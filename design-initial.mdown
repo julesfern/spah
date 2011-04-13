@@ -1,0 +1,47 @@
+SPA Single page architecture lib design "Spah"
+==============================================
+
+Assumptions:
+------------
+
+* Host API is RESTish
+* All host-client transfer is with JSON and all client-host transfer is with POST and multipart POST.
+* Client-side progressive enhancements are the responsibility of the developer
+* The server-side portion of the library will be ruby-based, and the client-side portion will be jquery-based, but the DTOs used to communicate the two will be thoroughly documented to allow drop-in replacements on either side.
+* Lazy-loading is often used as a performance enhancement for pages with long lists or critical data surrounded by slower-loading non-critical data such as relatedness queries. Therefore it's important to allow UIs to retain lazy loading capabilities even when rendered by the server.
+
+Goals:
+------
+
+1. Unified templating system - no duplication of templates between server-side and client-side apps
+2. Never use shebang links or other tricks. All URLs must be proper resource URLs.
+
+
+Implicit requirements:
+----------------------
+
+1. Server-side app provides an API endpoint or set of HTML nodes in the app layout containing the raw templates
+2. Every basic request for an HTML document must be answered with, at the very least, a very close approximation of the resulting client-side generated markup.
+    - This enables functionality in no-js environments
+    - This enables things like multipart POST requests to operate without sneaky iframe tricks, since the app state will be restored when the page renders after a successful post.
+3. Graceful boot from any state. Once a page has rendered as in requirement #2, client-side scripts must be able to pick up the application state and apply progressive enhancements as appropriate.
+
+First-pass rough design:
+------------------------
+
+* Combination MVC and MVVM pattern:
+** Server-side app assumed to be RESTish rails/merb/sinatra with MVC pattern.
+*** Models define validations and properties
+*** Controllers define authentication and statefulness
+*** Views are mixed: object marshalling for JSON requests and template-rendering for HTML.
+** Client-side app using
+
+* Combining server-side and client-side template rendering (requirement #2)
+** Support multiple template engines. Implicit requirement that template engine is available for both Ruby and JS, so opinionated skew towards Mustache templates to start with.
+*** Server-side: run mustache templates through Erb before rendering with mustache to allow app helpers and DRY templates.
+*** Client-side: templates are delivered pre-rendered with erb and use single-pass mustache layer for rendering.
+
+* Primary DTO is a Spah::ViewState, a package containing an abitrary dictionary of values for the client app to display.
+** ViewState objects may be transferred *up* to the server during a POST operation, allowing the server-side app to merge new data into the ViewState before it is sent back down in the response. Therefore:
+*** Synchronous actions (posts, uploads etc.) may migrate the view state in completeness to the newly-rendered page
+*** Async actions may supply the server with a less verbose view state (containing, for instance, the search parameters for a list but not a manifest of its contents) to allow the server to supply any necessary modifications to the ViewState.
