@@ -1,1 +1,31 @@
-See design-initial.mdown
+Spah - Single Page Architecture Helper
+======================================
+
+Spah is a work-in-progress gem intended to provide an opinionated framework within which to build single-page architecture applications without using silly /#!shebang links or rendering your site useless in scriptless environments.
+
+What is single-page architecture?
+---------------------------------
+
+Single-Page Architecure apps are those which serve a single HTML page for the initial request to the server, and from there on in all interactions are handled asynchronously with AJAX calls and other fanciness. Twitter is a reasonably good example of an SPA app with some serious problems, and we'll take a look at those in detail in just a moment.
+
+Why is SPA awesome?
+-------------------
+
+Properly used, SPA can make your web application much more responsive to user interactions, and permit you to create more "desktop-like" interfaces for your application, by:
+
+* Only requesting data from the server that is needed immediately by the user. Have a page that takes a while to render thanks to a fairly strenuous "related articles" query? An SPA application would typically load the video immediately for the user and then lazy-load the data for the related videos column in a follow-up request, giving the user their requested content faster and making the user happier.
+
+Why is SPA horrible and terribad?
+---------------------------------
+
+SPA applications can make the following horrible mistakes, which we wish to avoid:
+
+* The use of "shebang" links like this: 
+
+How does Spah help?
+-------------------
+
+
+By keeping the awesome parts of SPA and losing the horrible parts.
+
+Design thoughts: See design-initial.mdown
