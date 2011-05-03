@@ -1,0 +1,222 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>Spah  v0.0.0 API documentation | Spah</title>
+  <meta name="generator" content="PDoc" />
+  
+  <script charset="utf-8" src="../javascripts/pdoc/prototype.js" type="text/javascript"></script>
+  <script charset="utf-8" src="../javascripts/pdoc/application.js" type="text/javascript"></script>
+<script charset="utf-8" src="../javascripts/pdoc/tabs.js" type="text/javascript"></script>
+  <script charset="utf-8" src="../javascripts/pdoc/item_index.js" type="text/javascript"></script>
+  
+  <link charset="utf-8" href="../stylesheets/pdoc/api.css" media="screen, projection" rel="stylesheet" type="text/css" />
+<link charset="utf-8" href="../stylesheets/pdoc/pygments.css" media="screen, projection" rel="stylesheet" type="text/css" />
+  
+  <script type="text/javascript">
+    PDoc.pathPrefix = '../';
+  </script>
+</head>
+  <body>
+
+    <div id="sidebar">
+      <ul id="sidebar_tabs" class="sidebar-tabs">
+        <li>
+          <a href="#menu_pane">Menu</a>
+        </li>
+        <li>
+          <a href="#search_pane">Search</a>
+        </li>
+      </ul> <!-- .sidebar-tabs -->
+
+      <form class="search-ribbon">
+        <label>
+          <span class="hidden">Search</span>
+          <input type="text" id="search" size="20" title="Search" />
+        </label>
+      </form>
+      
+      <div class="sidebar-pane scrollable" id="menu_pane">
+        <ul class="menu-items" id="api_menu"><li><div class="menu-item"><a class="class current" href="../Spah/index.html" title="Spah (class)">Spah</a></div><ul><li><div class="menu-item"><a class="class-method" href="../Spah/boot/index.html" title="Spah.boot (class method)">boot</a></div></li>
+<li><div class="menu-item"><a class="class-method" href="../Spah/log/index.html" title="Spah.log (class method)">log</a></div></li>
+<li><div class="menu-item"><a class="class-property" href="../Spah/logMessages/index.html" title="Spah.logMessages (class property)">logMessages</a></div></li>
+<li><div class="menu-item"><a class="class-property" href="../Spah/verbose/index.html" title="Spah.verbose (class property)">verbose</a></div></li></ul></li></ul><!--- #api_menu =-->
+      </div> <!-- .sidebar-pane -->
+      <div class="sidebar-pane" id="search_pane">
+        <ul id="search_results" class="search-results menu-items scrollable"></ul>
+      </div> <!-- .sidebar-pane -->
+    </div> <!-- #sidebar -->
+
+    <div id="page">
+      
+
+      <div id="main" class="page-content">
+        
+
+
+
+
+
+<ul class="breadcrumbs clearfix">
+  <li><a href="../">Home</a></li>
+  
+    <li>&rarr; <a href="../Spah/index.html" title="Spah (class)">Spah</a></li>
+  
+</ul>
+
+
+  <p id="src_code_href"><a href="http://github.com/danski/spah/blob/master/client/src/Spah.js#48">src code</a></p>
+
+
+<h2 class="page-title">
+  <span class="type">class</span> Spah
+</h2>
+
+
+
+
+                <div class="section section-description">
+                <div class="section-title">
+                  <h3>Description</h3>
+                </div> <!-- .section-title -->
+                <div class="section-content">
+
+    <p>For cleanliness, Spah keeps all of its functions, classes and behaviour within the top level <code>Spah</code> object.</p>
+
+<p>The Spah client is client-side companion to the Spah rubygem. Together, the two parts are used to build dynamic single-page
+web applications that:</p>
+
+<ul>
+<li>Don't break document semantics. With Spah, every resource may be curled, scraped and indexed just as with a static site.</li>
+<li>Cold boot into full-fledged javascript applications from any of your application's URLs.</li>
+<li>Provide graceful continuation of interface state between pages when an action absolutely must be performed synchronously.</li>
+</ul>
+
+
+<p>The central concept in Spah is the <strong>state</strong>. Spah manages the state of your javascript application as a hash which may contain
+more hashes, booleans, strings and arrays. You, as the developer of your application, define the overall structure of the state.</p>
+
+<p>On each request to the server, Spah will attach the state in JSON form to the request. The server modifies the state and returns a
+new JSON object containing the updates. The Spah client merges the updates into the state and dispatches events to which you may subscribe.</p>
+
+<p>Initialising Spah is simple:</p>
+
+<div class="highlight"><pre> <span class="nx">$</span><span class="p">(</span><span class="nb">document</span><span class="p">).</span><span class="nx">ready</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+     <span class="nx">Spah</span><span class="p">.</span><span class="nx">init</span><span class="p">();</span>
+ <span class="p">});</span>
+</pre>
+</div>
+
+
+<p>Spah also does away with duplicated server-side and client-side templates. Previously, developers working within practical time constraints
+have had to choose between (a) creating applications with limited dynamic behaviour and primarily using server-side templates, and (b) creating
+applications with limitless dynamic behaviour but severely compromised server-side rendering capability. There are mitigating techniques in the form
+of Mustache templates and other such things, but still a large amount of view logic would ordinarily have to be duplicated in order to provide
+both static and dynamic versions of your application.</p>
+
+<p>Spah's approach is to improve on the dynamic behaviour. Instead of having the server render the same base HTML document for each request and relying
+on the browser's javascript engine to boot, load data and otherwise make the document usable, Spah allows the server to provision a single HTML document
+which is then processed into a usable form <strong>before being sent down the wire</strong>. The important parts of boot are handled by the server, making your
+resources accessible in no-js environments and to search indexers, and the more advanced interactivity is correctly delegated to client-side javascript.</p>
+
+<p>This is achieved by embedding template logic within the markup using HTML5 data attributes, thus making the same template logic available to both client
+and server. When the state is updated by a response from the server, elements with embedded display logic are re-evaluated automatically and the display
+updated accordingly.</p>
+
+<p>You may also bind more advanced behaviours to changes in the state using</p>
+
+<p>TODO: State queries
+TODO: Template refactoring
+TODO: Forcing forms and links to be synchronous</p>
+
+<p>For more information on Spah, see the main <a href="https://github.com/danski/spah#readme">Readme on Github</a>.</p>
+                </div> <!-- .section-content -->
+            </div> <!-- .section -->
+
+
+
+
+
+
+
+  
+
+  
+
+
+
+
+
+
+
+
+  
+  
+  
+                  <div class="section section-class_methods">
+                <div class="section-title">
+                  <h3>Class methods</h3>
+                </div> <!-- .section-title -->
+                <div class="section-content">
+
+      <ul class="method-list">
+        <li><code><a class="class-method" href="../Spah/boot/index.html" title="Spah.boot (class method)">boot</a></code></li>
+
+<li><code><a class="class-method" href="../Spah/log/index.html" title="Spah.log (class method)">log</a></code></li>
+
+      </ul>
+                  </div> <!-- .section-content -->
+            </div> <!-- .section -->
+
+  
+
+  
+  
+  
+                  <div class="section section-class_properties">
+                <div class="section-title">
+                  <h3>Class properties</h3>
+                </div> <!-- .section-title -->
+                <div class="section-content">
+
+      <ul class="method-list">
+        <li><code><a class="class-property" href="../Spah/logMessages/index.html" title="Spah.logMessages (class property)">logMessages</a></code></li>
+
+<li><code><a class="class-property" href="../Spah/verbose/index.html" title="Spah.verbose (class property)">verbose</a></code></li>
+
+      </ul>
+                  </div> <!-- .section-content -->
+            </div> <!-- .section -->
+
+  
+
+  
+  
+  
+
+  
+  
+  
+
+  
+  
+  
+
+      </div> <!-- #main -->
+      
+      <div id="footer">
+        <p><a href="http://github.com/danski/spah">Spah</a> v0.0.0 API documentation.</p>
+        <p>
+          
+            Last updated on May 03, 2011 at 16:33 UTC.
+          
+          Generated by <a href="http://pdoc.org">PDoc</a>.
+          Uses <a href="http://famfamfam.com/lab/icons/silk/" title="famfamfam.com: Silk Icons">Silk Icons</a> and portions of <a href="http://github.com/280north/aristo/tree/master" title="280north's aristo at master - GitHub">Aristo</a>.
+        </p>
+        
+      </div> <!-- #footer -->
+
+    </div> <!-- #page -->
+  </body>
+</html>

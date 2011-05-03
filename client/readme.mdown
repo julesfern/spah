@@ -1,0 +1,11 @@
+Prepping for development:
+
+1. Install the Google Closure linter http://code.google.com/closure/utilities/docs/linter_howto.html
+2. Install the Google Closure compiler http://code.google.com/closure/compiler/docs/gettingstarted_app.html
+
+Dependencies
+============
+
+* [jQuery 1.5.2](http://ajax.googleapis.com/ajax/libs/jquery/1.5.2/jquery.min.js)
+* [history.js](https://github.com/fortes/history.js)
+  * Spah uses the HTML5 history manager API to switch between views. You can optionally include History.js to transparently support this feature in HTML4 browsers.
