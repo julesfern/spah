@@ -52,7 +52,131 @@
         
 
 <div class="page-introduction">
-  
+  <h1 id='spah_singlepage_application_helper'>Spah: Single-Page Application Helper</h1>
+<img src='https://img.skitch.com/20110504-c79qr916mcwtnq4m63uqc3dibq.jpg' />
+<h2 id='contents'>Contents</h2>
+
+<ol>
+<li><a href='#introduction'>Introduction</a></li>
+
+<li><a href='#the_server'>The server</a></li>
+
+<li><a href='#the_client'>The client</a></li>
+
+<li>TODO: <a href='#state_queries'>State queries</a></li>
+
+<li>TODO: <a href='#document_logic'>Document logic</a></li>
+
+<li>TODO: <a href='#templating_with_mustache'>Templating with Mustache</a></li>
+
+<li>TODO: <a href='#responding_to_state_changes_with_javascript'>Reacting to state changes with Javascript</a></li>
+
+<li><a href='#forcing_links_and_forms_to_load_synchronously'>Forcing links and forms to load synchronously</a></li>
+
+<li>TODO: <a href='#default_client_behaviour'>Default client behaviours</a> (automatically update doc title from /title path, automatically add async behaviour, automatically manage history)</li>
+
+<li>TODO: <a href='#eager_client_state_changes'>Eager client state changes</a> (mark parts of the tree as &#8220;expected to get new data&#8221; to trigger load notifications. automatically revert to previous state on load failure and dispatch failure event)</li>
+
+<li>TODO: <a href='#example_rails_application'>Examples: Example Rails application</a></li>
+
+<li>TODO: <a href='#example_sinatra_application'>Examples: Example Sinatra application</a></li>
+</ol>
+
+<h2 id='introduction'>Introduction</h2>
+
+<p>Spah is both a server-side rubygem and a client-side javascript library. Together, the two parts are used to build dynamic single-page web applications that:</p>
+
+<ul>
+<li>Don&#8217;t break the web, and keep the document as king. With Spah, every resource may be curled, scraped and indexed just as with a static site.</li>
+
+<li>Cold boot into full-fledged javascript applications from any of your application&#8217;s URLs.</li>
+
+<li>Provide graceful continuation of interface state between pages when an action absolutely must be performed synchronously.</li>
+</ul>
+
+<p>The central concept in Spah is the <strong>state</strong>. Spah manages the state of your application as a hash which may contain more hashes, booleans, strings and arrays. You, as the developer of your application, define the overall structure of the state. As an example, the state for this documentation page might be something like:</p>
+<div class='highlight'><pre>   <span class='p'>{</span>
+     <span class='s2'>&quot;class&quot;</span><span class='o'>:</span> <span class='s2'>&quot;Spah&quot;</span><span class='p'>,</span> <span class='c1'>// Currently viewing the Spah class</span>
+     <span class='s2'>&quot;method&quot;</span><span class='o'>:</span> <span class='kc'>null</span><span class='p'>,</span> <span class='c1'>// No specific method selected</span>
+     <span class='s2'>&quot;search-query&quot;</span><span class='o'>:</span> <span class='s2'>&quot;&quot;</span> <span class='c1'>// No search term entered in search box</span>
+   <span class='p'>}</span>
+</pre>
+</div>
+<p>On each request to the server, Spah will attach the state in JSON form to the request. The server modifies the state and returns a new JSON object containing the updates. The Spah client merges the updates into the state and dispatches events to which you may subscribe.</p>
+
+<h2 id='the_server'>The server</h2>
+
+<p>A Spah application is assumed to be a RESTish ruby application - in our examples we&#8217;ll be using Rails. As always, all validation and data persistence is handled by your models. All routing by the router, and all request logic in the controllers. Where a Spah app differs is in the view layer.</p>
+
+<p><em>Figure 1: A crap approach to single-page apps</em></p>
+<img src='https://img.skitch.com/20110504-73a3ftde7d731kbepxg2p7w1.jpg' />
+<p>Instead of hiding away template logic in server-side ruby, template logic is moved to a place where both the client AND the server have access to it - <a href='#document_logic'>the document itself</a>.</p>
+
+<p>A Spah HTML render takes the <strong>state</strong> and a <strong>prototype layout</strong> and gloms to the two together. The HTML layout contains <a href='#document_logic'>logic encoded in HTML5 data attributes</a>, and Spah will pre-process the document <strong>before sending it down the wire</strong>. This way, any view can be cold-rendered by a request to the appropriate URL, or warm-rendered by an asynchronous state update from the server. In a sense, Spah allows your server-side app to <em>behave like a browser</em> and boot your client-side application to the point of usefulness, before letting the user&#8217;s actual browser carry out the rest of the startup process.</p>
+
+<p><em>Figure 2: A better approach.</em></p>
+<img src='https://img.skitch.com/20110504-p13hfga9s4d6x7bpjwrw1gbyjj.jpg' />
+<p>For partials, Spah uses <a href='#templating_with_mustache'>Mustache templates</a>. All <code>.mustache</code> files in your server-side application are indexed by path on startup and made available to the rendering chain on both the client and server. Spah automatically injects the templates into your HTML layout using <code><script id='views/my/partial' type='text/mustache'>...</script></code> tags, which are semantically neutral in nature and do not alter your document hierarchy. Spah will also add a hidden <code>state</code> input to the end of each form in your document containing the current state, and append the state to link URLs within the current domain - this allows for graceful state handover in no-js environments.</p>
+
+<p>In environments that support JS, the state in forms and links is replaced with the current state on submission/activation.</p>
+
+<h2 id='the_client'>The client</h2>
+
+<p>The Spah client handles things at the browser end. Its primary tasks are:</p>
+
+<ol>
+<li>Ensuring that links and forms are submitted asynchronously and that they attach the state when activated (you may also <a href='#forcing_links_and_forms_to_load_synchronously'>prevent some links and forms from acting asynchronously</a>)</li>
+
+<li>Ensuring that async requests are submitted with a <code>content-accept</code> header of <code>application/state+json</code>, allowing the server-side application to determine that this is a warm request and should be responded to with an updated state</li>
+
+<li>Re-evaluating and processing any document logic whenever the state is modified</li>
+
+<li>Raising path-specific events whenever the state is modified</li>
+</ol>
+
+<p><em>Figure 3: A better approach, with added progressive enhancement</em></p>
+<img src='https://img.skitch.com/20110504-tpqb613eyy46j7f758nqr745n2.jpg' />
+<p>For cleanliness, Spah keeps all of its functions, classes and behaviour within the top level <code>Spah</code> object. Initialising Spah is simple:</p>
+<div class='highlight'><pre> <span class='nx'>$</span><span class='p'>(</span><span class='nb'>document</span><span class='p'>).</span><span class='nx'>ready</span><span class='p'>(</span><span class='kd'>function</span><span class='p'>()</span> <span class='p'>{</span> 
+     <span class='nx'>Spah</span><span class='p'>.</span><span class='nx'>init</span><span class='p'>();</span> 
+ <span class='p'>});</span>
+</pre>
+</div>
+<p>This is achieved by embedding template logic within the markup using HTML5 data attributes, thus making the same template logic available to both client and server. When the state is updated by a response from the server, elements with embedded display logic are re-evaluated automatically and the display updated accordingly.</p>
+
+<p>You may also bind more advanced behaviours to changes in the state using</p>
+
+<h2 id='state_queries'>State queries</h2>
+
+<p>The state may be queried on both the client and server by using the state query language, an xpath-like syntax for retrieving groups of data. Let&#8217;s take an example state with a variety of types:</p>
+<div class='highlight'><pre>  <span class='p'>{</span>
+    <span class='nx'>hash_one</span><span class='o'>:</span> <span class='p'>{</span><span class='nx'>foo</span><span class='o'>:</span> <span class='s2'>&quot;bar&quot;</span><span class='p'>,</span> <span class='nx'>bar</span><span class='o'>:</span> <span class='s2'>&quot;baz&quot;</span><span class='p'>},</span>
+    <span class='nx'>hash_two</span><span class='o'>:</span> <span class='p'>{</span><span class='nx'>foo</span><span class='o'>:</span> <span class='s2'>&quot;bar&quot;</span><span class='p'>,</span> <span class='nx'>bool_one</span><span class='o'>:</span> <span class='kc'>true</span><span class='p'>,</span> <span class='nx'>bool_two</span><span class='o'>:</span> <span class='kc'>false</span><span class='p'>,</span> <span class='nx'>arr_in_hash</span><span class='o'>:</span> <span class='p'>[</span><span class='mi'>1</span><span class='p'>,</span><span class='mi'>2</span><span class='p'>,</span><span class='mi'>3</span><span class='p'>]},</span>
+    <span class='nx'>arr_one</span><span class='o'>:</span> <span class='p'>[</span><span class='mi'>1</span><span class='p'>,</span><span class='mi'>2</span><span class='p'>,</span><span class='mi'>3</span><span class='p'>],</span>
+    <span class='nx'>arr_two</span><span class='o'>:</span> <span class='p'>[</span><span class='mi'>0</span><span class='p'>,</span><span class='mi'>1</span><span class='p'>,</span><span class='mi'>2</span><span class='p'>],</span>
+    <span class='nx'>bool_one</span><span class='o'>:</span> <span class='kc'>true</span><span class='p'>,</span>
+    <span class='nx'>bool_two</span><span class='o'>:</span> <span class='kc'>false</span>
+  <span class='p'>}</span>
+</pre>
+</div>
+<p>TODO: Examples</p>
+
+<p>Queries may also include properties and comparators to produce boolean results:</p>
+
+<p>TODO: Bool examples</p>
+
+<h2 id='templating_with_mustache'>Templating with Mustache</h2>
+
+<h2 id='forcing_links_and_forms_to_load_synchronously'>Forcing links and forms to load synchronously</h2>
+
+<p>To prevent Spah from adding asynchronous behaviour, add the <code>data-async="false"</code> attribute to the link or form element:</p>
+<div class='highlight'><pre><span class='o'>&lt;</span><span class='nx'>a</span> <span class='nx'>href</span><span class='o'>=</span><span class='s2'>&quot;/login&quot;</span> <span class='nx'>data</span><span class='o'>-</span><span class='nx'>async</span><span class='o'>=</span><span class='s2'>&quot;false&quot;</span><span class='o'>&gt;</span><span class='nx'>Log</span> <span class='k'>in</span><span class='o'>&lt;</span><span class='err'>/a&gt;</span>
+
+<span class='o'>&lt;</span><span class='nx'>form</span> <span class='nx'>action</span><span class='o'>=</span><span class='s2'>&quot;/login&quot;</span> <span class='nx'>method</span><span class='o'>=</span><span class='s2'>&quot;POST&quot;</span> <span class='nx'>data</span><span class='o'>-</span><span class='nx'>async</span><span class='o'>=</span><span class='s2'>&quot;false&quot;</span><span class='o'>&gt;</span>
+  <span class='p'>...</span>
+<span class='o'>&lt;</span><span class='err'>/form&gt;</span>
+</pre>
+</div>
 </div> <!-- .section -->
 
               <div class="section section-sections">
@@ -73,7 +197,7 @@
         <p><a href="http://github.com/danski/spah">Spah</a> v0.0.0 API documentation.</p>
         <p>
           
-            Last updated on May 03, 2011 at 16:33 UTC.
+            Last updated on May 04, 2011 at 09:46 UTC.
           
           Generated by <a href="http://pdoc.org">PDoc</a>.
           Uses <a href="http://famfamfam.com/lab/icons/silk/" title="famfamfam.com: Silk Icons">Silk Icons</a> and portions of <a href="http://github.com/280north/aristo/tree/master" title="280north's aristo at master - GitHub">Aristo</a>.

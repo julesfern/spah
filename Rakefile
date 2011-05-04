@@ -77,7 +77,7 @@ namespace :client do
     task :generate do
       require 'PDoc'
       require 'json'
-      require 'bluecloth'
+      require 'maruku'
       
       input_dir = File.join(File.dirname(__FILE__), "client", "src")
       output_dir = File.join(File.dirname(__FILE__), "doc", "client")
@@ -91,9 +91,10 @@ namespace :client do
       
       PDoc.run({
           :source_files => Dir.glob(File.join(input_dir, "**", "/*.js")),
+          :index_page=>File.join(File.dirname(__FILE__), "readme.mdown"),
           :destination => output_dir,
           :syntax_highlighter => :pygments,
-          :markdown_parser => :bluecloth,
+          :markdown_parser => :maruku,
           :src_code_href => proc { |model|
             "#{LIB_GITHUB_URL}/blob/master/#{model.file.gsub(File.dirname(__FILE__)+"/", "")}##{model.line_number}"
           },

@@ -13,6 +13,6 @@ group :development do
   gem "rcov", ">= 0"
   gem "pdoc", "~> 0.2.0"
   gem "json", "~> 1.5.0"
-  gem "bluecloth", ">= 0"
+  gem "maruku", ">= 0"
   gem "albino", "~> 1.3.3"
 end
