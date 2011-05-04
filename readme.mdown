@@ -23,7 +23,7 @@ Contents
 1. [Introduction][introduction]
 2. [The server][server]
 3. [The client][client]
-4. TODO: [State queries][state_queries]
+4. [State queries][state_queries]
 5. TODO: [Document logic][document_logic]
 6. TODO: [Templating with Mustache][templating]
 7. TODO: [Building your markup with ruby][ruby_helpers] (erb, haml, templating, url builders)
@@ -83,7 +83,7 @@ out the rest of the startup process.
 For partials, Spah uses [Mustache templates][templating]. All <code>.mustache</code> files in your server-side application are indexed by path on startup
 and made available to the rendering chain on both the client and server. Spah automatically injects the templates into your HTML layout using
 <code><script type="text/mustache" id="views/my/partial">...</script></code> tags, which are semantically neutral in nature and do not alter
-your document hierarchy. Spah will also add a hidden <code>state</code> input to the end of each form in your document containing the current
+your document's content. Spah will also add a hidden <code>state</code> input to the end of each form in your document containing the current
 state, and append the state to link URLs within the current domain - this allows for graceful state handover in no-js environments.
 
 In environments that support JS, the state in forms and links is replaced with the current state on submission/activation.
@@ -119,29 +119,133 @@ You may also bind more advanced behaviours to changes in the state using [jQuery
 State queries
 -------------
 
-The state may be queried on both the client and server by using the state query language, an xpath-like syntax for retrieving groups of data. Let's take an example state with a variety of types:
+The state may be queried on both the client and server by using the state query language, a DSL for querying JSON structures. Let's take an example state with a variety of types:
 
       {
-        hash_one: {foo: "bar", bar: "baz"},
+        hash_one: {foo: "bar", bar: "baz", hash_in_hash: {"foo": "bar-inner"}},
         hash_two: {foo: "bar", bool_one: true, bool_two: false, arr_in_hash: [1,2,3]},
         arr_one: [1,2,3],
         arr_two: [0,1,2],
+        arr_three: [],
         bool_one: true,
         bool_two: false
       }
 
-TODO: Examples
-1. Retrieve a value by key
-2. Retrieve a set of values by path
-3. Retrieve a set of values by type
-4. Retrieve a set of values filtered by inner properties
+You may retrieve any value using a simple path:
 
-Queries may also include properties and comparators to produce boolean results:
+      Spah.state.queryValues("/hash_one"); //-> [{foo: "bar", bar: "baz"}]
+      Spah.state.queryValues("/hash_one/foo"); //-> "bar";
+      Spah.state.queryValues("/hash_one/arr_in_hash"); //-> "bar";
+      Spah.state.queryValues("//foo") //-> ["bar", "bar"];
+      
+In the last example, a double slash is used to indicate that we want all values named "foo" regardless of their place in the hierarchy. Much like xpath, the query can be scoped:
 
-TODO: Bool examples
-1. Truthiness of arrays (if the query is a filter, empty array is false. if the query is a direct path reference, empty array is true)
-2. Truthiness of bools, strings
-3. Truthiness of missing elements
+      Spah.state.queryValues("/hash_one//foo"); //-> ["bar", "bar-inner"];
+      
+What is actually happening here is that the #queryValues method is getting a set of <code>Spah.Viewstate.select.Result</code> objects back, each of which provides a path and a value for the returned result:
+
+      var results = Spah.state.select("/hash_one//foo"); //-> [Result, Result];
+          results[0].path //-> "/hash_one/foo"
+          results[0].value //-> "bar"
+          results[1].path //-> "/hash_one/hash_in_hash/foo"
+          results[1].value //-> "bar-inner"
+      
+When accessing arrays, strings and hashes, the <code>[index]</code> accessor may be used:
+
+      // Array
+      var results = Spah.state.select("/arr_one[0]") //-> [Result]
+          results[0].path //-> "/arr_one[0]"
+          results[0].value //-> 1
+      
+      // Hash
+          results = Spah.state.select("/hash_one[foo]") -> [Result]
+          results[0].path //-> "/hash_one/foo"
+          results[0].value //-> "bar"
+      
+      // String
+          results = Spah.state.select("/hash_one/foo[1]") -> [Result]
+          results[0].path //-> "/hash_one/foo[1]"
+          results[0].value //-> "a"
+          
+Arrays, strings and hashes also provide the .length property:
+          
+      var results = Spah.state.select("/arr_one.length") //-> [Result]
+          results[0].path //-> "/arr_one.length"
+          results[1].value = 3
+      
+The <code>[]</code> accessor also supports comparators:
+      
+      // Query for all hashes where the "foo" property is defined and has value "bar":
+      var results = Spah.state.select("//[foo=='bar']") //-> [Result, Result]
+          results[0].path = "/hash_one/foo"
+          results[0].value = "bar"
+          results[1].path = "/hash_two/foo"
+          results[1].value = "bar"
+          
+      // Query for all hashes where the "foo" property is defined and has a value matching 
+      // the regular expression '^bar'
+          results = Spah.state.select("//[foo~='^bar']") //-> 
+          results[0]
+      
+      // Query for all arrays of at least 2 entries in length:
+      // Note that the "type" and "length" properties are preceded by a dot.
+      // Available types are "Array", "Bool", "Hash", "String"
+          results = Spah.state.select("//[.type=='Array' && .length>=2]") -> [Result, Result, Result]
+          results[0].path = "/hash_two/arr_in_hash"
+          results[0].value = [1,2,3]
+          results[1].path = "/arr_one"
+          results[1].value = [1,2,3]
+          results[2].path = "/arr_two"
+          results[2].value = [0,1,2]
+          
+      // Query for all hashes where the value of key "foo" matches the value found 
+      // at /hash_one/foo
+      // NOTE: If the subquery returns more than one Result then an exception will be 
+      // raised. Be sure to use specific address paths in comparison operations.
+          results = Spah.state.select("//[foo==/hash_one/foo]") -> [Result, Result]
+          results[0].path = "/hash_one/foo"
+          results[0].value = "bar"
+          results[1].path = "/hash_two/foo"
+          results[1].value = "bar"
+
+Queries may also produce boolean results, using comparators between subqueries:
+
+      // Does the value at /hash_one/foo equal "bar"?
+      Spah.state.assert("/hash_one/foo == 'bar'") //-> true. The value is "bar"
+      
+      // Does the value at /hash_one/foo match the value at /hash_two/foo?
+      // NOTE: if comparing the results of more than one query, the results of both 
+      // queries must be the same length and must have matching values 
+      // although the results DO NOT have to be from the same paths.
+      Spah.state.assert("/hash_one/foo == /hash_two/foo") //-> true. Both values are "bar"
+      
+      // Is the value at /hash_one an array?
+      Spah.state.assert("/hash_one.type == 'Array'") //-> false. /hash_one is 'Hash'
+      
+      // Is arr_one empty?
+      Spah.state.assert("/arr_one.length < 1") //-> false. /arr_one has 3 entries.
+      
+      // Is does arr_three have the same number of entries as arr_one?
+      Spah.spate.assert("/arr_three.length == /arr_one.length") //-> false. /arr_three is empty, but /arr_one has 3 items.
+      
+      // Comparing arrays and hashes: both entities must have the same contents and the same keys in order to achieve equality.
+      Spah.state.assert("/hash_two/arr_in_hash == /arr_one") //-> true! both arrays have the same contents in the same order.
+      Spah.state.assert("/hash_two/arr_in_hash == /arr_two") //-> false. each array has content distinct from the other.
+      
+      // Comparing the types of entities
+      Spah.state.assert("/hash_one.type == /hash_two.type") //-> true. Both are hashes.
+      Spah.state.assert("/hash_one === /hash_two") // -> true, functionally identical to the above
+      
+      // Comparing query result counts: use the #count property at the end of your query
+      Spah.state.assert("/hash_one[foo~='bar']#count > 3") //-> false. There's only one item returned by this query.
+            
+      // And of course, simple truthiness assertions:
+      // Basic assertions return true if the associated query returns >0 results and if any of those results
+      // have values other than false or null.
+      Spah.state.assert("/bool_one") //-> true
+      Spah.state.assert("/bool_two") //-> false
+      Spah.state.assert("/key_does_not_exist") //-> false
+      Spah.state.assert("/arr_one") //-> true
 
 Document logic
 --------------
@@ -155,7 +259,8 @@ Forcing links and forms to load synchronously
 
 To prevent Spah from adding asynchronous behaviour, add the <code>data-async="false"</code> attribute to the link or form element:
 
-    lang:html
+    language:html
+    
     <a href="/login" data-async="false">Log in</a>
     
     <form action="/login" method="POST" data-async="false">
