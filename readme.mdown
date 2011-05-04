@@ -11,6 +11,7 @@ Contents
 [client]: #the_client
 [state_queries]: #state_queries
 [document_logic]: #document_logic
+[ruby_helpers]: #you_can_still_write_your_markup_with_ruby
 [templating]: #templating_with_mustache
 [responders]: #responding_to_state_changes_with_javascript
 [eager_state_changes]: #eager_client_state_changes
@@ -25,12 +26,13 @@ Contents
 4. TODO: [State queries][state_queries]
 5. TODO: [Document logic][document_logic]
 6. TODO: [Templating with Mustache][templating]
-7. TODO: [Reacting to state changes with Javascript][responders]
-8. [Forcing links and forms to load synchronously][force_synchronous]
-9. TODO: [Default client behaviours][defaults] (automatically update doc title from /title path, automatically add async behaviour, automatically manage history)
-8. TODO: [Eager client state changes][eager_state_changes] (mark parts of the tree as "expected to get new data" to trigger load notifications. automatically revert to previous state on load failure and dispatch failure event)
-9. TODO: [Examples: Example Rails application][rails_example]
-10. TODO: [Examples: Example Sinatra application][sinatra_example]
+7. TODO: [Building your markup with ruby][ruby_helpers] (erb, haml, templating, url builders)
+8. TODO: [Reacting to state changes with Javascript][responders]
+9. [Forcing links and forms to load synchronously][force_synchronous]
+10. TODO: [Default client behaviours][defaults] (automatically update doc title from /title path, automatically add async behaviour, automatically manage history)
+11. TODO: [Eager client state changes][eager_state_changes] (mark parts of the tree as "expected to get new data" to trigger load notifications. automatically revert to previous state on load failure and dispatch failure event)
+12. TODO: [Examples: Example Rails application][rails_example]
+13. TODO: [Examples: Example Sinatra application][sinatra_example]
 
 Introduction
 ------------
@@ -112,7 +114,7 @@ This is achieved by embedding template logic within the markup using HTML5 data 
 and server. When the state is updated by a response from the server, elements with embedded display logic are re-evaluated automatically and the display 
 updated accordingly.
 
-You may also bind more advanced behaviours to changes in the state using 
+You may also bind more advanced behaviours to changes in the state using [jQuery responders][responders] and [state queries][state_queries]
 
 State queries
 -------------
@@ -129,10 +131,20 @@ The state may be queried on both the client and server by using the state query 
       }
 
 TODO: Examples
+1. Retrieve a value by key
+2. Retrieve a set of values by path
+3. Retrieve a set of values by type
+4. Retrieve a set of values filtered by inner properties
 
 Queries may also include properties and comparators to produce boolean results:
 
 TODO: Bool examples
+1. Truthiness of arrays (if the query is a filter, empty array is false. if the query is a direct path reference, empty array is true)
+2. Truthiness of bools, strings
+3. Truthiness of missing elements
+
+Document logic
+--------------
 
 Templating with Mustache
 ------------------------
@@ -143,6 +155,7 @@ Forcing links and forms to load synchronously
 
 To prevent Spah from adding asynchronous behaviour, add the <code>data-async="false"</code> attribute to the link or form element:
 
+    lang:html
     <a href="/login" data-async="false">Log in</a>
     
     <form action="/login" method="POST" data-async="false">
