@@ -118,7 +118,13 @@
 
 <p><em>Figure 2: A better approach.</em></p>
 <img src='https://img.skitch.com/20110504-p13hfga9s4d6x7bpjwrw1gbyjj.jpg' />
-<p>For partials, Spah uses <a href='#templating_with_mustache'>Mustache templates</a>. All <code>.mustache</code> files in your server-side application are indexed by path on startup and made available to the rendering chain on both the client and server. Spah automatically injects the templates into your HTML layout using <code><script id='views/my/partial' type='text/mustache'>...</script></code> tags, which are semantically neutral in nature and do not alter your document&#8217;s content. Spah will also add a hidden <code>state</code> input to the end of each form in your document containing the current state, and append the state to link URLs within the current domain - this allows for graceful state handover in no-js environments.</p>
+<p>For partials, Spah uses <a href='#templating_with_mustache'>Mustache templates</a>. All <code>.mustache</code> files in your server-side application are indexed by path on startup and made available to the rendering chain on both the client and server. Spah automatically injects the templates into your HTML layout using script tags:</p>
+<div class='highlight'><pre><span class='nt'>&lt;script </span><span class='na'>type=</span><span class='s'>&quot;text/mustache&quot;</span> <span class='na'>id=</span><span class='s'>&quot;views/my/partial&quot;</span><span class='nt'>&gt;</span>
+  <span class='p'>{{</span><span class='nx'>name</span><span class='p'>}}</span>
+<span class='nt'>&lt;/script&gt;</span>
+</pre>
+</div>
+<p>These are semantically neutral in nature and do not alter your document&#8217;s content. Spah will also add a hidden <code>state</code> input to the end of each form in your document containing the current state, and append the state to link URLs within the current domain - this allows for graceful state handover in no-js environments.</p>
 
 <p>In environments that support JS, the state in forms and links is replaced with the current state on submission/activation.</p>
 
@@ -163,17 +169,17 @@
 </pre>
 </div>
 <p>You may retrieve any value using a simple path:</p>
-<div class='highlight'><pre><span class='nx'>Spah</span><span class='p'>.</span><span class='nx'>state</span><span class='p'>.</span><span class='nx'>queryValues</span><span class='p'>(</span><span class='s2'>&quot;/hash_one&quot;</span><span class='p'>);</span> <span class='c1'>//-&gt; [{foo: &quot;bar&quot;, bar: &quot;baz&quot;}]</span>
-<span class='nx'>Spah</span><span class='p'>.</span><span class='nx'>state</span><span class='p'>.</span><span class='nx'>queryValues</span><span class='p'>(</span><span class='s2'>&quot;/hash_one/foo&quot;</span><span class='p'>);</span> <span class='c1'>//-&gt; &quot;bar&quot;;</span>
-<span class='nx'>Spah</span><span class='p'>.</span><span class='nx'>state</span><span class='p'>.</span><span class='nx'>queryValues</span><span class='p'>(</span><span class='s2'>&quot;/hash_one/arr_in_hash&quot;</span><span class='p'>);</span> <span class='c1'>//-&gt; &quot;bar&quot;;</span>
-<span class='nx'>Spah</span><span class='p'>.</span><span class='nx'>state</span><span class='p'>.</span><span class='nx'>queryValues</span><span class='p'>(</span><span class='s2'>&quot;//foo&quot;</span><span class='p'>)</span> <span class='c1'>//-&gt; [&quot;bar&quot;, &quot;bar&quot;];</span>
+<div class='highlight'><pre><span class='nx'>Spah</span><span class='p'>.</span><span class='nx'>state</span><span class='p'>.</span><span class='nx'>selectValues</span><span class='p'>(</span><span class='s2'>&quot;/hash_one&quot;</span><span class='p'>);</span> <span class='c1'>//-&gt; [{foo: &quot;bar&quot;, bar: &quot;baz&quot;}]</span>
+<span class='nx'>Spah</span><span class='p'>.</span><span class='nx'>state</span><span class='p'>.</span><span class='nx'>selectValues</span><span class='p'>(</span><span class='s2'>&quot;/hash_one/foo&quot;</span><span class='p'>);</span> <span class='c1'>//-&gt; &quot;bar&quot;;</span>
+<span class='nx'>Spah</span><span class='p'>.</span><span class='nx'>state</span><span class='p'>.</span><span class='nx'>selectValues</span><span class='p'>(</span><span class='s2'>&quot;/hash_one/arr_in_hash&quot;</span><span class='p'>);</span> <span class='c1'>//-&gt; &quot;bar&quot;;</span>
+<span class='nx'>Spah</span><span class='p'>.</span><span class='nx'>state</span><span class='p'>.</span><span class='nx'>selectValues</span><span class='p'>(</span><span class='s2'>&quot;//foo&quot;</span><span class='p'>)</span> <span class='c1'>//-&gt; [&quot;bar&quot;, &quot;bar&quot;];</span>
 </pre>
 </div>
 <p>In the last example, a double slash is used to indicate that we want all values named &#8220;foo&#8221; regardless of their place in the hierarchy. Much like xpath, the query can be scoped:</p>
-<div class='highlight'><pre><span class='nx'>Spah</span><span class='p'>.</span><span class='nx'>state</span><span class='p'>.</span><span class='nx'>queryValues</span><span class='p'>(</span><span class='s2'>&quot;/hash_one//foo&quot;</span><span class='p'>);</span> <span class='c1'>//-&gt; [&quot;bar&quot;, &quot;bar-inner&quot;];</span>
+<div class='highlight'><pre><span class='nx'>Spah</span><span class='p'>.</span><span class='nx'>state</span><span class='p'>.</span><span class='nx'>selectValues</span><span class='p'>(</span><span class='s2'>&quot;/hash_one//foo&quot;</span><span class='p'>);</span> <span class='c1'>//-&gt; [&quot;bar&quot;, &quot;bar-inner&quot;];</span>
 </pre>
 </div>
-<p>What is actually happening here is that the #queryValues method is getting a set of <code>Spah.Viewstate.select.Result</code> objects back, each of which provides a path and a value for the returned result:</p>
+<p>What is actually happening here is that the #selectValues method is getting a set of <code>Spah.Viewstate.select.Result</code> objects back, each of which provides a path and a value for the returned result:</p>
 <div class='highlight'><pre><span class='kd'>var</span> <span class='nx'>results</span> <span class='o'>=</span> <span class='nx'>Spah</span><span class='p'>.</span><span class='nx'>state</span><span class='p'>.</span><span class='nx'>select</span><span class='p'>(</span><span class='s2'>&quot;/hash_one//foo&quot;</span><span class='p'>);</span> <span class='c1'>//-&gt; [Result, Result];</span>
     <span class='nx'>results</span><span class='p'>[</span><span class='mi'>0</span><span class='p'>].</span><span class='nx'>path</span> <span class='c1'>//-&gt; &quot;/hash_one/foo&quot;</span>
     <span class='nx'>results</span><span class='p'>[</span><span class='mi'>0</span><span class='p'>].</span><span class='nx'>value</span> <span class='c1'>//-&gt; &quot;bar&quot;</span>
@@ -326,7 +332,7 @@
         <p><a href="http://github.com/danski/spah">Spah</a> v0.0.0 API documentation.</p>
         <p>
           
-            Last updated on May 04, 2011 at 16:34 UTC.
+            Last updated on May 05, 2011 at 09:24 UTC.
           
           Generated by <a href="http://pdoc.org">PDoc</a>.
           Uses <a href="http://famfamfam.com/lab/icons/silk/" title="famfamfam.com: Silk Icons">Silk Icons</a> and portions of <a href="http://github.com/280north/aristo/tree/master" title="280north's aristo at master - GitHub">Aristo</a>.

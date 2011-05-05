@@ -82,8 +82,15 @@ out the rest of the startup process.
 
 For partials, Spah uses [Mustache templates][templating]. All <code>.mustache</code> files in your server-side application are indexed by path on startup
 and made available to the rendering chain on both the client and server. Spah automatically injects the templates into your HTML layout using
-<code><script type="text/mustache" id="views/my/partial">...</script></code> tags, which are semantically neutral in nature and do not alter
-your document's content. Spah will also add a hidden <code>state</code> input to the end of each form in your document containing the current
+script tags:
+
+    language:html
+    
+    <script type="text/mustache" id="views/my/partial">
+      {{name}}
+    </script>
+
+These are semantically neutral in nature and do not alter your document's content. Spah will also add a hidden <code>state</code> input to the end of each form in your document containing the current
 state, and append the state to link URLs within the current domain - this allows for graceful state handover in no-js environments.
 
 In environments that support JS, the state in forms and links is replaced with the current state on submission/activation.
@@ -133,16 +140,16 @@ The state may be queried on both the client and server by using the state query 
 
 You may retrieve any value using a simple path:
 
-    Spah.state.queryValues("/hash_one"); //-> [{foo: "bar", bar: "baz"}]
-    Spah.state.queryValues("/hash_one/foo"); //-> "bar";
-    Spah.state.queryValues("/hash_one/arr_in_hash"); //-> "bar";
-    Spah.state.queryValues("//foo") //-> ["bar", "bar"];
+    Spah.state.selectValues("/hash_one"); //-> [{foo: "bar", bar: "baz"}]
+    Spah.state.selectValues("/hash_one/foo"); //-> "bar";
+    Spah.state.selectValues("/hash_one/arr_in_hash"); //-> "bar";
+    Spah.state.selectValues("//foo") //-> ["bar", "bar"];
       
 In the last example, a double slash is used to indicate that we want all values named "foo" regardless of their place in the hierarchy. Much like xpath, the query can be scoped:
 
-    Spah.state.queryValues("/hash_one//foo"); //-> ["bar", "bar-inner"];
+    Spah.state.selectValues("/hash_one//foo"); //-> ["bar", "bar-inner"];
       
-What is actually happening here is that the #queryValues method is getting a set of <code>Spah.Viewstate.select.Result</code> objects back, each of which provides a path and a value for the returned result:
+What is actually happening here is that the #selectValues method is getting a set of <code>Spah.Viewstate.select.Result</code> objects back, each of which provides a path and a value for the returned result:
 
     var results = Spah.state.select("/hash_one//foo"); //-> [Result, Result];
         results[0].path //-> "/hash_one/foo"
