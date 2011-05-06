@@ -13,6 +13,7 @@ GEM
     json (1.5.0)
     maruku (0.6.0)
       syntax (>= 1.0.0)
+    mustache (0.99.3)
     oyster (0.9.4)
     pdoc (0.2.0)
       BlueCloth (> 0.0.0)
@@ -44,6 +45,7 @@ DEPENDENCIES
   jeweler (~> 1.5.2)
   json (~> 1.5.0)
   maruku
+  mustache (~> 0.99.3)
   pdoc (~> 0.2.0)
   rcov
   rspec (~> 2.3.0)

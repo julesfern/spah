@@ -1,0 +1,77 @@
+---
+id: "Spah.State.Merger"
+parent_id: "Spah.State"
+type: class
+line_number: 7
+description: |
+  This is a singleton helper dedicated to deep-merging complex JSON structures and returning both
+  the merged data and a digest of modified paths within the structure.
+
+file: /Users/danski/Sites/spah/client/src/Spah.State.Merger.js
+
+---
+id: "Spah.State.Merger.mergeTree"
+parent_id: "Spah.State.Merger"
+type: class method
+line_number: 33
+description: |
+  Merges the given objects and returns an object like:
+  
+       {
+         data: updatedObject,
+         modifications: modificationsKeyedByPath,
+         modified: booleanIndicatingChangesWereMade
+       }
+
+signatures:
+ -
+  signature: "Spah.State.Merger.mergeTree(src, dest [, path])"
+  return_value: "Object mergeData"
+arguments:
+ -
+  name: src
+  types: [Object]
+  description: >
+    The source object containing deltas intended to be written into the destination object.
+
+ -
+  name: dest
+  types: [Object]
+  description: >
+    The destination object for the updated data.
+
+ -
+  name: path
+  types: [String]
+  description: >
+    A path used in recursion to collect modifications and act as a stack tracer.
+
+file: /Users/danski/Sites/spah/client/src/Spah.State.Merger.js
+
+---
+id: "Spah.State.Merger.modificationSymbol"
+parent_id: "Spah.State.Merger"
+type: class method
+line_number: 133
+description: |
+  Determines whether the change between two objects, assuming content inequality, is a "+" (addition), "-" (nullification) or "~" (alteration).
+
+signatures:
+ -
+  signature: "Spah.State.Merger.modificationSymbol(src, dest)"
+  return_value: "String symbol"
+file: /Users/danski/Sites/spah/client/src/Spah.State.Merger.js
+
+---
+id: "Spah.State.Merger.objectType"
+parent_id: "Spah.State.Merger"
+type: class method
+line_number: 144
+description: |
+  Extends the core typeof(obj) function by adding types "array" and "null".
+
+signatures:
+ -
+  signature: "Spah.State.Merger.objectType(obj)"
+  return_value: "String type"
+file: /Users/danski/Sites/spah/client/src/Spah.State.Merger.js

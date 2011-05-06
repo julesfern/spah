@@ -4,13 +4,21 @@ Spah: Single-Page Application Helper
 <img src="https://img.skitch.com/20110504-c79qr916mcwtnq4m63uqc3dibq.jpg" />
 
 Contents
---------
+========
 
 [introduction]: #introduction
 [server]: #the_server
 [client]: #the_client
 [state_queries]: #state_queries
+[selection_state_queries]: #selection_queries
+[boolean_state_queries]: #boolean_queries
 [document_logic]: #document_logic
+[logic_hide_show]: #hide_or_show_an_element
+[logic_classes]: #add_or_remove_element_classes
+[logic_id]: #set_element_id
+[logic_stashing]: #stash_and_unstash_element_content
+[logic_chaining]: #using_multiple_operations_on_a_single_element
+[logic_example]: #advanced_document_logic_example
 [ruby_helpers]: #you_can_still_write_your_markup_with_ruby
 [templating]: #templating_with_mustache
 [responders]: #responding_to_state_changes_with_javascript
@@ -23,8 +31,16 @@ Contents
 1. [Introduction][introduction]
 2. [The server][server]
 3. [The client][client]
-4. [State queries][state_queries]
-5. TODO: [Document logic][document_logic]
+4. [State queries][state_queries] 
+  * [Selection queries][selection_state_queries]
+  * [Boolean queries][boolean_state_queries]
+5. [Document logic][document_logic]
+  * [Hiding and showing elements][logic_hide_show]
+  * [Adding and removing element classes][logic_classes]
+  * [Setting the ID of an element][logic_id]
+  * [Stash and unstash element content][logic_stashing]
+  * [Using multiple operations on a single element][logic_chaining]
+  * [Advanced example][logic_example]
 6. TODO: [Templating with Mustache][templating]
 7. TODO: [Building your markup with ruby][ruby_helpers] (erb, haml, templating, url builders)
 8. TODO: [Reacting to state changes with Javascript][responders]
@@ -35,7 +51,7 @@ Contents
 13. TODO: [Examples: Example Sinatra application][sinatra_example]
 
 Introduction
-------------
+============
 
 Spah is both a server-side rubygem and a client-side javascript library. Together, the two parts are used to build dynamic single-page
 web applications that:
@@ -48,17 +64,17 @@ The central concept in Spah is the **state**. Spah manages the state of your app
 strings and arrays. You, as the developer of your application, define the overall structure of the state. As an example, the state for this
 documentation page might be something like:
 
-       {
-         "class": "Spah", // Currently viewing the Spah class
-         "method": null, // No specific method selected
-         "search-query": "" // No search term entered in search box
-       }
+     {
+       "class": "Spah", // Currently viewing the Spah class
+       "method": null, // No specific method selected
+       "search-query": "" // No search term entered in search box
+     }
 
 On each request to the server, Spah will attach the state in JSON form to the request. The server modifies the state and returns a
 new JSON object containing the updates. The Spah client merges the updates into the state and dispatches events to which you may subscribe.
 
 The server
-----------
+==========
 A Spah application is assumed to be a RESTish ruby application - in our examples we'll be using Rails. As always, all validation and data
 persistence is handled by your models. All routing by the router, and all request logic in the controllers. Where a Spah app differs is in
 the view layer.
@@ -96,7 +112,7 @@ state, and append the state to link URLs within the current domain - this allows
 In environments that support JS, the state in forms and links is replaced with the current state on submission/activation.
 
 The client
-----------
+==========
 The Spah client handles things at the browser end. Its primary tasks are:
 
 1. Ensuring that links and forms are submitted asynchronously and that they attach the state when activated (you may also [prevent some links and forms from acting asynchronously][force_synchronous])
@@ -124,7 +140,10 @@ updated accordingly.
 You may also bind more advanced behaviours to changes in the state using [jQuery responders][responders] and [state queries][state_queries]
 
 State queries
--------------
+=============
+
+Selection Queries
+-----------------
 
 The state may be queried on both the client and server by using the state query language, a DSL for querying JSON structures. Let's take an example state with a variety of types:
 
@@ -179,6 +198,16 @@ Arrays, strings and hashes also provide the .length property:
     results = Spah.state.select("/arr_one.length") //-> [Result]
     results[0].path //-> "/arr_one.length"
     results[1].value = 3
+    
+Arrays provide the .first and .last properties:
+
+    results = Spah.state.select("/arr_one.first") //-> [Result]
+    results[0].path //-> "/arr_one[0]"
+    results[0].value = 1
+    
+    results = Spah.state.select("/arr_one.last") //-> [Result]
+    results[0].path //-> "/arr_one[2]"
+    results[0].value = 3
 
 The <code>[]</code> accessor also supports comparators:
 
@@ -216,6 +245,9 @@ The <code>[]</code> accessor also supports comparators:
     results[0].value = "bar"
     results[1].path = "/hash_two/foo"
     results[1].value = "bar"
+
+Boolean Queries
+---------------
 
 Queries may also produce boolean results, using comparators between subqueries:
 
@@ -269,14 +301,148 @@ Queries may also produce boolean results, using comparators between subqueries:
     Spah.state.assert("/arr_one") //-> true
 
 Document logic
+==============
+
+In a Spah application, document logic (show this, hide that, populate this with that) is moved away from in-place Erb views and into a place where both the client and the server will have access to it - the document itself. In doing this, we want to avoid doing anything silly like adding new tags or attributes that break HTML validity, or dirtying up your markup with billions of extra nested div elements.
+
+Spah handles document logic with HTML5 data attributes. Elements may query the state and declare how they should be altered when the query result is returned. When cold-booting your application from the server, the document logic is evaluated and run in-place before sending the HTML down the wire - this is what allows Spah to respond to HTML requests with valid, useful documents. On the client side, updates to the state cause any embedded document logic to be re-evaluated automatically. All document logic is achieved using [State Queries][state_queries]. Conditions such as <code>if</code> statements use truthiness queries, as seen in the [state query documentation][boolean_state_queries].
+
+Spah provides the following operations on document logic:
+
+Hide or show an element
+-----------------------
+
+Show/hide of an element is achieved by appending <code>display: none;</code> to the element's <code>style</code> attribute if it should be hidden.
+
+    language:html
+    
+    <form class="add-tags" data-show-if="/user-authenticated">
+      This form will only show if the query "/user-authenticated" returns true
+    </form>
+    
+    <form class="add-tags" data-show-unless="/user-anonymous">
+      An alternative way of expressing a similar query using 
+      the "data-*-unless" syntax. All conditions support both 
+      the -if and -unless syntaxes.
+    </form>
+
+Add or remove element classes
+-----------------------------
+
+Use the <code>data-class-[classname]-if</code> or <code>-unless</code> attribute to specify that a specific class should be appended to the element's <code>class</code> attribute.
+    language:html
+    
+    <li class="item" data-class-current-if="/items[0]/important">
+      This list item will have the class "important" if the first item in the 
+      array at "/items" has the "important" property
+    </li>
+    
+Set element ID
 --------------
 
-Templating with Mustache
-------------------------
+Use the <code>data-id-[id]-if</code> or <code>-unless</code> to specify that an element should be given a new <code>id</code> under certain circumstances. If the condition causes Spah to write the ID on an element, Spah will automatically remove the ID from any other elements that previously possessed it.
 
+    language:html
+    
+    <li class="item" data-id-current_item-if="/items.last/id == 3">
+      This list item will have the id "current_item" if the last object 
+      in the items array has the property "id" with value 3.
+    </li>
+    
+Stash and unstash element content
+---------------------------------
+
+Stashing content allows you to render semantically-null empty elements into your document, with their content stowed in a data attribute for later use. Stashing only occurs if there is no content already stashed on the element - thus stashed content may be used for state-toggling. See [example][logic_example].
+
+    language:html
+    
+    <div  class="new-message-notification" 
+          data-stash-unless="/messages[unread].length > 0">
+
+          You have new messages!
+      
+          (This text will be moved into the "data-stashed-content" attribute 
+          on the containing DIV element if the user has no new messages. 
+          This way, your markup won't contain a hidden, but erroneous, 
+          new message notification.)
+    </div>
+    
+    <!-- When the content is stashed, the element will look like this: -->
+    <div  class="new-message-notification" 
+          data-stash-unless="/messages[unread].length > 0" 
+          data-stashed-content="You%20have%20new%20messages%21....">
+    </div>
+
+Populate element from a template
+--------------------------------
+
+Spah can use your shared [Mustache templates][templating] to render state data into a containing element. On the client side, the Spah client will automatically add a [jQuery responder][responders] to the path referenced in the <code>data-populate-with</code> attribute, ensuring that the populated content is updated when the state is modified.
+
+    language:html
+    
+    <ul class="users" data-populate-if="/users.length > 0" 
+                      data-populate-with="/users" 
+                      data-populate-template="/views/users/single">
+                     
+      This text will be replaced with the results of running the template contained
+      in an element with ID "/views/users/single" through Mustache.js using data from
+      the state at /users as the payload.
+      
+      If the data found at /users is an array, the array will be wrapped in an object 
+      so that Mustache can make it available: {"items": [content, of, array]}
+    </ul>
+
+Using multiple operations on a single element
+---------------------------------------------
+
+All of the above operations may be combined on a single element. The order in which the operations will run is strictly defined in order of the type of operation. <code>-if</code> operations always run before <code>-unless</code> operations.
+
+1. data-show-if and data-show-unless
+2. data-class-\[classname\]-if, data-class-\[classname\]-unless
+3. data-id-\[id\]-if, data-id-\[id\]-unless
+4. data-stash-if, data-stash-unless
+5. data-populate-if, data-populate-unless
+
+Advanced document logic example
+-------------------------------
+
+Let's make an advanced example: We want a list of users to default to an "empty" state, becoming populated with users if there is a non-empty list of users in the state. If the user list in the state is emptied, then the "empty" state should be restored on the element
+
+    <ul class="users"
+        data-class-empty-if="/users.length < 1">
+        data-stash-if="/users.length > 0"
+        data-populate-if="/users.length > 0"
+        data-populate-with="/users"
+        data-populate-template="/views/users/single">
+        
+        <li class="empty">
+          No users found.
+        </li>
+    </ul>
+    
+Because stash operations run before populate operations, the following chain of events will occur:
+
+1. The element will render in the "empty" state, with class "empty" applied.
+2. If the <code>/users</code> array is empty, it will remain in the empty state
+3. If the <code>/users</code> array becomes non-empty:
+  1. The "No users found" element will be stashed
+  2. The <code>ul</code> element will be populated using the template
+  3. The "empty" class will be removed from the <code>ul</code>
+4. If the <code>/users</code> array reverts to an empty state:
+  1. The "empty" class will be removed from the <code>ul</code>
+  2. The "No users found" element will be unstashed into the <code>ul</code>, overwriting the rendered template content.
+
+Templating with Mustache
+========================
+
+You can still write your markup with Ruby
+=========================================
+
+Responding to state changes with Javascript
+===========================================
 
 Forcing links and forms to load synchronously
----------------------------------------------
+=============================================
 
 To prevent Spah from adding asynchronous behaviour, add the <code>data-async="false"</code> attribute to the link or form element:
 
@@ -287,3 +453,15 @@ To prevent Spah from adding asynchronous behaviour, add the <code>data-async="fa
     <form action="/login" method="POST" data-async="false">
       ...
     </form>
+
+Default client behaviour
+========================
+
+Eager client state changes
+==========================
+
+Example Rails application
+=========================
+
+Example Sinatra application
+===========================

@@ -1,11 +1,19 @@
 /**
  * class Spah
  * 
+ * For cleanliness, the Spah client is wrapped entirely in the <code>window.Spah</code> object.
+ * 
+ * Initialising Spah in your page is easy:
  *
+ *      $(document).ready(function() {
+ *        Spah.init();
+ *      })
  *
- * For more information on Spah, see the main [Readme on Github](https://github.com/danski/spah#readme).
+ * See [Default client behaviour](../../index.html#default_client_behaviour) to learn what actions Spah performs on initialisation.
+ * For more information on Spah, see the main [Readme](../index.html) ([also available on Github](https://github.com/danski/spah#readme))
  **/
 Spah = function() {};
+window["Spah"] = Spah;
 
 jQuery.extend(Spah, {
   
@@ -21,26 +29,25 @@ jQuery.extend(Spah, {
   "verbose": false,
   
   /**
-   * Spah.boot(options) -> Null
-   * desc
-   * description
+   * Spah.init(options) -> Null
+   * 
+   * Initialises the Spah client. See [Default client behaviour](../../index.html#default_client_behaviour) to learn what actions
+   * Spah performs on initialisation.
    **/
-  "boot": function(options) {
-    
+  "init": function(options) {
+    // Instantiate state object
   },
   
   /**
-   * Spah.log(message) -> String message
+   * Spah.log(message, objects) -> String message
    * Logs debug output to Spah's internal logger. If Spah.verbose is set to true, the message will appear in the browser's console.
    **/
   "log": function(message) {
     this.logMessages.push(message);
     if(this.verbose && window.console) {
-      console.log(message);
+      console.log.apply(window.console, arguments);
     }
     return message;
   }
 });
 
-// Compiler exports
-window["Spah"] = Spah;

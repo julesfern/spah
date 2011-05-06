@@ -7,5 +7,6 @@ Dependencies
 ============
 
 * [jQuery 1.5.2](http://ajax.googleapis.com/ajax/libs/jquery/1.5.2/jquery.min.js)
+* [mustache.js](http://mustache.github.com)
 * [history.js](https://github.com/fortes/history.js)
   * Spah uses the HTML5 history manager API to switch between views. You can optionally include History.js to transparently support this feature in HTML4 browsers.
