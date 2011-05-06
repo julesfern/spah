@@ -122,6 +122,40 @@ $(document).ready(function() {
     mergeResult = Spah.State.Merger.merge(Fixtures.State.BaseTypes.delta, Fixtures.State.BaseTypes.target);
     updates = mergeResult.modifications; data = mergeResult.data;
     expectedState = Fixtures.State.BaseTypes.expected;
+    
+    // Manually assert everything about the updated data
+    expectedModifications = {
+      "/": "~",
+      "/modifyStr": "~",
+      "/modifyBool": "~",
+      "/modifyNum": "~",
+      "/nullify": "-"
+    }
+    
+    // Assert identical keys, values and counts
+    var expectedCount = 0;
+    for(expectedKey in expectedModifications) {
+      equal(updates[expectedKey], expectedModifications[expectedKey], expectedKey+" matched update type");
+      expectedCount++;
+    }
+    var actualCount = 0;
+    for(countKey in updates) {
+      actualCount++;
+    }
+    equal(actualCount, expectedCount, "Updates had correct key count");
+    
+    // Assert expected content
+    var hKey;
+    var actualCount = 0;
+    var expectedCount = 0;
+    for(hKey in expectedState) {
+      equals(expectedState[hKey], data[hKey], "value at /"+hKey+" matches");
+      actualCount++;
+    }
+    for(hKey in data) {
+      expectedCount++;
+    }
+    equals(actualCount, expectedCount, "Equal object counts");
   });
   
   test("Merges the complex fixture correctly", function() {

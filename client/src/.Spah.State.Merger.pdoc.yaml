@@ -10,7 +10,7 @@ description: |
 file: /Users/danski/Sites/spah/client/src/Spah.State.Merger.js
 
 ---
-id: "Spah.State.Merger.mergeTree"
+id: "Spah.State.Merger.merge"
 parent_id: "Spah.State.Merger"
 type: class method
 line_number: 33
@@ -25,7 +25,7 @@ description: |
 
 signatures:
  -
-  signature: "Spah.State.Merger.mergeTree(src, dest [, path])"
+  signature: "Spah.State.Merger.merge(src, dest [, path])"
   return_value: "Object mergeData"
 arguments:
  -
@@ -52,7 +52,7 @@ file: /Users/danski/Sites/spah/client/src/Spah.State.Merger.js
 id: "Spah.State.Merger.modificationSymbol"
 parent_id: "Spah.State.Merger"
 type: class method
-line_number: 133
+line_number: 282
 description: |
   Determines whether the change between two objects, assuming content inequality, is a "+" (addition), "-" (nullification) or "~" (alteration).
 
@@ -66,7 +66,7 @@ file: /Users/danski/Sites/spah/client/src/Spah.State.Merger.js
 id: "Spah.State.Merger.objectType"
 parent_id: "Spah.State.Merger"
 type: class method
-line_number: 144
+line_number: 293
 description: |
   Extends the core typeof(obj) function by adding types "array" and "null".
 

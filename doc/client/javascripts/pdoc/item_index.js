@@ -1,7 +1,7 @@
 if (!window.PDoc) window.PDoc = {};
 PDoc.elements = {
-  'Spah.State': { 'name': 'Spah.State', 'type': 'class', 'path': 'Spah/State/index.html' },
-'Spah.State.Merger.merge': { 'name': 'Spah.State.Merger.merge', 'type': 'class method', 'path': 'Spah/State/Merger/merge/index.html' },
+  'Spah.State.Merger.merge': { 'name': 'Spah.State.Merger.merge', 'type': 'class method', 'path': 'Spah/State/Merger/merge/index.html' },
+'Spah.State': { 'name': 'Spah.State', 'type': 'class', 'path': 'Spah/State/index.html' },
 'Spah.verbose': { 'name': 'Spah.verbose', 'type': 'class property', 'path': 'Spah/verbose/index.html' },
 'Spah.State.Merger.modificationSymbol': { 'name': 'Spah.State.Merger.modificationSymbol', 'type': 'class method', 'path': 'Spah/State/Merger/modificationSymbol/index.html' },
 'Spah.State.Merger': { 'name': 'Spah.State.Merger', 'type': 'class', 'path': 'Spah/State/Merger/index.html' },
