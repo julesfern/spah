@@ -1,24 +1,23 @@
 $(document).ready(function() {
   
-  module("Spah.State.Merger");
+  module("Spah.State.DataHelper");
   
   test("Correctly determines object types", function() {
-    equal("string", Spah.State.Merger.objectType(""), "String type");
-    equal("number", Spah.State.Merger.objectType(0), "Number type");
-    equal("boolean", Spah.State.Merger.objectType(false), "Bool type");
-    equal("object", Spah.State.Merger.objectType({}), "Hash type");
-    equal("array", Spah.State.Merger.objectType([]), "Array type");
-    equal("null", Spah.State.Merger.objectType(null), "Null type");
+    equal("string", Spah.State.DataHelper.objectType(""), "String type");
+    equal("number", Spah.State.DataHelper.objectType(0), "Number type");
+    equal("boolean", Spah.State.DataHelper.objectType(false), "Bool type");
+    equal("object", Spah.State.DataHelper.objectType({}), "Hash type");
+    equal("array", Spah.State.DataHelper.objectType([]), "Array type");
+    equal("null", Spah.State.DataHelper.objectType(null), "Null type");
   })
   
   test("Merges arrays correctly", function() {
-    mergeResult = Spah.State.Merger.merge(Fixtures.State.Arrays.delta, Fixtures.State.Arrays.target);
+    mergeResult = Spah.State.DataHelper.merge(Fixtures.State.Arrays.delta, Fixtures.State.Arrays.target);
     updates = mergeResult.modifications; data = mergeResult.data;
     expectedState = Fixtures.State.Arrays.expected;
     
     // Manually assert everything about the updated data
     expectedModifications = {
-      "/": "~",
       "/modify": "~",
       "/modify[2]": "~",
       "/modify[3]": "+",
@@ -64,13 +63,12 @@ $(document).ready(function() {
   });
   
   test("Merges hashes correctly", function() {
-    mergeResult = Spah.State.Merger.merge(Fixtures.State.Hashes.delta, Fixtures.State.Hashes.target);
+    mergeResult = Spah.State.DataHelper.merge(Fixtures.State.Hashes.delta, Fixtures.State.Hashes.target);
     updates = mergeResult.modifications; data = mergeResult.data;
     expectedState = Fixtures.State.Hashes.expected;
     
     // Manually assert everything about the updated data
     expectedModifications = {
-      "/": "~",
       "/modify": "~",
       "/modify/original": "~",
       "/lengthen": "~",
@@ -119,13 +117,12 @@ $(document).ready(function() {
   });
   
   test("Merges base object types correctly", function() {
-    mergeResult = Spah.State.Merger.merge(Fixtures.State.BaseTypes.delta, Fixtures.State.BaseTypes.target);
+    mergeResult = Spah.State.DataHelper.merge(Fixtures.State.BaseTypes.delta, Fixtures.State.BaseTypes.target);
     updates = mergeResult.modifications; data = mergeResult.data;
     expectedState = Fixtures.State.BaseTypes.expected;
     
     // Manually assert everything about the updated data
     expectedModifications = {
-      "/": "~",
       "/modifyStr": "~",
       "/modifyBool": "~",
       "/modifyNum": "~",
@@ -159,12 +156,11 @@ $(document).ready(function() {
   });
   
   test("Merges the complex fixture correctly", function() {
-    mergeResult = Spah.State.Merger.merge(Fixtures.State.Complex.delta, Fixtures.State.Complex.target);
+    mergeResult = Spah.State.DataHelper.merge(Fixtures.State.Complex.delta, Fixtures.State.Complex.target);
     updates = mergeResult.modifications; data = mergeResult.data;
     
     // Manually assert everything about the updated data
     expectedModifications = {
-      "/": "~",
       "/modify": "~",
       "/modify/nullify": "-",
       "/modify/str": "~",
@@ -178,8 +174,23 @@ $(document).ready(function() {
       "/modify/obj_modify": "~",
       "/modify/obj_modify/foo": "~",
       "/modify/created": "+",
+      "/modify/array_replace_with_object": "~",
+      "/modify/array_replace_with_object[0]": "-",
+      "/modify/array_replace_with_object[1]": "-",
+      "/modify/array_replace_with_object/foo": "+",
+      "/modify/object_replace_with_array": "~",
+      "/modify/object_replace_with_array/foo": "-",
+      "/modify/object_replace_with_array[0]": "+",
+      "/modify/object_replace_with_array[1]": "+",
+      "/modify/remove_hash_in_array": "~",
+      "/modify/remove_hash_in_array[2]": "-",
+      "/modify/remove_hash_in_array[2]/foo": "-",
       "/created": "+",
-      "/created/created_inner": "+"
+      "/created/created_str": "+",
+      "/created/created_arr": "+",
+      "/created/created_arr[0]": "+",
+      "/created/created_obj": "+",
+      "/created/created_obj/foo": "+",
     }
     
     // Assert identical keys, values and counts

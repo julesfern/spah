@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-  <title>Spah  v0.0.0 API documentation | new Spah.State</title>
+  <title>Spah  v0.0.0 API documentation | Spah.State.DataHelper</title>
   <meta name="generator" content="PDoc" />
   
   <script charset="utf-8" src="../../../javascripts/pdoc/prototype.js" type="text/javascript"></script>
@@ -38,7 +38,9 @@
       </form>
       
       <div class="sidebar-pane scrollable" id="menu_pane">
-        <ul class="menu-items" id="api_menu"><li><div class="menu-item"><a class="class current-parent" href="../../../Spah/index.html" title="Spah (class)">Spah</a></div><ul><li><div class="menu-item"><a class="class current-parent" href="../../../Spah/State/index.html" title="Spah.State (class)">Spah.State</a></div><ul><li><div class="menu-item"><a class="class" href="../../../Spah/State/DataHelper/index.html" title="Spah.State.DataHelper (class)">Spah.State.DataHelper</a></div></li></ul><ul><li><div class="menu-item"><a class="constructor current" href="../../../Spah/State/new/index.html" title="new Spah.State (constructor)">new</a></div></li>
+        <ul class="menu-items" id="api_menu"><li><div class="menu-item"><a class="class current-parent" href="../../../Spah/index.html" title="Spah (class)">Spah</a></div><ul><li><div class="menu-item"><a class="class current-parent" href="../../../Spah/State/index.html" title="Spah.State (class)">Spah.State</a></div><ul><li><div class="menu-item"><a class="class current" href="../../../Spah/State/DataHelper/index.html" title="Spah.State.DataHelper (class)">Spah.State.DataHelper</a></div><ul><li><div class="menu-item"><a class="class-method" href="../../../Spah/State/DataHelper/merge/index.html" title="Spah.State.DataHelper.merge (class method)">merge</a></div></li>
+<li><div class="menu-item"><a class="class-method" href="../../../Spah/State/DataHelper/modificationSymbol/index.html" title="Spah.State.DataHelper.modificationSymbol (class method)">modificationSymbol</a></div></li>
+<li><div class="menu-item"><a class="class-method" href="../../../Spah/State/DataHelper/objectType/index.html" title="Spah.State.DataHelper.objectType (class method)">objectType</a></div></li></ul></li></ul><ul><li><div class="menu-item"><a class="constructor" href="../../../Spah/State/new/index.html" title="new Spah.State (constructor)">new</a></div></li>
 <li><div class="menu-item"><a class="instance-method" href="../../../Spah/State/prototype/update/index.html" title="Spah.State#update (instance method)">update</a></div></li>
 <li><div class="menu-item"><a class="instance-property" href="../../../Spah/State/prototype/data/index.html" title="Spah.State#data (instance property)">data</a></div></li></ul></li></ul></li></ul><!--- #api_menu =-->
       </div> <!-- .sidebar-pane -->
@@ -64,44 +66,85 @@
   
     <li>&rarr; <a href="../../../Spah/State/index.html" title="Spah.State (class)">State</a></li>
   
-    <li>&rarr; <a href="../../../Spah/State/new/index.html" title="new Spah.State (constructor)">new</a></li>
+    <li>&rarr; <a href="../../../Spah/State/DataHelper/index.html" title="Spah.State.DataHelper (class)">DataHelper</a></li>
   
 </ul>
 
 
-  <p id="src_code_href"><a href="http://github.com/danski/spah/blob/master/client/src/Spah.State.js#29">src code</a></p>
+  <p id="src_code_href"><a href="http://github.com/danski/spah/blob/master/client/src/Spah.State.DataHelper.js#7">src code</a></p>
 
 
 <h2 class="page-title">
-  <span class="type">constructor</span> new Spah.State
+  <span class="type">class</span> Spah.State.DataHelper
 </h2>
 
 
 
 
-<div class="section">
-  <div class="section-title">
-  </div> <!-- .section-title -->
-  <div class="section-content">
-    <div class="method-description">
-      
-        <pre class="syntax"><code class="ebnf">new Spah.State(data)</code></pre>
+                <div class="section section-description">
+                <div class="section-title">
+                  <h3>Description</h3>
+                </div> <!-- .section-title -->
+                <div class="section-content">
 
-      
-
-      <ul>
-<li>data (Object): A hash of data to act as the starting state. Note that modification events are not fired during instantiation.</li>
-</ul>
-      
-      
+    <p>This is a singleton helper dedicated to deep-merging complex JSON structures and returning both the merged data and a digest of modified paths within the structure.</p>
+                </div> <!-- .section-content -->
+            </div> <!-- .section -->
 
 
 
 
-      
-    </div>
-  </div> <!-- .section-content -->
-</div> <!-- .section -->
+
+
+
+  
+
+  
+
+
+
+
+
+
+
+
+  
+  
+  
+                  <div class="section section-class_methods">
+                <div class="section-title">
+                  <h3>Class methods</h3>
+                </div> <!-- .section-title -->
+                <div class="section-content">
+
+      <ul class="method-list">
+        <li><code><a class="class-method" href="../../../Spah/State/DataHelper/merge/index.html" title="Spah.State.DataHelper.merge (class method)">merge</a></code></li>
+
+<li><code><a class="class-method" href="../../../Spah/State/DataHelper/modificationSymbol/index.html" title="Spah.State.DataHelper.modificationSymbol (class method)">modificationSymbol</a></code></li>
+
+<li><code><a class="class-method" href="../../../Spah/State/DataHelper/objectType/index.html" title="Spah.State.DataHelper.objectType (class method)">objectType</a></code></li>
+
+      </ul>
+                  </div> <!-- .section-content -->
+            </div> <!-- .section -->
+
+  
+
+  
+  
+  
+
+  
+  
+  
+
+  
+  
+  
+
+  
+  
+  
 
       </div> <!-- #main -->
       

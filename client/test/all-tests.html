@@ -12,7 +12,7 @@
     <!-- Libs -->
     <script type="text/javascript" src="../src/Spah.js"></script>
     <script type="text/javascript" src="../src/Spah.State.js"></script>
-    <script type="text/javascript" src="../src/Spah.State.Merger.js"></script>
+    <script type="text/javascript" src="../src/Spah.State.DataHelper.js"></script>
     
     <!-- Setup -->
     <script type="text/javascript">
@@ -22,7 +22,7 @@
     <!-- TESTS -->
     <script type="text/javascript" src="Spah.qunit.js"></script>
     <script type="text/javascript" src="Spah.State.qunit.js"></script>
-    <script type="text/javascript" src="Spah.State.Merger.qunit.js"></script>
+    <script type="text/javascript" src="Spah.State.DataHelper.qunit.js"></script>
     <!-- /TESTS -->
   </head>
   <body>
@@ -141,7 +141,10 @@
                   obj_modify: {
                     foo: "foo original",
                     bar: "bar original"
-                  }
+                  },
+                  array_replace_with_object: [0,1],
+                  object_replace_with_array: {foo: "bar"},
+                  remove_hash_in_array: [{foo: "bar"}, {foo: "bar"}, {foo: "bar"}]
                 },
                 leave: {
                   string: "original",
@@ -161,10 +164,15 @@
                   obj_modify: {
                     foo: "foo modified"
                   },
+                  array_replace_with_object: {foo: "bar"},
+                  object_replace_with_array: [0,1],
+                  remove_hash_in_array: [{foo: "bar"}, {foo: "bar"}],
                   created: "i'm new!"
                 },
                 created: {
-                  created_inner: "created"
+                  created_str: "created",
+                  created_arr: [0],
+                  created_obj: {foo: "bar"}
                 }
               }
             }

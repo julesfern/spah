@@ -1,0 +1,95 @@
+---
+id: "Spah.State.DataHelper"
+parent_id: "Spah.State"
+type: class
+line_number: 7
+description: |
+  This is a singleton helper dedicated to deep-merging complex JSON structures and returning both
+  the merged data and a digest of modified paths within the structure.
+
+file: /Users/danski/Sites/spah/client/src/Spah.State.DataHelper.js
+
+---
+id: "Spah.State.DataHelper.merge"
+parent_id: "Spah.State.DataHelper"
+type: class method
+line_number: 51
+description: |
+  Merges the given objects and returns an object like:
+  
+       {
+         data: updatedObject,
+         modifications: modificationsKeyedByPath,
+         modified: booleanIndicatingChangesWereMade
+       }
+  
+  For instance:
+  
+       var originalState = {
+         user_authenticated: true,
+         items: [{type: "Item", id: 1}, {type: "Item", id: 2}],
+         user: {id: 9, name: "My user"}
+       }
+       var delta = {
+         items: [{type: "Item", id: 888}],
+         user: {id: 9, name: "User got a new name"}
+       }
+       mergeResult = Spah.State.DataHelper.merge(delta, originalState);
+       mergeResult.data; /*-> The merged data: {
+         user_authenticated: true,
+         items: [{type: "Item", id: 888}],
+         user: {id: 9, name: "User got a new name"}
+       } */
+
+signatures:
+ -
+  signature: "Spah.State.DataHelper.merge(delta, target [, path])"
+  return_value: "Object mergeData"
+arguments:
+ -
+  name: delta
+  types: [Object]
+  description: >
+    The source object containing deltas intended to be written into the destination object.
+
+ -
+  name: target
+  types: [Object]
+  description: >
+    The destination object for the updated data.
+
+ -
+  name: path
+  types: [String]
+  description: >
+    A path used in recursion to collect modifications and act as a stack tracer.
+
+file: /Users/danski/Sites/spah/client/src/Spah.State.DataHelper.js
+
+---
+id: "Spah.State.DataHelper.modificationSymbol"
+parent_id: "Spah.State.DataHelper"
+type: class method
+line_number: 329
+description: |
+  Determines whether the change between two objects, assuming content inequality, is a "+" (addition), "-" (nullification) or "~" (alteration).
+
+signatures:
+ -
+  signature: "Spah.State.DataHelper.modificationSymbol(delta, target)"
+  return_value: "String symbol"
+file: /Users/danski/Sites/spah/client/src/Spah.State.DataHelper.js
+
+---
+id: "Spah.State.DataHelper.objectType"
+parent_id: "Spah.State.DataHelper"
+type: class method
+line_number: 340
+description: |
+  Extends the core typeof(obj) function by adding types "array" and "null".
+
+signatures:
+ -
+  signature: "Spah.State.DataHelper.objectType(obj)"
+  return_value: "String type"
+file: /Users/danski/Sites/spah/client/src/Spah.State.DataHelper.js

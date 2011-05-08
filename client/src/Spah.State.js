@@ -27,7 +27,7 @@ jQuery.extend(Spah.State.prototype, {
    * - data (Object): A hash of data to act as the starting state. Note that modification events are not fired during instantiation.
    **/
   "init": function(data) {
-    this.data = data;
+    this.data = data || {};
   },
   
   /**
@@ -52,12 +52,12 @@ jQuery.extend(Spah.State.prototype, {
    *          cat: null,
    *        }
    *      })
-   *      //-> {"/foo": "modified", "/foo/chicken": "~", "/foo/owl": "+", "/foo/cat": "-"}
+   *      //-> {"/foo": "~", "/foo/chicken": "~", "/foo/owl": "+", "/foo/cat": "-"}
    *
    * During the merge hashes are merged, while strings, arrays and booleans are replaced if re-specified in the delta.
    **/
   "update": function(delta) {
-    updates = Spah.State.Merger.merge(delta, this.data);
+    updates = Spah.State.DataHelper.merge(delta, this.data);
     this.data = updates.data;
     return updates.modifications;
   }

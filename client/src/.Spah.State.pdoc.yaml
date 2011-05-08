@@ -54,7 +54,7 @@ description: |
            cat: null,
          }
        })
-       //-> {"/foo": "modified", "/foo/chicken": "~", "/foo/owl": "+", "/foo/cat": "-"}
+       //-> {"/foo": "~", "/foo/chicken": "~", "/foo/owl": "+", "/foo/cat": "-"}
   
   During the merge hashes are merged, while strings, arrays and booleans are replaced if re-specified in the delta.
 
