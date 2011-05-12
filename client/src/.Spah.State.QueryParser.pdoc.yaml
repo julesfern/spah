@@ -1,0 +1,122 @@
+---
+id: "Spah.State.QueryParser"
+parent_id: "Spah.State"
+type: class
+line_number: 7
+description: |
+  Parses string queries from data-\*-if attributes and client-side responders and produces parsed <code>Spah.State.Query</code> instances.
+  Maintains a cache of previously-parsed queries for speed.
+
+file: /Users/danski/Sites/spah/client/src/Spah.State.QueryParser.js
+
+---
+id: "Spah.State.QueryParser.queryCache"
+parent_id: "Spah.State.QueryParser"
+type: class property
+line_number: 19
+description: |
+  Holds a cache of previously-parsed queries indexed by string representation.
+
+signatures:
+ -
+  signature: "Spah.State.QueryParser.queryCache"
+  return_value: "Object cached queries"
+file: /Users/danski/Sites/spah/client/src/Spah.State.QueryParser.js
+
+---
+id: "Spah.State.QueryParser.dotProperties"
+parent_id: "Spah.State.QueryParser"
+type: class property
+line_number: 24
+description: |
+
+
+signatures:
+ -
+  signature: "Spah.State.QueryParser.dotProperties"
+  return_value: "Array of allowed property calls"
+file: /Users/danski/Sites/spah/client/src/Spah.State.QueryParser.js
+
+---
+id: "Spah.State.QueryParser.operators"
+parent_id: "Spah.State.QueryParser"
+type: class property
+line_number: 29
+description: |
+
+
+signatures:
+ -
+  signature: "Spah.State.QueryParser.operators"
+  return_value: "Array of allowed mathematical operators"
+file: /Users/danski/Sites/spah/client/src/Spah.State.QueryParser.js
+
+---
+id: "Spah.State.QueryParser.comparators"
+parent_id: "Spah.State.QueryParser"
+type: class property
+line_number: 38
+description: |
+  Allowed comparison operators. Detection of an allowed comparator throws the
+  current subquery into "truthiness" mode, where it will return a boolean result
+  rather than a resultset.
+
+signatures:
+ -
+  signature: "Spah.State.QueryParser.comparators"
+  return_value: "Array of allowed comparators"
+file: /Users/danski/Sites/spah/client/src/Spah.State.QueryParser.js
+
+---
+id: "Spah.State.QueryParser.logicOperators"
+parent_id: "Spah.State.QueryParser"
+type: class property
+line_number: 46
+description: |
+  Allowed logical operators. Detection of an allowed logical operator throws the
+  current subquery into truthiness mode.
+
+signatures:
+ -
+  signature: "Spah.State.QueryParser.logicOperators"
+  return_value: "Array of allowed logical operators"
+file: /Users/danski/Sites/spah/client/src/Spah.State.QueryParser.js
+
+---
+id: "Spah.State.QueryParser.parseQuery"
+parent_id: "Spah.State.QueryParser"
+type: class method
+line_number: 73
+description: |
+  Parses a string query and returns a parsed <code>Spah.State.Query</code> instance.
+  
+  A query is parsed into an array of >=1 sub-queries linked by comparison operators.
+  Each sub-query is an object like:
+  
+      {
+        fragments: [...],
+        comparison: "||"
+      }
+  
+  Where the <code>comparison</code> key contains the logic gate to be used against the next
+  
+  Selection query example: /foo\[/bar=='baz'\]/foochild
+  
+      [[{key: "foo", filterQuery: resultOfParsingSquareBracketContent, recursive: false}, {key: "foochild", recursive: false}]]
+  
+  Assertion query example: /foo\[/bar=='baz'\]/foochild == "3"
+  
+      [resultOfParsingPreviousExample, "==", "3"]
+
+signatures:
+ -
+  signature: "Spah.State.QueryParser.parseQuery(str)"
+  return_value: "Spah.State.Query instance"
+arguments:
+ -
+  name: str
+  types: [String]
+  description: >
+    The string query e.g. "/foo/bar == 3"
+
+file: /Users/danski/Sites/spah/client/src/Spah.State.QueryParser.js

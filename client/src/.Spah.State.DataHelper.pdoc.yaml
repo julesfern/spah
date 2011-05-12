@@ -13,7 +13,7 @@ file: /Users/danski/Sites/spah/client/src/Spah.State.DataHelper.js
 id: "Spah.State.DataHelper.merge"
 parent_id: "Spah.State.DataHelper"
 type: class method
-line_number: 51
+line_number: 59
 description: |
   Merges the given objects and returns an object like:
   
@@ -31,15 +31,23 @@ description: |
          user: {id: 9, name: "My user"}
        }
        var delta = {
-         items: [{type: "Item", id: 888}],
-         user: {id: 9, name: "User got a new name"}
+         items: [{type: "Item", id: 1}],
+         user: {name: "User got a new name"}
        }
        mergeResult = Spah.State.DataHelper.merge(delta, originalState);
-       mergeResult.data; /*-> The merged data: {
-         user_authenticated: true,
-         items: [{type: "Item", id: 888}],
-         user: {id: 9, name: "User got a new name"}
-       } */
+       mergeResult.data; //-> The merged data: {
+       //  user_authenticated: true,
+       //  items: [{type: "Item", id: 888}], // Note that arrays are REPLACED during a merge
+       //  user: {id: 9, name: "User got a new name"} // Note hashes are MERGED during a merge
+       //}
+       mergeResult.modifications; //-> Modifications: {
+       //  "/items": "~", // The "items" array was altered
+       //  "/items[1]": "-", // The "items" array was shortened
+       //  "/items[1]/type": "-", // The hash inside the array was deleted
+       //  "/items[1]/id": "-",
+       //  "/user": "~", // Value inside "/user" was modified
+       //  "/user/name": "~" // User's name was modified
+       //}
 
 signatures:
  -
@@ -70,7 +78,7 @@ file: /Users/danski/Sites/spah/client/src/Spah.State.DataHelper.js
 id: "Spah.State.DataHelper.modificationSymbol"
 parent_id: "Spah.State.DataHelper"
 type: class method
-line_number: 329
+line_number: 338
 description: |
   Determines whether the change between two objects, assuming content inequality, is a "+" (addition), "-" (nullification) or "~" (alteration).
 
@@ -84,7 +92,7 @@ file: /Users/danski/Sites/spah/client/src/Spah.State.DataHelper.js
 id: "Spah.State.DataHelper.objectType"
 parent_id: "Spah.State.DataHelper"
 type: class method
-line_number: 340
+line_number: 349
 description: |
   Extends the core typeof(obj) function by adding types "array" and "null".
 
@@ -92,4 +100,20 @@ signatures:
  -
   signature: "Spah.State.DataHelper.objectType(obj)"
   return_value: "String type"
+file: /Users/danski/Sites/spah/client/src/Spah.State.DataHelper.js
+
+---
+id: "Spah.State.DataHelper.eq"
+parent_id: "Spah.State.DataHelper"
+type: class method
+line_number: 366
+description: |
+  Determines content equality of two or more objects. Booleans, null values, numbers and strings are compared using
+  the <code>Spah.State.DataHelper.objectType</code> method and the built-in <code>==</code> operator, but arrays
+  and hashes are traversed recursively and have their values compared.
+
+signatures:
+ -
+  signature: "Spah.State.DataHelper.eq(obj1, obj2[, objN])"
+  return_value: "Boolean equality result"
 file: /Users/danski/Sites/spah/client/src/Spah.State.DataHelper.js

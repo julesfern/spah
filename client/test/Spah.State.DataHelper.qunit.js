@@ -11,6 +11,35 @@ $(document).ready(function() {
     equal("null", Spah.State.DataHelper.objectType(null), "Null type");
   })
   
+  test("Determines simple object equality", function() {
+    ok(Spah.State.DataHelper.eq(0,0,0), "Compares integers eq")
+    ok(!Spah.State.DataHelper.eq(1,0,0), "Fails integers diff")
+    ok(!Spah.State.DataHelper.eq(0,0,false), "Fails integer crosstype")
+    
+    ok(Spah.State.DataHelper.eq("a","a","a"), "Compares strings eq")
+    ok(!Spah.State.DataHelper.eq("a", "b"), "Fails strings diff")
+    ok(!Spah.State.DataHelper.eq("a","a","a", 2), "Fails strings crosstype")
+    
+    ok(Spah.State.DataHelper.eq(true,true,true,true), "Compares bools eq")
+    ok(!Spah.State.DataHelper.eq(false, undefined), "Fails bools diff")
+    ok(!Spah.State.DataHelper.eq(false, null), "Fails bools diff")
+    ok(!Spah.State.DataHelper.eq("true",true), "Fails bools crosstype")
+  });
+  
+  test("Determines array equality", function() {
+    ok(Spah.State.DataHelper.eq([0,"1", false], [0,"1", false]), "Compares arrays eq")
+    ok(!Spah.State.DataHelper.eq([0,"1", false], [0,"1"]), "Fails arrays diff lengths")
+    ok(!Spah.State.DataHelper.eq([0,"1", false], [2,"1", false]), "Fails arrays diff")
+  })
+  
+  test("Determines hash equality", function() {
+    ok(Spah.State.DataHelper.eq({foo: "bar", bar: "baz"}, {foo: "bar", bar: "baz"}), "Compares hashes eq")
+    ok(!Spah.State.DataHelper.eq({foo: "bar", bar: "baz"}, {foo: "bar", bar: "different"}), "Fails hashes diff root content")
+    ok(!Spah.State.DataHelper.eq({foo: "bar", bar: "baz"}, {foo: "bar", barDifferent: "baz"}), "Fails hashes diff root keys")
+    ok(!Spah.State.DataHelper.eq({foo: "bar", arr: [0,1,2]}, {foo: "bar", arr: [1,2,3]}), "Fails hashes diff inner content")
+    ok(!Spah.State.DataHelper.eq({foo: "bar", arr: [0,1,2]}, {foo: "bar", arr: null}), "Fails hashes diff inner content types")
+  })
+  
   test("Merges arrays correctly", function() {
     mergeResult = Spah.State.DataHelper.merge(Fixtures.State.Arrays.delta, Fixtures.State.Arrays.target);
     updates = mergeResult.modifications; data = mergeResult.data;
@@ -19,18 +48,18 @@ $(document).ready(function() {
     // Manually assert everything about the updated data
     expectedModifications = {
       "/modify": "~",
-      "/modify[2]": "~",
-      "/modify[3]": "+",
+      "/modify/2": "~",
+      "/modify/3": "+",
       "/lengthen": "~",
-      "/lengthen[0]": "+",
-      "/lengthen[1]": "+",
-      "/lengthen[2]": "+",
+      "/lengthen/0": "+",
+      "/lengthen/1": "+",
+      "/lengthen/2": "+",
       "/shorten": "~",
-      "/shorten[1]": "-",
-      "/shorten[2]": "-",
-      "/shorten[3]": "-",
+      "/shorten/1": "-",
+      "/shorten/2": "-",
+      "/shorten/3": "-",
       "/nullify": "-",
-      "/nullify[0]": "-"
+      "/nullify/0": "-"
     }
     
     // Assert identical keys, values and counts
@@ -165,30 +194,30 @@ $(document).ready(function() {
       "/modify/nullify": "-",
       "/modify/str": "~",
       "/modify/array_modify": "~",
-      "/modify/array_modify[3]": "~",
-      "/modify/array_modify[5]": "-",
-      "/modify/array_modify[6]": "+",
+      "/modify/array_modify/3": "~",
+      "/modify/array_modify/5": "-",
+      "/modify/array_modify/6": "+",
       "/modify/array_shorten": "~",
-      "/modify/array_shorten[5]": "-",
+      "/modify/array_shorten/5": "-",
       "/modify/bool": "~",
       "/modify/obj_modify": "~",
       "/modify/obj_modify/foo": "~",
       "/modify/created": "+",
       "/modify/array_replace_with_object": "~",
-      "/modify/array_replace_with_object[0]": "-",
-      "/modify/array_replace_with_object[1]": "-",
+      "/modify/array_replace_with_object/0": "-",
+      "/modify/array_replace_with_object/1": "-",
       "/modify/array_replace_with_object/foo": "+",
       "/modify/object_replace_with_array": "~",
       "/modify/object_replace_with_array/foo": "-",
-      "/modify/object_replace_with_array[0]": "+",
-      "/modify/object_replace_with_array[1]": "+",
+      "/modify/object_replace_with_array/0": "+",
+      "/modify/object_replace_with_array/1": "+",
       "/modify/remove_hash_in_array": "~",
-      "/modify/remove_hash_in_array[2]": "-",
-      "/modify/remove_hash_in_array[2]/foo": "-",
+      "/modify/remove_hash_in_array/2": "-",
+      "/modify/remove_hash_in_array/2/foo": "-",
       "/created": "+",
       "/created/created_str": "+",
       "/created/created_arr": "+",
-      "/created/created_arr[0]": "+",
+      "/created/created_arr/0": "+",
       "/created/created_obj": "+",
       "/created/created_obj/foo": "+",
     }

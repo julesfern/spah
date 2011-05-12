@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-  <title>Spah  v0.0.0 API documentation | Spah.State#data</title>
+  <title>Spah  v0.0.0 API documentation | Spah.State.QueryParser.dotProperties</title>
   <meta name="generator" content="PDoc" />
   
   <script charset="utf-8" src="../../../../javascripts/pdoc/prototype.js" type="text/javascript"></script>
@@ -40,9 +40,12 @@
       <div class="sidebar-pane scrollable" id="menu_pane">
         <ul class="menu-items" id="api_menu"><li><div class="menu-item"><a class="class current-parent" href="../../../../Spah/index.html" title="Spah (class)">Spah</a></div><ul><li><div class="menu-item"><a class="class current-parent" href="../../../../Spah/State/index.html" title="Spah.State (class)">Spah.State</a></div><ul><li><div class="menu-item"><a class="class" href="../../../../Spah/State/DataHelper/index.html" title="Spah.State.DataHelper (class)">Spah.State.DataHelper</a></div></li>
 <li><div class="menu-item"><a class="class" href="../../../../Spah/State/Query/index.html" title="Spah.State.Query (class)">Spah.State.Query</a></div></li>
-<li><div class="menu-item"><a class="class" href="../../../../Spah/State/QueryParser/index.html" title="Spah.State.QueryParser (class)">Spah.State.QueryParser</a></div></li></ul><ul><li><div class="menu-item"><a class="constructor" href="../../../../Spah/State/new/index.html" title="new Spah.State (constructor)">new</a></div></li>
-<li><div class="menu-item"><a class="instance-method" href="../../../../Spah/State/prototype/update/index.html" title="Spah.State#update (instance method)">update</a></div></li>
-<li><div class="menu-item"><a class="instance-property current" href="../../../../Spah/State/prototype/data/index.html" title="Spah.State#data (instance property)">data</a></div></li></ul></li></ul></li></ul><!--- #api_menu =-->
+<li><div class="menu-item"><a class="class current-parent" href="../../../../Spah/State/QueryParser/index.html" title="Spah.State.QueryParser (class)">Spah.State.QueryParser</a></div><ul><li><div class="menu-item"><a class="class-method" href="../../../../Spah/State/QueryParser/parseQuery/index.html" title="Spah.State.QueryParser.parseQuery (class method)">parseQuery</a></div></li>
+<li><div class="menu-item"><a class="class-property" href="../../../../Spah/State/QueryParser/comparators/index.html" title="Spah.State.QueryParser.comparators (class property)">comparators</a></div></li>
+<li><div class="menu-item"><a class="class-property current" href="../../../../Spah/State/QueryParser/dotProperties/index.html" title="Spah.State.QueryParser.dotProperties (class property)">dotProperties</a></div></li>
+<li><div class="menu-item"><a class="class-property" href="../../../../Spah/State/QueryParser/logicOperators/index.html" title="Spah.State.QueryParser.logicOperators (class property)">logicOperators</a></div></li>
+<li><div class="menu-item"><a class="class-property" href="../../../../Spah/State/QueryParser/operators/index.html" title="Spah.State.QueryParser.operators (class property)">operators</a></div></li>
+<li><div class="menu-item"><a class="class-property" href="../../../../Spah/State/QueryParser/queryCache/index.html" title="Spah.State.QueryParser.queryCache (class property)">queryCache</a></div></li></ul></li></ul></li></ul></li></ul><!--- #api_menu =-->
       </div> <!-- .sidebar-pane -->
       <div class="sidebar-pane" id="search_pane">
         <ul id="search_results" class="search-results menu-items scrollable"></ul>
@@ -66,16 +69,18 @@
   
     <li>&rarr; <a href="../../../../Spah/State/index.html" title="Spah.State (class)">State</a></li>
   
-    <li>&rarr; <a href="../../../../Spah/State/prototype/data/index.html" title="Spah.State#data (instance property)">data</a></li>
+    <li>&rarr; <a href="../../../../Spah/State/QueryParser/index.html" title="Spah.State.QueryParser (class)">QueryParser</a></li>
+  
+    <li>&rarr; <a href="../../../../Spah/State/QueryParser/dotProperties/index.html" title="Spah.State.QueryParser.dotProperties (class property)">dotProperties</a></li>
   
 </ul>
 
 
-  <p id="src_code_href"><a href="http://github.com/danski/spah/blob/master/client/src/Spah.State.js#39">src code</a></p>
+  <p id="src_code_href"><a href="http://github.com/danski/spah/blob/master/client/src/Spah.State.QueryParser.js#24">src code</a></p>
 
 
 <h2 class="page-title">
-  <span class="type">instance property</span> Spah.State#data
+  <span class="type">class property</span> Spah.State.QueryParser.dotProperties
 </h2>
 
 
@@ -87,11 +92,11 @@
   <div class="section-content">
     <div class="method-description">
       
-        <pre class="syntax"><code class="ebnf">Spah.State#data &rarr; Object</code></pre>
+        <pre class="syntax"><code class="ebnf">Spah.State.QueryParser.dotProperties &rarr; Array of allowed property calls</code></pre>
 
       
 
-      <p>The raw JSON construct being managed by this Spah.State instance. If you overwrite this directly, you will be haunted by a pigeon.</p>
+      
       
       
 

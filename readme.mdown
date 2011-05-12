@@ -9,9 +9,15 @@ Contents
 [introduction]: #introduction
 [server]: #the_server
 [client]: #the_client
-[state_queries]: #state_queries
+
+[spahql]: #spahql
+[spahql_concepts]: #spahql_core_concepts
 [selection_state_queries]: #selection_queries
-[boolean_state_queries]: #boolean_queries
+[assertion_state_queries]: #assertion_queries
+[literals_and_sets]: #assertion_queries_literals_and_sets
+[comparison_operators]: #comparison_operators
+[object_equality]: #object_equality
+
 [document_logic]: #document_logic
 [logic_hide_show]: #hide_or_show_an_element
 [logic_classes]: #add_or_remove_element_classes
@@ -19,21 +25,32 @@ Contents
 [logic_stashing]: #stash_and_unstash_element_content
 [logic_chaining]: #using_multiple_operations_on_a_single_element
 [logic_example]: #advanced_document_logic_example
+
 [ruby_helpers]: #you_can_still_write_your_markup_with_ruby
 [templating]: #templating_with_mustache
+[extending_templates]: #extending_the_template_helpers
+
 [responders]: #responding_to_state_changes_with_javascript
 [eager_state_changes]: #eager_client_state_changes
+
 [rails_example]: #example_rails_application
 [sinatra_example]: #example_sinatra_application
 [force_synchronous]: #forcing_links_and_forms_to_load_synchronously
 [defaults]: #default_client_behaviour
 
+[app_expression_spec]: #appendix_spahql_expression_spec
+[app_execution_spec]: #appendix_spahql_query_execution_spec
+
 1. [Introduction][introduction]
 2. [The server][server]
 3. [The client][client]
-4. [State queries][state_queries] 
+4. [Querying the state with SpahQL][spahql] 
+  * [Core concepts][spahql_concepts]
   * [Selection queries][selection_state_queries]
-  * [Boolean queries][boolean_state_queries]
+  * [Assertion queries][assertion_state_queries]
+  * [Literals and sets][literals_and_sets]
+  * [Comparison operators][comparison_operators]
+  * [Object equality][object_equality]
 5. [Document logic][document_logic]
   * [Hiding and showing elements][logic_hide_show]
   * [Adding and removing element classes][logic_classes]
@@ -42,6 +59,7 @@ Contents
   * [Using multiple operations on a single element][logic_chaining]
   * [Advanced example][logic_example]
 6. TODO: [Templating with Mustache][templating]
+  * TODO: Extending the template helpers
 7. TODO: [Building your markup with ruby][ruby_helpers] (erb, haml, templating, url builders)
 8. TODO: [Reacting to state changes with Javascript][responders]
 9. [Forcing links and forms to load synchronously][force_synchronous]
@@ -49,6 +67,8 @@ Contents
 11. TODO: [Eager client state changes][eager_state_changes] (mark parts of the tree as "expected to get new data" to trigger load notifications. automatically revert to previous state on load failure and dispatch failure event)
 12. TODO: [Examples: Example Rails application][rails_example]
 13. TODO: [Examples: Example Sinatra application][sinatra_example]
+14. [Appendix A: SpahQL expression spec][app_expression_spec]
+15. [Appendix B: SpahQL query execution spec][app_execution_spec]
 
 Introduction
 ============
@@ -137,175 +157,298 @@ This is achieved by embedding template logic within the markup using HTML5 data 
 and server. When the state is updated by a response from the server, elements with embedded display logic are re-evaluated automatically and the display 
 updated accordingly.
 
-You may also bind more advanced behaviours to changes in the state using [jQuery responders][responders] and [state queries][state_queries]
+You may also bind more advanced behaviours to changes in the state using [jQuery responders][responders] and [state queries][spahql]
 
-State queries
-=============
+SpahQL
+======
 
-Selection Queries
+SpahQL Core concepts
+--------------------
+
+SpahQL is an execution-safe query language designed to let you ask complex questions of basic JSON constructs. SpahQL is designed to work against your application's state, but it will work happily against any combination of native hashes, arrays, strings, booleans and numbers.
+
+SpahQL allows two kinds of query: **[Selection queries][selection_state_queries]** are those which retrieve a set of results from your object, while **[Assertion queries][assertion_state_queries]** are those that return a boolean result.
+
+SpahQL is biased towards value equality over key equality. It is assumed that the keys in your object are known, curated namespace with arbitrary values. For this reason SpahQL's matching is designed to focus on comparing values, not keys.
+
+All SpahQL queries are read-only; there is no semantic for updating the state.
+
+Furthermore, SpahQL uses set arithmetic for comparisons. Rather than providing an imperative syntax with complex logic, SpahQL provides set operations that allow you to build the equivalent of the <code>AND</code> and <code>OR</code> operations from other query languages using a safe, declarative syntax.
+
+Selection queries
 -----------------
 
-The state may be queried on both the client and server by using the state query language, a DSL for querying JSON structures. Let's take an example state with a variety of types:
+To select items from the state, use the basic syntax:
+
+    var results = Spah.state.select(myQuery);
+
+The basic constituent of a selection query is a *path selector*. With an example object:
 
     {
-      hash_one: {foo: "bar", bar: "baz", hash_in_hash: {"foo": "bar-inner"}},
-      hash_two: {foo: "bar", bool_one: true, bool_two: false, arr_in_hash: [1,2,3]},
-      arr_one: [1,2,3],
-      arr_two: [0,1,2],
-      arr_three: [],
-      bool_one: true,
-      bool_two: false
+        myHash: {foo: "bar", bar: "baz", mySubHash: {foo: "bar", bar: "I'M IN A HASH"}},
+        myArr: [0,1,2],
+        myPrimitives: [true, false, null, "foo", 3]
     }
 
-You may retrieve any value using a simple path:
+It's easy to make selections based on a known path. To pull up the contents of the key "myHash" in the root, use the following syntax and remember that **paths always begin with a slash**.
 
-    Spah.state.selectValues("/hash_one"); //-> [{foo: "bar", bar: "baz"}]
-    Spah.state.selectValues("/hash_one/foo"); //-> "bar";
-    Spah.state.selectValues("/hash_one/arr_in_hash"); //-> "bar";
-    Spah.state.selectValues("//foo") //-> ["bar", "bar"];
-      
-In the last example, a double slash is used to indicate that we want all values named "foo" regardless of their place in the hierarchy. Much like xpath, the query can be scoped:
+    results = Spah.state.select("/myHash");
 
-    Spah.state.selectValues("/hash_one//foo"); //-> ["bar", "bar-inner"];
-      
-What is actually happening here is that the #selectValues method is getting a set of <code>Spah.Viewstate.select.Result</code> objects back, each of which provides a path and a value for the returned result:
+Or to pull up the contents of the subhash:
 
-    var results = Spah.state.select("/hash_one//foo"); //-> [Result, Result];
-        results[0].path //-> "/hash_one/foo"
-        results[0].value //-> "bar"
-        results[1].path //-> "/hash_one/hash_in_hash/foo"
-        results[1].value //-> "bar-inner"
-      
-When accessing arrays, strings and hashes, the <code>[index]</code> accessor may be used:
+    results = Spah.state.select("/myHash/mySubHash");
 
-    // Array
-    results = Spah.state.select("/arr_one[0]") //-> [Result]
-    results[0].path //-> "/arr_one[0]"
-    results[0].value //-> 1
+Recursion is supported with a double-slash anywhere in the path:
+
+    // Find all entries with the key "foo"
+    results = Spah.state.select("//foo");
     
-    // Hash
-    results = Spah.state.select("/hash_one[foo]") //-> [Result]
-    results[0].path //-> "/hash_one/foo"
+    // Find all entries inside myHash with the key "foo"
+    results = Spah.state.select("/myHash//foo");
+    
+The results are always returned as a set of <code>Spah.State.QueryResult</code> objects, which each have properties <code>path</code> and <code>value</code>:
+
+    results = Spah.state.select("/myHash//foo"); //-> [QueryResult, QueryResult]
+    results[0].path //-> "/myHash/foo"
     results[0].value //-> "bar"
+    results[1].path //-> "/myHash/mySubHash/foo"
+    results[1].value //-> "bar"
+
+Keys in arrays are treated just like keys in hashes:
+
+    // Grab the first item in /myArr
+    results = Spah.state.select("/myArr/0")
+
+You may also use <code>*</code> as a wildcard in paths:
+
+    // Grab ALL items in /myArr
+    results = Spah.state.select("/myArr/*")
+    results[0].path //-> "/myArr/0"
+    results[0].value //-> 0
+
+Path queries are **reductive**. When executed, the first part of the query is run against the top level of the object being queried, and the remaining results are handed to the next part of the path to be reduced further. This loop continues until we're either out of results or out of path segments.
+
+Using these reductive characteristics, we can perform advanced queries with **filter queries**. Filter queries are contained in square brackets, and can be used to further reduce the results before the query runner moves on to the next path segment.
+
+    // Grab /myHash, but only if it contains a key "foo" with any 
+    // non-false value:
+    results = Spah.state.select("/myHash[/foo]")
     
-    // String
-    results = Spah.state.select("/hash_one/foo[1]") //-> [Result]
-    results[0].path //-> "/hash_one/foo[1]"
-    results[0].value //-> "a"
-          
-Arrays, strings and hashes also provide the .length property:
-
-    results = Spah.state.select("/arr_one.length") //-> [Result]
-    results[0].path //-> "/arr_one.length"
-    results[1].value = 3
+    // Grab all items that contain a key "foo" with value "bar"
+    // This is an identical query to "//*[/foo == 'bar']"
+    results = Spah.state.select("//[/foo == 'bar']")
     
-Arrays provide the .first and .last properties:
-
-    results = Spah.state.select("/arr_one.first") //-> [Result]
-    results[0].path //-> "/arr_one[0]"
-    results[0].value = 1
+    // Grab all root-level items that have the key "foo" with value "bar"
+    // either on themselves or on any of their descendants.
+    // This is an identical query to "/*[//foo == 'bar']"
+    results = Spah.state.select("/[//foo == 'bar']")
     
-    results = Spah.state.select("/arr_one.last") //-> [Result]
-    results[0].path //-> "/arr_one[2]"
-    results[0].value = 3
+    // Grab all items anywhere that have key "foo" with value "bar"
+    // either on themselves or on any of their descendants.
+    // This is an identical query to "//*[//foo == 'bar']"
+    results = Spah.state.select("//[//foo == 'bar']")
+    
+    // Grab all items containing the value "bar" on themselves:
+    // This is an identical query to "//*[/* == 'bar']"
+    results = Spah.state.select("//[/* == 'bar']")
+    
+    // Grab all items containing the value "bar" on themselves
+    // or any of their descendants.
+    // This is an identical query to "//*[//* == 'bar']"
+    results = Spah.state.select("//[//* == 'bar']")
 
-The <code>[]</code> accessor also supports comparators:
+There are a few things to note about the query inside the <code>[]</code> brackets. Firstly, it has access to the full query syntax. Secondly, it runs within the scope of the current path segment. Take this query for example:
 
-    // Query for all hashes where the "foo" property is defined 
-    // and has value "bar":
-    results = Spah.state.select("//[foo=='bar']") //-> [Result, Result]
-    results[0].path = "/hash_one/foo"
-    results[0].value = "bar"
-    results[1].path = "/hash_two/foo"
-    results[1].value = "bar"
+    // Returns no results - myArr is on the root, and the filter query 
+    // runs in the context of /myHash, which has no key "myArr".
+    results = Spah.state.select("/myHash[/myArr]")
+
+If you want to lookup data on the root from inside a filter query, use the <code>$</code> symbol to force a path to execute on the root context:
+
+    // Returns /myHash only if it contains a value with the same contents as 
+    // /myArr on the root.
+    results = Spah.state.select("/myHash[/* == $/myArr]")
+
+I'm sure by now that you've noticed the filter queries contain **comparison operators**. Any query containing a comparison operator is automatically executed as an [assertion query][assertion_state_queries]:
+
+* A **selection** query: 
+  
+        /myHash
+  
+* An **assertion** query: 
+  
+        /myHash == /someOtherHash
+  
+* A **selection** query containing an assertion query as a filter: 
+  
+        /myHash[/foo == 'baz']
+  
+* An **assertion** query containing two selection queries, one of which contains an assertion query as a filter: 
+  
+        /myHash[/foo == 'baz'] == /myArr
+  
+
+Assertion queries
+-----------------
+
+We've already seen how assertion queries can be used as filters in [selection queries][selection_state_queries]. Assertion queries are also used heavily in Spah's [document logic][document_logic] features.
+
+Assertion queries are run through the <code>assert</code> method on the state:
+
+    result = Spah.state.assert(myQuery) //-> true or false.
+
+The <code>assert</code> method accepts both selection and assertion queries - if the given query is a selection query, the result will be <code>true</code> if the query returns one or more results with non-false (i.e. not false or null) values.
+
+As discussed in [core concepts][spahql_concepts], all comparisons in SpahQL use set arithmetic instead of traditional imperative logic and equality. SpahQL comparisons allow you to determine if:
+
+* One set is exactly equal to another set
+* One set contains the same values as another set
+* One set is a subset of another set
+* One set is a superset of another set
+
+Assertion queries: Literals and sets
+------------------------------------
+
+SpahQL does support literals - strings, integers, floats, <code>true</code>, <code>false</code> and <code>null</code> may all be used directly in SpahQL queries:
+
+    3 // the number 3
+    "foo" // the string "foo"
+    'foo' // the string "foo"
+    true // boolean true
+    false // boolean false
+    null // null
+
+All comparisons in SpahQL are **set comparisons**. A query like <code>/foo</code> returns a set of results. A literal like <code>3</code> or <code>"somestring"</code> is considered to be a set containing a single entity. Literals may be wrapped in <code>{}</code> mustaches and seperated with commas to create in-place sets:
+
+    // a set containing the string "3" and the number 3.
+    {"3",3}
+
+Sets may also be built from a combination of literals and queries:
+
+    // a set containing the string "3", all the results from the 
+    // query "/bar" and the string "foo".
+    {"3",/bar,"foo"}
+    // note that the set is flattened - the results from "/bar"
+    // are appended to the set in-place. If /bar returned values "a" and "b",
+    // this set would look like: {"3","a","b","foo"}
+
+You may also create ranges:
+
+    {"a".."c"} // a set containing "a", "b" and "c"
+    {0..3} // a set containing 0, 1, 2 and 3.
+    {"a"..9} // COMPILER ERROR - sets must be composed of objects of the same type.
+    {"a"../foo/bar} // COMPILE ERROR - ranges do not support path lookup.
+
+Comparison operators
+--------------------
+
+SpahQL's set arithmetic uses simple operators:
+
+* Set equality <code>==</code>
+
+  Asserts that both the left-hand and right-hand sets have a 1:1 relationship between their values. The values may come from different paths in the state, or be literals. The values do not have to be in the same order. Each value has its equality checked based on its type. See [Object equality][object_equality].
+
+        // Always true:
+        Spah.state.assert("1 == 1"); // integers
+        Spah.state.assert("'foo' == 'foo'"); // strings
+        Spah.state.assert("true"); // boolean
+        Spah.state.assert("/myHash == /myHash"); // queries
+        Spah.state.assert("{1,2,3} == {1..3}"); // set literals
         
-    // Query for all hashes where the "foo" property is defined and 
-    // has a value matching the regular expression '^bar'
-    results = Spah.state.select("//[foo~='^bar']") //-> 
-    results[0]
-    
-    // Query for all arrays of at least 2 entries in length:
-    // Note that the "type" and "length" properties are preceded by a dot.
-    // Available types are "Array", "Bool", "Hash", "String"
-    results = Spah.state.select("//[.type=='Array' && .length>=2]") 
-    // -> [Result, Result, Result]
-    results[0].path = "/hash_two/arr_in_hash"
-    results[0].value = [1,2,3]
-    results[1].path = "/arr_one"
-    results[1].value = [1,2,3]
-    results[2].path = "/arr_two"
-    results[2].value = [0,1,2]
-    
-    // Query for all hashes where the value of key "foo" matches the value found 
-    // at /hash_one/foo
-    // NOTE: If the subquery returns more than one Result then an exception will be 
-    // raised. Be sure to use specific address paths in comparison operations.
-    results = Spah.state.select("//[foo==/hash_one/foo]") -> [Result, Result]
-    results[0].path = "/hash_one/foo"
-    results[0].value = "bar"
-    results[1].path = "/hash_two/foo"
-    results[1].value = "bar"
+        // Always false:
+        Spah.state.assert("1 == '1'"); // mixed types
+        Spah.state.assert("true == false"); // boolean comparison
+        Spah.state.assert("false"); // boolean
+        Spah.state.assert("/myHash == /myArr"); // queries
+        Spah.state.assert("{1,2,3} == {'a'..'z'}"); // set literals
 
-Boolean Queries
+* Set inequality <code>!=</code>
+
+  Asserts that the sets are not identical under the rules of the <code>==</code> operator.
+  
+*  Subset of <code>}&lt;{</code>
+  
+  Asserts that the left-hand set is a subset of the right-hand set. All values present in the left-hand set must have a matching counterpart in the right-hand set.
+  
+* Superset of <code>}&gt;{</code>
+
+  Asserts that the left-hand set is a superset of the right-hand set. All values present in the right-hand set must have a matching counterpart in the left-hand set.
+
+* Joint set <code>}~{</code>
+
+  Asserts that the left-hand set contains one or more values that are also present in the right-hand set.
+
+* Disjoint set <code>}!{</code>
+
+  Asserts that the left-hand set contains no values that are also present in the right-hand set.
+
+* Rough equality <code>~=</code>
+
+  Asserts that one or more values from the left-hand set are roughly equal to one or more values from the right-hand set. See [Object equality][object_equality].
+
+* Greater than (or equal to) <code>&gt;=</code> and <code>&gt;</code>
+
+  Asserts that one or more values from the left-hand set is greater than (or equal to) one or more values from the right-hand set.
+
+* Less than (or equal to) <code>&lt;``=</code> and <code>&lt;</code> 
+
+  Asserts that one or more values from the left-hand set is less than (or equal to) one or more values from the right-hand set.
+
+Object equality
 ---------------
 
-Queries may also produce boolean results, using comparators between subqueries:
+The equality of objects is calculated based on their type. Firstly, for two objects to be equal under strict equality (<code>==</code>) they must have the same base type.
 
-    // Does the value at /hash_one/foo equal "bar"?
-    Spah.state.assert("/hash_one/foo == 'bar'") 
-    //-> true. The value is "bar"
-    
-    // Does the value at /hash_one/foo match the value at /hash_two/foo?
-    // NOTE: if comparing the results of more than one query, the results of both 
-    // queries must be the same length and must have matching values 
-    // although the results DO NOT have to be from the same paths.
-    Spah.state.assert("/hash_one/foo == /hash_two/foo") 
-    //-> true. Both values are "bar"
-    
-    // Is the value at /hash_one an array?
-    Spah.state.assert("/hash_one.type == 'Array'") 
-    //-> false. /hash_one is 'Hash'
-    
-    // Is arr_one empty?
-    Spah.state.assert("/arr_one.length < 1") 
-    //-> false. /arr_one has 3 entries.
-    
-    // Is does arr_three have the same number of entries as arr_one?
-    Spah.spate.assert("/arr_three.length == /arr_one.length") 
-    //-> false. /arr_three is empty, but /arr_one has 3 items.
-    
-    // Comparing arrays and hashes: both entities must have the same contents
-    // and the same keys in order to achieve equality.
-    Spah.state.assert("/hash_two/arr_in_hash == /arr_one") 
-    //-> true! both arrays have the same contents in the same order.
-    Spah.state.assert("/hash_two/arr_in_hash == /arr_two") 
-    //-> false. each array has content distinct from the other.
-    
-    // Comparing the types of entities
-    Spah.state.assert("/hash_one.type == /hash_two.type") 
-    //-> true. Both are hashes.
-    Spah.state.assert("/hash_one === /hash_two") 
-    // -> true, functionally identical to the above
-    
-    // Comparing query result counts: use the #count property 
-    // at the end of your query
-    Spah.state.assert("/hash_one[foo~='bar']#count > 3") 
-    //-> false. There's only one item returned by this query.
-          
-    // And of course, simple truthiness assertions:
-    // Basic assertions return true if the associated query returns >0 results 
-    // and if any of those results have values other than false or null.
-    Spah.state.assert("/bool_one") //-> true
-    Spah.state.assert("/bool_two") //-> false
-    Spah.state.assert("/key_does_not_exist") //-> false
-    Spah.state.assert("/arr_one") //-> true
+* **Object equality**: The objects being compared must contain the same set of keys, and the value of each key must be the same in each object. If the value is an object or an array, it will be evaluated recursively.
+* **Array equality**: The arrays must each contain the same values in the same order. If any value is an array or object, it will be evaluated recursively.
+* **Number, String, Bool, null**: The objects must be of equal type and value.
+
+Under rough equality (<code>~=</code>) the rules are altered:
+
+* **Strings** are evaluated to determine if the left-hand value matches the right-hand value, evaluating the right-hand value as a regular expression e.g. <code>"bar" ~= "^b"</code> returns <code>true</code> but <code>"bar" ~= "^a"</code> returns <code>false</code>
+* **Numbers** are evaluated with integer accuracy only.
+* **Arrays and Objects** behave as if compared with the superset operator.
+* **Booleans and null** are evaluated based on truthiness rather than exact equality. <code>false ~= null</code> is <code>true</code> but <code>true ~= false</code> is <code>false</code>.
+
+When using inequality operators <code>&lt;</code>, <code>=&lt;</code>, <code>&gt;</code>, <code>&gt;=</code>:
+
+* **Strings** are evaluated based on alphanumeric sorting. <code>"a" &lt;= "b"</code> returns <code>true</code> but <code>"z" &gt;= "a"</code> returns <code>false</code>.
+* **Numbers** are evaluated, as you'd expect, based on their native values.
+* **Arrays, Objects, Booleans, null** are not compatible with these operators and will automatically result in <code>false</code> being returned.
+
+Properties
+----------
+
+Properties are like imaginary paths on objects in your state. Each property uses the <code>.propertyName</code> syntax and may be used in any path query:
+
+* **.type** Returns the object type as 'Object', 'Array', 'String', 'Number', 'Boolean' or 'null'
+
+        results = Spah.state.select("/myArr/.type"); //-> [QueryResult]
+        results[0].path //-> "/myArr/.type"
+        results[0].value //-> 'Array'
+        
+        // Find all arrays everywhere. 
+        results = Spah.state.select("//[/.type == 'Array']")
+        results[0].path //-> "/myArr"
+        results[1].path //-> "/myPrimitives"
+
+* **.size** Returns the object's size if it is a String (number of characters), Array (number of items) or Object (number of keys)
+        
+        // Number of keys in the root
+        results = Spah.state.select("/.size");
+        results[0].path //-> "/.size"
+        results[0].value //-> 3
+        
+        // Find all strings longer than 3 characters
+        results = Spah.state.select("//[/.type == 'String'][/.size > 3]")
+        results[0].path //-> "/myHash/mySubHash/bar"
 
 Document logic
 ==============
 
 In a Spah application, document logic (show this, hide that, populate this with that) is moved away from in-place Erb views and into a place where both the client and the server will have access to it - the document itself. In doing this, we want to avoid doing anything silly like adding new tags or attributes that break HTML validity, or dirtying up your markup with billions of extra nested div elements.
 
-Spah handles document logic with HTML5 data attributes. Elements may query the state and declare how they should be altered when the query result is returned. When cold-booting your application from the server, the document logic is evaluated and run in-place before sending the HTML down the wire - this is what allows Spah to respond to HTML requests with valid, useful documents. On the client side, updates to the state cause any embedded document logic to be re-evaluated automatically. All document logic is achieved using [State Queries][state_queries]. Conditions such as <code>if</code> statements use truthiness queries, as seen in the [state query documentation][boolean_state_queries].
+Spah handles document logic with HTML5 data attributes. Elements may query the state and declare how they should be altered when the query result is returned. When cold-booting your application from the server, the document logic is evaluated and run in-place before sending the HTML down the wire - this is what allows Spah to respond to HTML requests with valid, useful documents. On the client side, updates to the state cause any embedded document logic to be re-evaluated automatically. All document logic is achieved using [State Queries][spahql]. Conditions such as <code>if</code> statements use truthiness queries, as seen in the [state query documentation][assertion_state_queries].
 
 Spah provides the following operations on document logic:
 
@@ -357,7 +500,7 @@ Stashing content allows you to render semantically-null empty elements into your
     language:html
     
     <div  class="new-message-notification" 
-          data-stash-unless="/messages[unread].length > 0">
+          data-stash-unless="/messages[/unread]/.size > 0">
 
           You have new messages!
       
@@ -369,7 +512,7 @@ Stashing content allows you to render semantically-null empty elements into your
     
     <!-- When the content is stashed, the element will look like this: -->
     <div  class="new-message-notification" 
-          data-stash-unless="/messages[unread].length > 0" 
+          data-stash-unless="/messages[/unread]/.size > 0" 
           data-stashed-content="You%20have%20new%20messages%21....">
     </div>
 
@@ -380,7 +523,7 @@ Spah can use your shared [Mustache templates][templating] to render state data i
 
     language:html
     
-    <ul class="users" data-populate-if="/users.length > 0" 
+    <ul class="users" data-populate-if="/users/.length > 0" 
                       data-populate-with="/users" 
                       data-populate-template="/views/users/single">
                      
@@ -465,3 +608,276 @@ Example Rails application
 
 Example Sinatra application
 ===========================
+
+Appendix: SpahQL Expression spec
+================================
+
+Syntax:
+
+    // ATOM_FOO = "foo" - token matches an exact string
+    // ATOM_BAR = /.../ - token matches a pattern
+    // TOKEN_FOOBAR = ATOM_FOO[,ATOM_BAR] - atom_foo optionally followed by atom bar
+    // TOKEN_FOOBARBAR = (ATOM_FOO[,ATOM_BAR])+ - one or more repetitions of the group (atom_foo optionally followed by atom bar)
+
+State machine:
+
+    // The expression parser is assumed to be a tokenizer. We will define the following states:
+    STATE_NULL = null
+    STATE_PATH_QUERY = "path"
+    STATE_KEY_NAME = "key"
+    STATE_PROPERTY = "prop"
+    STATE_FILTER_QUERY = "filt"
+    STATE_STRING_LITERAL = "str"
+    STATE_NUMERIC_LITERAL = "num"
+    STATE_BOOLEAN_LITERAL = "bool"
+    STATE_SET_LITERAL = "set"
+    
+    // We will also assume that the tokenizer maintains a state stack - every time
+    // a state is entered, it is pushed onto the STATE_STACK. When the state exits,
+    // the STATE_STACK is popped and control is returned to the previous state.
+    
+    // The state machine begins in the null state. An empty state stack means you are
+    // in the null state.
+
+Tokens and compiler behaviour:
+
+<table>
+  <tr style="background-color: #333; color: #FFF">
+    <th colspan="3">Basic literals</th>
+  </tr>
+  <tr style="background-color: #CCC;">
+    <th>Symbol name</th>
+    <th>Symbol value</th>
+    <th>Compiler behaviour</th>
+  </tr>
+  <tr style="background-color: #EEE">
+    <td>ATOM_QUOTE</td>
+    <td><code>/("|')/</code></td>
+    <td>Enters <code>STATE_STRING_LITERAL</code>. In this state, all special atoms and tokens are ignored and simply appended to the current token until the closing quote is encountered. The string state may be entered at any point.</td>
+  </tr>
+  <tr>
+    <td>ATOM_ESCAPE</td>
+    <td><code>"\"</code></td>
+    <td>Only legal in <code>STATE_STRING_LITERAL</code>. Causes the compiler to treat the next character as an ordinary character within a string, appending it to the token without exiting the string state.</td>
+  </tr>
+  <tr style="background-color: #EEE">
+    <td>TOKEN_STRING_LITERAL</td>
+    <td><code>/(ATOM_QUOTE).*($1)/</code></td>
+    <td>A complete string literal, wrapped in identical closing quotes. This token is legal in the <code>null</code> state and within the <code>STATE_FILTER_QUERY</code> and <code>STATE_SET_LITERAL</code> state.</td>
+  </tr>
+  <tr>
+    <td>TOKEN_NUMERIC_LITERAL</td>
+    <td><code>/(\d)+?(\.(\d+))/</code></td>
+    <td>An integer or floating-point numeric literal. The value is ascertained using the runtime environment's <code>parseFloat</code> function. Legal in the <code>null</code> state and in the <code>STATE_SET_LITERAL</code> state. Encountering a numeric character in either of these states enters the <code>STATE_NUMERIC_LITERAL</code> state, which terminates upon encountering a non-numeric character or a second period character.</td>
+  </tr>
+  <tr style="background-color: #EEE">
+    <td>TOKEN_BOOLEAN_LITERAL</td>
+    <td><code>/true|false/</code></td>
+    <td>An alias for any boolean literal.</td>
+  </tr>
+  <tr>
+    <td>TOKEN_PRIMITIVE_LITERAL</td>
+    <td><code>(TOKEN_STRING_LITERAL|TOKEN_NUMERIC_LITERAL|TOKEN_BOOLEAN_LITERAL)</code></td>
+    <td>An alias for any string or numeric literal.</td>
+  </tr>
+</table>
+
+<table>
+  <tr style="background-color: #333; color: #FFF">
+    <th colspan="3">Set literals</th>
+  </tr>
+  <tr style="background-color: #CCC;">
+    <th>Symbol name</th>
+    <th>Symbol value</th>
+    <th>Compiler behaviour</th>
+  </tr>
+  <tr style="background-color: #EEE">
+    <td>ATOM_SET_START</td>
+    <td><code>"{"</code></td>
+    <td>Announces the start of a set literal. This is legal in the <code>null</code> state only. The parser discriminates between this character and any comparison operators that include this character. Enters the <code>STATE_SET_LITERAL</code> state.</td>
+  </tr>
+  <tr>
+    <td>ATOM_SET_END</td>
+    <td><code>"}"</code></td>
+    <td>Exits the <code>STATE_SET_LITERAL</code> state. Only valid in this state.</td>
+  </tr>
+  <tr style="background-color: #EEE">
+    <td>ATOM_SET_DELIMITER</td>
+    <td><code>","</code></td>
+    <td>When encountered in the <code>STATE_SET_LITERAL</code> state, prepares the parser to append a new entry to the set. Only legal in the <code>STATE_SET_LITERAL</code> state. If the separator is immediately followed by  <code>ATOM_SET_END</code>, a compiler error is thrown.</td>
+  </tr>
+  <tr>
+    <td>ATOM_SET_RANGE_DELIMITER</td>
+    <td><code>".."</code></td>
+    <td>Declares a range between the preceding literal and the following literal. The preceding literal must be the first literal in the set, and the following literal must be the last literal in the set. Both literals must be of the same primitive type. This token does not alter the state, allowing the parser to remain in <code>STATE_SET_LITERAL</code>, but it is expected to set flags preventing the parser from breaking the above rules.</td>
+  </tr>
+  <tr style="background-color: #EEE">
+    <td>TOKEN_SET_RANGE_LITERAL_STRING</td>
+    <td><code>ATOM_SET_START,TOKEN_STRING_LITERAL,ATOM_SET_RANGE_DELIMITER,TOKEN_STRING_LITERAL,ATOM_SET_END</code></td>
+    <td>An alias for a valid string range e.g. <code>{"a".."z"}</code></td>
+  </tr>
+  <tr>
+    <td>TOKEN_SET_RANGE_LITERAL_NUMERIC</td>
+    <td><code>ATOM_SET_START,TOKEN_NUMERIC_LITERAL,ATOM_SET_RANGE_DELIMITER,TOKEN_NUMERIC_LITERAL,ATOM_SET_END</code></td>
+    <td></td>
+  </tr>
+  <tr style="background-color: #EEE">
+    <td>TOKEN_SET_LITERAL_MIXED</td>
+    <td><code>ATOM_SET_START,((TOKEN_PRIMITIVE_LITERAL|TOKEN_SELECTION_QUERY)[,ATOM_SET_DELIMITER,(TOKEN_PRIMITIVE_LITERAL|TOKEN_SELECTION_QUERY)]*),ATOM_SET_END</code></td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>TOKEN_SET_LITERAL</td>
+    <td><code>TOKEN_SET_RANGE_LITERAL_STRING|TOKEN_SET_RANGE_LITERAL_NUMERIC|TOKEN_SET_LITERAL_MIXED</code></td>
+    <td>An alias for any valid set literal</td>
+  </tr>
+</table>
+
+<table>
+  <tr style="background-color: #333; color: #FFF">
+    <th colspan="3">Path queries</th>
+  </tr>
+  <tr style="background-color: #CCC;">
+    <th>Symbol name</th>
+    <th>Symbol value</th>
+    <th>Compiler behaviour</th>
+  </tr>
+  <tr style="background-color: #EEE">
+    <td>ATOM_PATH_DELIMITER</td>
+    <td><code>/\/{1,2}/</code></td>
+    <td>Describes a valid join between two paths. One slash instructs the runner to execute this part of the query at the top-level of the scope object only, while two slashes instructs the runner to recurse down the scope to find all matching keys. When encountered while the parser is already in <code>STATE_PATH_QUERY</code>, the atom instructs the parser to close the current path fragment and to begin a new one.</td>
+  </tr>
+  <tr>
+    <td>ATOM_PATH_ROOT</td>
+    <td><code>"$"</code></td>
+    <td>Forces the subsequent path query to act on the root context, regardless of the current query's execution scope. Must be followed by <code>ATOM_PATH_DELIMITER</code> or else a compiler error will be thrown.</td>
+  </tr>
+  <tr style="background-color: #EEE">
+    <td>TOKEN_PATH_START</td>
+    <td><code>[ATOM_PATH_ROOT,]ATOM_PATH_DELIMITER</code></td>
+    <td>Describes a valid opener for a path query. Encountering this atom whilst in the <code>null</code> or <code>STATE_SET_LITERAL</code> states will throw the parser into the <code>STATE_PATH_QUERY</code> state.</td>
+  </tr>
+  <tr>
+    <td>TOKEN_PATH_KEYNAME</td>
+    <td><code>/\*|[a-zA-Z0-9-_]*/</code></td>
+    <td>A wildcard <code>*</code> or an optional alphanumeric path. Underscores and dashes are also supported in key names.</td>
+  </tr>
+  <tr style="background-color: #EEE">
+    <td>ATOM_FILTER_QUERY_START</td>
+    <td><code>"["</code></td>
+    <td>Instructs the parser to enter the <code>STATE_FILTER_QUERY</code> state within the current path fragment. During the <code>STATE_FILTER_QUERY</code> state, the parser reads ahead until the matching <code>ATOM_FILTER_QUERY_END</code> bracket is found. The collected token is then parsed as a separate query and attached to the current path fragment. The tokenizer should then resume at the character immediately following the <code>ATOM_FILTER_QUERY_END</code> token. **Note this means that special atoms and tokens encountered in the <code>STATE_FILTER_QUERY</code> state are ignored by the current parser context.**</td>
+  </tr>
+  <tr>
+    <td>ATOM_FILTER_QUERY_END</td>
+    <td><code>"]"</code></td>
+    <td>Causes the parser to exit the <code>STATE_FILTER_QUERY</code> state and return control to the previous state. Only allowed within <code>STATE_FILTER_QUERY</code>. Encountering this token in any other state (except <code>STATE_STRING_LITERAL</code>) should cause a compiler error.</td>
+  </tr>
+  <tr style="background-color: #EEE">
+    <td>TOKEN_PATH_PROPERTY</td>
+    <td><code>/\.\w+/</code></td>
+    <td>Instructs the parser to attach a property modifier to the current path component. Only allowable in <code>STATE_PATH_QUERY</code>.</td>
+  </tr>
+  <tr>
+    <td>TOKEN_FILTER_QUERY</td>
+    <td><code>ATOM_FILTER_QUERY_START,TOKEN_ASSERTION_QUERY,ATOM_FILTER_QUERY_END</code></td>
+    <td>An alias for any valid filter query token.</td>
+  </tr>
+  <tr style="background-color: #EEE">
+    <td>TOKEN_PATH_COMPONENT</td>
+    <td><code>(TOKEN_PATH_PROPERTY|[TOKEN_PATH_KEY][,TOKEN_FILTER_QUERY]*)</code></td>
+    <td>An alias for any valid path component. A property, or a key followed by any number of filter queries.</td>
+  </tr>
+  <tr>
+    <td>TOKEN_SELECTION_QUERY</td>
+    <td><code>TOKEN_PATH_START[,TOKEN_PATH_COMPONENT[,ATOM_PATH_DELIMITER,TOKEN_PATH_COMPONENT]+]*</code></td>
+    <td>An alias for any valid selection query. A path opener, followed by any number of path components separated with the <code>ATOM_PATH_DELIMITER</code>.</td>
+  </tr>
+</table>
+
+<table>
+  <tr style="background-color: #333; color: #FFF">
+    <th colspan="3">Comparisons and assertions</th>
+  </tr>
+  <tr style="background-color: #CCC;">
+    <th>Symbol name</th>
+    <th>Symbol value</th>
+    <th>Compiler behaviour</th>
+  </tr>
+  <tr style="background-color: #EEE">
+    <td>TOKEN_SET_COMPARISON_OPERATOR</td>
+    <td><code>/(\}[!&gt;&lt;]{1}\{)|([&lt;&gt;~!=]=)/</code></td>
+    <td>Any of the set comparison operators detailed in [Comparison operators][comparison_operators]. Only allowable in the <code>null</code> state and the <code>STATE_PATH_QUERY</code> state. Encountering this token in the <code>STATE_PATH_QUERY</code> state will cause the path query to exit.</td>
+  </tr>
+  <tr>
+    <td>TOKEN_ASSERTION_QUERY</td>
+    <td><code>(TOKEN_SELECTION_QUERY|TOKEN_SET_LITERAL)[, TOKEN_COMPARISON_OPERATOR, (TOKEN_SELECTION_QUERY|TOKEN_SET_LITERAL)]</code></td>
+    <td>An alias for any valid assertion query. At least one selection query or set literal optionally followed by a comparison operator and another set or selection query.</td>
+  </tr>
+</table>
+
+Appendix: SpahQL query execution spec
+=====================================
+
+SpahQL selection queries are, fundamentally, reductive. At the start of execution, a selection query is given the root data context against which it will run. As the execution moves between the path segments, the data is reduced (and possibly forked) before being passed to the next path segment:
+
+    data = {foo: {bar: {baz: "str"}}}
+    query = "/foo/bar/baz"
+
+At each point in the above query:
+
+1. The root <code>data</code> object is handed to the first path component, which selects the key <code>foo</code>.
+2. The resulting data <code>{bar: {baz: "str"}}</code> is handed to the next path component which selects the key <code>bar</code>
+3. The resulting data <code>{baz: "str"}</code> is handed to the final path segment, which selects the key <code>baz</code>
+4. The key "baz" is a string with value "str". This is returned as a result set with one item.
+
+If at any point a query runs out of data, the execution is aborted and an empty result set is returned:
+
+    data = {foo: {bar: {baz: "str"}}}
+    query = "/foo/NOTBAR/baz"
+
+In this case, the query exits and returns <code>[]</code> when it is unable to find any matching data for the <code>NOTBAR</code> portion of the query.
+
+Recursive paths force the query runner to fork the execution:
+
+    data = {foo: {bar: {baz: "str", bar: "inner-bar"}}}
+    query = "/foo//bar/baz"
+
+In this instance:
+
+1. The root <code>data</code> object is handed to the first path component, which selects the key <code>foo</code>.
+2. The remaining data <code>{bar: {baz: "str", bar: "inner-bar"}}</code> is handed to the next path query, which **recursively** searches for the key <code>bar</code>.
+3. The recursive search returns results from two paths: <code>/foo/bar</code>, which contains a hash, and <code>/foo/bar/bar</code> which is a value within a sub-hash.
+4. The two result sets are handed down to the <code>baz</code> portion of the query.
+5. The <code>baz</code> key appears in only one of the previous data constructs, and this result is added to the final result set.
+
+And so we can see that the overall progression is:
+
+    data -> reduce -> array of result sets -> reduce -> array of result sets -> reduce -> finalise
+
+The finalisation step flattens the returned resultsets as a set of <code>QueryResult</code> objects. The final result set is a union of each of the final result sets made unique by result path.
+
+In the case of **filters**, an additional reduce step is introduced into the path segment specifying the filter:
+
+    data = {foo: {bar: {baz: "str", bar: "inner-bar"}}}
+    query = "/foo/[//baz == 'str']"
+
+In this case:
+
+1. The root <code>data</code> object is handed to the first path segment, which retrieves the key <code>foo</code>.
+2. The resulting data is handed to the next path segment, which specifies no key - therefore all keys are acceptable.
+3. All keys in the resulting data have the filter query <code>//baz =='str'</code> run against their values. Those keys for which the filter query returns <code>true</code> are added to the result set for this path segment.
+4. The query ends - the results (all values defined directly on <code>/foo</code> that may be recursed to find a key <code>baz</code> with value <code>str</code>) are flattened and returned as the query result.
+
+Example execution flow:
+
+<img src="https://img.skitch.com/20110511-f6t1iwt3jq4gxyd2hnk7fyfjdd.jpg" />
+
+**Properties** act like special keys on paths:
+
+    data = {foo: {bar: {baz: "str", bar: "inner-bar"}}}
+    query = "/.size" // returns the number of keys on the root object
+    query = "//baz/.size" // returns the sizes of all keys named "baz"
+
+There is no other special behaviour for properties - they simply act like key names.
+
+TODO: comparisons

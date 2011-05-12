@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-  <title>Spah  v0.0.0 API documentation | Spah.State#data</title>
+  <title>Spah  v0.0.0 API documentation | Spah.State.DataHelper.eq</title>
   <meta name="generator" content="PDoc" />
   
   <script charset="utf-8" src="../../../../javascripts/pdoc/prototype.js" type="text/javascript"></script>
@@ -38,11 +38,12 @@
       </form>
       
       <div class="sidebar-pane scrollable" id="menu_pane">
-        <ul class="menu-items" id="api_menu"><li><div class="menu-item"><a class="class current-parent" href="../../../../Spah/index.html" title="Spah (class)">Spah</a></div><ul><li><div class="menu-item"><a class="class current-parent" href="../../../../Spah/State/index.html" title="Spah.State (class)">Spah.State</a></div><ul><li><div class="menu-item"><a class="class" href="../../../../Spah/State/DataHelper/index.html" title="Spah.State.DataHelper (class)">Spah.State.DataHelper</a></div></li>
+        <ul class="menu-items" id="api_menu"><li><div class="menu-item"><a class="class current-parent" href="../../../../Spah/index.html" title="Spah (class)">Spah</a></div><ul><li><div class="menu-item"><a class="class current-parent" href="../../../../Spah/State/index.html" title="Spah.State (class)">Spah.State</a></div><ul><li><div class="menu-item"><a class="class current-parent" href="../../../../Spah/State/DataHelper/index.html" title="Spah.State.DataHelper (class)">Spah.State.DataHelper</a></div><ul><li><div class="menu-item"><a class="class-method current" href="../../../../Spah/State/DataHelper/eq/index.html" title="Spah.State.DataHelper.eq (class method)">eq</a></div></li>
+<li><div class="menu-item"><a class="class-method" href="../../../../Spah/State/DataHelper/merge/index.html" title="Spah.State.DataHelper.merge (class method)">merge</a></div></li>
+<li><div class="menu-item"><a class="class-method" href="../../../../Spah/State/DataHelper/modificationSymbol/index.html" title="Spah.State.DataHelper.modificationSymbol (class method)">modificationSymbol</a></div></li>
+<li><div class="menu-item"><a class="class-method" href="../../../../Spah/State/DataHelper/objectType/index.html" title="Spah.State.DataHelper.objectType (class method)">objectType</a></div></li></ul></li>
 <li><div class="menu-item"><a class="class" href="../../../../Spah/State/Query/index.html" title="Spah.State.Query (class)">Spah.State.Query</a></div></li>
-<li><div class="menu-item"><a class="class" href="../../../../Spah/State/QueryParser/index.html" title="Spah.State.QueryParser (class)">Spah.State.QueryParser</a></div></li></ul><ul><li><div class="menu-item"><a class="constructor" href="../../../../Spah/State/new/index.html" title="new Spah.State (constructor)">new</a></div></li>
-<li><div class="menu-item"><a class="instance-method" href="../../../../Spah/State/prototype/update/index.html" title="Spah.State#update (instance method)">update</a></div></li>
-<li><div class="menu-item"><a class="instance-property current" href="../../../../Spah/State/prototype/data/index.html" title="Spah.State#data (instance property)">data</a></div></li></ul></li></ul></li></ul><!--- #api_menu =-->
+<li><div class="menu-item"><a class="class" href="../../../../Spah/State/QueryParser/index.html" title="Spah.State.QueryParser (class)">Spah.State.QueryParser</a></div></li></ul></li></ul></li></ul><!--- #api_menu =-->
       </div> <!-- .sidebar-pane -->
       <div class="sidebar-pane" id="search_pane">
         <ul id="search_results" class="search-results menu-items scrollable"></ul>
@@ -66,16 +67,18 @@
   
     <li>&rarr; <a href="../../../../Spah/State/index.html" title="Spah.State (class)">State</a></li>
   
-    <li>&rarr; <a href="../../../../Spah/State/prototype/data/index.html" title="Spah.State#data (instance property)">data</a></li>
+    <li>&rarr; <a href="../../../../Spah/State/DataHelper/index.html" title="Spah.State.DataHelper (class)">DataHelper</a></li>
+  
+    <li>&rarr; <a href="../../../../Spah/State/DataHelper/eq/index.html" title="Spah.State.DataHelper.eq (class method)">eq</a></li>
   
 </ul>
 
 
-  <p id="src_code_href"><a href="http://github.com/danski/spah/blob/master/client/src/Spah.State.js#39">src code</a></p>
+  <p id="src_code_href"><a href="http://github.com/danski/spah/blob/master/client/src/Spah.State.DataHelper.js#366">src code</a></p>
 
 
 <h2 class="page-title">
-  <span class="type">instance property</span> Spah.State#data
+  <span class="type">class method</span> Spah.State.DataHelper.eq
 </h2>
 
 
@@ -87,11 +90,11 @@
   <div class="section-content">
     <div class="method-description">
       
-        <pre class="syntax"><code class="ebnf">Spah.State#data &rarr; Object</code></pre>
+        <pre class="syntax"><code class="ebnf">Spah.State.DataHelper.eq(obj1, obj2[, objN]) &rarr; Boolean equality result</code></pre>
 
       
 
-      <p>The raw JSON construct being managed by this Spah.State instance. If you overwrite this directly, you will be haunted by a pigeon.</p>
+      <p>Determines content equality of two or more objects. Booleans, null values, numbers and strings are compared using the <code>Spah.State.DataHelper.objectType</code> method and the built-in <code>==</code> operator, but arrays and hashes are traversed recursively and have their values compared.</p>
       
       
 

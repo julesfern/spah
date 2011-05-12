@@ -1,16 +1,28 @@
 if (!window.PDoc) window.PDoc = {};
 PDoc.elements = {
   'Spah.State': { 'name': 'Spah.State', 'type': 'class', 'path': 'Spah/State/index.html' },
+'Spah.State.Query': { 'name': 'Spah.State.Query', 'type': 'class', 'path': 'Spah/State/Query/index.html' },
+'Spah.State.QueryParser': { 'name': 'Spah.State.QueryParser', 'type': 'class', 'path': 'Spah/State/QueryParser/index.html' },
 'Spah.State.DataHelper.merge': { 'name': 'Spah.State.DataHelper.merge', 'type': 'class method', 'path': 'Spah/State/DataHelper/merge/index.html' },
 'Spah.State.DataHelper': { 'name': 'Spah.State.DataHelper', 'type': 'class', 'path': 'Spah/State/DataHelper/index.html' },
 'Spah.verbose': { 'name': 'Spah.verbose', 'type': 'class property', 'path': 'Spah/verbose/index.html' },
+'Spah.State.QueryParser.parseQuery': { 'name': 'Spah.State.QueryParser.parseQuery', 'type': 'class method', 'path': 'Spah/State/QueryParser/parseQuery/index.html' },
+'Spah.State.QueryParser.operators': { 'name': 'Spah.State.QueryParser.operators', 'type': 'class property', 'path': 'Spah/State/QueryParser/operators/index.html' },
+'Spah.State.Query#fragments': { 'name': 'Spah.State.Query#fragments', 'type': 'instance property', 'path': 'Spah/State/Query/prototype/fragments/index.html' },
+'Spah.State.Query#rawString': { 'name': 'Spah.State.Query#rawString', 'type': 'instance property', 'path': 'Spah/State/Query/prototype/rawString/index.html' },
 'Spah.State.DataHelper.modificationSymbol': { 'name': 'Spah.State.DataHelper.modificationSymbol', 'type': 'class method', 'path': 'Spah/State/DataHelper/modificationSymbol/index.html' },
+'Spah.State.QueryParser.comparators': { 'name': 'Spah.State.QueryParser.comparators', 'type': 'class property', 'path': 'Spah/State/QueryParser/comparators/index.html' },
 'Spah.log': { 'name': 'Spah.log', 'type': 'class method', 'path': 'Spah/log/index.html' },
+'Spah.State.QueryParser.dotProperties': { 'name': 'Spah.State.QueryParser.dotProperties', 'type': 'class property', 'path': 'Spah/State/QueryParser/dotProperties/index.html' },
 'Spah.init': { 'name': 'Spah.init', 'type': 'class method', 'path': 'Spah/init/index.html' },
 'Spah.logMessages': { 'name': 'Spah.logMessages', 'type': 'class property', 'path': 'Spah/logMessages/index.html' },
 'Spah': { 'name': 'Spah', 'type': 'class', 'path': 'Spah/index.html' },
+'Spah.State.DataHelper.eq': { 'name': 'Spah.State.DataHelper.eq', 'type': 'class method', 'path': 'Spah/State/DataHelper/eq/index.html' },
+'Spah.State.Query#isTruthy': { 'name': 'Spah.State.Query#isTruthy', 'type': 'instance method', 'path': 'Spah/State/Query/prototype/isTruthy/index.html' },
+'Spah.State.QueryParser.logicOperators': { 'name': 'Spah.State.QueryParser.logicOperators', 'type': 'class property', 'path': 'Spah/State/QueryParser/logicOperators/index.html' },
 'Spah.State#update': { 'name': 'Spah.State#update', 'type': 'instance method', 'path': 'Spah/State/prototype/update/index.html' },
 'new Spah.State': { 'name': 'new Spah.State', 'type': 'constructor', 'path': 'Spah/State/new/index.html' },
+'Spah.State.QueryParser.queryCache': { 'name': 'Spah.State.QueryParser.queryCache', 'type': 'class property', 'path': 'Spah/State/QueryParser/queryCache/index.html' },
 'Spah.State#data': { 'name': 'Spah.State#data', 'type': 'instance property', 'path': 'Spah/State/prototype/data/index.html' },
 'Spah.State.DataHelper.objectType': { 'name': 'Spah.State.DataHelper.objectType', 'type': 'class method', 'path': 'Spah/State/DataHelper/objectType/index.html' }
 };

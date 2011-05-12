@@ -57,12 +57,19 @@ jQuery.extend(Spah.State.DataHelper, {
    *      //} 
    **/
   "merge": function(delta, target, path) {
+    var topStack = (!path);
     var path = path || ""; // the current path stack
     var modifications = {}; // a collector for paths and their modification types
     var modified = false; // set to true if a modification occurred at this tree depth
     var mergeResult = null;
     var deltaType = this.objectType(delta);
     var targetType = this.objectType(target);
+    
+    if(topStack) {
+      Spah.log("State merge: Beginning merge of delta->target :", delta, target);
+      target = jQuery.extend({}, target);
+    }
+    
     
     switch(targetType) {
       case "object":
@@ -86,7 +93,7 @@ jQuery.extend(Spah.State.DataHelper, {
         }
         break;
       case "null":
-        Spah.log("Overwriting null value at "+path+" with "+deltaType+":", delta);
+        //Spah.log("Overwriting null value at "+path+" with "+deltaType+":", delta);
         if(deltaType == "array") {
           mergeResult = this.createArray(delta, path);
         }
@@ -113,6 +120,8 @@ jQuery.extend(Spah.State.DataHelper, {
     if(modifications[""]) {
       delete modifications[""];
     }
+    
+    if(topStack) Spah.log("State merge: Completed merge, data and modifications follow :", target, modifications);
     return {"data": target, "modifications": modifications, "modified": modified};
   },
   
@@ -146,9 +155,9 @@ jQuery.extend(Spah.State.DataHelper, {
     var a, arrPath;
     var arrModified = false;
     
-    Spah.log("State update: Processing array merge at "+path);
+    //Spah.log("State update: Processing array merge at "+path);
     for(a=0; a<Math.max(delta.length, target.length); a++) {
-      arrPath = path+"["+a+"]";
+      arrPath = path+"/"+a;
       mergeResult = this.merge(delta[a], target[a], arrPath);
       
       if(a < delta.length) {
@@ -187,7 +196,7 @@ jQuery.extend(Spah.State.DataHelper, {
     // Create modifications for inner keys
     target = [];
     for(i=0; i<delta.length; i++) {
-      arrPath = path+"["+i+"]";
+      arrPath = path+"/"+i;
       mergeResult = this.merge(delta[i], target[i], arrPath);
       jQuery.extend(modifications, mergeResult.modifications);
       target[i] = mergeResult.data;
@@ -205,7 +214,7 @@ jQuery.extend(Spah.State.DataHelper, {
     modifications[path] = this.modificationSymbol(null, target);
     // Log removal of each key
     for(i=0; i<target.length; i++) {
-      arrPath = path+"["+i+"]";
+      arrPath = path+"/"+i;
       mergeResult = this.merge(null, target[i], arrPath);
       jQuery.extend(modifications, mergeResult.modifications);
     }
@@ -222,7 +231,7 @@ jQuery.extend(Spah.State.DataHelper, {
       keyList.push(key)
     }
     
-    Spah.log("State update: Beginning hash merge at path '"+path+"' with keys, delta, target:", keyList, delta, target);
+    //Spah.log("State update: Beginning hash merge at path '"+path+"' with keys, delta, target:", keyList, delta, target);
     
     for(var k=0; k<keyList.length; k++) {
       sKey = keyList[k];
@@ -282,7 +291,7 @@ jQuery.extend(Spah.State.DataHelper, {
     var deltaType = this.objectType(delta);
     var mSym = this.modificationSymbol(delta, target); // precompare to get symbol
     
-    Spah.log("Complex object replacement at "+path+" : "+targetType+" -> "+deltaType, delta, target);
+    // Spah.log("Complex object replacement at "+path+" : "+targetType+" -> "+deltaType, delta, target);
     
     // Nullify the destination object
     if(targetType == "object") {
@@ -312,7 +321,7 @@ jQuery.extend(Spah.State.DataHelper, {
     var modified = (delta != target);
     if(modified) {
       modifications[path] = modifications[path] || this.modificationSymbol(delta, target);
-      Spah.log("State update: modification of simple type at "+path+" ("+modifications[path]+") "+target+" ("+targetType+") -> "+ delta + " ("+deltaType+")");
+      //Spah.log("State update: modification of simple type at "+path+" ("+modifications[path]+") "+target+" ("+targetType+") -> "+ delta + " ("+deltaType+")");
     }
     return {"data": delta, "modifications": modifications, "modified": modified};
   },
@@ -345,6 +354,92 @@ jQuery.extend(Spah.State.DataHelper, {
     } else {
       return typeof(obj);
     }
+  },
+  
+  /**
+   * Spah.State.DataHelper.eq(obj1, obj2[, objN]) -> Boolean equality result
+   *
+   * Determines content equality of two or more objects. Booleans, null values, numbers and strings are compared using 
+   * the <code>Spah.State.DataHelper.objectType</code> method and the built-in <code>==</code> operator, but arrays 
+   * and hashes are traversed recursively and have their values compared.
+   **/
+  "eq": function() {
+    // Grab the types. If they're not equal, fail out early.
+    var oType, oI;
+    for(oI=0; oI < arguments.length; oI++) {
+      var aType = this.objectType(arguments[oI]);
+      if(oType && oType != aType) return false;
+      oType = aType;
+    }
+    // All objects are same type - continue w/ comparison
+    switch(oType) {
+      case "array":
+        return this.eqArray.apply(this, arguments);
+        break;
+      case "object":
+        return this.eqHash.apply(this, arguments);
+        break;
+      default:
+        return this.eqSimple.apply(this, arguments);
+        break;
+    }
+  },
+  
+  "eqHash": function() {
+    // Keys may be in any order but must have 1:1 mapping
+    var hP, hI, hKeys;
+    hP = arguments[0]; hKeys = this.hashKeys(arguments[0]);
+    for(hI=1; hI<arguments.length; hI++) {
+      var h = arguments[hI];
+      var k = this.hashKeys(h);
+      // Compare keys
+      if(!this.eq(k, hKeys)) return false;
+      // Compare values
+      for(var iK in h) {
+        if(!this.eq(h[iK], hP[iK])) return false;
+      }      
+      hKeys = k; hP = h;
+    }
+    return true;
+  },
+  
+  "eqArray": function() {
+    // Length, order and subequality must match
+    var aP, aI;
+    aP = arguments[0];
+    for(aI=1; aI<arguments.length; aI++) {
+      var a = arguments[aI];
+      var iI;
+      
+      // Compare a and aP
+      if(a.length != aP.length) return false;
+      // Values
+      for(iI=0; iI<a.length; iI++) {
+        if(!this.eq(a[iI], aP[iI])) return false;
+      }
+      
+      aP = a;
+    }
+    return true;
+  },
+  
+  "eqSimple": function() {
+    var aP, aI, aT;
+    aP = arguments[0]; aT = this.objectType(arguments[0]);
+    for(aI=1; aI<arguments.length; aI++) {
+      var a=arguments[aI]; var t=this.objectType(a)
+      if(a != aP || t != aT) return false;
+      aP = a; aT = t;
+    }
+    return true;
+  },
+  
+  "hashKeys": function(hash) {
+    var keys = [];
+    for(var k in hash) {
+      keys.push(k);
+    }
+    return keys.sort();
   }
   
 });

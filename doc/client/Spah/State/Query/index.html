@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-  <title>Spah  v0.0.0 API documentation | Spah.State.DataHelper</title>
+  <title>Spah  v0.0.0 API documentation | Spah.State.Query</title>
   <meta name="generator" content="PDoc" />
   
   <script charset="utf-8" src="../../../javascripts/pdoc/prototype.js" type="text/javascript"></script>
@@ -38,11 +38,10 @@
       </form>
       
       <div class="sidebar-pane scrollable" id="menu_pane">
-        <ul class="menu-items" id="api_menu"><li><div class="menu-item"><a class="class current-parent" href="../../../Spah/index.html" title="Spah (class)">Spah</a></div><ul><li><div class="menu-item"><a class="class current-parent" href="../../../Spah/State/index.html" title="Spah.State (class)">Spah.State</a></div><ul><li><div class="menu-item"><a class="class current" href="../../../Spah/State/DataHelper/index.html" title="Spah.State.DataHelper (class)">Spah.State.DataHelper</a></div><ul><li><div class="menu-item"><a class="class-method" href="../../../Spah/State/DataHelper/eq/index.html" title="Spah.State.DataHelper.eq (class method)">eq</a></div></li>
-<li><div class="menu-item"><a class="class-method" href="../../../Spah/State/DataHelper/merge/index.html" title="Spah.State.DataHelper.merge (class method)">merge</a></div></li>
-<li><div class="menu-item"><a class="class-method" href="../../../Spah/State/DataHelper/modificationSymbol/index.html" title="Spah.State.DataHelper.modificationSymbol (class method)">modificationSymbol</a></div></li>
-<li><div class="menu-item"><a class="class-method" href="../../../Spah/State/DataHelper/objectType/index.html" title="Spah.State.DataHelper.objectType (class method)">objectType</a></div></li></ul></li>
-<li><div class="menu-item"><a class="class" href="../../../Spah/State/Query/index.html" title="Spah.State.Query (class)">Spah.State.Query</a></div></li>
+        <ul class="menu-items" id="api_menu"><li><div class="menu-item"><a class="class current-parent" href="../../../Spah/index.html" title="Spah (class)">Spah</a></div><ul><li><div class="menu-item"><a class="class current-parent" href="../../../Spah/State/index.html" title="Spah.State (class)">Spah.State</a></div><ul><li><div class="menu-item"><a class="class" href="../../../Spah/State/DataHelper/index.html" title="Spah.State.DataHelper (class)">Spah.State.DataHelper</a></div></li>
+<li><div class="menu-item"><a class="class current" href="../../../Spah/State/Query/index.html" title="Spah.State.Query (class)">Spah.State.Query</a></div><ul><li><div class="menu-item"><a class="instance-method" href="../../../Spah/State/Query/prototype/isTruthy/index.html" title="Spah.State.Query#isTruthy (instance method)">isTruthy</a></div></li>
+<li><div class="menu-item"><a class="instance-property" href="../../../Spah/State/Query/prototype/fragments/index.html" title="Spah.State.Query#fragments (instance property)">fragments</a></div></li>
+<li><div class="menu-item"><a class="instance-property" href="../../../Spah/State/Query/prototype/rawString/index.html" title="Spah.State.Query#rawString (instance property)">rawString</a></div></li></ul></li>
 <li><div class="menu-item"><a class="class" href="../../../Spah/State/QueryParser/index.html" title="Spah.State.QueryParser (class)">Spah.State.QueryParser</a></div></li></ul><ul><li><div class="menu-item"><a class="constructor" href="../../../Spah/State/new/index.html" title="new Spah.State (constructor)">new</a></div></li>
 <li><div class="menu-item"><a class="instance-method" href="../../../Spah/State/prototype/update/index.html" title="Spah.State#update (instance method)">update</a></div></li>
 <li><div class="menu-item"><a class="instance-property" href="../../../Spah/State/prototype/data/index.html" title="Spah.State#data (instance property)">data</a></div></li></ul></li></ul></li></ul><!--- #api_menu =-->
@@ -69,16 +68,16 @@
   
     <li>&rarr; <a href="../../../Spah/State/index.html" title="Spah.State (class)">State</a></li>
   
-    <li>&rarr; <a href="../../../Spah/State/DataHelper/index.html" title="Spah.State.DataHelper (class)">DataHelper</a></li>
+    <li>&rarr; <a href="../../../Spah/State/Query/index.html" title="Spah.State.Query (class)">Query</a></li>
   
 </ul>
 
 
-  <p id="src_code_href"><a href="http://github.com/danski/spah/blob/master/client/src/Spah.State.DataHelper.js#7">src code</a></p>
+  <p id="src_code_href"><a href="http://github.com/danski/spah/blob/master/client/src/Spah.State.Query.js#7">src code</a></p>
 
 
 <h2 class="page-title">
-  <span class="type">class</span> Spah.State.DataHelper
+  <span class="type">class</span> Spah.State.Query
 </h2>
 
 
@@ -90,7 +89,7 @@
                 </div> <!-- .section-title -->
                 <div class="section-content">
 
-    <p>This is a singleton helper dedicated to deep-merging complex JSON structures and returning both the merged data and a digest of modified paths within the structure.</p>
+    <p>A <code>Query</code> instance is the result of running a string state query such as &#8220;/foo/bar/baz == 1&#8221; through the <code>Spah.State.QueryParser</code>. Queries are parsed only once, upon registration. The QueryParser maintains a cache of pre-existing parsed queries keyed by the original query string.</p>
                 </div> <!-- .section-content -->
             </div> <!-- .section -->
 
@@ -114,20 +113,22 @@
   
   
   
-                  <div class="section section-class_methods">
+
+  
+  
+  
+
+  
+  
+  
+                  <div class="section section-instance_methods">
                 <div class="section-title">
-                  <h3>Class methods</h3>
+                  <h3>Instance methods</h3>
                 </div> <!-- .section-title -->
                 <div class="section-content">
 
       <ul class="method-list">
-        <li><code><a class="class-method" href="../../../Spah/State/DataHelper/eq/index.html" title="Spah.State.DataHelper.eq (class method)">eq</a></code></li>
-
-<li><code><a class="class-method" href="../../../Spah/State/DataHelper/merge/index.html" title="Spah.State.DataHelper.merge (class method)">merge</a></code></li>
-
-<li><code><a class="class-method" href="../../../Spah/State/DataHelper/modificationSymbol/index.html" title="Spah.State.DataHelper.modificationSymbol (class method)">modificationSymbol</a></code></li>
-
-<li><code><a class="class-method" href="../../../Spah/State/DataHelper/objectType/index.html" title="Spah.State.DataHelper.objectType (class method)">objectType</a></code></li>
+        <li><code><a class="instance-method" href="../../../Spah/State/Query/prototype/isTruthy/index.html" title="Spah.State.Query#isTruthy (instance method)">isTruthy</a></code></li>
 
       </ul>
                   </div> <!-- .section-content -->
@@ -138,13 +139,21 @@
   
   
   
+                  <div class="section section-instance_properties">
+                <div class="section-title">
+                  <h3>Instance properties</h3>
+                </div> <!-- .section-title -->
+                <div class="section-content">
 
-  
-  
-  
+      <ul class="method-list">
+        <li><code><a class="instance-property" href="../../../Spah/State/Query/prototype/fragments/index.html" title="Spah.State.Query#fragments (instance property)">fragments</a></code></li>
 
-  
-  
+<li><code><a class="instance-property" href="../../../Spah/State/Query/prototype/rawString/index.html" title="Spah.State.Query#rawString (instance property)">rawString</a></code></li>
+
+      </ul>
+                  </div> <!-- .section-content -->
+            </div> <!-- .section -->
+
   
 
   
