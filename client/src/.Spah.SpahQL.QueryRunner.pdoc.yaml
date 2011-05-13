@@ -1,0 +1,25 @@
+---
+id: "Spah.SpahQL.QueryRunner"
+parent_id: "Spah.SpahQL"
+type: class
+line_number: 7
+description: |
+  Class responsible for executing parsed <code>Spah.SpahQL.Query</code> queries and returning sets
+  of <code>Spah.SpahQL.QueryResult</code> instances.
+
+file: /Users/danski/Sites/spah/client/src/Spah.SpahQL.QueryRunner.js
+
+---
+id: "Spah.SpahQL.QueryRunner.select"
+parent_id: "Spah.SpahQL.QueryRunner"
+type: class method
+line_number: 18
+description: |
+  - query (Spah.SpahQL.Query): A parsed query instance
+  - data (Object): The data against which to run the query
+
+signatures:
+ -
+  signature: "Spah.SpahQL.QueryRunner.select(query, data)"
+  return_value: "Array resultset"
+file: /Users/danski/Sites/spah/client/src/Spah.SpahQL.QueryRunner.js

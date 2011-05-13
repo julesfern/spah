@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-  <title>Spah  v0.0.0 API documentation | Spah.State.QueryParser.parseQuery</title>
+  <title>Spah  v0.0.0 API documentation | Spah.SpahQL.QueryParser.parseQuery</title>
   <meta name="generator" content="PDoc" />
   
   <script charset="utf-8" src="../../../../javascripts/pdoc/prototype.js" type="text/javascript"></script>
@@ -39,13 +39,12 @@
       
       <div class="sidebar-pane scrollable" id="menu_pane">
         <ul class="menu-items" id="api_menu"><li><div class="menu-item"><a class="class current-parent" href="../../../../Spah/index.html" title="Spah (class)">Spah</a></div><ul><li><div class="menu-item"><a class="class current-parent" href="../../../../Spah/State/index.html" title="Spah.State (class)">Spah.State</a></div><ul><li><div class="menu-item"><a class="class" href="../../../../Spah/State/DataHelper/index.html" title="Spah.State.DataHelper (class)">Spah.State.DataHelper</a></div></li>
-<li><div class="menu-item"><a class="class" href="../../../../Spah/State/Query/index.html" title="Spah.State.Query (class)">Spah.State.Query</a></div></li>
-<li><div class="menu-item"><a class="class current-parent" href="../../../../Spah/State/QueryParser/index.html" title="Spah.State.QueryParser (class)">Spah.State.QueryParser</a></div><ul><li><div class="menu-item"><a class="class-method current" href="../../../../Spah/State/QueryParser/parseQuery/index.html" title="Spah.State.QueryParser.parseQuery (class method)">parseQuery</a></div></li>
-<li><div class="menu-item"><a class="class-property" href="../../../../Spah/State/QueryParser/comparators/index.html" title="Spah.State.QueryParser.comparators (class property)">comparators</a></div></li>
-<li><div class="menu-item"><a class="class-property" href="../../../../Spah/State/QueryParser/dotProperties/index.html" title="Spah.State.QueryParser.dotProperties (class property)">dotProperties</a></div></li>
-<li><div class="menu-item"><a class="class-property" href="../../../../Spah/State/QueryParser/logicOperators/index.html" title="Spah.State.QueryParser.logicOperators (class property)">logicOperators</a></div></li>
-<li><div class="menu-item"><a class="class-property" href="../../../../Spah/State/QueryParser/operators/index.html" title="Spah.State.QueryParser.operators (class property)">operators</a></div></li>
-<li><div class="menu-item"><a class="class-property" href="../../../../Spah/State/QueryParser/queryCache/index.html" title="Spah.State.QueryParser.queryCache (class property)">queryCache</a></div></li></ul></li></ul></li></ul></li></ul><!--- #api_menu =-->
+<li><div class="menu-item"><a class="class" href="../../../../Spah/State/Query/index.html" title="Spah.SpahQL.Query (class)">Spah.SpahQL.Query</a></div></li>
+<li><div class="menu-item"><a class="class current-parent" href="../../../../Spah/State/QueryParser/index.html" title="Spah.SpahQL.QueryParser (class)">Spah.SpahQL.QueryParser</a></div><ul><li><div class="menu-item"><a class="class-method current" href="../../../../Spah/State/QueryParser/parseQuery/index.html" title="Spah.SpahQL.QueryParser.parseQuery (class method)">parseQuery</a></div></li>
+<li><div class="menu-item"><a class="class-method" href="../../../../Spah/State/QueryParser/readAheadToken/index.html" title="Spah.SpahQL.QueryParser.readAheadToken (class method)">readAheadToken</a></div></li>
+<li><div class="menu-item"><a class="class-property" href="../../../../Spah/State/QueryParser/comparisonOperators/index.html" title="Spah.SpahQL.QueryParser.comparisonOperators (class property)">comparisonOperators</a></div></li>
+<li><div class="menu-item"><a class="class-property" href="../../../../Spah/State/QueryParser/dotProperties/index.html" title="Spah.SpahQL.QueryParser.dotProperties (class property)">dotProperties</a></div></li>
+<li><div class="menu-item"><a class="class-property" href="../../../../Spah/State/QueryParser/queryCache/index.html" title="Spah.SpahQL.QueryParser.queryCache (class property)">queryCache</a></div></li></ul></li></ul></li></ul></li></ul><!--- #api_menu =-->
       </div> <!-- .sidebar-pane -->
       <div class="sidebar-pane" id="search_pane">
         <ul id="search_results" class="search-results menu-items scrollable"></ul>
@@ -69,18 +68,18 @@
   
     <li>&rarr; <a href="../../../../Spah/State/index.html" title="Spah.State (class)">State</a></li>
   
-    <li>&rarr; <a href="../../../../Spah/State/QueryParser/index.html" title="Spah.State.QueryParser (class)">QueryParser</a></li>
+    <li>&rarr; <a href="../../../../Spah/State/QueryParser/index.html" title="Spah.SpahQL.QueryParser (class)">QueryParser</a></li>
   
-    <li>&rarr; <a href="../../../../Spah/State/QueryParser/parseQuery/index.html" title="Spah.State.QueryParser.parseQuery (class method)">parseQuery</a></li>
+    <li>&rarr; <a href="../../../../Spah/State/QueryParser/parseQuery/index.html" title="Spah.SpahQL.QueryParser.parseQuery (class method)">parseQuery</a></li>
   
 </ul>
 
 
-  <p id="src_code_href"><a href="http://github.com/danski/spah/blob/master/client/src/Spah.State.QueryParser.js#73">src code</a></p>
+  <p id="src_code_href"><a href="http://github.com/danski/spah/blob/master/client/src/Spah.SpahQL.QueryParser.js#79">src code</a></p>
 
 
 <h2 class="page-title">
-  <span class="type">class method</span> Spah.State.QueryParser.parseQuery
+  <span class="type">class method</span> Spah.SpahQL.QueryParser.parseQuery
 </h2>
 
 
@@ -92,7 +91,7 @@
   <div class="section-content">
     <div class="method-description">
       
-        <pre class="syntax"><code class="ebnf">Spah.State.QueryParser.parseQuery(str) &rarr; Spah.State.Query instance</code></pre>
+        <pre class="syntax"><code class="ebnf">Spah.SpahQL.QueryParser.parseQuery(str) &rarr; Spah.SpahQL.Query instance</code></pre>
 
   <ul class="argument-list">
     
@@ -108,25 +107,9 @@
 
       
 
-      <p>Parses a string query and returns a parsed <code>Spah.State.Query</code> instance.</p>
+      <p>Parses a string query and returns a parsed <code>Spah.SpahQL.Query</code> instance.</p>
 
-<p>A query is parsed into an array of &gt;=1 sub-queries linked by comparison operators. Each sub-query is an object like:</p>
-<div class='highlight'><pre><span class='p'>{</span>
-  <span class='nx'>fragments</span><span class='o'>:</span> <span class='p'>[...],</span>
-  <span class='nx'>comparison</span><span class='o'>:</span> <span class='s2'>&quot;||&quot;</span>
-<span class='p'>}</span>
-</pre>
-</div>
-<p>Where the <code>comparison</code> key contains the logic gate to be used against the next</p>
-
-<p>Selection query example: /foo[/bar==&#8217;baz&#8217;]/foochild</p>
-<div class='highlight'><pre><span class='p'>[[{</span><span class='nx'>key</span><span class='o'>:</span> <span class='s2'>&quot;foo&quot;</span><span class='p'>,</span> <span class='nx'>filterQuery</span><span class='o'>:</span> <span class='nx'>resultOfParsingSquareBracketContent</span><span class='p'>,</span> <span class='nx'>recursive</span><span class='o'>:</span> <span class='kc'>false</span><span class='p'>},</span> <span class='p'>{</span><span class='nx'>key</span><span class='o'>:</span> <span class='s2'>&quot;foochild&quot;</span><span class='p'>,</span> <span class='nx'>recursive</span><span class='o'>:</span> <span class='kc'>false</span><span class='p'>}]]</span>
-</pre>
-</div>
-<p>Assertion query example: /foo[/bar==&#8217;baz&#8217;]/foochild == &#8220;3&#8221;</p>
-<div class='highlight'><pre><span class='p'>[</span><span class='nx'>resultOfParsingPreviousExample</span><span class='p'>,</span> <span class='s2'>&quot;==&quot;</span><span class='p'>,</span> <span class='s2'>&quot;3&quot;</span><span class='p'>]</span>
-</pre>
-</div>
+<p>Uses control characters such as set openers, comparison operators and path delimiters to throw the tokenizer into a variety of states. The actual parsing of each token is handed by a set of functions with naming convention readAhead, e.g. <code>readAheadStringLiteral</code>. These methods are responsible for identifying the token, reading ahead to parse it, and returning the found object to the tokenizer along with an updated index at which the tokenizer may resume parsing.</p>
       
       
 
@@ -144,7 +127,7 @@
         <p><a href="http://github.com/danski/spah">Spah</a> v0.0.0 API documentation.</p>
         <p>
           
-            Last updated on May 11, 2011 at 13:31 UTC.
+            Last updated on May 13, 2011 at 11:56 UTC.
           
           Generated by <a href="http://pdoc.org">PDoc</a>.
           Uses <a href="http://famfamfam.com/lab/icons/silk/" title="famfamfam.com: Silk Icons">Silk Icons</a> and portions of <a href="http://github.com/280north/aristo/tree/master" title="280north's aristo at master - GitHub">Aristo</a>.

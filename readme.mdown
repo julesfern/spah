@@ -57,6 +57,7 @@ Contents
   * [Setting the ID of an element][logic_id]
   * [Stash and unstash element content][logic_stashing]
   * [Using multiple operations on a single element][logic_chaining]
+  * TODO: Applying document logic with css selectors ({"a.loadsTickets": {"stash-if": "query"}})
   * [Advanced example][logic_example]
 6. TODO: [Templating with Mustache][templating]
   * TODO: Extending the template helpers
@@ -145,19 +146,18 @@ determine that this is a warm request and should be responded to with an updated
 
 <img src="https://img.skitch.com/20110504-tpqb613eyy46j7f758nqr745n2.jpg" />
 
+This is achieved by embedding template logic within the markup using HTML5 data attributes, thus making the same template logic available to both client
+and server. When the state is updated by a response from the server, elements with embedded display logic are re-evaluated automatically and the display 
+updated accordingly.
+
+You may also bind more advanced behaviours to changes in the state using [jQuery responders][responders] and [state queries][spahql]
+
 For cleanliness, Spah keeps all of its functions, classes and behaviour within the top level <code>Spah</code> object.
 Initialising Spah is simple:
 
      $(document).ready(function() { 
          Spah.init(); 
      });
-
-
-This is achieved by embedding template logic within the markup using HTML5 data attributes, thus making the same template logic available to both client
-and server. When the state is updated by a response from the server, elements with embedded display logic are re-evaluated automatically and the display 
-updated accordingly.
-
-You may also bind more advanced behaviours to changes in the state using [jQuery responders][responders] and [state queries][spahql]
 
 SpahQL
 ======
@@ -206,7 +206,7 @@ Recursion is supported with a double-slash anywhere in the path:
     // Find all entries inside myHash with the key "foo"
     results = Spah.state.select("/myHash//foo");
     
-The results are always returned as a set of <code>Spah.State.QueryResult</code> objects, which each have properties <code>path</code> and <code>value</code>:
+The results are always returned as a set of <code>Spah.SpahQL.QueryResult</code> objects, which each have properties <code>path</code> and <code>value</code>:
 
     results = Spah.state.select("/myHash//foo"); //-> [QueryResult, QueryResult]
     results[0].path //-> "/myHash/foo"
@@ -442,6 +442,13 @@ Properties are like imaginary paths on objects in your state. Each property uses
         // Find all strings longer than 3 characters
         results = Spah.state.select("//[/.type == 'String'][/.size > 3]")
         results[0].path //-> "/myHash/mySubHash/bar"
+
+* **.explode** Returns the object broken into a set that may be compared to other sets. Strings are exploded into a set of characters. Arrays and objects are exploded into sets of their values without keys.
+
+        // Does an array contain all of these values?
+        results = Spah.state.assert("/myArr/.explode }>{ {1,2,3}")
+        // Does a string contain all these characters?
+        results = Spah.state.assert("/myStr/.explode }>{ {'a','b','c'}")
 
 Document logic
 ==============

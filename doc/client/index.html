@@ -38,9 +38,10 @@
       </form>
       
       <div class="sidebar-pane scrollable" id="menu_pane">
-        <ul class="menu-items" id="api_menu"><li><div class="menu-item"><a class="class" href="Spah/index.html" title="Spah (class)">Spah</a></div><ul><li><div class="menu-item"><a class="class" href="Spah/State/index.html" title="Spah.State (class)">Spah.State</a></div><ul><li><div class="menu-item"><a class="class" href="Spah/State/DataHelper/index.html" title="Spah.State.DataHelper (class)">Spah.State.DataHelper</a></div></li>
-<li><div class="menu-item"><a class="class" href="Spah/State/Query/index.html" title="Spah.State.Query (class)">Spah.State.Query</a></div></li>
-<li><div class="menu-item"><a class="class" href="Spah/State/QueryParser/index.html" title="Spah.State.QueryParser (class)">Spah.State.QueryParser</a></div></li></ul></li></ul></li></ul><!--- #api_menu =-->
+        <ul class="menu-items" id="api_menu"><li><div class="menu-item"><a class="class" href="Spah/index.html" title="Spah (class)">Spah</a></div><ul><li><div class="menu-item"><a class="class" href="Spah/SpahQL/index.html" title="Spah.SpahQL (class)">Spah.SpahQL</a></div><ul><li><div class="menu-item"><a class="class" href="Spah/SpahQL/Query/index.html" title="Spah.SpahQL.Query (class)">Spah.SpahQL.Query</a></div></li>
+<li><div class="menu-item"><a class="class" href="Spah/SpahQL/QueryParser/index.html" title="Spah.SpahQL.QueryParser (class)">Spah.SpahQL.QueryParser</a></div></li>
+<li><div class="menu-item"><a class="class" href="Spah/SpahQL/QueryRunner/index.html" title="Spah.SpahQL.QueryRunner (class)">Spah.SpahQL.QueryRunner</a></div></li></ul></li>
+<li><div class="menu-item"><a class="class" href="Spah/State/index.html" title="Spah.State (class)">Spah.State</a></div><ul><li><div class="menu-item"><a class="class" href="Spah/State/DataHelper/index.html" title="Spah.State.DataHelper (class)">Spah.State.DataHelper</a></div></li></ul></li></ul></li></ul><!--- #api_menu =-->
       </div> <!-- .sidebar-pane -->
       <div class="sidebar-pane" id="search_pane">
         <ul id="search_results" class="search-results menu-items scrollable"></ul>
@@ -102,6 +103,8 @@
 <li><a href='#stash_and_unstash_element_content'>Stash and unstash element content</a></li>
 
 <li><a href='#using_multiple_operations_on_a_single_element'>Using multiple operations on a single element</a></li>
+
+<li>TODO: Applying document logic with css selectors ({&#8220;a.loadsTickets&#8221;: {&#8220;stash-if&#8221;: &#8220;query&#8221;}})</li>
 
 <li><a href='#advanced_document_logic_example'>Advanced example</a></li>
 </ul>
@@ -208,16 +211,16 @@
 
 <p><em>Figure 3: A better approach, with added progressive enhancement</em></p>
 <img src='https://img.skitch.com/20110504-tpqb613eyy46j7f758nqr745n2.jpg' />
+<p>This is achieved by embedding template logic within the markup using HTML5 data attributes, thus making the same template logic available to both client and server. When the state is updated by a response from the server, elements with embedded display logic are re-evaluated automatically and the display updated accordingly.</p>
+
+<p>You may also bind more advanced behaviours to changes in the state using <a href='#responding_to_state_changes_with_javascript'>jQuery responders</a> and <a href='#spahql'>state queries</a></p>
+
 <p>For cleanliness, Spah keeps all of its functions, classes and behaviour within the top level <code>Spah</code> object. Initialising Spah is simple:</p>
 <div class='highlight'><pre> <span class='nx'>$</span><span class='p'>(</span><span class='nb'>document</span><span class='p'>).</span><span class='nx'>ready</span><span class='p'>(</span><span class='kd'>function</span><span class='p'>()</span> <span class='p'>{</span> 
      <span class='nx'>Spah</span><span class='p'>.</span><span class='nx'>init</span><span class='p'>();</span> 
  <span class='p'>});</span>
 </pre>
 </div>
-<p>This is achieved by embedding template logic within the markup using HTML5 data attributes, thus making the same template logic available to both client and server. When the state is updated by a response from the server, elements with embedded display logic are re-evaluated automatically and the display updated accordingly.</p>
-
-<p>You may also bind more advanced behaviours to changes in the state using <a href='#responding_to_state_changes_with_javascript'>jQuery responders</a> and <a href='#spahql'>state queries</a></p>
-
 <h1 id='spahql'>SpahQL</h1>
 
 <h2 id='spahql_core_concepts'>SpahQL Core concepts</h2>
@@ -262,7 +265,7 @@
 <span class='nx'>results</span> <span class='o'>=</span> <span class='nx'>Spah</span><span class='p'>.</span><span class='nx'>state</span><span class='p'>.</span><span class='nx'>select</span><span class='p'>(</span><span class='s2'>&quot;/myHash//foo&quot;</span><span class='p'>);</span>
 </pre>
 </div>
-<p>The results are always returned as a set of <code>Spah.State.QueryResult</code> objects, which each have properties <code>path</code> and <code>value</code>:</p>
+<p>The results are always returned as a set of <code>Spah.SpahQL.QueryResult</code> objects, which each have properties <code>path</code> and <code>value</code>:</p>
 <div class='highlight'><pre><span class='nx'>results</span> <span class='o'>=</span> <span class='nx'>Spah</span><span class='p'>.</span><span class='nx'>state</span><span class='p'>.</span><span class='nx'>select</span><span class='p'>(</span><span class='s2'>&quot;/myHash//foo&quot;</span><span class='p'>);</span> <span class='c1'>//-&gt; [QueryResult, QueryResult]</span>
 <span class='nx'>results</span><span class='p'>[</span><span class='mi'>0</span><span class='p'>].</span><span class='nx'>path</span> <span class='c1'>//-&gt; &quot;/myHash/foo&quot;</span>
 <span class='nx'>results</span><span class='p'>[</span><span class='mi'>0</span><span class='p'>].</span><span class='nx'>value</span> <span class='c1'>//-&gt; &quot;bar&quot;</span>
@@ -549,8 +552,17 @@
   results = Spah.state.select(&quot;//[/.type == &#39;String&#39;][/.size &gt; 3]&quot;)
   results[0].path //-&gt; &quot;/myHash/mySubHash/bar&quot;</code></pre>
 </li>
-</ul>
 
+<li>
+<p><strong>.explode</strong> Returns the object broken into a set that may be compared to other sets. Strings are exploded into a set of characters. Arrays and objects are exploded into sets of their values without keys.</p>
+</li>
+</ul>
+<div class='highlight'><pre>    <span class='c1'>// Does an array contain all of these values?</span>
+    <span class='nx'>results</span> <span class='o'>=</span> <span class='nx'>Spah</span><span class='p'>.</span><span class='nx'>state</span><span class='p'>.</span><span class='nx'>assert</span><span class='p'>(</span><span class='s2'>&quot;/myArr/.explode }&gt;{ {1,2,3}&quot;</span><span class='p'>)</span>
+    <span class='c1'>// Does a string contain all these characters?</span>
+    <span class='nx'>results</span> <span class='o'>=</span> <span class='nx'>Spah</span><span class='p'>.</span><span class='nx'>state</span><span class='p'>.</span><span class='nx'>assert</span><span class='p'>(</span><span class='s2'>&quot;/myStr/.explode }&gt;{ {&#39;a&#39;,&#39;b&#39;,&#39;c&#39;}&quot;</span><span class='p'>)</span>
+</pre>
+</div>
 <h1 id='document_logic'>Document logic</h1>
 
 <p>In a Spah application, document logic (show this, hide that, populate this with that) is moved away from in-place Erb views and into a place where both the client and the server will have access to it - the document itself. In doing this, we want to avoid doing anything silly like adding new tags or attributes that break HTML validity, or dirtying up your markup with billions of extra nested div elements.</p>
@@ -730,10 +742,12 @@
 <div class='highlight'><pre><span class='c1'>// The expression parser is assumed to be a tokenizer. We will define the following states:</span>
 <span class='nx'>STATE_NULL</span> <span class='o'>=</span> <span class='kc'>null</span>
 <span class='nx'>STATE_PATH_QUERY</span> <span class='o'>=</span> <span class='s2'>&quot;path&quot;</span>
+<span class='nx'>STATE_KEY_NAME</span> <span class='o'>=</span> <span class='s2'>&quot;key&quot;</span>
 <span class='nx'>STATE_PROPERTY</span> <span class='o'>=</span> <span class='s2'>&quot;prop&quot;</span>
 <span class='nx'>STATE_FILTER_QUERY</span> <span class='o'>=</span> <span class='s2'>&quot;filt&quot;</span>
 <span class='nx'>STATE_STRING_LITERAL</span> <span class='o'>=</span> <span class='s2'>&quot;str&quot;</span>
 <span class='nx'>STATE_NUMERIC_LITERAL</span> <span class='o'>=</span> <span class='s2'>&quot;num&quot;</span>
+<span class='nx'>STATE_BOOLEAN_LITERAL</span> <span class='o'>=</span> <span class='s2'>&quot;bool&quot;</span>
 <span class='nx'>STATE_SET_LITERAL</span> <span class='o'>=</span> <span class='s2'>&quot;set&quot;</span>
 
 <span class='c1'>// We will also assume that the tokenizer maintains a state stack - every time</span>
@@ -775,8 +789,13 @@
     <td>An integer or floating-point numeric literal. The value is ascertained using the runtime environment's <code>parseFloat</code> function. Legal in the <code>null</code> state and in the <code>STATE_SET_LITERAL</code> state. Encountering a numeric character in either of these states enters the <code>STATE_NUMERIC_LITERAL</code> state, which terminates upon encountering a non-numeric character or a second period character.</td>
   </tr>
   <tr style='background-color: #EEE'>
+    <td>TOKEN_BOOLEAN_LITERAL</td>
+    <td><code>/true|false/</code></td>
+    <td>An alias for any boolean literal.</td>
+  </tr>
+  <tr>
     <td>TOKEN_PRIMITIVE_LITERAL</td>
-    <td><code>(TOKEN_STRING_LITERAL|TOKEN_NUMERIC_LITERAL)</code></td>
+    <td><code>(TOKEN_STRING_LITERAL|TOKEN_NUMERIC_LITERAL|TOKEN_BOOLEAN_LITERAL)</code></td>
     <td>An alias for any string or numeric literal.</td>
   </tr>
 </table><table>
@@ -799,28 +818,28 @@
     <td>Exits the <code>STATE_SET_LITERAL</code> state. Only valid in this state.</td>
   </tr>
   <tr style='background-color: #EEE'>
-    <td>ATOM_SET_SEPARATOR</td>
+    <td>ATOM_SET_DELIMITER</td>
     <td><code>","</code></td>
     <td>When encountered in the <code>STATE_SET_LITERAL</code> state, prepares the parser to append a new entry to the set. Only legal in the <code>STATE_SET_LITERAL</code> state. If the separator is immediately followed by  <code>ATOM_SET_END</code>, a compiler error is thrown.</td>
   </tr>
   <tr>
-    <td>ATOM_SET_RANGE_SEPERATOR</td>
+    <td>ATOM_SET_RANGE_DELIMITER</td>
     <td><code>".."</code></td>
     <td>Declares a range between the preceding literal and the following literal. The preceding literal must be the first literal in the set, and the following literal must be the last literal in the set. Both literals must be of the same primitive type. This token does not alter the state, allowing the parser to remain in <code>STATE_SET_LITERAL</code>, but it is expected to set flags preventing the parser from breaking the above rules.</td>
   </tr>
   <tr style='background-color: #EEE'>
     <td>TOKEN_SET_RANGE_LITERAL_STRING</td>
-    <td><code>ATOM_SET_START,TOKEN_STRING_LITERAL,ATOM_SET_RANGE_SEPERATOR,TOKEN_STRING_LITERAL,ATOM_SET_END</code></td>
+    <td><code>ATOM_SET_START,TOKEN_STRING_LITERAL,ATOM_SET_RANGE_DELIMITER,TOKEN_STRING_LITERAL,ATOM_SET_END</code></td>
     <td>An alias for a valid string range e.g. <code>{"a".."z"}</code></td>
   </tr>
   <tr>
     <td>TOKEN_SET_RANGE_LITERAL_NUMERIC</td>
-    <td><code>ATOM_SET_START,TOKEN_NUMERIC_LITERAL,ATOM_SET_RANGE_SEPERATOR,TOKEN_NUMERIC_LITERAL,ATOM_SET_END</code></td>
+    <td><code>ATOM_SET_START,TOKEN_NUMERIC_LITERAL,ATOM_SET_RANGE_DELIMITER,TOKEN_NUMERIC_LITERAL,ATOM_SET_END</code></td>
     <td />
   </tr>
   <tr style='background-color: #EEE'>
     <td>TOKEN_SET_LITERAL_MIXED</td>
-    <td><code>ATOM_SET_START,((TOKEN_PRIMITIVE_LITERAL|TOKEN_SELECTION_QUERY)[,ATOM_SET_SEPARATOR,(TOKEN_PRIMITIVE_LITERAL|TOKEN_SELECTION_QUERY)]*),ATOM_SET_END</code></td>
+    <td><code>ATOM_SET_START,((TOKEN_PRIMITIVE_LITERAL|TOKEN_SELECTION_QUERY)[,ATOM_SET_DELIMITER,(TOKEN_PRIMITIVE_LITERAL|TOKEN_SELECTION_QUERY)]*),ATOM_SET_END</code></td>
     <td />
   </tr>
   <tr>
@@ -848,12 +867,12 @@
     <td>Forces the subsequent path query to act on the root context, regardless of the current query's execution scope. Must be followed by <code>ATOM_PATH_DELIMITER</code> or else a compiler error will be thrown.</td>
   </tr>
   <tr style='background-color: #EEE'>
-    <td>ATOM_PATH_START</td>
+    <td>TOKEN_PATH_START</td>
     <td><code>[ATOM_PATH_ROOT,]ATOM_PATH_DELIMITER</code></td>
     <td>Describes a valid opener for a path query. Encountering this atom whilst in the <code>null</code> or <code>STATE_SET_LITERAL</code> states will throw the parser into the <code>STATE_PATH_QUERY</code> state.</td>
   </tr>
   <tr>
-    <td>ATOM_PATH_KEYNAME</td>
+    <td>TOKEN_PATH_KEYNAME</td>
     <td><code>/\*|[a-zA-Z0-9-_]*/</code></td>
     <td>A wildcard <code>*</code> or an optional alphanumeric path. Underscores and dashes are also supported in key names.</td>
   </tr>
@@ -884,7 +903,7 @@
   </tr>
   <tr>
     <td>TOKEN_SELECTION_QUERY</td>
-    <td><code>ATOM_PATH_START[,TOKEN_PATH_COMPONENT[,ATOM_PATH_DELIMITER,TOKEN_PATH_COMPONENT]+]*</code></td>
+    <td><code>TOKEN_PATH_START[,TOKEN_PATH_COMPONENT[,ATOM_PATH_DELIMITER,TOKEN_PATH_COMPONENT]+]*</code></td>
     <td>An alias for any valid selection query. A path opener, followed by any number of path components separated with the <code>ATOM_PATH_DELIMITER</code>.</td>
   </tr>
 </table><table>
@@ -1006,7 +1025,7 @@
         <p><a href="http://github.com/danski/spah">Spah</a> v0.0.0 API documentation.</p>
         <p>
           
-            Last updated on May 11, 2011 at 13:31 UTC.
+            Last updated on May 13, 2011 at 16:30 UTC.
           
           Generated by <a href="http://pdoc.org">PDoc</a>.
           Uses <a href="http://famfamfam.com/lab/icons/silk/" title="famfamfam.com: Silk Icons">Silk Icons</a> and portions of <a href="http://github.com/280north/aristo/tree/master" title="280north's aristo at master - GitHub">Aristo</a>.

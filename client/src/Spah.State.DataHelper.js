@@ -64,10 +64,11 @@ jQuery.extend(Spah.State.DataHelper, {
     var mergeResult = null;
     var deltaType = this.objectType(delta);
     var targetType = this.objectType(target);
+    var target = target;
     
     if(topStack) {
       Spah.log("State merge: Beginning merge of delta->target :", delta, target);
-      target = jQuery.extend({}, target);
+      var target = jQuery.extend({}, target);
     }
     
     

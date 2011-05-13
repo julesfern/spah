@@ -38,75 +38,34 @@ signatures:
 file: /Users/danski/Sites/spah/client/src/Spah.State.QueryParser.js
 
 ---
-id: "Spah.State.QueryParser.operators"
+id: "Spah.State.QueryParser.comparisonOperators"
 parent_id: "Spah.State.QueryParser"
 type: class property
-line_number: 29
+line_number: 33
 description: |
-
-
-signatures:
- -
-  signature: "Spah.State.QueryParser.operators"
-  return_value: "Array of allowed mathematical operators"
-file: /Users/danski/Sites/spah/client/src/Spah.State.QueryParser.js
-
----
-id: "Spah.State.QueryParser.comparators"
-parent_id: "Spah.State.QueryParser"
-type: class property
-line_number: 38
-description: |
-  Allowed comparison operators. Detection of an allowed comparator throws the
+  Allowed set comparison operators. Detection of an allowed comparator throws the
   current subquery into "truthiness" mode, where it will return a boolean result
   rather than a resultset.
 
 signatures:
  -
-  signature: "Spah.State.QueryParser.comparators"
+  signature: "Spah.State.QueryParser.comparisonOperators"
   return_value: "Array of allowed comparators"
-file: /Users/danski/Sites/spah/client/src/Spah.State.QueryParser.js
-
----
-id: "Spah.State.QueryParser.logicOperators"
-parent_id: "Spah.State.QueryParser"
-type: class property
-line_number: 46
-description: |
-  Allowed logical operators. Detection of an allowed logical operator throws the
-  current subquery into truthiness mode.
-
-signatures:
- -
-  signature: "Spah.State.QueryParser.logicOperators"
-  return_value: "Array of allowed logical operators"
 file: /Users/danski/Sites/spah/client/src/Spah.State.QueryParser.js
 
 ---
 id: "Spah.State.QueryParser.parseQuery"
 parent_id: "Spah.State.QueryParser"
 type: class method
-line_number: 73
+line_number: 79
 description: |
   Parses a string query and returns a parsed <code>Spah.State.Query</code> instance.
   
-  A query is parsed into an array of >=1 sub-queries linked by comparison operators.
-  Each sub-query is an object like:
-  
-      {
-        fragments: [...],
-        comparison: "||"
-      }
-  
-  Where the <code>comparison</code> key contains the logic gate to be used against the next
-  
-  Selection query example: /foo\[/bar=='baz'\]/foochild
-  
-      [[{key: "foo", filterQuery: resultOfParsingSquareBracketContent, recursive: false}, {key: "foochild", recursive: false}]]
-  
-  Assertion query example: /foo\[/bar=='baz'\]/foochild == "3"
-  
-      [resultOfParsingPreviousExample, "==", "3"]
+  Uses control characters such as set openers, comparison operators and path delimiters to throw the
+  tokenizer into a variety of states. The actual parsing of each token is handed by a set of functions
+  with naming convention readAhead, e.g. <code>readAheadStringLiteral</code>. These methods are
+  responsible for identifying the token, reading ahead to parse it, and returning the found object
+  to the tokenizer along with an updated index at which the tokenizer may resume parsing.
 
 signatures:
  -
@@ -118,5 +77,36 @@ arguments:
   types: [String]
   description: >
     The string query e.g. "/foo/bar == 3"
+
+file: /Users/danski/Sites/spah/client/src/Spah.State.QueryParser.js
+
+---
+id: "Spah.State.QueryParser.readAheadToken"
+parent_id: "Spah.State.QueryParser"
+type: class method
+line_number: 156
+description: |
+  Reads ahead through the given query string, starting at the current index, to identify the token at the given index.
+  Returns an Array <code>{resumeAt, token, tokenType}</code> where <code>index</code> is the index at which the found token
+  concludes, and at which the expression parser should resume.
+  
+  Returns <code>null</code> if no valid tokens are found.
+
+signatures:
+ -
+  signature: "Spah.State.QueryParser.readAheadToken(i, query)"
+  return_value: "Object token descriptor"
+arguments:
+ -
+  name: i
+  types: [Number]
+  description: >
+    The index at which to start reading the string
+
+ -
+  name: query
+  types: [String]
+  description: >
+    The raw string of the query
 
 file: /Users/danski/Sites/spah/client/src/Spah.State.QueryParser.js

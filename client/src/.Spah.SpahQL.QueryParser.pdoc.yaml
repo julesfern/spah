@@ -1,0 +1,112 @@
+---
+id: "Spah.SpahQL.QueryParser"
+parent_id: "Spah.SpahQL"
+type: class
+line_number: 7
+description: |
+  Parses string queries from data-\*-if attributes and client-side responders and produces parsed <code>Spah.SpahQL.Query</code> instances.
+  Maintains a cache of previously-parsed queries for speed.
+
+file: /Users/danski/Sites/spah/client/src/Spah.SpahQL.QueryParser.js
+
+---
+id: "Spah.SpahQL.QueryParser.queryCache"
+parent_id: "Spah.SpahQL.QueryParser"
+type: class property
+line_number: 19
+description: |
+  Holds a cache of previously-parsed queries indexed by string representation.
+
+signatures:
+ -
+  signature: "Spah.SpahQL.QueryParser.queryCache"
+  return_value: "Object cached queries"
+file: /Users/danski/Sites/spah/client/src/Spah.SpahQL.QueryParser.js
+
+---
+id: "Spah.SpahQL.QueryParser.dotProperties"
+parent_id: "Spah.SpahQL.QueryParser"
+type: class property
+line_number: 24
+description: |
+
+
+signatures:
+ -
+  signature: "Spah.SpahQL.QueryParser.dotProperties"
+  return_value: "Array of allowed property calls"
+file: /Users/danski/Sites/spah/client/src/Spah.SpahQL.QueryParser.js
+
+---
+id: "Spah.SpahQL.QueryParser.comparisonOperators"
+parent_id: "Spah.SpahQL.QueryParser"
+type: class property
+line_number: 33
+description: |
+  Allowed set comparison operators. Detection of an allowed comparator throws the
+  current subquery into "truthiness" mode, where it will return a boolean result
+  rather than a resultset.
+
+signatures:
+ -
+  signature: "Spah.SpahQL.QueryParser.comparisonOperators"
+  return_value: "Array of allowed comparators"
+file: /Users/danski/Sites/spah/client/src/Spah.SpahQL.QueryParser.js
+
+---
+id: "Spah.SpahQL.QueryParser.parseQuery"
+parent_id: "Spah.SpahQL.QueryParser"
+type: class method
+line_number: 79
+description: |
+  Parses a string query and returns a parsed <code>Spah.SpahQL.Query</code> instance.
+  
+  Uses control characters such as set openers, comparison operators and path delimiters to throw the
+  tokenizer into a variety of states. The actual parsing of each token is handed by a set of functions
+  with naming convention readAhead, e.g. <code>readAheadStringLiteral</code>. These methods are
+  responsible for identifying the token, reading ahead to parse it, and returning the found object
+  to the tokenizer along with an updated index at which the tokenizer may resume parsing.
+
+signatures:
+ -
+  signature: "Spah.SpahQL.QueryParser.parseQuery(str)"
+  return_value: "Spah.SpahQL.Query instance"
+arguments:
+ -
+  name: str
+  types: [String]
+  description: >
+    The string query e.g. "/foo/bar == 3"
+
+file: /Users/danski/Sites/spah/client/src/Spah.SpahQL.QueryParser.js
+
+---
+id: "Spah.SpahQL.QueryParser.readAheadToken"
+parent_id: "Spah.SpahQL.QueryParser"
+type: class method
+line_number: 159
+description: |
+  Reads ahead through the given query string, starting at the current index, to identify the token at the given index.
+  Returns an Array <code>{resumeAt, token, tokenType}</code> where <code>index</code> is the index at which the found token
+  concludes, and at which the expression parser should resume.
+  
+  Returns <code>null</code> if no valid tokens are found.
+
+signatures:
+ -
+  signature: "Spah.SpahQL.QueryParser.readAheadToken(i, query)"
+  return_value: "Object token descriptor"
+arguments:
+ -
+  name: i
+  types: [Number]
+  description: >
+    The index at which to start reading the string
+
+ -
+  name: query
+  types: [String]
+  description: >
+    The raw string of the query
+
+file: /Users/danski/Sites/spah/client/src/Spah.SpahQL.QueryParser.js

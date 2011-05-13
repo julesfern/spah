@@ -41,12 +41,12 @@ $(document).ready(function() {
   })
   
   test("Merges arrays correctly", function() {
-    mergeResult = Spah.State.DataHelper.merge(Fixtures.State.Arrays.delta, Fixtures.State.Arrays.target);
-    updates = mergeResult.modifications; data = mergeResult.data;
-    expectedState = Fixtures.State.Arrays.expected;
+    var mergeResult = Spah.State.DataHelper.merge(Fixtures.State.Arrays.delta, Fixtures.State.Arrays.target);
+    var updates = mergeResult.modifications; data = mergeResult.data;
+    var expectedState = Fixtures.State.Arrays.expected;
     
     // Manually assert everything about the updated data
-    expectedModifications = {
+    var expectedModifications = {
       "/modify": "~",
       "/modify/2": "~",
       "/modify/3": "+",
@@ -77,7 +77,7 @@ $(document).ready(function() {
     // Assert expected state equal to resulting state
     var hKey, hArr, hArrI;
     for(hKey in expectedState) {
-      hArr = expectedState[hKey];
+      var hArr = expectedState[hKey];
       if(hKey != "nullify") {
         // Equal lengths
         equal(hArr.length, data[hKey].length, hKey+" key has correct length");
@@ -92,12 +92,12 @@ $(document).ready(function() {
   });
   
   test("Merges hashes correctly", function() {
-    mergeResult = Spah.State.DataHelper.merge(Fixtures.State.Hashes.delta, Fixtures.State.Hashes.target);
-    updates = mergeResult.modifications; data = mergeResult.data;
-    expectedState = Fixtures.State.Hashes.expected;
+    var mergeResult = Spah.State.DataHelper.merge(Fixtures.State.Hashes.delta, Fixtures.State.Hashes.target);
+    var updates = mergeResult.modifications; data = mergeResult.data;
+    var expectedState = Fixtures.State.Hashes.expected;
     
     // Manually assert everything about the updated data
-    expectedModifications = {
+    var expectedModifications = {
       "/modify": "~",
       "/modify/original": "~",
       "/lengthen": "~",
@@ -123,10 +123,10 @@ $(document).ready(function() {
     
     // Assert actual data content
     var rootKey, innerHash, innerKey, rootCount, innerCount, expectedInnerCount;
-    rootCount = 0;
+    var rootCount = 0;
     for(rootKey in expectedState) {
-      innerHash = expectedState[rootKey];
-      innerCount = 0; expectedInnerCount = 0;
+      var innerHash = expectedState[rootKey];
+      var innerCount = 0; expectedInnerCount = 0;
       if(rootKey == "nullify") {
         equal(null, innerHash, "nullified hash is nullified");
       } 
@@ -146,12 +146,12 @@ $(document).ready(function() {
   });
   
   test("Merges base object types correctly", function() {
-    mergeResult = Spah.State.DataHelper.merge(Fixtures.State.BaseTypes.delta, Fixtures.State.BaseTypes.target);
-    updates = mergeResult.modifications; data = mergeResult.data;
-    expectedState = Fixtures.State.BaseTypes.expected;
+    var mergeResult = Spah.State.DataHelper.merge(Fixtures.State.BaseTypes.delta, Fixtures.State.BaseTypes.target);
+    var updates = mergeResult.modifications; data = mergeResult.data;
+    var expectedState = Fixtures.State.BaseTypes.expected;
     
     // Manually assert everything about the updated data
-    expectedModifications = {
+    var expectedModifications = {
       "/modifyStr": "~",
       "/modifyBool": "~",
       "/modifyNum": "~",
@@ -185,11 +185,11 @@ $(document).ready(function() {
   });
   
   test("Merges the complex fixture correctly", function() {
-    mergeResult = Spah.State.DataHelper.merge(Fixtures.State.Complex.delta, Fixtures.State.Complex.target);
-    updates = mergeResult.modifications; data = mergeResult.data;
+    var mergeResult = Spah.State.DataHelper.merge(Fixtures.State.Complex.delta, Fixtures.State.Complex.target);
+    var updates = mergeResult.modifications; data = mergeResult.data;
     
     // Manually assert everything about the updated data
-    expectedModifications = {
+    var expectedModifications = {
       "/modify": "~",
       "/modify/nullify": "-",
       "/modify/str": "~",
@@ -224,6 +224,7 @@ $(document).ready(function() {
     
     // Assert identical keys, values and counts
     var expectedCount = 0;
+    var expectedKey, countKey;
     for(expectedKey in expectedModifications) {
       equal(updates[expectedKey], expectedModifications[expectedKey], expectedKey+" matched update type");
       expectedCount++;

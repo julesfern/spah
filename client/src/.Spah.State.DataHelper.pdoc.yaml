@@ -78,7 +78,7 @@ file: /Users/danski/Sites/spah/client/src/Spah.State.DataHelper.js
 id: "Spah.State.DataHelper.modificationSymbol"
 parent_id: "Spah.State.DataHelper"
 type: class method
-line_number: 338
+line_number: 339
 description: |
   Determines whether the change between two objects, assuming content inequality, is a "+" (addition), "-" (nullification) or "~" (alteration).
 
@@ -92,7 +92,7 @@ file: /Users/danski/Sites/spah/client/src/Spah.State.DataHelper.js
 id: "Spah.State.DataHelper.objectType"
 parent_id: "Spah.State.DataHelper"
 type: class method
-line_number: 349
+line_number: 350
 description: |
   Extends the core typeof(obj) function by adding types "array" and "null".
 
@@ -106,7 +106,7 @@ file: /Users/danski/Sites/spah/client/src/Spah.State.DataHelper.js
 id: "Spah.State.DataHelper.eq"
 parent_id: "Spah.State.DataHelper"
 type: class method
-line_number: 366
+line_number: 367
 description: |
   Determines content equality of two or more objects. Booleans, null values, numbers and strings are compared using
   the <code>Spah.State.DataHelper.objectType</code> method and the built-in <code>==</code> operator, but arrays
