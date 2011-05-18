@@ -1,0 +1,51 @@
+---
+id: "Spah.SpahQL.QueryResult"
+parent_id: "Spah.SpahQL"
+type: class
+line_number: 6
+description: |
+  A simple model wrapping an individual result returned from a SpahQL query.
+
+file: /Users/danski/Sites/spah/client/src/Spah.SpahQL.QueryResult.js
+
+---
+id: "new Spah.SpahQL.QueryResult"
+parent_id: "Spah.SpahQL.QueryResult"
+type: constructor
+line_number: 12
+description: |
+  Creates a new instance with the specified path and value.
+
+signatures:
+ -
+  signature: "new Spah.SpahQL.QueryResult(path, value)"
+file: /Users/danski/Sites/spah/client/src/Spah.SpahQL.QueryResult.js
+
+---
+id: "Spah.SpahQL.QueryResult#path"
+parent_id: "Spah.SpahQL.QueryResult"
+type: instance property
+line_number: 23
+description: |
+  The SpahQL object path from which this result was garnered, if it was gathered from an object path.
+  Results garnered from literals will not have paths associated with them.
+
+signatures:
+ -
+  signature: "Spah.SpahQL.QueryResult#path"
+  return_value: "String path or null"
+file: /Users/danski/Sites/spah/client/src/Spah.SpahQL.QueryResult.js
+
+---
+id: "Spah.SpahQL.QueryResult#value"
+parent_id: "Spah.SpahQL.QueryResult"
+type: instance property
+line_number: 30
+description: |
+  The raw value of this query result as represented in the queried object.
+
+signatures:
+ -
+  signature: "Spah.SpahQL.QueryResult#value"
+  return_value: "Array, object, boolean, string or null"
+file: /Users/danski/Sites/spah/client/src/Spah.SpahQL.QueryResult.js

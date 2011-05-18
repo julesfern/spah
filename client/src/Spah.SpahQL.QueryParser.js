@@ -88,7 +88,6 @@
       var readAheadResult;
       var i = 0;
       while(readAheadResult = this.readAheadToken(i, query)) {
-        console.log(readAheadResult);
         switch(readAheadResult.tokenType) {
           case this.TOKEN_NUMERIC_LITERAL: 
           case this.TOKEN_STRING_LITERAL:  
@@ -97,7 +96,7 @@
           case this.TOKEN_SET_LITERAL:
             if(([this.TOKEN_NUMERIC_LITERAL, this.TOKEN_STRING_LITERAL, this.TOKEN_BOOLEAN_LITERAL]).indexOf(readAheadResult.tokenType) > -1) {
               // Transpose raw literal into set
-              readAheadResult.token = {type: "set", values: [readAheadResult.token], isRange: false};
+              readAheadResult.token = {type: this.TOKEN_SET_LITERAL, values: [readAheadResult.token], isRange: false};
               readAheadResult.tokenType = this.TOKEN_SET_LITERAL;
             }
             // Take set literal or selection query and push to main query object
@@ -293,7 +292,7 @@
            this.throwParseErrorAt(j, query,  "Found unexpected "+tType+" in set literal. Set literals may only contain "+allowedTokens.join(","));
          }
        }
-       return [j, {type: "set", values: tokens, isRange: usedRangeDelimiter}];
+       return [j, {type: this.TOKEN_SET_LITERAL, values: tokens, isRange: usedRangeDelimiter}];
      }
      return null;
    },
@@ -306,7 +305,7 @@
        // Going to return query
         // Query as a whole may have: root flag, set of path fragments
         // Each fragment may have: recursion flag, key OR property name, filter queries if using key name and not property name
-        var pq = {useRoot: false, pathComponents: []};
+        var pq = {useRoot: false, pathComponents: [], type: this.TOKEN_SELECTION_QUERY};
         var j = i;
        
         if(ch == this.ATOM_PATH_ROOT) {
@@ -347,6 +346,7 @@
        // Check for wildcard, which halts the key reader and moves on to filters
        if(query.charAt(j) == this.ATOM_PATH_WILDCARD) {
           // Expect filter or end
+          pc.key = this.ATOM_PATH_WILDCARD;
           j++
        }
        else {

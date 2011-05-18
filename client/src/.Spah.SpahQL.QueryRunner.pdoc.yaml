@@ -13,13 +13,81 @@ file: /Users/danski/Sites/spah/client/src/Spah.SpahQL.QueryRunner.js
 id: "Spah.SpahQL.QueryRunner.select"
 parent_id: "Spah.SpahQL.QueryRunner"
 type: class method
-line_number: 18
+line_number: 20
 description: |
-  - query (Spah.SpahQL.Query): A parsed query instance
-  - data (Object): The data against which to run the query
+  Executes a selection query against the given dataset. Returns an array of result instances.
 
 signatures:
  -
   signature: "Spah.SpahQL.QueryRunner.select(query, data)"
-  return_value: "Array resultset"
+  return_value: "Array of Spah.SpahQL.QueryResult instances"
+arguments:
+ -
+  name: query
+  types: [Spah.SpahQL.Query]
+  description: >
+    A parsed query instance
+
+ -
+  name: data
+  types: [Object]
+  description: >
+    The data against which to run the query
+
+file: /Users/danski/Sites/spah/client/src/Spah.SpahQL.QueryRunner.js
+
+---
+id: "Spah.SpahQL.QueryRunner.assert"
+parent_id: "Spah.SpahQL.QueryRunner"
+type: class method
+line_number: 33
+description: |
+  Executes and ssserts the truthiness of a selection or assertion query against the given dataset.
+  Returns a boolean indicating the overall result of the query - if the query is not an assertion
+  query, it will return true if the query returns one or more results.
+
+signatures:
+ -
+  signature: "Spah.SpahQL.QueryRunner.assert(query, data)"
+  return_value: "Boolean result"
+arguments:
+ -
+  name: query
+  types: [Spah.SpahQL.Query]
+  description: >
+    A parsed query instance
+
+ -
+  name: data
+  types: [Object]
+  description: >
+    The data against which to run the query
+
+file: /Users/danski/Sites/spah/client/src/Spah.SpahQL.QueryRunner.js
+
+---
+id: "Spah.SpahQL.QueryRunner.evalQueryToken"
+parent_id: "Spah.SpahQL.QueryRunner"
+type: class method
+line_number: 44
+description: |
+  Translates a selection query or set literal to a series of results
+
+signatures:
+ -
+  signature: "Spah.SpahQL.QueryRunner.evalQueryToken(token, data)"
+  return_value: "Array of Spah.SpahQL.QueryResult instances"
+arguments:
+ -
+  name: token
+  types: [Object]
+  description: >
+    One of the primary or secondary tokens from a Query instance. May be a selection query or a set literal.
+
+ -
+  name: data
+  types: [Object]
+  description: >
+    The data scope against which any selection queries in the token top level will be run.
+
 file: /Users/danski/Sites/spah/client/src/Spah.SpahQL.QueryRunner.js

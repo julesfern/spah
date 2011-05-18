@@ -69,9 +69,9 @@ $(document).ready(function() {
   test("Returns a correct new index and found set when reading ahead for set literals", function() {
     expect(5);
     
-    deepEqual(Spah.SpahQL.QueryParser.readAheadSetLiteral(0, "{1,'2,',true}"), [13, {type: "set", values: [1,"2,",true], isRange: false}]);
-    deepEqual(Spah.SpahQL.QueryParser.readAheadSetLiteral(2, "--{1.5,false,true}--"), [18, {type: "set", values: [1.5,false,true], isRange: false}]);
-    deepEqual(Spah.SpahQL.QueryParser.readAheadSetLiteral(2, "--{'a'..'d'}--"), [12, {type: "set", values: ['a','d'], isRange: true}]);
+    deepEqual(Spah.SpahQL.QueryParser.readAheadSetLiteral(0, "{1,'2,',true}"), [13, {type: Spah.SpahQL.QueryParser.TOKEN_SET_LITERAL, values: [1,"2,",true], isRange: false}]);
+    deepEqual(Spah.SpahQL.QueryParser.readAheadSetLiteral(2, "--{1.5,false,true}--"), [18, {type: Spah.SpahQL.QueryParser.TOKEN_SET_LITERAL, values: [1.5,false,true], isRange: false}]);
+    deepEqual(Spah.SpahQL.QueryParser.readAheadSetLiteral(2, "--{'a'..'d'}--"), [12, {type: Spah.SpahQL.QueryParser.TOKEN_SET_LITERAL, values: ['a','d'], isRange: true}]);
     
     // Errors
     try { Spah.SpahQL.QueryParser.readAheadSetLiteral(0, "{'a'..'d',2}--") } catch(e) { ok(e, e.message) };
@@ -85,7 +85,8 @@ $(document).ready(function() {
         {key: "key1", property: null, recursive: false, filterQueries: []},
         {key: "key2", property: null, recursive: true, filterQueries: [Spah.SpahQL.QueryParser.parseQuery("$/foo=='bar'")]},
         {key: null, property: "explode", recursive: false, filterQueries: [Spah.SpahQL.QueryParser.parseQuery("//foo == 2"), Spah.SpahQL.QueryParser.parseQuery("//bar == 3")]},
-      ]
+      ],
+      type: Spah.SpahQL.QueryParser.TOKEN_SELECTION_QUERY
     }]);
   });
   
@@ -98,9 +99,21 @@ $(document).ready(function() {
         {key: "bar", property: null, recursive: true, filterQueries: []},
         {key: null, property: "property", recursive: false, filterQueries: []},
         {key: "baz", property: null, recursive: false, filterQueries: [Spah.SpahQL.QueryParser.parseQuery("$//bar")]}
-      ]
+      ],
+      type: Spah.SpahQL.QueryParser.TOKEN_SELECTION_QUERY
     });
     ok(!q.comparisonOperator && !q.secondaryToken);
+  });
+  
+  test("Parses a flat root query", function() {
+    var q = Spah.SpahQL.QueryParser.parseQuery("/");
+    deepEqual(q.primaryToken, {
+      useRoot: false,
+      pathComponents: [
+        {key: null, property: null, recursive: false, filterQueries: []}
+      ],
+      type: Spah.SpahQL.QueryParser.TOKEN_SELECTION_QUERY
+    })
   });
   
 });

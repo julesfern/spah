@@ -12,7 +12,9 @@
     <!-- Libs -->
     <script type="text/javascript" src="../src/Spah.js"></script>
     <script type="text/javascript" src="../src/Spah.SpahQL.js"></script>
+    <script type="text/javascript" src="../src/Spah.SpahQL.Errors.js"></script>
     <script type="text/javascript" src="../src/Spah.SpahQL.Query.js"></script>
+    <script type="text/javascript" src="../src/Spah.SpahQL.QueryResult.js"></script>
     <script type="text/javascript" src="../src/Spah.SpahQL.QueryParser.js"></script>
     <script type="text/javascript" src="../src/Spah.SpahQL.QueryRunner.js"></script>
     <script type="text/javascript" src="../src/Spah.State.js"></script>
@@ -20,7 +22,7 @@
     
     <!-- Setup -->
     <script type="text/javascript">
-      Spah.verbose = true;
+      //Spah.verbose = true;
     </script>    
     
     <!-- TESTS -->
@@ -46,6 +48,33 @@
       
       <script type="text/javascript">
         var Fixtures = {
+          Query: {
+            Data: {
+              obj: {a: 1, b: 2, c: 3},
+              arr: ["d","e","f"],
+              str: "abcdefgh",
+              num: 1000,
+              bool: true,
+              objNested: {a: {a: 1, b: 2, c: 3}, b: {d: 4, e: 5, f: 6}, c: {g: 7, h: 8, i: 9, j: ["a", "b", "c"]}},
+              arrNested: [["a", "b", "c"],["d", "e", "f"],["g", "h", {a: 1, b: 2, c: 3}]],
+              objWithArr: {a: ["a", "b", "c"], b: ["d", "e", "f"], c: ["g", "h", "i"]},
+              arrWithObj: [{a: 1, b: 2, c: 3},{d: 4, e: 5, f: 6},{g: 7, h: 8, i: 9, j: 10}],
+            },
+            Selection: {
+              root: "/",
+              basicObjectKey: "/obj",
+              basicArrayKey: "/1",
+              nestedKeysObject: "/objNested/c/j/1",
+              nestedKeysArray: "/arrNested/2/2",
+              wildcardSingleDepth: "/arrNested/*",
+              wildcardDoubleDepth: "/arrNested/*/*",
+              wildcardTripleDepth: "/arrNested/*/*/*"
+            },
+            Assertion: {
+              
+            }
+          },
+          
           State: {
             
             Arrays: {

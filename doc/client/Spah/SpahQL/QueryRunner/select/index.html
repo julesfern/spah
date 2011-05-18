@@ -38,9 +38,14 @@
       </form>
       
       <div class="sidebar-pane scrollable" id="menu_pane">
-        <ul class="menu-items" id="api_menu"><li><div class="menu-item"><a class="class current-parent" href="../../../../Spah/index.html" title="Spah (class)">Spah</a></div><ul><li><div class="menu-item"><a class="class current-parent" href="../../../../Spah/SpahQL/index.html" title="Spah.SpahQL (class)">Spah.SpahQL</a></div><ul><li><div class="menu-item"><a class="class" href="../../../../Spah/SpahQL/Query/index.html" title="Spah.SpahQL.Query (class)">Spah.SpahQL.Query</a></div></li>
+        <ul class="menu-items" id="api_menu"><li><div class="menu-item"><a class="class current-parent" href="../../../../Spah/index.html" title="Spah (class)">Spah</a></div><ul><li><div class="menu-item"><a class="class current-parent" href="../../../../Spah/SpahQL/index.html" title="Spah.SpahQL (class)">Spah.SpahQL</a></div><ul><li><div class="menu-item"><a class="class" href="../../../../Spah/SpahQL/Errors/index.html" title="Spah.SpahQL.Errors (class)">Spah.SpahQL.Errors</a></div><ul><li><div class="menu-item"><a class="class" href="../../../../Spah/SpahQL/Errors/SpahQLError/index.html" title="Spah.SpahQL.Errors.SpahQLError (class)">Spah.SpahQL.Errors.SpahQLError</a></div></li>
+<li><div class="menu-item"><a class="class" href="../../../../Spah/SpahQL/Errors/SpahQLRunTimeError/index.html" title="Spah.SpahQL.Errors.SpahQLRunTimeError (class)">Spah.SpahQL.Errors.SpahQLRunTimeError</a></div></li></ul></li>
+<li><div class="menu-item"><a class="class" href="../../../../Spah/SpahQL/Query/index.html" title="Spah.SpahQL.Query (class)">Spah.SpahQL.Query</a></div></li>
 <li><div class="menu-item"><a class="class" href="../../../../Spah/SpahQL/QueryParser/index.html" title="Spah.SpahQL.QueryParser (class)">Spah.SpahQL.QueryParser</a></div></li>
-<li><div class="menu-item"><a class="class current-parent" href="../../../../Spah/SpahQL/QueryRunner/index.html" title="Spah.SpahQL.QueryRunner (class)">Spah.SpahQL.QueryRunner</a></div><ul><li><div class="menu-item"><a class="class-method current" href="../../../../Spah/SpahQL/QueryRunner/select/index.html" title="Spah.SpahQL.QueryRunner.select (class method)">select</a></div></li></ul></li></ul></li>
+<li><div class="menu-item"><a class="class" href="../../../../Spah/SpahQL/QueryResult/index.html" title="Spah.SpahQL.QueryResult (class)">Spah.SpahQL.QueryResult</a></div></li>
+<li><div class="menu-item"><a class="class current-parent" href="../../../../Spah/SpahQL/QueryRunner/index.html" title="Spah.SpahQL.QueryRunner (class)">Spah.SpahQL.QueryRunner</a></div><ul><li><div class="menu-item"><a class="class-method" href="../../../../Spah/SpahQL/QueryRunner/assert/index.html" title="Spah.SpahQL.QueryRunner.assert (class method)">assert</a></div></li>
+<li><div class="menu-item"><a class="class-method" href="../../../../Spah/SpahQL/QueryRunner/evalQueryToken/index.html" title="Spah.SpahQL.QueryRunner.evalQueryToken (class method)">evalQueryToken</a></div></li>
+<li><div class="menu-item"><a class="class-method current" href="../../../../Spah/SpahQL/QueryRunner/select/index.html" title="Spah.SpahQL.QueryRunner.select (class method)">select</a></div></li></ul></li></ul></li>
 <li><div class="menu-item"><a class="class" href="../../../../Spah/State/index.html" title="Spah.State (class)">Spah.State</a></div><ul><li><div class="menu-item"><a class="class" href="../../../../Spah/State/DataHelper/index.html" title="Spah.State.DataHelper (class)">Spah.State.DataHelper</a></div></li></ul></li></ul></li></ul><!--- #api_menu =-->
       </div> <!-- .sidebar-pane -->
       <div class="sidebar-pane" id="search_pane">
@@ -72,7 +77,7 @@
 </ul>
 
 
-  <p id="src_code_href"><a href="http://github.com/danski/spah/blob/master/client/src/Spah.SpahQL.QueryRunner.js#18">src code</a></p>
+  <p id="src_code_href"><a href="http://github.com/danski/spah/blob/master/client/src/Spah.SpahQL.QueryRunner.js#20">src code</a></p>
 
 
 <h2 class="page-title">
@@ -88,15 +93,31 @@
   <div class="section-content">
     <div class="method-description">
       
-        <pre class="syntax"><code class="ebnf">Spah.SpahQL.QueryRunner.select(query, data) &rarr; Array resultset</code></pre>
+        <pre class="syntax"><code class="ebnf">Spah.SpahQL.QueryRunner.select(query, data) &rarr; Array of Spah.SpahQL.QueryResult instances</code></pre>
+
+  <ul class="argument-list">
+    
+      <li>
+        <code class="argument-name">query</code>
+        
+          <span class="argument-types">(<code><a href="../../../../Spah/SpahQL/Query/index.html" title="Spah.SpahQL.Query (class)">Spah.SpahQL.Query</a></code>)</span>
+        
+         &ndash; A parsed query instance
+      </li>
+    
+      <li>
+        <code class="argument-name">data</code>
+        
+          <span class="argument-types">(<code>Object</code>)</span>
+        
+         &ndash; The data against which to run the query
+      </li>
+    
+  </ul> <!-- .argument-list -->
 
       
 
-      <ul>
-<li>query (Spah.SpahQL.Query): A parsed query instance</li>
-
-<li>data (Object): The data against which to run the query</li>
-</ul>
+      <p>Executes a selection query against the given dataset. Returns an array of result instances.</p>
       
       
 
@@ -114,7 +135,7 @@
         <p><a href="http://github.com/danski/spah">Spah</a> v0.0.0 API documentation.</p>
         <p>
           
-            Last updated on May 13, 2011 at 16:30 UTC.
+            Last updated on May 16, 2011 at 18:21 UTC.
           
           Generated by <a href="http://pdoc.org">PDoc</a>.
           Uses <a href="http://famfamfam.com/lab/icons/silk/" title="famfamfam.com: Silk Icons">Silk Icons</a> and portions of <a href="http://github.com/280north/aristo/tree/master" title="280north's aristo at master - GitHub">Aristo</a>.

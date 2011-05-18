@@ -53,7 +53,7 @@ signatures:
 file: /Users/danski/Sites/spah/client/src/Spah.SpahQL.Query.js
 
 ---
-id: "Spah.SpahQL.Query#primaryToken"
+id: "Spah.SpahQL.Query#secondaryToken"
 parent_id: "Spah.SpahQL.Query"
 type: instance property
 line_number: 47
@@ -62,8 +62,8 @@ description: |
 
 signatures:
  -
-  signature: "Spah.SpahQL.Query#primaryToken"
-  return_value: "Primary token (set literal or selection query)"
+  signature: "Spah.SpahQL.Query#secondaryToken"
+  return_value: "Secondary token (set literal or selection query)"
 file: /Users/danski/Sites/spah/client/src/Spah.SpahQL.Query.js
 
 ---

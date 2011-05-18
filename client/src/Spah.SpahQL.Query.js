@@ -40,7 +40,7 @@
    "comparisonOperator": null,
    
    /**
-     * Spah.SpahQL.Query#primaryToken -> Primary token (set literal or selection query)
+     * Spah.SpahQL.Query#secondaryToken -> Secondary token (set literal or selection query)
      *
      * The second (optional) token in the query. Cannot be defined without a comparison operator.
      **/
