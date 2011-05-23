@@ -366,7 +366,7 @@ SpahQL's set arithmetic uses simple operators:
 
   Asserts that the sets are not identical under the rules of the <code>==</code> operator.
   
-*  Subset of <code>}&lt;{</code>
+* Subset of <code>}&lt;{</code>
   
   Asserts that the left-hand set is a subset of the right-hand set. All values present in the left-hand set must have a matching counterpart in the right-hand set.
   
@@ -443,10 +443,8 @@ Properties are like imaginary paths on objects in your state. Each property uses
         results = Spah.state.select("//[/.type == 'String'][/.size > 3]")
         results[0].path //-> "/myHash/mySubHash/bar"
 
-* **.explode** Returns the object broken into a set that may be compared to other sets. Strings are exploded into a set of characters. Arrays and objects are exploded into sets of their values without keys.
+* **.explode** Returns the object broken into a set that may be compared to other sets. Strings are exploded into a set of characters. Arrays and objects do not support this property - use the wildcard (\*) character instead.
 
-        // Does an array contain all of these values?
-        results = Spah.state.assert("/myArr/.explode }>{ {1,2,3}")
         // Does a string contain all these characters?
         results = Spah.state.assert("/myStr/.explode }>{ {'a','b','c'}")
 

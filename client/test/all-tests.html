@@ -50,7 +50,7 @@
         var queryDataFixture = {
           obj: {a: 1, b: 2, c: 3},
           arr: ["d","e","f"],
-          str: "abcdefgh",
+          str: "abcdef",
           num: 1000,
           bool: true,
           objNested: {a: {a: 1, b: 2, c: 3}, b: {d: 4, e: 5, f: 6}, c: {g: 7, h: 8, i: 9, j: ["a", "b", "c"]}},
@@ -130,16 +130,120 @@
                 result: [
                   ["/objNested/a", queryDataFixture.objNested["a"]]
                 ]
-              }
-              //{
-              //  name: "Filter query used at path scope with child keys selected", query: "/foo[/bar=baz]/a",
-              //},
-              //{
-              //  name: "Filter query"
-              //},
-              //{
-              //  name: "Set literal with mixed types"
-              //},
+              },
+              {
+                name: "Filter query used at path scope with child keys selected", query: "//*[/a]/c", // ANYTHING with a, but return the c from those matches
+                result: [
+                  ["/obj/c", queryDataFixture.obj["c"]],
+                  ["/objNested/c", queryDataFixture.objNested["c"]],
+                  ["/objNested/a/c", queryDataFixture.objNested["a"]["c"]],
+                  ["/arrNested/2/2/c", queryDataFixture.arrNested[2][2]["c"]],
+                  ["/objWithArr/c", queryDataFixture.objWithArr["c"]],
+                  ["/arrWithObj/0/c", queryDataFixture.arrWithObj[0]["c"]]
+                ]
+              },
+              {
+                name: "Nested filter query", query: "//*[/b[/0]]/c", // return C from anything that has B with an array value
+                result: [
+                  ["/objWithArr/c", queryDataFixture.objWithArr["c"]]
+                ]
+              },
+              {
+                name: "Properties: size of array", query: "/arr/.size",
+                result: [
+                  ["/arr/.size", queryDataFixture.arr.length]
+                ]
+              },
+              {
+                name: "Properties: size of string", query: "/str/.size",
+                result: [
+                  ["/str/.size", queryDataFixture.str.length]
+                ]
+              },
+              {
+                name: "Properties: size of hash", query: "/obj/.size",
+                result: [
+                  ["/obj/.size", 3]
+                ]
+              },
+              {
+                name: "Properties: size of simple", query: "/bool/.size",
+                result: []
+              },
+              {
+                name: "Properties: recursive size query", query: "/arrNested//.size",
+                result: [
+                  ["/arrNested/.size", queryDataFixture.arrNested.length],
+                  ["/arrNested/0/.size", queryDataFixture.arrNested[0].length],
+                  ["/arrNested/0/0/.size", queryDataFixture.arrNested[0][0].length],
+                  ["/arrNested/0/1/.size", queryDataFixture.arrNested[0][1].length],
+                  ["/arrNested/0/2/.size", queryDataFixture.arrNested[0][2].length],
+                  ["/arrNested/1/.size", queryDataFixture.arrNested[1].length],
+                  ["/arrNested/1/0/.size", queryDataFixture.arrNested[1][0].length],
+                  ["/arrNested/1/1/.size", queryDataFixture.arrNested[1][1].length],
+                  ["/arrNested/1/2/.size", queryDataFixture.arrNested[1][2].length],
+                  ["/arrNested/2/.size", queryDataFixture.arrNested[2].length],
+                  ["/arrNested/2/0/.size", queryDataFixture.arrNested[2][0].length],
+                  ["/arrNested/2/1/.size", queryDataFixture.arrNested[2][1].length],
+                  ["/arrNested/2/2/.size", 3]
+                ]
+              },
+              {
+                name: "Properties: Explode string", query: "/str/.explode",
+                result: [
+                  ["/str/0", "a"],
+                  ["/str/1", "b"],
+                  ["/str/2", "c"],
+                  ["/str/3", "d"],
+                  ["/str/4", "e"],
+                  ["/str/5", "f"]
+                ]
+              },
+              {
+                name: "Properties: Explode unexplodable object", query: "/arr/.explode",
+                result: []
+              },
+              {
+                name: "Properties: object type", query: "/obj/.type",
+                result: [["/obj/.type", "object"]]
+              },
+              {
+                name: "Properties: string type", query: "/str/.type",
+                result: [["/str/.type", "string"]]
+              },
+              {
+                name: "Properties: object type", query: "/arr/.type",
+                result: [["/arr/.type", "array"]]
+              },
+              {
+                name: "Properties: object type", query: "/bool/.type",
+                result: [["/bool/.type", "boolean"]]
+              },
+              {
+                name: "Properties: object type", query: "/num/.type",
+                result: [["/num/.type", "number"]]
+              },
+              {
+                name: "Set literal with mixed types", query: "{1,'2',true,false,'foo',3.4,0}",
+                result: [
+                  [null, 1],
+                  [null, "2"],
+                  [null, true],
+                  [null, false],
+                  [null, "foo"],
+                  [null, 3.4],
+                  [null, 0]
+                ]
+              },
+              {
+                name: "Set literal with embedded query", query: "{1,'2',/arr,0}",
+                result: [
+                  [null, 1],
+                  [null, "2"],
+                  ["/arr", queryDataFixture.arr],
+                  [null, 0]
+                ]
+              },
               //{
               //  name: "Set literal with alphabetic range",
               //},

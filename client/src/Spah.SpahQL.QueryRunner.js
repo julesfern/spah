@@ -12,6 +12,11 @@ window["Spah"]["SpahQL"]["QueryRunner"] = Spah.SpahQL.QueryRunner;
 // Singletons
 jQuery.extend(Spah.SpahQL.QueryRunner, {
   
+  // Constants for known symbols
+  PROPERTY_TYPE: "type",
+  PROPERTY_SIZE: "size",
+  PROPERTY_EXPLODE: "explode",
+  
   /**
    * Spah.SpahQL.QueryRunner.select(query, rootData[,scopeData]) -> Array of Spah.SpahQL.QueryResult instances
    * - query (Spah.SpahQL.Query): A parsed query instance
@@ -169,6 +174,87 @@ jQuery.extend(Spah.SpahQL.QueryRunner, {
   },
   
   fetchResultsFromObjectByProperty: function(property, object, path, recursive) {
+    var oType = Spah.State.DataHelper.objectType(object);
+    var pPath = path+"/."+property;
+    var results = [];
+    
+    switch(property) {
+      case this.PROPERTY_SIZE:
+        switch(oType) {
+          case "array": case "string":
+            results.push(new Spah.SpahQL.QueryResult(pPath, object.length));
+            break;
+          case "object":
+            results.push(new Spah.SpahQL.QueryResult(pPath, Spah.State.DataHelper.hashKeys(object).length));
+            break;
+        }
+        break;
+      case this.PROPERTY_TYPE:
+        results.push(new Spah.SpahQL.QueryResult(pPath, oType));
+        break;
+      case this.PROPERTY_EXPLODE:
+        if(oType =="string") {
+          for(var c=0; c<object.length; c++) {
+            results.push(new Spah.SpahQL.QueryResult(path+"/"+c, object.charAt(c)));
+          }
+        }
+        break;
+      default:
+        throw new Spah.SpahQL.Errors.SpahQLRunTimeError("Unrecognised property token '"+property+"'.");
+        break;
+    }
+    
+    // recurse if needed
+    if(recursive && (oType == "array" || oType == "object")) {
+      for(var k in object) {
+        var kPath = path+"/"+k;
+        var kVal = object[k];
+        results = results.concat(this.fetchResultsFromObjectByProperty(property, kVal, kPath, recursive));
+      }
+    }
+    
+    return results;
+  },
+  
+  evalSetLiteralToken: function(queryToken, rootData, scopeData) {
+    var results = [];
+    if(queryToken.isRange) {
+      var start = queryToken.values[0];
+      var end = queryToken.values[1];
+      var sType = Spah.State.DataHelper.objectType(start);
+      var eType = Spah.State.DataHelper.objectType(end);
+      if(sType == eType) {
+        if(sType == "number") results = results.concat(this.evalNumericRange(start, end));
+        else if(sType == "string") results = results.concat(this.evalStringRange(start, end));
+        else new Spah.SpahQL.Errors.SpahQLRunTimeError("Unsupported type used in range. Ranges support only strings and numbers.");
+      }
+      else {
+        throw new Spah.SpahQL.Errors.SpahQLRunTimeError("Illegal range with start type '"+sType+"' and end type '"+eType+"'. Ranges must use the same type at each end.");
+      }
+    }
+    else {
+      // Loop - evaluate queries
+      for(var i in queryToken.values) {
+        var val = queryToken.values[i];
+        var oType = Spah.State.DataHelper.objectType(val);
+        
+        if(oType == "object") {
+          results = results.concat(this.evalSelectionQueryToken(val, rootData, scopeData));
+        }
+        else {
+          results.push(new Spah.SpahQL.QueryResult(null, val));
+        }
+        
+      }
+    }
+    return results;
+  },
+  
+  evalNumericRange: function(start, end) {
+    
+  },
+  
+  evalStringRange: function(start, end) {
     
   }
   
