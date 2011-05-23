@@ -47,32 +47,107 @@
       <a href="/sync" id="sync_link" data-async="false">Synchronous link</a>
       
       <script type="text/javascript">
+        var queryDataFixture = {
+          obj: {a: 1, b: 2, c: 3},
+          arr: ["d","e","f"],
+          str: "abcdefgh",
+          num: 1000,
+          bool: true,
+          objNested: {a: {a: 1, b: 2, c: 3}, b: {d: 4, e: 5, f: 6}, c: {g: 7, h: 8, i: 9, j: ["a", "b", "c"]}},
+          arrNested: [["a", "b", "c"],["d", "e", "f"],["g", "h", {a: 1, b: 2, c: 3}]],
+          objWithArr: {a: ["a", "b", "c"], b: ["d", "e", "f"], c: ["g", "h", "i"]},
+          arrWithObj: [{a: 1, b: 2, c: 3},{d: 4, e: 5, f: 6},{g: 7, h: 8, i: 9, j: 10}],
+        };
         var Fixtures = {
           Query: {
-            Data: {
-              obj: {a: 1, b: 2, c: 3},
-              arr: ["d","e","f"],
-              str: "abcdefgh",
-              num: 1000,
-              bool: true,
-              objNested: {a: {a: 1, b: 2, c: 3}, b: {d: 4, e: 5, f: 6}, c: {g: 7, h: 8, i: 9, j: ["a", "b", "c"]}},
-              arrNested: [["a", "b", "c"],["d", "e", "f"],["g", "h", {a: 1, b: 2, c: 3}]],
-              objWithArr: {a: ["a", "b", "c"], b: ["d", "e", "f"], c: ["g", "h", "i"]},
-              arrWithObj: [{a: 1, b: 2, c: 3},{d: 4, e: 5, f: 6},{g: 7, h: 8, i: 9, j: 10}],
-            },
-            Selection: {
-              root: "/",
-              basicObjectKey: "/obj",
-              basicArrayKey: "/1",
-              nestedKeysObject: "/objNested/c/j/1",
-              nestedKeysArray: "/arrNested/2/2",
-              wildcardSingleDepth: "/arrNested/*",
-              wildcardDoubleDepth: "/arrNested/*/*",
-              wildcardTripleDepth: "/arrNested/*/*/*"
-            },
-            Assertion: {
-              
-            }
+            Data: queryDataFixture,
+            Selection: [
+              { name: "Root", query: "/", result: [["/", queryDataFixture]]},
+              { name: "Basic object key", query: "/obj", result: [["/obj", queryDataFixture.obj]]},
+              { name: "Basic array key", query: "/arr/1", result: [["/arr/1", queryDataFixture.arr[1]]]},
+              { name: "Nested keys in an object", query: "/objNested/c/j/1", result: [["/objNested/c/j/1", queryDataFixture.objNested.c.j[1]]]},
+              { name: "Nested keys in an array", query: "/arrNested/2/2", result: [["/arrNested/2/2", queryDataFixture.arrNested[2][2]]]},
+              { name: "Wildcard single-depth", query: "/arrNested/*", 
+                result: [
+                  ["/arrNested/0", queryDataFixture.arrNested[0]], 
+                  ["/arrNested/1", queryDataFixture.arrNested[1]], 
+                  ["/arrNested/2", queryDataFixture.arrNested[2]]
+                ]
+              },
+              { name: "Wildcard double-depth", query: "/arrNested/*/*", 
+                result: [
+                  ["/arrNested/0/0", queryDataFixture.arrNested[0][0]], 
+                  ["/arrNested/0/1", queryDataFixture.arrNested[0][1]], 
+                  ["/arrNested/0/2", queryDataFixture.arrNested[0][2]],
+                  ["/arrNested/1/0", queryDataFixture.arrNested[1][0]], 
+                  ["/arrNested/1/1", queryDataFixture.arrNested[1][1]], 
+                  ["/arrNested/1/2", queryDataFixture.arrNested[1][2]],
+                  ["/arrNested/2/0", queryDataFixture.arrNested[2][0]], 
+                  ["/arrNested/2/1", queryDataFixture.arrNested[2][1]], 
+                  ["/arrNested/2/2", queryDataFixture.arrNested[2][2]]
+                ]
+              },
+              { name: "Wildcard triple-depth", query: "/arrNested/*/*/*", 
+                result: [
+                  ["/arrNested/2/2/a", queryDataFixture.arrNested[2][2]["a"]], 
+                  ["/arrNested/2/2/b", queryDataFixture.arrNested[2][2]["b"]], 
+                  ["/arrNested/2/2/c", queryDataFixture.arrNested[2][2]["c"]]
+                ]
+              },
+              {
+                name: "Root-level recursion", query: "//j",
+                result: [
+                  ["/objNested/c/j", queryDataFixture.objNested["c"]["j"]], 
+                  ["/arrWithObj/2/j", queryDataFixture.arrWithObj[2]["j"]]
+                ]
+              },
+              {
+                name: "Nested recursion", query: "/objNested//a",
+                result: [
+                  ["/objNested/a", queryDataFixture.objNested["a"]], 
+                  ["/objNested/a/a", queryDataFixture.objNested["a"]["a"]]
+                ]
+              },
+              {
+                name: "Depth-controlled recursion using wildcards", query: "/objNested//c/*/*",
+                result: [
+                  ["/objNested/c/j/0", queryDataFixture.objNested["c"]["j"][0]], 
+                  ["/objNested/c/j/1", queryDataFixture.objNested["c"]["j"][1]], 
+                  ["/objNested/c/j/2", queryDataFixture.objNested["c"]["j"][2]]
+                ]
+              },
+              {
+                name: "Nested array key recursion", query: "/arrNested//0",
+                result: [
+                  ["/arrNested/0", queryDataFixture.arrNested[0]],
+                  ["/arrNested/0/0", queryDataFixture.arrNested[0][0]],
+                  ["/arrNested/1/0", queryDataFixture.arrNested[1][0]],
+                  ["/arrNested/2/0", queryDataFixture.arrNested[2][0]]
+                ]
+              },
+              {
+                name: "Combined filter queries at result scope", query: "//a[/b][/c]", // any A with both a B and a C
+                result: [
+                  ["/objNested/a", queryDataFixture.objNested["a"]]
+                ]
+              }
+              //{
+              //  name: "Filter query used at path scope with child keys selected", query: "/foo[/bar=baz]/a",
+              //},
+              //{
+              //  name: "Filter query"
+              //},
+              //{
+              //  name: "Set literal with mixed types"
+              //},
+              //{
+              //  name: "Set literal with alphabetic range",
+              //},
+              //{
+              //  name: "Set literal with numeric range",
+              //}
+            ],
+            Assertion: []
           },
           
           State: {

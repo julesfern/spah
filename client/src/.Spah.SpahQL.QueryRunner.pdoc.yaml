@@ -2,10 +2,12 @@
 id: "Spah.SpahQL.QueryRunner"
 parent_id: "Spah.SpahQL"
 type: class
-line_number: 7
+line_number: 9
 description: |
   Class responsible for executing parsed <code>Spah.SpahQL.Query</code> queries and returning sets
   of <code>Spah.SpahQL.QueryResult</code> instances.
+  
+  Unless you're spelunking or fixing bugs, the only methods you care about are _select_ and _assert_.
 
 file: /Users/danski/Sites/spah/client/src/Spah.SpahQL.QueryRunner.js
 
@@ -13,13 +15,13 @@ file: /Users/danski/Sites/spah/client/src/Spah.SpahQL.QueryRunner.js
 id: "Spah.SpahQL.QueryRunner.select"
 parent_id: "Spah.SpahQL.QueryRunner"
 type: class method
-line_number: 20
+line_number: 23
 description: |
   Executes a selection query against the given dataset. Returns an array of result instances.
 
 signatures:
  -
-  signature: "Spah.SpahQL.QueryRunner.select(query, data)"
+  signature: "Spah.SpahQL.QueryRunner.select(query, rootData[,scopeData])"
   return_value: "Array of Spah.SpahQL.QueryResult instances"
 arguments:
  -
@@ -29,10 +31,16 @@ arguments:
     A parsed query instance
 
  -
-  name: data
+  name: rootData
   types: [Object]
   description: >
-    The data against which to run the query
+    The root data context against which to run the query
+
+ -
+  name: scopeData
+  types: [Object]
+  description: >
+    An optional additional data context which will be the local scope for this query. If not set, will be set internally to <code>rootData</code>.
 
 file: /Users/danski/Sites/spah/client/src/Spah.SpahQL.QueryRunner.js
 
@@ -40,7 +48,7 @@ file: /Users/danski/Sites/spah/client/src/Spah.SpahQL.QueryRunner.js
 id: "Spah.SpahQL.QueryRunner.assert"
 parent_id: "Spah.SpahQL.QueryRunner"
 type: class method
-line_number: 33
+line_number: 38
 description: |
   Executes and ssserts the truthiness of a selection or assertion query against the given dataset.
   Returns a boolean indicating the overall result of the query - if the query is not an assertion
@@ -48,7 +56,7 @@ description: |
 
 signatures:
  -
-  signature: "Spah.SpahQL.QueryRunner.assert(query, data)"
+  signature: "Spah.SpahQL.QueryRunner.assert(query, rootData[, scopeData])"
   return_value: "Boolean result"
 arguments:
  -
@@ -58,10 +66,16 @@ arguments:
     A parsed query instance
 
  -
-  name: data
+  name: rootData
   types: [Object]
   description: >
-    The data against which to run the query
+    The root data context against which to run the query
+
+ -
+  name: scopeData
+  types: [Object]
+  description: >
+    An optional additional data context which will be the local scope for this query. If not set, will be set internally to <code>rootData</code>.
 
 file: /Users/danski/Sites/spah/client/src/Spah.SpahQL.QueryRunner.js
 
@@ -69,7 +83,7 @@ file: /Users/danski/Sites/spah/client/src/Spah.SpahQL.QueryRunner.js
 id: "Spah.SpahQL.QueryRunner.evalQueryToken"
 parent_id: "Spah.SpahQL.QueryRunner"
 type: class method
-line_number: 44
+line_number: 49
 description: |
   Translates a selection query or set literal to a series of results
 
@@ -89,5 +103,44 @@ arguments:
   types: [Object]
   description: >
     The data scope against which any selection queries in the token top level will be run.
+
+file: /Users/danski/Sites/spah/client/src/Spah.SpahQL.QueryRunner.js
+
+---
+id: "Spah.SpahQL.QueryRunner.evalSelectionQueryToken"
+parent_id: "Spah.SpahQL.QueryRunner"
+type: class method
+line_number: 70
+description: |
+  Evaluates all the path components in the given query in turn, creating an array of QueryResult instances.
+
+signatures:
+ -
+  signature: "Spah.SpahQL.QueryRunner.evalSelectionQueryToken(query, rootData, scopeData, scopePath)"
+  return_value: "Array of Spah.SpahQL.QueryResult instances"
+arguments:
+ -
+  name: query
+  types: [Object]
+  description: >
+    A selection query token taken from a Query instance.
+
+ -
+  name: rootData
+  types: [Object]
+  description: >
+    The entire root-level data structure being queried
+
+ -
+  name: scopeData
+  types: [Object]
+  description: >
+    The data for the scope at which this query is being executed.
+
+ -
+  name: scopePath
+  types: [String]
+  description: >
+    The string path for the root of the scopeData argument.
 
 file: /Users/danski/Sites/spah/client/src/Spah.SpahQL.QueryRunner.js

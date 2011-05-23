@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-  <title>Spah  v0.0.0 API documentation | Spah.SpahQL.QueryParser.readAheadToken</title>
+  <title>Spah  v0.0.0 API documentation | Spah.SpahQL.QueryRunner.evalSelectionQueryToken</title>
   <meta name="generator" content="PDoc" />
   
   <script charset="utf-8" src="../../../../javascripts/pdoc/prototype.js" type="text/javascript"></script>
@@ -41,13 +41,12 @@
         <ul class="menu-items" id="api_menu"><li><div class="menu-item"><a class="class current-parent" href="../../../../Spah/index.html" title="Spah (class)">Spah</a></div><ul><li><div class="menu-item"><a class="class current-parent" href="../../../../Spah/SpahQL/index.html" title="Spah.SpahQL (class)">Spah.SpahQL</a></div><ul><li><div class="menu-item"><a class="class" href="../../../../Spah/SpahQL/Errors/index.html" title="Spah.SpahQL.Errors (class)">Spah.SpahQL.Errors</a></div><ul><li><div class="menu-item"><a class="class" href="../../../../Spah/SpahQL/Errors/SpahQLError/index.html" title="Spah.SpahQL.Errors.SpahQLError (class)">Spah.SpahQL.Errors.SpahQLError</a></div></li>
 <li><div class="menu-item"><a class="class" href="../../../../Spah/SpahQL/Errors/SpahQLRunTimeError/index.html" title="Spah.SpahQL.Errors.SpahQLRunTimeError (class)">Spah.SpahQL.Errors.SpahQLRunTimeError</a></div></li></ul></li>
 <li><div class="menu-item"><a class="class" href="../../../../Spah/SpahQL/Query/index.html" title="Spah.SpahQL.Query (class)">Spah.SpahQL.Query</a></div></li>
-<li><div class="menu-item"><a class="class current-parent" href="../../../../Spah/SpahQL/QueryParser/index.html" title="Spah.SpahQL.QueryParser (class)">Spah.SpahQL.QueryParser</a></div><ul><li><div class="menu-item"><a class="class-method" href="../../../../Spah/SpahQL/QueryParser/parseQuery/index.html" title="Spah.SpahQL.QueryParser.parseQuery (class method)">parseQuery</a></div></li>
-<li><div class="menu-item"><a class="class-method current" href="../../../../Spah/SpahQL/QueryParser/readAheadToken/index.html" title="Spah.SpahQL.QueryParser.readAheadToken (class method)">readAheadToken</a></div></li>
-<li><div class="menu-item"><a class="class-property" href="../../../../Spah/SpahQL/QueryParser/comparisonOperators/index.html" title="Spah.SpahQL.QueryParser.comparisonOperators (class property)">comparisonOperators</a></div></li>
-<li><div class="menu-item"><a class="class-property" href="../../../../Spah/SpahQL/QueryParser/dotProperties/index.html" title="Spah.SpahQL.QueryParser.dotProperties (class property)">dotProperties</a></div></li>
-<li><div class="menu-item"><a class="class-property" href="../../../../Spah/SpahQL/QueryParser/queryCache/index.html" title="Spah.SpahQL.QueryParser.queryCache (class property)">queryCache</a></div></li></ul></li>
+<li><div class="menu-item"><a class="class" href="../../../../Spah/SpahQL/QueryParser/index.html" title="Spah.SpahQL.QueryParser (class)">Spah.SpahQL.QueryParser</a></div></li>
 <li><div class="menu-item"><a class="class" href="../../../../Spah/SpahQL/QueryResult/index.html" title="Spah.SpahQL.QueryResult (class)">Spah.SpahQL.QueryResult</a></div></li>
-<li><div class="menu-item"><a class="class" href="../../../../Spah/SpahQL/QueryRunner/index.html" title="Spah.SpahQL.QueryRunner (class)">Spah.SpahQL.QueryRunner</a></div></li></ul></li>
+<li><div class="menu-item"><a class="class current-parent" href="../../../../Spah/SpahQL/QueryRunner/index.html" title="Spah.SpahQL.QueryRunner (class)">Spah.SpahQL.QueryRunner</a></div><ul><li><div class="menu-item"><a class="class-method" href="../../../../Spah/SpahQL/QueryRunner/assert/index.html" title="Spah.SpahQL.QueryRunner.assert (class method)">assert</a></div></li>
+<li><div class="menu-item"><a class="class-method" href="../../../../Spah/SpahQL/QueryRunner/evalQueryToken/index.html" title="Spah.SpahQL.QueryRunner.evalQueryToken (class method)">evalQueryToken</a></div></li>
+<li><div class="menu-item"><a class="class-method current" href="../../../../Spah/SpahQL/QueryRunner/evalSelectionQueryToken/index.html" title="Spah.SpahQL.QueryRunner.evalSelectionQueryToken (class method)">evalSelectionQueryToken</a></div></li>
+<li><div class="menu-item"><a class="class-method" href="../../../../Spah/SpahQL/QueryRunner/select/index.html" title="Spah.SpahQL.QueryRunner.select (class method)">select</a></div></li></ul></li></ul></li>
 <li><div class="menu-item"><a class="class" href="../../../../Spah/State/index.html" title="Spah.State (class)">Spah.State</a></div><ul><li><div class="menu-item"><a class="class" href="../../../../Spah/State/DataHelper/index.html" title="Spah.State.DataHelper (class)">Spah.State.DataHelper</a></div></li></ul></li></ul></li></ul><!--- #api_menu =-->
       </div> <!-- .sidebar-pane -->
       <div class="sidebar-pane" id="search_pane">
@@ -72,18 +71,18 @@
   
     <li>&rarr; <a href="../../../../Spah/SpahQL/index.html" title="Spah.SpahQL (class)">SpahQL</a></li>
   
-    <li>&rarr; <a href="../../../../Spah/SpahQL/QueryParser/index.html" title="Spah.SpahQL.QueryParser (class)">QueryParser</a></li>
+    <li>&rarr; <a href="../../../../Spah/SpahQL/QueryRunner/index.html" title="Spah.SpahQL.QueryRunner (class)">QueryRunner</a></li>
   
-    <li>&rarr; <a href="../../../../Spah/SpahQL/QueryParser/readAheadToken/index.html" title="Spah.SpahQL.QueryParser.readAheadToken (class method)">readAheadToken</a></li>
+    <li>&rarr; <a href="../../../../Spah/SpahQL/QueryRunner/evalSelectionQueryToken/index.html" title="Spah.SpahQL.QueryRunner.evalSelectionQueryToken (class method)">evalSelectionQueryToken</a></li>
   
 </ul>
 
 
-  <p id="src_code_href"><a href="http://github.com/danski/spah/blob/master/client/src/Spah.SpahQL.QueryParser.js#158">src code</a></p>
+  <p id="src_code_href"><a href="http://github.com/danski/spah/blob/master/client/src/Spah.SpahQL.QueryRunner.js#70">src code</a></p>
 
 
 <h2 class="page-title">
-  <span class="type">class method</span> Spah.SpahQL.QueryParser.readAheadToken
+  <span class="type">class method</span> Spah.SpahQL.QueryRunner.evalSelectionQueryToken
 </h2>
 
 
@@ -95,33 +94,47 @@
   <div class="section-content">
     <div class="method-description">
       
-        <pre class="syntax"><code class="ebnf">Spah.SpahQL.QueryParser.readAheadToken(i, query) &rarr; Object token descriptor</code></pre>
+        <pre class="syntax"><code class="ebnf">Spah.SpahQL.QueryRunner.evalSelectionQueryToken(query, rootData, scopeData, scopePath) &rarr; Array of Spah.SpahQL.QueryResult instances</code></pre>
 
   <ul class="argument-list">
     
       <li>
-        <code class="argument-name">i</code>
+        <code class="argument-name">query</code>
         
-          <span class="argument-types">(<code>Number</code>)</span>
+          <span class="argument-types">(<code>Object</code>)</span>
         
-         &ndash; The index at which to start reading the string
+         &ndash; A selection query token taken from a Query instance.
       </li>
     
       <li>
-        <code class="argument-name">query</code>
+        <code class="argument-name">rootData</code>
+        
+          <span class="argument-types">(<code>Object</code>)</span>
+        
+         &ndash; The entire root-level data structure being queried
+      </li>
+    
+      <li>
+        <code class="argument-name">scopeData</code>
+        
+          <span class="argument-types">(<code>Object</code>)</span>
+        
+         &ndash; The data for the scope at which this query is being executed.
+      </li>
+    
+      <li>
+        <code class="argument-name">scopePath</code>
         
           <span class="argument-types">(<code>String</code>)</span>
         
-         &ndash; The raw string of the query
+         &ndash; The string path for the root of the scopeData argument.
       </li>
     
   </ul> <!-- .argument-list -->
 
       
 
-      <p>Reads ahead through the given query string, starting at the current index, to identify the token at the given index. Returns an Array <code>{resumeAt, token, tokenType}</code> where <code>index</code> is the index at which the found token concludes, and at which the expression parser should resume.</p>
-
-<p>Returns <code>null</code> if no valid tokens are found.</p>
+      <p>Evaluates all the path components in the given query in turn, creating an array of QueryResult instances.</p>
       
       
 

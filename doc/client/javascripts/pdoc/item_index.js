@@ -37,5 +37,6 @@ PDoc.elements = {
 'Spah.SpahQL.QueryParser.dotProperties': { 'name': 'Spah.SpahQL.QueryParser.dotProperties', 'type': 'class property', 'path': 'Spah/SpahQL/QueryParser/dotProperties/index.html' },
 'Spah.SpahQL.Errors': { 'name': 'Spah.SpahQL.Errors', 'type': 'class', 'path': 'Spah/SpahQL/Errors/index.html' },
 'Spah.State#data': { 'name': 'Spah.State#data', 'type': 'instance property', 'path': 'Spah/State/prototype/data/index.html' },
-'Spah.State.DataHelper.objectType': { 'name': 'Spah.State.DataHelper.objectType', 'type': 'class method', 'path': 'Spah/State/DataHelper/objectType/index.html' }
+'Spah.State.DataHelper.objectType': { 'name': 'Spah.State.DataHelper.objectType', 'type': 'class method', 'path': 'Spah/State/DataHelper/objectType/index.html' },
+'Spah.SpahQL.QueryRunner.evalSelectionQueryToken': { 'name': 'Spah.SpahQL.QueryRunner.evalSelectionQueryToken', 'type': 'class method', 'path': 'Spah/SpahQL/QueryRunner/evalSelectionQueryToken/index.html' }
 };

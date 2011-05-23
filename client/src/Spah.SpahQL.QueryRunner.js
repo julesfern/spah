@@ -13,27 +13,40 @@ window["Spah"]["SpahQL"]["QueryRunner"] = Spah.SpahQL.QueryRunner;
 jQuery.extend(Spah.SpahQL.QueryRunner, {
   
   /**
-   * Spah.SpahQL.QueryRunner.select(query, data) -> Array of Spah.SpahQL.QueryResult instances
+   * Spah.SpahQL.QueryRunner.select(query, rootData[,scopeData]) -> Array of Spah.SpahQL.QueryResult instances
    * - query (Spah.SpahQL.Query): A parsed query instance
-   * - data (Object): The data against which to run the query
+   * - rootData (Object): The root data context against which to run the query
+   * - scopeData (Object): An optional additional data context which will be the local scope for this query. If not set, will be set internally to <code>rootData</code>.
    *
    * Executes a selection query against the given dataset. Returns an array of result instances.
    **/
-  "select": function(query, data) {
-    return this.evalQueryToken(query.primaryToken, data, data);
+  "select": function(query, rootData, scopeData) {
+    if(query.assertion) throw new Spah.SpahQL.Errors.SpahQLRunTimeError("Attempted to select from an assertion query.");
+    // Now move on
+    scopeData = scopeData || rootData;
+    return this.evalQueryToken(query.primaryToken, rootData, scopeData);
   },
   
   /**
-   * Spah.SpahQL.QueryRunner.assert(query, data) -> Boolean result
+   * Spah.SpahQL.QueryRunner.assert(query, rootData[, scopeData]) -> Boolean result
    * - query (Spah.SpahQL.Query): A parsed query instance
-   * - data (Object): The data against which to run the query
+   * - rootData (Object): The root data context against which to run the query
+   * - scopeData (Object): An optional additional data context which will be the local scope for this query. If not set, will be set internally to <code>rootData</code>.
    *
    * Executes and ssserts the truthiness of a selection or assertion query against the given dataset. 
    * Returns a boolean indicating the overall result of the query - if the query is not an assertion
    * query, it will return true if the query returns one or more results.
    **/
-  "assert": function(query, data) {
-    
+  "assert": function(query, rootData, scopeData) {
+    scopeData = scopeData || rootData;
+    if(query.assertion) {
+      // Running assertion as assertion
+      // TODO
+    }
+    else {
+      // Running selection as assertion
+      return this.select(query, rootData, scopeData).length > 0;
+    }
   },
   
   /**
@@ -109,6 +122,23 @@ jQuery.extend(Spah.SpahQL.QueryRunner, {
     }
     
     // Now filter results if there are filter queries
+    if(results.length > 0 && pathComponent.filterQueries.length > 0) {
+      var fI, rI;
+      var filteredResults = [];
+      for(fI=0; fI<pathComponent.filterQueries.length; fI++) {
+        var q = pathComponent.filterQueries[fI];
+        
+        // Loop results and assert filters against the result's data
+        for(rI = 0; rI < results.length; rI++) {
+          var r = results[rI];
+          if(filteredResults.indexOf(r) < 0 && this.assert(q, rootData, r.value)) {
+            filteredResults.push(r);
+          }
+        }
+        // Set results to those allowed by this filter query
+        results = filteredResults;
+      }
+    }
     
     // Return remainder
     return results;
