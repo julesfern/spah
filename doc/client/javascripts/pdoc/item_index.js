@@ -11,6 +11,7 @@ PDoc.elements = {
 'Spah.SpahQL.Errors.SpahQLError': { 'name': 'Spah.SpahQL.Errors.SpahQLError', 'type': 'class', 'path': 'Spah/SpahQL/Errors/SpahQLError/index.html' },
 'Spah.verbose': { 'name': 'Spah.verbose', 'type': 'class property', 'path': 'Spah/verbose/index.html' },
 'Spah.State.DataHelper.modificationSymbol': { 'name': 'Spah.State.DataHelper.modificationSymbol', 'type': 'class method', 'path': 'Spah/State/DataHelper/modificationSymbol/index.html' },
+'Spah.SpahQL.QueryRunner.evalSetLiteralToken': { 'name': 'Spah.SpahQL.QueryRunner.evalSetLiteralToken', 'type': 'class method', 'path': 'Spah/SpahQL/QueryRunner/evalSetLiteralToken/index.html' },
 'Spah.SpahQL.QueryRunner.assert': { 'name': 'Spah.SpahQL.QueryRunner.assert', 'type': 'class method', 'path': 'Spah/SpahQL/QueryRunner/assert/index.html' },
 'Spah.SpahQL.QueryParser.parseQuery': { 'name': 'Spah.SpahQL.QueryParser.parseQuery', 'type': 'class method', 'path': 'Spah/SpahQL/QueryParser/parseQuery/index.html' },
 'new Spah.SpahQL.QueryResult': { 'name': 'new Spah.SpahQL.QueryResult', 'type': 'constructor', 'path': 'Spah/SpahQL/QueryResult/new/index.html' },

@@ -15,7 +15,7 @@ file: /Users/danski/Sites/spah/client/src/Spah.SpahQL.QueryRunner.js
 id: "Spah.SpahQL.QueryRunner.select"
 parent_id: "Spah.SpahQL.QueryRunner"
 type: class method
-line_number: 23
+line_number: 28
 description: |
   Executes a selection query against the given dataset. Returns an array of result instances.
 
@@ -48,7 +48,7 @@ file: /Users/danski/Sites/spah/client/src/Spah.SpahQL.QueryRunner.js
 id: "Spah.SpahQL.QueryRunner.assert"
 parent_id: "Spah.SpahQL.QueryRunner"
 type: class method
-line_number: 38
+line_number: 45
 description: |
   Executes and ssserts the truthiness of a selection or assertion query against the given dataset.
   Returns a boolean indicating the overall result of the query - if the query is not an assertion
@@ -83,7 +83,7 @@ file: /Users/danski/Sites/spah/client/src/Spah.SpahQL.QueryRunner.js
 id: "Spah.SpahQL.QueryRunner.evalQueryToken"
 parent_id: "Spah.SpahQL.QueryRunner"
 type: class method
-line_number: 49
+line_number: 64
 description: |
   Translates a selection query or set literal to a series of results
 
@@ -110,7 +110,7 @@ file: /Users/danski/Sites/spah/client/src/Spah.SpahQL.QueryRunner.js
 id: "Spah.SpahQL.QueryRunner.evalSelectionQueryToken"
 parent_id: "Spah.SpahQL.QueryRunner"
 type: class method
-line_number: 70
+line_number: 85
 description: |
   Evaluates all the path components in the given query in turn, creating an array of QueryResult instances.
 
@@ -142,5 +142,39 @@ arguments:
   types: [String]
   description: >
     The string path for the root of the scopeData argument.
+
+file: /Users/danski/Sites/spah/client/src/Spah.SpahQL.QueryRunner.js
+
+---
+id: "Spah.SpahQL.QueryRunner.evalSetLiteralToken"
+parent_id: "Spah.SpahQL.QueryRunner"
+type: class method
+line_number: 228
+description: |
+  Evaluates a set literal, for use when a set is used in a selection query and must be returned as a set of results.
+  If the set is a range, it will be flattened into a set of values.
+
+signatures:
+ -
+  signature: "Spah.SpahQL.QueryRunner.evalSetLiteralToken(queryToken, rootData[, scopeData])"
+  return_value: "Array of QueryResults"
+arguments:
+ -
+  name: queryToken
+  types: [Object]
+  description: >
+    The parsed query token, which must be a set literal
+
+ -
+  name: rootData
+  types: [Object]
+  description: >
+    A root data context for any selection queries that appear in the literal
+
+ -
+  name: scopeData
+  types: [Object]
+  description: >
+    A scoped data context for the scope at which selection queries in the set will be evaluated.
 
 file: /Users/danski/Sites/spah/client/src/Spah.SpahQL.QueryRunner.js

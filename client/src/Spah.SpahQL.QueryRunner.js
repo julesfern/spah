@@ -46,7 +46,7 @@ jQuery.extend(Spah.SpahQL.QueryRunner, {
     scopeData = scopeData || rootData;
     if(query.assertion) {
       // Running assertion as assertion
-      // TODO
+      // TODO.
     }
     else {
       // Running selection as assertion
@@ -216,6 +216,15 @@ jQuery.extend(Spah.SpahQL.QueryRunner, {
     return results;
   },
   
+  /**
+   * Spah.SpahQL.QueryRunner.evalSetLiteralToken(queryToken, rootData[, scopeData]) -> Array of QueryResults
+   * - queryToken (Object): The parsed query token, which must be a set literal
+   * - rootData (Object): A root data context for any selection queries that appear in the literal
+   * - scopeData (Object): A scoped data context for the scope at which selection queries in the set will be evaluated.
+   *
+   * Evaluates a set literal, for use when a set is used in a selection query and must be returned as a set of results.
+   * If the set is a range, it will be flattened into a set of values.
+   **/
   evalSetLiteralToken: function(queryToken, rootData, scopeData) {
     var results = [];
     if(queryToken.isRange) {
