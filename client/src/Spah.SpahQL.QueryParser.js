@@ -220,7 +220,9 @@
           }
           else if(query.charAt(i+j) == this.ATOM_NUMERIC_POINT) {
             if(pointFound) {
-              this.throwParseErrorAt(i+j, query, "Found ATOM_NUMERIC_POINT multiple times in the same numeric literal. Only one instance of this atom is allowed per numeric literal.");
+              // rewind and surrender
+              j--;
+              break;
             }
             else {
               pointFound = true;

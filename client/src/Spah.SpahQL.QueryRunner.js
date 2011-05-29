@@ -260,11 +260,33 @@ jQuery.extend(Spah.SpahQL.QueryRunner, {
   },
   
   evalNumericRange: function(start, end) {
-    
+    var results = [];
+    var i = start;
+    var d = (start>=end)? -1 : 1;
+    while(true) {
+      results.push(new Spah.SpahQL.QueryResult(null, i));
+      i = i+d;
+      if((d < 0 && i < end) || (d > 0 && i > end)) {
+        break;
+      }
+    }
+    return results;
   },
   
   evalStringRange: function(start, end) {
-    
+    var results = [];
+    var radix = 35;
+    var s = parseInt(start, radix); var e = parseInt(end, radix);
+    var i = s;
+    var d = (s>=e)? -1 : 1;
+    while(true) {
+      results.push(new Spah.SpahQL.QueryResult(null, i.toString(radix)));
+      i = i+d;
+      if((d < 0 && i < e) || (d > 0 && i > e)) {
+        break;
+      }
+    }
+    return results;
   }
   
   

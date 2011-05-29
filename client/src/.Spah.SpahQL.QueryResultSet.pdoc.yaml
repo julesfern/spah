@@ -1,0 +1,9 @@
+---
+id: "Spah.SpahQL.QueryResultSet"
+parent_id: "Spah.SpahQL"
+type: class
+line_number: 6
+description: |
+  Wraps an array of QueryResult objects and provides manipulation and traversal methods upon the set.
+
+file: /Users/danski/Sites/spah/client/src/Spah.SpahQL.QueryResultSet.js

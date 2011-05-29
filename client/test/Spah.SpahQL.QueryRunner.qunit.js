@@ -24,7 +24,7 @@ $(document).ready(function() {
         var actual = qr.select(q, Fixtures.Query.Data);
         var expected = qfix.result;
       
-        equal(actual.length, expected.length, n+": Result count matched ("+jQuery.map(actual, function(result, index) {return result.path}).join(", ")+")");
+        equal(actual.length, expected.length, n+": Result count matched ("+jQuery.map(actual, function(result, index) {return [result.path, result.value]}).join(", ")+")");
       
         for(var e in expected) {
           // Assert presence of each result

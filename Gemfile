@@ -16,4 +16,5 @@ group :development do
   gem "json", "~> 1.5.0"
   gem "maruku", ">= 0"
   gem "albino", "~> 1.3.3"
+  gem "sinatra", "~> 1.1.0"
 end

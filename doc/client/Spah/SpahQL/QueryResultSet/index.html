@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-  <title>Spah  v0.0.0 API documentation | Spah.SpahQL.QueryRunner</title>
+  <title>Spah  v0.0.0 API documentation | Spah.SpahQL.QueryResultSet</title>
   <meta name="generator" content="PDoc" />
   
   <script charset="utf-8" src="../../../javascripts/pdoc/prototype.js" type="text/javascript"></script>
@@ -43,12 +43,8 @@
 <li><div class="menu-item"><a class="class" href="../../../Spah/SpahQL/Query/index.html" title="Spah.SpahQL.Query (class)">Spah.SpahQL.Query</a></div></li>
 <li><div class="menu-item"><a class="class" href="../../../Spah/SpahQL/QueryParser/index.html" title="Spah.SpahQL.QueryParser (class)">Spah.SpahQL.QueryParser</a></div></li>
 <li><div class="menu-item"><a class="class" href="../../../Spah/SpahQL/QueryResult/index.html" title="Spah.SpahQL.QueryResult (class)">Spah.SpahQL.QueryResult</a></div></li>
-<li><div class="menu-item"><a class="class" href="../../../Spah/SpahQL/QueryResultSet/index.html" title="Spah.SpahQL.QueryResultSet (class)">Spah.SpahQL.QueryResultSet</a></div></li>
-<li><div class="menu-item"><a class="class current" href="../../../Spah/SpahQL/QueryRunner/index.html" title="Spah.SpahQL.QueryRunner (class)">Spah.SpahQL.QueryRunner</a></div><ul><li><div class="menu-item"><a class="class-method" href="../../../Spah/SpahQL/QueryRunner/assert/index.html" title="Spah.SpahQL.QueryRunner.assert (class method)">assert</a></div></li>
-<li><div class="menu-item"><a class="class-method" href="../../../Spah/SpahQL/QueryRunner/evalQueryToken/index.html" title="Spah.SpahQL.QueryRunner.evalQueryToken (class method)">evalQueryToken</a></div></li>
-<li><div class="menu-item"><a class="class-method" href="../../../Spah/SpahQL/QueryRunner/evalSelectionQueryToken/index.html" title="Spah.SpahQL.QueryRunner.evalSelectionQueryToken (class method)">evalSelectionQueryToken</a></div></li>
-<li><div class="menu-item"><a class="class-method" href="../../../Spah/SpahQL/QueryRunner/evalSetLiteralToken/index.html" title="Spah.SpahQL.QueryRunner.evalSetLiteralToken (class method)">evalSetLiteralToken</a></div></li>
-<li><div class="menu-item"><a class="class-method" href="../../../Spah/SpahQL/QueryRunner/select/index.html" title="Spah.SpahQL.QueryRunner.select (class method)">select</a></div></li></ul></li></ul><ul></ul></li>
+<li><div class="menu-item"><a class="class current" href="../../../Spah/SpahQL/QueryResultSet/index.html" title="Spah.SpahQL.QueryResultSet (class)">Spah.SpahQL.QueryResultSet</a></div><ul></ul></li>
+<li><div class="menu-item"><a class="class" href="../../../Spah/SpahQL/QueryRunner/index.html" title="Spah.SpahQL.QueryRunner (class)">Spah.SpahQL.QueryRunner</a></div></li></ul><ul></ul></li>
 <li><div class="menu-item"><a class="class" href="../../../Spah/State/index.html" title="Spah.State (class)">Spah.State</a></div><ul><li><div class="menu-item"><a class="class" href="../../../Spah/State/DataHelper/index.html" title="Spah.State.DataHelper (class)">Spah.State.DataHelper</a></div></li></ul></li></ul></li></ul><!--- #api_menu =-->
       </div> <!-- .sidebar-pane -->
       <div class="sidebar-pane" id="search_pane">
@@ -73,16 +69,16 @@
   
     <li>&rarr; <a href="../../../Spah/SpahQL/index.html" title="Spah.SpahQL (class)">SpahQL</a></li>
   
-    <li>&rarr; <a href="../../../Spah/SpahQL/QueryRunner/index.html" title="Spah.SpahQL.QueryRunner (class)">QueryRunner</a></li>
+    <li>&rarr; <a href="../../../Spah/SpahQL/QueryResultSet/index.html" title="Spah.SpahQL.QueryResultSet (class)">QueryResultSet</a></li>
   
 </ul>
 
 
-  <p id="src_code_href"><a href="http://github.com/danski/spah/blob/master/client/src/Spah.SpahQL.QueryRunner.js#9">src code</a></p>
+  <p id="src_code_href"><a href="http://github.com/danski/spah/blob/master/client/src/Spah.SpahQL.QueryResultSet.js#6">src code</a></p>
 
 
 <h2 class="page-title">
-  <span class="type">class</span> Spah.SpahQL.QueryRunner
+  <span class="type">class</span> Spah.SpahQL.QueryResultSet
 </h2>
 
 
@@ -94,9 +90,7 @@
                 </div> <!-- .section-title -->
                 <div class="section-content">
 
-    <p>Class responsible for executing parsed <code>Spah.SpahQL.Query</code> queries and returning sets of <code>Spah.SpahQL.QueryResult</code> instances.</p>
-
-<p>Unless you&#8217;re spelunking or fixing bugs, the only methods you care about are <em>select</em> and <em>assert</em>.</p>
+    <p>Wraps an array of QueryResult objects and provides manipulation and traversal methods upon the set.</p>
                 </div> <!-- .section-content -->
             </div> <!-- .section -->
 
@@ -119,28 +113,6 @@
 
   
   
-  
-                  <div class="section section-class_methods">
-                <div class="section-title">
-                  <h3>Class methods</h3>
-                </div> <!-- .section-title -->
-                <div class="section-content">
-
-      <ul class="method-list">
-        <li><code><a class="class-method" href="../../../Spah/SpahQL/QueryRunner/assert/index.html" title="Spah.SpahQL.QueryRunner.assert (class method)">assert</a></code></li>
-
-<li><code><a class="class-method" href="../../../Spah/SpahQL/QueryRunner/evalQueryToken/index.html" title="Spah.SpahQL.QueryRunner.evalQueryToken (class method)">evalQueryToken</a></code></li>
-
-<li><code><a class="class-method" href="../../../Spah/SpahQL/QueryRunner/evalSelectionQueryToken/index.html" title="Spah.SpahQL.QueryRunner.evalSelectionQueryToken (class method)">evalSelectionQueryToken</a></code></li>
-
-<li><code><a class="class-method" href="../../../Spah/SpahQL/QueryRunner/evalSetLiteralToken/index.html" title="Spah.SpahQL.QueryRunner.evalSetLiteralToken (class method)">evalSetLiteralToken</a></code></li>
-
-<li><code><a class="class-method" href="../../../Spah/SpahQL/QueryRunner/select/index.html" title="Spah.SpahQL.QueryRunner.select (class method)">select</a></code></li>
-
-      </ul>
-                  </div> <!-- .section-content -->
-            </div> <!-- .section -->
-
   
 
   

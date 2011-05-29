@@ -244,12 +244,40 @@
                   [null, 0]
                 ]
               },
-              //{
-              //  name: "Set literal with alphabetic range",
-              //},
-              //{
-              //  name: "Set literal with numeric range",
-              //}
+              {
+                name: "Numeric range literal", query: "{5..7}",
+                result: [
+                  [null, 5],
+                  [null, 6],
+                  [null, 7]
+                ]
+              },
+              {
+                name: "Numeric literal downwards order", query: "{10..8}",
+                result: [
+                  [null, 10],
+                  [null, 9],
+                  [null, 8]
+                ]
+              },
+              {
+                name: "String range literal", query: '{"a".."d"}',
+                result: [
+                  [null, "a"],
+                  [null, "b"],
+                  [null, "c"],
+                  [null, "d"]
+                ]
+              },
+              {
+                name: "String range literal backwards", query: '{"f".."c"}',
+                result: [
+                  [null, "f"],
+                  [null, "e"],
+                  [null, "d"],
+                  [null, "c"]
+                ]
+              }
             ],
             Assertion: []
           },

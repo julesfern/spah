@@ -28,7 +28,6 @@ $(document).ready(function() {
   });
   
   test("Returns a correct new index and found number when reading ahead for numeric literals", function() {
-    expect(8);
     // Ints
     deepEqual([1,7], Spah.SpahQL.QueryParser.readAheadNumericLiteral(0, '7, bar'));
     deepEqual([1,7], Spah.SpahQL.QueryParser.readAheadNumericLiteral(0, '7'));
@@ -41,10 +40,6 @@ $(document).ready(function() {
     
     // Not found
     equal(null, Spah.SpahQL.QueryParser.readAheadNumericLiteral(0, 'true'))
-    
-    // Errors
-    try { Spah.SpahQL.QueryParser.readAheadNumericLiteral(0, '7.5.5') }
-    catch(e) { ok(e) }
   });
   
   test("Returns a correct new index and found bool when reading ahead for boolean literals", function() {

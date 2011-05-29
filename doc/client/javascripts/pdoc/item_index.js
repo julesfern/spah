@@ -14,6 +14,7 @@ PDoc.elements = {
 'Spah.SpahQL.QueryRunner.evalSetLiteralToken': { 'name': 'Spah.SpahQL.QueryRunner.evalSetLiteralToken', 'type': 'class method', 'path': 'Spah/SpahQL/QueryRunner/evalSetLiteralToken/index.html' },
 'Spah.SpahQL.QueryRunner.assert': { 'name': 'Spah.SpahQL.QueryRunner.assert', 'type': 'class method', 'path': 'Spah/SpahQL/QueryRunner/assert/index.html' },
 'Spah.SpahQL.QueryParser.parseQuery': { 'name': 'Spah.SpahQL.QueryParser.parseQuery', 'type': 'class method', 'path': 'Spah/SpahQL/QueryParser/parseQuery/index.html' },
+'Spah.SpahQL.QueryResultSet': { 'name': 'Spah.SpahQL.QueryResultSet', 'type': 'class', 'path': 'Spah/SpahQL/QueryResultSet/index.html' },
 'new Spah.SpahQL.QueryResult': { 'name': 'new Spah.SpahQL.QueryResult', 'type': 'constructor', 'path': 'Spah/SpahQL/QueryResult/new/index.html' },
 'Spah.SpahQL.Query#assertion': { 'name': 'Spah.SpahQL.Query#assertion', 'type': 'instance property', 'path': 'Spah/SpahQL/Query/prototype/assertion/index.html' },
 'Spah.log': { 'name': 'Spah.log', 'type': 'class method', 'path': 'Spah/log/index.html' },
