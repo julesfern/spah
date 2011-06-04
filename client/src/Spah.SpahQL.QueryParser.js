@@ -30,7 +30,19 @@
     * current subquery into "truthiness" mode, where it will return a boolean result
     * rather than a resultset.
     **/
-   comparisonOperators: ["==", "~=", ">", "<", ">=", "<=", "!=", "}~{", "}>{", "}<{", "}!{"],
+   comparisonOperators: ["==", "=~", ">", "<", ">=", "<=", "!=", "}~{", "}>{", "}<{", "}!{"],
+   COMPARISON_STRICT_EQUALITY: "==",
+   COMPARISON_ROUGH_EQUALITY: "=~",
+   COMPARISON_INEQUALITY: "!=",
+   COMPARISON_LT: "<",
+   COMPARISON_GT: ">",
+   COMPARISON_LTE: "<=",
+   COMPARISON_GTE: ">=",
+   COMPARISON_JOINT_SET: "}~{",
+   COMPARISON_SUPERSET: "}>{",
+   COMPARISON_SUBSET: "}<{",
+   COMPARISON_DISJOINT_SET: "}!{",
+
    
    // Atom configuration: strings
    ATOM_QUOTE_SINGLE: "'",

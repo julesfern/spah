@@ -45,8 +45,7 @@ jQuery.extend(Spah.SpahQL.QueryRunner, {
   "assert": function(query, rootData, scopeData) {
     scopeData = scopeData || rootData;
     if(query.assertion) {
-      // Running assertion as assertion
-      // TODO.
+      return this.evalAssertion(query.primaryToken, query.secondaryToken, query.comparisonOperator, rootData, scopeData);
     }
     else {
       // Running selection as assertion
@@ -287,8 +286,32 @@ jQuery.extend(Spah.SpahQL.QueryRunner, {
       }
     }
     return results;
+  },
+  
+  evalAssertion: function(primaryToken, secondaryToken, comparisonOperator, rootData, scopeData) {
+    // Evaluate the tokens
+    var primarySet = this.evalQueryToken(primaryToken, rootData, scopeData);
+    var secondarySet = this.evalQueryToken(secondaryToken, rootData, scopeData);
+    var primaryValues = jQuery.map(primarySet, function(result, i) { return result.value; });
+    var secondaryValues = jQuery.map(secondarySet, function(result, i) { return result.value; });
+    // Now run the comparisons
+    switch(comparisonOperator) {
+      case Spah.SpahQL.QueryParser.COMPARISON_STRICT_EQUALITY:
+      case Spah.SpahQL.QueryParser.COMPARISON_INEQUALITY:
+      case Spah.SpahQL.QueryParser.COMPARISON_ROUGH_EQUALITY:
+      case Spah.SpahQL.QueryParser.COMPARISON_LT:
+      case Spah.SpahQL.QueryParser.COMPARISON_GT:
+      case Spah.SpahQL.QueryParser.COMPARISON_LTE:
+      case Spah.SpahQL.QueryParser.COMPARISON_GTE:
+      case Spah.SpahQL.QueryParser.COMPARISON_JOINT_SET:
+      case Spah.SpahQL.QueryParser.COMPARISON_DISJOINT_SET:
+      case Spah.SpahQL.QueryParser.COMPARISON_SUPERSET:
+      case Spah.SpahQL.QueryParser.COMPARISON_SUPERSET:
+    }
+  },
+  
+  evalSetEquality: function() {
+    
   }
-  
-  
   
 });

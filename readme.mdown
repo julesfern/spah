@@ -382,7 +382,7 @@ SpahQL's set arithmetic uses simple operators:
 
   Asserts that the left-hand set contains no values that are also present in the right-hand set.
 
-* Rough equality <code>~=</code>
+* Rough equality <code>=~</code>
 
   Asserts that one or more values from the left-hand set are roughly equal to one or more values from the right-hand set. See [Object equality][object_equality].
 
@@ -403,12 +403,12 @@ The equality of objects is calculated based on their type. Firstly, for two obje
 * **Array equality**: The arrays must each contain the same values in the same order. If any value is an array or object, it will be evaluated recursively.
 * **Number, String, Bool, null**: The objects must be of equal type and value.
 
-Under rough equality (<code>~=</code>) the rules are altered:
+Under rough equality (<code>=~</code>) the rules are altered:
 
-* **Strings** are evaluated to determine if the left-hand value matches the right-hand value, evaluating the right-hand value as a regular expression e.g. <code>"bar" ~= "^b"</code> returns <code>true</code> but <code>"bar" ~= "^a"</code> returns <code>false</code>
+* **Strings** are evaluated to determine if the left-hand value matches the right-hand value, evaluating the right-hand value as a regular expression e.g. <code>"bar" =~ "^b"</code> returns <code>true</code> but <code>"bar" =~ "^a"</code> returns <code>false</code>
 * **Numbers** are evaluated with integer accuracy only.
 * **Arrays and Objects** behave as if compared with the superset operator.
-* **Booleans and null** are evaluated based on truthiness rather than exact equality. <code>false ~= null</code> is <code>true</code> but <code>true ~= false</code> is <code>false</code>.
+* **Booleans and null** are evaluated based on truthiness rather than exact equality. <code>false =~ null</code> is <code>true</code> but <code>true =~ false</code> is <code>false</code>.
 
 When using inequality operators <code>&lt;</code>, <code>=&lt;</code>, <code>&gt;</code>, <code>&gt;=</code>:
 
