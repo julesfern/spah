@@ -29,7 +29,14 @@ $(document).ready(function() {
   
   // Run all assertion queries
   test("Assertion query fixtures: Runs the fixture set with the correct results", function() {
-    
+    for(var s in Fixtures.Query.Assertion) {
+      var qfix = Fixtures.Query.Assertion[s];
+      var n = qfix.name;
+      var q = qp.parseQuery(qfix.query);
+      var actual = qr.assert(q, Fixtures.Query.Data);
+      var expected = qfix.result;
+      equal(actual, expected, n+": Expected boolean returned ('"+qfix.query+"' -> "+expected+")");
+    }
   });
   
 });

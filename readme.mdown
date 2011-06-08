@@ -406,9 +406,12 @@ The equality of objects is calculated based on their type. Firstly, for two obje
 Under rough equality (<code>=~</code>) the rules are altered:
 
 * **Strings** are evaluated to determine if the left-hand value matches the right-hand value, evaluating the right-hand value as a regular expression e.g. <code>"bar" =~ "^b"</code> returns <code>true</code> but <code>"bar" =~ "^a"</code> returns <code>false</code>
-* **Numbers** are evaluated with integer accuracy only.
-* **Arrays and Objects** behave as if compared with the superset operator.
+* **Numbers** are evaluated with integer accuracy only (using Math.floor, numeric.floor or an equivalent operation)
+* **Arrays** behave as if compared with the joint set operator.
+* **Objects** are roughly equal if both hashes contain one or more keys with the same corresponding values. Values are compared using strict equality.
 * **Booleans and null** are evaluated based on truthiness rather than exact equality. <code>false =~ null</code> is <code>true</code> but <code>true =~ false</code> is <code>false</code>.
+
+N.B: Objects that are of different types are never roughly equal.
 
 When using inequality operators <code>&lt;</code>, <code>=&lt;</code>, <code>&gt;</code>, <code>&gt;=</code>:
 

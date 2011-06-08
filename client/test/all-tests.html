@@ -56,6 +56,7 @@
           objNested: {a: {a: 1, b: 2, c: 3}, b: {d: 4, e: 5, f: 6}, c: {g: 7, h: 8, i: 9, j: ["a", "b", "c"]}},
           arrNested: [["a", "b", "c"],["d", "e", "f"],["g", "h", {a: 1, b: 2, c: 3}]],
           objWithArr: {a: ["a", "b", "c"], b: ["d", "e", "f"], c: ["g", "h", "i"]},
+          objWithArrSlice: {b: ["d", "e", "f"]},
           arrWithObj: [{a: 1, b: 2, c: 3},{d: 4, e: 5, f: 6},{g: 7, h: 8, i: 9, j: 10}],
         };
         var Fixtures = {
@@ -279,7 +280,143 @@
                 ]
               }
             ],
-            Assertion: []
+            Assertion: [
+              {
+                name: "Query strict equality pass", query: "/objWithArr/c == /objWithArr/c", result: true
+              },
+              {
+                name: "Query strict equality fail", query: "/objWithArr/a == /objWithArr/c", result: false
+              },
+              {
+                name: "Query->Set literal strict equality pass", query: "/arr/* == {'d','e','f'}", result: true
+              },
+              {
+                name: "Query->Set literal strict equality fail", query: "/arr/* == {'d'}", result: false
+              },
+              {
+                name: "Set literal strict equality pass", query: "{'d','e','f'} == {'d','e','f'}", result: true
+              },
+              {
+                name: "Set literal strict equality fail", query: "{'d','e','f'} == {'a','e','f'}", result: false
+              },
+              {
+                name: "Query strict inequality pass", query: "/objWithArr/c != /objWithArr/c", result: false
+              },
+              {
+                name: "Query strict inequality fail", query: "/objWithArr/a != /objWithArr/c", result: true
+              },
+              {
+                name: "Query->Set literal strict inequality pass", query: "/arr/* != {'d','e','f'}", result: false
+              },
+              {
+                name: "Query->Set literal strict inequality fail", query: "/arr/* != {'d'}", result: true
+              },
+              {
+                name: "Set literal strict inequality pass", query: "{'d','e','f'} != {'d','e','f'}", result: false
+              },
+              {
+                name: "Set literal strict inequality fail", query: "{'d','e','f'} != {'a','e','f'}", result: true
+              },
+              {
+                name: "Loose equality with string literals pass", query: "'abcdefg' =~ '^a'", result: true
+              },
+              {
+                name: "Loose equality with string literals fail", query: "'abcdefg' =~ '^d'", result: false
+              },
+              {
+                name: "Loose equality with string query pass", query: "/str =~ '^a'", result: true
+              },
+              {
+                name: "Loose equality with string query fail", query: "/str =~ '^d'", result: false
+              },
+              {
+                name: "Loose equality with numeric literals pass", query: "4.5 =~ 4.1", result: true
+              },
+              {
+                name: "Loose equality with numeric literals fail", query: "4.5 =~ 5", result: false
+              },
+              {
+                name: "Loose equality with numeric query pass", query: "/num =~ 1000.5", result: true
+              },
+              {
+                name: "Loose equality with numeric query fail", query: "/num =~ 0", result: false
+              },
+              {
+                name: "Loose equality with array query pass", query: "/arrNested/0 =~ /objWithArr/a", result: true
+              },
+              {
+                name: "Loose equality with array query fail", query: "/arrNested/0 =~ /objWithArr/b", result: false
+              },
+              {
+                name: "Loose equality with hash query pass", query: "/objWithArr =~ /objWithArrSlice", result: true
+              },
+              {
+                name: "Loose equality with hash query fail", query: "/objWithArr =~ /objNested", result: false
+              },
+              {
+                name: "Less than comparison numeric pass", query: "/obj/a < 2", result: true
+              },
+              {
+                name: "Less than comparison numeric fail", query: "/obj/a < 1", result: false
+              },
+              {
+                name: "Less than or equal to comparison numeric pass", query: "/obj/b <= 2", result: true
+              },
+              {
+                name: "Less than or equal to comparison numeric fail", query: "/obj/b <= 1", result: false
+              },
+              {
+                name: "Greater than comparison numeric pass", query: "/obj/a > 0", result: true
+              },
+              {
+                name: "Greater than comparison numeric fail", query: "/obj/a > 1", result: false
+              },
+              {
+                name: "Greater than or equal to comparison numeric pass", query: "/obj/b >= 2", result: true
+              },
+              {
+                name: "Greater than or equal to comparison numeric fail", query: "/obj/b >= 100", result: false
+              },
+              {
+                name: "Less than comparison string pass", query: "/arrNested/0/0 < 'b'", result: true
+              },
+              {
+                name: "Less than comparison string fail", query: "/arrNested/0/0 < 'a'", result: false
+              },
+              {
+                name: "Less than or equal to comparison string pass", query: "/arrNested/0/1 <= 'b'", result: true
+              },
+              {
+                name: "Less than or equal to comparison string fail", query: "/arrNested/0/1 <= 'a'", result: false
+              },
+              {
+                name: "Greater than comparison string pass", query: "/arrNested/0/1 > 'a'", result: true
+              },
+              {
+                name: "Greater than comparison string fail", query: "/arrNested/0/1 > 'b'", result: false
+              },
+              {
+                name: "Greater than or equal to comparison string pass", query: "/arrNested/0/1 >= 'b'", result: true
+              },
+              {
+                name: "Greater than or equal to comparison string fail", query: "/arrNested/0/1 >= 'c'", result: false
+              },
+              
+              //  name: "Subset comparison"
+              //},
+              //{
+              //  name: "Superset comparison"
+              //},
+              //{
+              //  name: "Joint set comparison",
+              //},
+              //{
+              //  name: "Disjoint set comparison"
+              //},
+
+              // item count
+              // item count query is false on false/null result
+            ]
           },
           
           State: {

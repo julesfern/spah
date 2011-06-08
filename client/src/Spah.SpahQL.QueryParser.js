@@ -181,8 +181,9 @@
    },
    
    readAheadComparisonOperator: function(i, query) { 
-     if(this.comparisonOperators.indexOf(query.substr(i,2)) >= 0) return [i+2, query.substr(i,2)];
-     else if(this.comparisonOperators.indexOf(query.substr(i,3)) >= 0)  return [i+3, query.substr(i,3)];
+     if(this.comparisonOperators.indexOf(query.substr(i,3)) >= 0)  return [i+3, query.substr(i,3)];
+     else if(this.comparisonOperators.indexOf(query.substr(i,2)) >= 0) return [i+2, query.substr(i,2)];
+     else if(this.comparisonOperators.indexOf(query.substr(i,1)) >= 0) return [i+1, query.substr(i,1)];
      else return null;
    },
    

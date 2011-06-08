@@ -423,6 +423,7 @@ jQuery.extend(Spah.State.DataHelper, {
     }
     return true;
   },
+
   
   "eqSimple": function() {
     var aP, aI, aT;
@@ -441,6 +442,147 @@ jQuery.extend(Spah.State.DataHelper, {
       keys.push(k);
     }
     return keys.sort();
+  },
+  
+  "hashValues": function(hash) {
+    var values = [];
+    for(var k in hash) {
+      values.push(hash[k]);
+    }
+    return values;
+  },
+  
+  "mathGte": function(left, right) {
+    return this.mathCompare(left, right, function(a,b) { return a >= b; });
+  },
+  
+  "mathGt": function(left, right) {
+    return this.mathCompare(left, right, function(a,b) { return a > b; });
+  },
+  
+  "mathLte": function(left, right) {
+    return this.mathCompare(left, right, function(a,b) { return a <= b; });
+  },
+  
+  "mathLt": function(left, right) {
+    return this.mathCompare(left, right, function(a,b) { return a < b; });
+  },
+  
+  "mathCompare": function(left, right, callback) {
+    var leftType = this.objectType(left);
+    var rightType = this.objectType(right);
+    if(leftType == rightType && (leftType == "number" || leftType == "string")) {
+      return callback.apply(this, [left, right]);
+    }
+    return false;
+  },
+  
+  /**
+   * Spah.State.DataHelper.eqRough(left, right) -> Boolean result
+   * - left (*): The value at the left-hand side of the comparator
+   * - right (*): The value at the right-hand side of the comparator
+   *
+   * Compares two objects under the rules of rough equality. See readme for details.
+   **/
+  "eqRough": function(left, right) {
+    var leftType = this.objectType(left);
+    var rightType = this.objectType(right);
+    if(leftType != rightType) {
+      return false;
+    }
+    else {
+      switch(leftType) {
+        case "string":
+          return this.eqStringRough(left, right);
+          break;
+        case "number":
+          return this.eqNumberRough(left, right);
+          break;
+        case "array":
+          return this.eqArrayRough(left, right);
+          break;
+        case "object":
+          return this.eqHashRough(left, right);
+          break;
+        case "boolean":
+          return this.eqBooleanRough(left, right);
+          break;
+        default:
+          return false;
+      }
+    }
+  },
+  
+  "eqStringRough": function(left, right) {
+    return (left.match(new RegExp(right, "g")));
+  },
+  
+  "eqNumberRough": function(left, right) {
+    return (Math.floor(left) == Math.floor(right));
+  },
+  
+  "eqArrayRough": function(left, right) {
+    return this.jointSet(left, right);
+  },
+  
+  "eqHashRough": function(left, right) {
+    for(var k in left) {
+      if(right[k] && this.eq(left[k], right[k])) return true;
+    }
+    return false;
+  },
+  
+  "eqBooleanRough": function(left, right) {
+    return ((left && right) || (!left && !right));
+  },
+  
+  "eqSetStrict": function(set1, set2) {
+    if(set1.length != set2.length) return false;
+    var foundIndexMap = [];
+    for(var i=0; i < set1.length; i++) {
+      var val = set1[i];
+      for(var j=0; j < set2.length; j++) {
+        // Search for equality values in the second set
+        var candidate = set2[j];
+        if(this.eq(val, candidate) && (foundIndexMap.indexOf(j) < 0)) {
+          foundIndexMap.push(j);
+        }
+      }
+    }
+    return (foundIndexMap.length == set1.length);
+  },
+
+  "eqSetRough": function(set1, set2) {
+    return this.jointSetWithCallback(set1, set2, function(a,b) { return this.eqRough(a,b); });
+  },
+  
+  "jointSet": function(set1, set2) {
+    return this.jointSetWithCallback(set1, set2, function(a,b) { return this.eq(a,b); });
+  },
+  
+  "gteSet": function(set1, set2) {
+    return this.jointSetWithCallback(set1, set2, function(a,b) { return this.mathGte(a,b) });
+  },
+  
+  "lteSet": function(set1, set2) {
+    return this.jointSetWithCallback(set1, set2, function(a,b) { return this.mathLte(a,b) });
+  },
+  
+  "gtSet": function(set1, set2) {
+    return this.jointSetWithCallback(set1, set2, function(a,b) { return this.mathGt(a,b) });
+  },
+  
+  "ltSet": function(set1, set2) {
+    return this.jointSetWithCallback(set1, set2, function(a,b) { return this.mathLt(a,b) });
+  },
+  
+  "jointSetWithCallback": function(set1, set2, callback) {
+    for(var i=0; i < set2.length; i++) {
+      for(j=0; j < set1.length; j++) {
+        if(callback.apply(this, [set1[j], set2[i]])) return true;
+      }
+    }
+    return false;
   }
   
 });

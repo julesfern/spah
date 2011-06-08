@@ -292,26 +292,39 @@ jQuery.extend(Spah.SpahQL.QueryRunner, {
     // Evaluate the tokens
     var primarySet = this.evalQueryToken(primaryToken, rootData, scopeData);
     var secondarySet = this.evalQueryToken(secondaryToken, rootData, scopeData);
-    var primaryValues = jQuery.map(primarySet, function(result, i) { return result.value; });
-    var secondaryValues = jQuery.map(secondarySet, function(result, i) { return result.value; });
+    var primaryValues = [];
+    for(var p in primarySet) {
+      primaryValues.push(primarySet[p].value);
+    }
+    var secondaryValues = [];
+    for(var s in secondarySet) {
+      secondaryValues.push(secondarySet[s].value);
+    }
     // Now run the comparisons
     switch(comparisonOperator) {
       case Spah.SpahQL.QueryParser.COMPARISON_STRICT_EQUALITY:
+        return Spah.State.DataHelper.eqSetStrict(primaryValues, secondaryValues);
       case Spah.SpahQL.QueryParser.COMPARISON_INEQUALITY:
+        return !(Spah.State.DataHelper.eqSetStrict(primaryValues, secondaryValues));
       case Spah.SpahQL.QueryParser.COMPARISON_ROUGH_EQUALITY:
+        return Spah.State.DataHelper.eqSetRough(primaryValues, secondaryValues);
       case Spah.SpahQL.QueryParser.COMPARISON_LT:
+        return Spah.State.DataHelper.ltSet(primaryValues, secondaryValues);
       case Spah.SpahQL.QueryParser.COMPARISON_GT:
+        return Spah.State.DataHelper.gtSet(primaryValues, secondaryValues);
       case Spah.SpahQL.QueryParser.COMPARISON_LTE:
+        return Spah.State.DataHelper.lteSet(primaryValues, secondaryValues);
       case Spah.SpahQL.QueryParser.COMPARISON_GTE:
+        return Spah.State.DataHelper.gteSet(primaryValues, secondaryValues);
       case Spah.SpahQL.QueryParser.COMPARISON_JOINT_SET:
+        return Spah.State.DataHelper.jointSet(primaryValues, secondaryValues);
       case Spah.SpahQL.QueryParser.COMPARISON_DISJOINT_SET:
+        return !(Spah.State.DataHelper.jointSet(primaryValues, secondaryValues));
       case Spah.SpahQL.QueryParser.COMPARISON_SUPERSET:
-      case Spah.SpahQL.QueryParser.COMPARISON_SUPERSET:
+        // all values in primary token present in secondary token
+      case Spah.SpahQL.QueryParser.COMPARISON_SUBSET:
+        // all values in secondary token present in primary token
     }
-  },
-  
-  evalSetEquality: function() {
-    
-  }
+  }  
   
 });
