@@ -583,6 +583,21 @@ jQuery.extend(Spah.State.DataHelper, {
       }
     }
     return false;
+  },
+  
+  "superSet": function(superset, subset) {
+    var foundIndexMap = [];
+    isubset: for(var i=0; i < subset.length; i++) {
+      var subVal = subset[i];
+      isuperset: for(var j=0; j < superset.length; j++) {
+        var superVal = superset[j];
+        if((foundIndexMap.indexOf(j) == -1) && this.eq(subVal, superVal)) {
+          foundIndexMap.push(j);
+          break isuperset;
+        }
+      }
+    }
+    return (subset.length == foundIndexMap.length);
   }
   
 });

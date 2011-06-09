@@ -402,11 +402,24 @@
                 name: "Greater than or equal to comparison string fail", query: "/arrNested/0/1 >= 'c'", result: false
               },
               
-              //  name: "Subset comparison"
-              //},
-              //{
-              //  name: "Superset comparison"
-              //},
+              {
+                name: "Subset set literals pass", query: "{1,2,3} }<{ {1,2,3,4}", result: true
+              },
+              {
+                name: "Subset set literals fail", query: "{1,2,3} }<{ {2,3,4}", result: false
+              },
+              {
+                name: "Subset Query->Set pass", query: "/arrNested/0/* }<{ {'a','b','c','d'}", result: true
+              },
+              {
+                name: "Subset Query->Set fail", query: "/arrNested/0/* }<{ {'b','c','d'}", result: false
+              },
+              {
+                name: "Subset Query->Query pass", query: "/arrNested/0/* }<{ /objWithArr/a/*", result: true
+              },
+              {
+                name: "Subset Query->Query fail", query: "/arrNested/* }<{ /arr/*", result: false
+              },
               //{
               //  name: "Joint set comparison",
               //},

@@ -306,24 +306,34 @@ jQuery.extend(Spah.SpahQL.QueryRunner, {
         return Spah.State.DataHelper.eqSetStrict(primaryValues, secondaryValues);
       case Spah.SpahQL.QueryParser.COMPARISON_INEQUALITY:
         return !(Spah.State.DataHelper.eqSetStrict(primaryValues, secondaryValues));
+        break;
       case Spah.SpahQL.QueryParser.COMPARISON_ROUGH_EQUALITY:
         return Spah.State.DataHelper.eqSetRough(primaryValues, secondaryValues);
+        break;
       case Spah.SpahQL.QueryParser.COMPARISON_LT:
         return Spah.State.DataHelper.ltSet(primaryValues, secondaryValues);
+        break;
       case Spah.SpahQL.QueryParser.COMPARISON_GT:
         return Spah.State.DataHelper.gtSet(primaryValues, secondaryValues);
+        break;
       case Spah.SpahQL.QueryParser.COMPARISON_LTE:
         return Spah.State.DataHelper.lteSet(primaryValues, secondaryValues);
+        break;
       case Spah.SpahQL.QueryParser.COMPARISON_GTE:
         return Spah.State.DataHelper.gteSet(primaryValues, secondaryValues);
+        break;
       case Spah.SpahQL.QueryParser.COMPARISON_JOINT_SET:
         return Spah.State.DataHelper.jointSet(primaryValues, secondaryValues);
+        break;
       case Spah.SpahQL.QueryParser.COMPARISON_DISJOINT_SET:
         return !(Spah.State.DataHelper.jointSet(primaryValues, secondaryValues));
+        break;
       case Spah.SpahQL.QueryParser.COMPARISON_SUPERSET:
-        // all values in primary token present in secondary token
+        return Spah.State.DataHelper.superSet(primaryValues, secondaryValues);
+        break;
       case Spah.SpahQL.QueryParser.COMPARISON_SUBSET:
-        // all values in secondary token present in primary token
+        return Spah.State.DataHelper.superSet(secondaryValues, primaryValues);
+        break;
     }
   }  
   
