@@ -1,47 +1,47 @@
 $(document).ready(function() {
   
-  module("Spah.State.DataHelper");
+  module("Spah.SpahQL.DataHelper");
   
   test("Correctly determines object types", function() {
-    equal("string", Spah.State.DataHelper.objectType(""), "String type");
-    equal("number", Spah.State.DataHelper.objectType(0), "Number type");
-    equal("boolean", Spah.State.DataHelper.objectType(false), "Bool type");
-    equal("object", Spah.State.DataHelper.objectType({}), "Hash type");
-    equal("array", Spah.State.DataHelper.objectType([]), "Array type");
-    equal("null", Spah.State.DataHelper.objectType(null), "Null type");
+    equal("string", Spah.SpahQL.DataHelper.objectType(""), "String type");
+    equal("number", Spah.SpahQL.DataHelper.objectType(0), "Number type");
+    equal("boolean", Spah.SpahQL.DataHelper.objectType(false), "Bool type");
+    equal("object", Spah.SpahQL.DataHelper.objectType({}), "Hash type");
+    equal("array", Spah.SpahQL.DataHelper.objectType([]), "Array type");
+    equal("null", Spah.SpahQL.DataHelper.objectType(null), "Null type");
   })
   
   test("Determines simple object equality", function() {
-    ok(Spah.State.DataHelper.eq(0,0,0), "Compares integers eq")
-    ok(!Spah.State.DataHelper.eq(1,0,0), "Fails integers diff")
-    ok(!Spah.State.DataHelper.eq(0,0,false), "Fails integer crosstype")
+    ok(Spah.SpahQL.DataHelper.eq(0,0,0), "Compares integers eq")
+    ok(!Spah.SpahQL.DataHelper.eq(1,0,0), "Fails integers diff")
+    ok(!Spah.SpahQL.DataHelper.eq(0,0,false), "Fails integer crosstype")
     
-    ok(Spah.State.DataHelper.eq("a","a","a"), "Compares strings eq")
-    ok(!Spah.State.DataHelper.eq("a", "b"), "Fails strings diff")
-    ok(!Spah.State.DataHelper.eq("a","a","a", 2), "Fails strings crosstype")
+    ok(Spah.SpahQL.DataHelper.eq("a","a","a"), "Compares strings eq")
+    ok(!Spah.SpahQL.DataHelper.eq("a", "b"), "Fails strings diff")
+    ok(!Spah.SpahQL.DataHelper.eq("a","a","a", 2), "Fails strings crosstype")
     
-    ok(Spah.State.DataHelper.eq(true,true,true,true), "Compares bools eq")
-    ok(!Spah.State.DataHelper.eq(false, undefined), "Fails bools diff")
-    ok(!Spah.State.DataHelper.eq(false, null), "Fails bools diff")
-    ok(!Spah.State.DataHelper.eq("true",true), "Fails bools crosstype")
+    ok(Spah.SpahQL.DataHelper.eq(true,true,true,true), "Compares bools eq")
+    ok(!Spah.SpahQL.DataHelper.eq(false, undefined), "Fails bools diff")
+    ok(!Spah.SpahQL.DataHelper.eq(false, null), "Fails bools diff")
+    ok(!Spah.SpahQL.DataHelper.eq("true",true), "Fails bools crosstype")
   });
   
   test("Determines array equality", function() {
-    ok(Spah.State.DataHelper.eq([0,"1", false], [0,"1", false]), "Compares arrays eq")
-    ok(!Spah.State.DataHelper.eq([0,"1", false], [0,"1"]), "Fails arrays diff lengths")
-    ok(!Spah.State.DataHelper.eq([0,"1", false], [2,"1", false]), "Fails arrays diff")
+    ok(Spah.SpahQL.DataHelper.eq([0,"1", false], [0,"1", false]), "Compares arrays eq")
+    ok(!Spah.SpahQL.DataHelper.eq([0,"1", false], [0,"1"]), "Fails arrays diff lengths")
+    ok(!Spah.SpahQL.DataHelper.eq([0,"1", false], [2,"1", false]), "Fails arrays diff")
   })
   
   test("Determines hash equality", function() {
-    ok(Spah.State.DataHelper.eq({foo: "bar", bar: "baz"}, {foo: "bar", bar: "baz"}), "Compares hashes eq")
-    ok(!Spah.State.DataHelper.eq({foo: "bar", bar: "baz"}, {foo: "bar", bar: "different"}), "Fails hashes diff root content")
-    ok(!Spah.State.DataHelper.eq({foo: "bar", bar: "baz"}, {foo: "bar", barDifferent: "baz"}), "Fails hashes diff root keys")
-    ok(!Spah.State.DataHelper.eq({foo: "bar", arr: [0,1,2]}, {foo: "bar", arr: [1,2,3]}), "Fails hashes diff inner content")
-    ok(!Spah.State.DataHelper.eq({foo: "bar", arr: [0,1,2]}, {foo: "bar", arr: null}), "Fails hashes diff inner content types")
+    ok(Spah.SpahQL.DataHelper.eq({foo: "bar", bar: "baz"}, {foo: "bar", bar: "baz"}), "Compares hashes eq")
+    ok(!Spah.SpahQL.DataHelper.eq({foo: "bar", bar: "baz"}, {foo: "bar", bar: "different"}), "Fails hashes diff root content")
+    ok(!Spah.SpahQL.DataHelper.eq({foo: "bar", bar: "baz"}, {foo: "bar", barDifferent: "baz"}), "Fails hashes diff root keys")
+    ok(!Spah.SpahQL.DataHelper.eq({foo: "bar", arr: [0,1,2]}, {foo: "bar", arr: [1,2,3]}), "Fails hashes diff inner content")
+    ok(!Spah.SpahQL.DataHelper.eq({foo: "bar", arr: [0,1,2]}, {foo: "bar", arr: null}), "Fails hashes diff inner content types")
   })
   
   test("Merges arrays correctly", function() {
-    var mergeResult = Spah.State.DataHelper.merge(Fixtures.State.Arrays.delta, Fixtures.State.Arrays.target);
+    var mergeResult = Spah.SpahQL.DataHelper.merge(Fixtures.State.Arrays.delta, Fixtures.State.Arrays.target);
     var updates = mergeResult.modifications; var data = mergeResult.data;
     var expectedState = Fixtures.State.Arrays.expected;
     
@@ -92,7 +92,7 @@ $(document).ready(function() {
   });
   
   test("Merges hashes correctly", function() {
-    var mergeResult = Spah.State.DataHelper.merge(Fixtures.State.Hashes.delta, Fixtures.State.Hashes.target);
+    var mergeResult = Spah.SpahQL.DataHelper.merge(Fixtures.State.Hashes.delta, Fixtures.State.Hashes.target);
     var updates = mergeResult.modifications; var data = mergeResult.data;
     var expectedState = Fixtures.State.Hashes.expected;
     
@@ -146,7 +146,7 @@ $(document).ready(function() {
   });
   
   test("Merges base object types correctly", function() {
-    var mergeResult = Spah.State.DataHelper.merge(Fixtures.State.BaseTypes.delta, Fixtures.State.BaseTypes.target);
+    var mergeResult = Spah.SpahQL.DataHelper.merge(Fixtures.State.BaseTypes.delta, Fixtures.State.BaseTypes.target);
     var updates = mergeResult.modifications; var data = mergeResult.data;
     var expectedState = Fixtures.State.BaseTypes.expected;
     
@@ -185,7 +185,7 @@ $(document).ready(function() {
   });
   
   test("Merges the complex fixture correctly", function() {
-    var mergeResult = Spah.State.DataHelper.merge(Fixtures.State.Complex.delta, Fixtures.State.Complex.target);
+    var mergeResult = Spah.SpahQL.DataHelper.merge(Fixtures.State.Complex.delta, Fixtures.State.Complex.target);
     var updates = mergeResult.modifications; var data = mergeResult.data;
     
     // Manually assert everything about the updated data

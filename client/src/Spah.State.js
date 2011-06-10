@@ -57,7 +57,7 @@ jQuery.extend(Spah.State.prototype, {
    * During the merge hashes are merged, while strings, arrays and booleans are replaced if re-specified in the delta.
    **/
   "update": function(delta) {
-    updates = Spah.State.DataHelper.merge(delta, this.data);
+    updates = Spah.SpahQL.DataHelper.merge(delta, this.data);
     this.data = updates.data;
     return updates.modifications;
   }

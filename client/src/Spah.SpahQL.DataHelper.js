@@ -1,5 +1,5 @@
 /**
- * class Spah.State.DataHelper
+ * class Spah.SpahQL.DataHelper
  *
  * This is a singleton helper dedicated to deep-merging complex JSON structures and returning both
  * the merged data and a digest of modified paths within the structure.
@@ -10,14 +10,14 @@ Spah = window["Spah"];
 Spah.State = window["Spah"]["State"];
 
 // Declare and export class
-Spah.State.DataHelper = function() { };
-window["Spah"]["State"]["Merger"] = Spah.State.DataHelper;
+Spah.SpahQL.DataHelper = function() { };
+window["Spah"]["State"]["Merger"] = Spah.SpahQL.DataHelper;
 
 // Singletons
-jQuery.extend(Spah.State.DataHelper, {
+jQuery.extend(Spah.SpahQL.DataHelper, {
   
   /**
-   * Spah.State.DataHelper.merge(delta, target [, path]) -> Object mergeData
+   * Spah.SpahQL.DataHelper.merge(delta, target [, path]) -> Object mergeData
    * - delta (Object): The source object containing deltas intended to be written into the destination object.
    * - target (Object): The destination object for the updated data.
    * - path (String): A path used in recursion to collect modifications and act as a stack tracer.
@@ -41,7 +41,7 @@ jQuery.extend(Spah.State.DataHelper, {
    *        items: [{type: "Item", id: 1}],
    *        user: {name: "User got a new name"}
    *      }
-   *      mergeResult = Spah.State.DataHelper.merge(delta, originalState);
+   *      mergeResult = Spah.SpahQL.DataHelper.merge(delta, originalState);
    *      mergeResult.data; //-> The merged data: {
    *      //  user_authenticated: true, 
    *      //  items: [{type: "Item", id: 888}], // Note that arrays are REPLACED during a merge
@@ -334,7 +334,7 @@ jQuery.extend(Spah.State.DataHelper, {
   },
   
   /**
-   * Spah.State.DataHelper.modificationSymbol(delta, target) -> String symbol
+   * Spah.SpahQL.DataHelper.modificationSymbol(delta, target) -> String symbol
    * 
    * Determines whether the change between two objects, assuming content inequality, is a "+" (addition), "-" (nullification) or "~" (alteration).
    **/
@@ -345,7 +345,7 @@ jQuery.extend(Spah.State.DataHelper, {
   },
   
   /**
-   * Spah.State.DataHelper.objectType(obj) -> String type
+   * Spah.SpahQL.DataHelper.objectType(obj) -> String type
    * 
    * Extends the core typeof(obj) function by adding types "array" and "null".
    **/
@@ -360,10 +360,10 @@ jQuery.extend(Spah.State.DataHelper, {
   },
   
   /**
-   * Spah.State.DataHelper.eq(obj1, obj2[, objN]) -> Boolean equality result
+   * Spah.SpahQL.DataHelper.eq(obj1, obj2[, objN]) -> Boolean equality result
    *
    * Determines content equality of two or more objects. Booleans, null values, numbers and strings are compared using 
-   * the <code>Spah.State.DataHelper.objectType</code> method and the built-in <code>==</code> operator, but arrays 
+   * the <code>Spah.SpahQL.DataHelper.objectType</code> method and the built-in <code>==</code> operator, but arrays 
    * and hashes are traversed recursively and have their values compared.
    **/
   "eq": function() {
@@ -389,7 +389,7 @@ jQuery.extend(Spah.State.DataHelper, {
   },
   
   /**
-   * Spah.State.DataHelper.eqHash(obj1, obj2[, objN]) -> Boolean result
+   * Spah.SpahQL.DataHelper.eqHash(obj1, obj2[, objN]) -> Boolean result
    *
    * Compares two or more associative arrays for equality, enforcing strict key matching.
    * Values are compared using the "eq" method.
@@ -413,7 +413,7 @@ jQuery.extend(Spah.State.DataHelper, {
   },
   
   /**
-   * Spah.State.DataHelper.eqArray(obj1, obj2[, objN]) -> Boolean result
+   * Spah.SpahQL.DataHelper.eqArray(obj1, obj2[, objN]) -> Boolean result
    *
    * Compares two or more arrays for equality, enforcing strict ordering.
    * Values are compared using the "eq" method.
@@ -439,7 +439,7 @@ jQuery.extend(Spah.State.DataHelper, {
   },
 
   /**
-   * Spah.State.DataHelper.hashKeys(obj1, obj2[, objN]) -> Boolean result
+   * Spah.SpahQL.DataHelper.hashKeys(obj1, obj2[, objN]) -> Boolean result
    *
    * Compares two or more values of any type under simple javascript equality rules. 
    * All arguments must be strictly equal or the function will return false.
@@ -456,7 +456,7 @@ jQuery.extend(Spah.State.DataHelper, {
   },
   
   /**
-   * Spah.State.DataHelper.hashKeys(hash) -> Array of keys
+   * Spah.SpahQL.DataHelper.hashKeys(hash) -> Array of keys
    * - hash (Object): The hash being exploded
    *
    * Retrieves all keys found in an associative array and returns them as an array
@@ -471,7 +471,7 @@ jQuery.extend(Spah.State.DataHelper, {
   },
   
   /**
-   * Spah.State.DataHelper.hashValues(hash) -> Array of values
+   * Spah.SpahQL.DataHelper.hashValues(hash) -> Array of values
    * - hash (Object): The hash being exploded
    *
    * Retrieves all values found in an associative array and returns them as an array
@@ -486,7 +486,7 @@ jQuery.extend(Spah.State.DataHelper, {
   },
   
   /**
-   * Spah.State.DataHelper.mathGte(left, right) -> Boolean result
+   * Spah.SpahQL.DataHelper.mathGte(left, right) -> Boolean result
    * - left (Object, Array, Boolean, String, Number, null): The value at the left-hand side of the comparator
    * - right (Object, Array, Boolean, String, Number, null): The value at the right-hand side of the comparator
    *
@@ -498,7 +498,7 @@ jQuery.extend(Spah.State.DataHelper, {
   },
   
   /**
-   * Spah.State.DataHelper.mathGt(left, right) -> Boolean result
+   * Spah.SpahQL.DataHelper.mathGt(left, right) -> Boolean result
    * - left (Object, Array, Boolean, String, Number, null): The value at the left-hand side of the comparator
    * - right (Object, Array, Boolean, String, Number, null): The value at the right-hand side of the comparator
    *
@@ -510,7 +510,7 @@ jQuery.extend(Spah.State.DataHelper, {
   },
   
   /**
-   * Spah.State.DataHelper.mathLte(left, right) -> Boolean result
+   * Spah.SpahQL.DataHelper.mathLte(left, right) -> Boolean result
    * - left (Object, Array, Boolean, String, Number, null): The value at the left-hand side of the comparator
    * - right (Object, Array, Boolean, String, Number, null): The value at the right-hand side of the comparator
    *
@@ -522,7 +522,7 @@ jQuery.extend(Spah.State.DataHelper, {
   },
   
   /**
-   * Spah.State.DataHelper.mathLt(left, right) -> Boolean result
+   * Spah.SpahQL.DataHelper.mathLt(left, right) -> Boolean result
    * - left (Object, Array, Boolean, String, Number, null): The value at the left-hand side of the comparator
    * - right (Object, Array, Boolean, String, Number, null): The value at the right-hand side of the comparator
    *
@@ -534,7 +534,7 @@ jQuery.extend(Spah.State.DataHelper, {
   },
   
   /**
-   * Spah.State.DataHelper.mathCompare(left, right, callback) -> Boolean result
+   * Spah.SpahQL.DataHelper.mathCompare(left, right, callback) -> Boolean result
    * - left (Object, Array, Boolean, String, Number, null): The value at the left-hand side of the comparator
    * - right (Object, Array, Boolean, String, Number, null): The value at the right-hand side of the comparator
    * - callback (Function): A callback function which will be evaluating the mathematical comparison.
@@ -554,7 +554,7 @@ jQuery.extend(Spah.State.DataHelper, {
   },
   
   /**
-   * Spah.State.DataHelper.eqRough(left, right) -> Boolean result
+   * Spah.SpahQL.DataHelper.eqRough(left, right) -> Boolean result
    * - left (Object, Array, Boolean, String, Number, null): The value at the left-hand side of the comparator
    * - right (Object, Array, Boolean, String, Number, null): The value at the right-hand side of the comparator
    *
@@ -590,7 +590,7 @@ jQuery.extend(Spah.State.DataHelper, {
   },
   
   /**
-   * Spah.State.DataHelper.eqStringRough(left, right) -> Boolean result
+   * Spah.SpahQL.DataHelper.eqStringRough(left, right) -> Boolean result
    * - left (String): The value at the left-hand side of the comparator
    * - right (String): The value at the right-hand side of the comparator
    *
@@ -602,7 +602,7 @@ jQuery.extend(Spah.State.DataHelper, {
   },
   
   /**
-   * Spah.State.DataHelper.eqNumberRough(left, right) -> Boolean result
+   * Spah.SpahQL.DataHelper.eqNumberRough(left, right) -> Boolean result
    * - left (Number): The value at the left-hand side of the comparator
    * - right (Number): The value at the right-hand side of the comparator
    *
@@ -613,7 +613,7 @@ jQuery.extend(Spah.State.DataHelper, {
   },
   
   /**
-   * Spah.State.DataHelper.eqArrayRough(left, right) -> Boolean result
+   * Spah.SpahQL.DataHelper.eqArrayRough(left, right) -> Boolean result
    * - left (Array): The value at the left-hand side of the comparator
    * - right (Array): The value at the right-hand side of the comparator
    *
@@ -625,7 +625,7 @@ jQuery.extend(Spah.State.DataHelper, {
   },
   
   /**
-   * Spah.State.DataHelper.eqHashRough(left, right) -> Boolean result
+   * Spah.SpahQL.DataHelper.eqHashRough(left, right) -> Boolean result
    * - left (Object): The value at the left-hand side of the comparator
    * - right (Object): The value at the right-hand side of the comparator
    *
@@ -640,7 +640,7 @@ jQuery.extend(Spah.State.DataHelper, {
   },
   
   /**
-   * Spah.State.DataHelper.eqBooleanRough(left, right) -> Boolean result
+   * Spah.SpahQL.DataHelper.eqBooleanRough(left, right) -> Boolean result
    * - left (Boolean, null): The value at the left-hand side of the comparator
    * - right (Boolean, null): The value at the right-hand side of the comparator
    *
@@ -652,7 +652,7 @@ jQuery.extend(Spah.State.DataHelper, {
   },
   
   /**
-   * Spah.State.DataHelper.eqSetStrict(set1, set2) -> Boolean result
+   * Spah.SpahQL.DataHelper.eqSetStrict(set1, set2) -> Boolean result
    * - set1 (Array): The value at the left-hand side of the comparator
    * - set2 (Array): The value at the right-hand side of the comparator
    *
@@ -677,7 +677,7 @@ jQuery.extend(Spah.State.DataHelper, {
   },
 
   /**
-   * Spah.State.DataHelper.eqSetRough(set1, set2) -> Boolean result
+   * Spah.SpahQL.DataHelper.eqSetRough(set1, set2) -> Boolean result
    * - set1 (Array): The value at the left-hand side of the comparator
    * - set2 (Array): The value at the right-hand side of the comparator
    *
@@ -690,7 +690,7 @@ jQuery.extend(Spah.State.DataHelper, {
   },
   
   /**
-   * Spah.State.DataHelper.jointSet(set1, set2) -> Boolean result
+   * Spah.SpahQL.DataHelper.jointSet(set1, set2) -> Boolean result
    * - set1 (Array): The value at the left-hand side of the comparator
    * - set2 (Array): The value at the right-hand side of the comparator
    *
@@ -702,7 +702,7 @@ jQuery.extend(Spah.State.DataHelper, {
   },
   
   /**
-   * Spah.State.DataHelper.gteSet(set1, set2) -> Boolean result
+   * Spah.SpahQL.DataHelper.gteSet(set1, set2) -> Boolean result
    * - set1 (Array): The value at the left-hand side of the comparator
    * - set2 (Array): The value at the right-hand side of the comparator
    *
@@ -714,7 +714,7 @@ jQuery.extend(Spah.State.DataHelper, {
   },
   
   /**
-   * Spah.State.DataHelper.lteSet(set1, set2) -> Boolean result
+   * Spah.SpahQL.DataHelper.lteSet(set1, set2) -> Boolean result
    * - set1 (Array): The value at the left-hand side of the comparator
    * - set2 (Array): The value at the right-hand side of the comparator
    *
@@ -726,7 +726,7 @@ jQuery.extend(Spah.State.DataHelper, {
   },
   
   /**
-   * Spah.State.DataHelper.gtSet(set1, set2) -> Boolean result
+   * Spah.SpahQL.DataHelper.gtSet(set1, set2) -> Boolean result
    * - set1 (Array): The value at the left-hand side of the comparator
    * - set2 (Array): The value at the right-hand side of the comparator
    *
@@ -738,7 +738,7 @@ jQuery.extend(Spah.State.DataHelper, {
   },
   
   /**
-   * Spah.State.DataHelper.ltSet(set1, set2) -> Boolean result
+   * Spah.SpahQL.DataHelper.ltSet(set1, set2) -> Boolean result
    * - set1 (Array): The value at the left-hand side of the comparator
    * - set2 (Array): The value at the right-hand side of the comparator
    *
@@ -750,7 +750,7 @@ jQuery.extend(Spah.State.DataHelper, {
   },
   
   /**
-   * Spah.State.DataHelper.jointSetWithCallback(set1, set2, callback) -> Boolean result
+   * Spah.SpahQL.DataHelper.jointSetWithCallback(set1, set2, callback) -> Boolean result
    * - set1 (Array): The value at the left-hand side of the comparator
    * - set2 (Array): The value at the right-hand side of the comparator
    * - callback (Function): A function to be used for comparing the values. Should accept two values as arguments.
@@ -771,7 +771,7 @@ jQuery.extend(Spah.State.DataHelper, {
   },
   
   /**
-   * Spah.State.DataHelper.superSet(superset, subset) -> Boolean result
+   * Spah.SpahQL.DataHelper.superSet(superset, subset) -> Boolean result
    * - superset (Array): The value being asserted as a superset of the 'subset' argument.
    * - subset (Array): The value being asserted as a subset of the 'superset' argument.
    *
@@ -794,7 +794,7 @@ jQuery.extend(Spah.State.DataHelper, {
   },
   
   /**
-   * Spah.State.DataHelper.truthySet(set) -> Boolean result
+   * Spah.SpahQL.DataHelper.truthySet(set) -> Boolean result
    * - set (Array): The value being asserted as a "truthy" set.
    *
    * Asserts that a set may be considered "truthy", i.e. containing one or more

@@ -163,14 +163,14 @@ jQuery.extend(Spah.SpahQL.QueryRunner, {
    * Retrieves the value(s) associated with a given key from the given object, if such a key exists.
    **/
   fetchResultsFromObjectByKey: function(key, object, path, recursive) {
-    var oType = Spah.State.DataHelper.objectType(object);
+    var oType = Spah.SpahQL.DataHelper.objectType(object);
     var results = [];
     
     if(oType == "array" || oType == "object") {
       // Loop and append
       for(var oKey in object) {
         var oVal = object[oKey];
-        var oValType = Spah.State.DataHelper.objectType(oVal);
+        var oValType = Spah.SpahQL.DataHelper.objectType(oVal);
         var oPath = path+"/"+oKey;
         // Match at this level
         if(key == Spah.SpahQL.QueryParser.ATOM_PATH_WILDCARD || key.toString() == oKey.toString()) {
@@ -196,7 +196,7 @@ jQuery.extend(Spah.SpahQL.QueryRunner, {
    * Retrieves the specified Spah object property from the given object, if the object supports the specified property.
    **/
   fetchResultsFromObjectByProperty: function(property, object, path, recursive) {
-    var oType = Spah.State.DataHelper.objectType(object);
+    var oType = Spah.SpahQL.DataHelper.objectType(object);
     var pPath = path+"/."+property;
     var results = [];
     
@@ -207,7 +207,7 @@ jQuery.extend(Spah.SpahQL.QueryRunner, {
             results.push(new Spah.SpahQL.QueryResult(pPath, object.length));
             break;
           case "object":
-            results.push(new Spah.SpahQL.QueryResult(pPath, Spah.State.DataHelper.hashKeys(object).length));
+            results.push(new Spah.SpahQL.QueryResult(pPath, Spah.SpahQL.DataHelper.hashKeys(object).length));
             break;
         }
         break;
@@ -252,8 +252,8 @@ jQuery.extend(Spah.SpahQL.QueryRunner, {
     if(queryToken.isRange) {
       var start = queryToken.values[0];
       var end = queryToken.values[1];
-      var sType = Spah.State.DataHelper.objectType(start);
-      var eType = Spah.State.DataHelper.objectType(end);
+      var sType = Spah.SpahQL.DataHelper.objectType(start);
+      var eType = Spah.SpahQL.DataHelper.objectType(end);
       if(sType == eType) {
         if(sType == "number") results = results.concat(this.evalNumericRange(start, end));
         else if(sType == "string") results = results.concat(this.evalStringRange(start, end));
@@ -267,7 +267,7 @@ jQuery.extend(Spah.SpahQL.QueryRunner, {
       // Loop - evaluate queries
       for(var i in queryToken.values) {
         var val = queryToken.values[i];
-        var oType = Spah.State.DataHelper.objectType(val);
+        var oType = Spah.SpahQL.DataHelper.objectType(val);
         
         if(oType == "object") {
           results = results.concat(this.evalSelectionQueryToken(val, rootData, scopeData));
@@ -358,43 +358,43 @@ jQuery.extend(Spah.SpahQL.QueryRunner, {
     }
     else {
       // No secondary token - just assert based on the primary set
-      return Spah.State.DataHelper.truthySet(primaryValues);
+      return Spah.SpahQL.DataHelper.truthySet(primaryValues);
     }  
     
     
     // Now run the comparisons
     switch(comparisonOperator) {
       case Spah.SpahQL.QueryParser.COMPARISON_STRICT_EQUALITY:
-        return Spah.State.DataHelper.eqSetStrict(primaryValues, secondaryValues);
+        return Spah.SpahQL.DataHelper.eqSetStrict(primaryValues, secondaryValues);
       case Spah.SpahQL.QueryParser.COMPARISON_INEQUALITY:
-        return !(Spah.State.DataHelper.eqSetStrict(primaryValues, secondaryValues));
+        return !(Spah.SpahQL.DataHelper.eqSetStrict(primaryValues, secondaryValues));
         break;
       case Spah.SpahQL.QueryParser.COMPARISON_ROUGH_EQUALITY:
-        return Spah.State.DataHelper.eqSetRough(primaryValues, secondaryValues);
+        return Spah.SpahQL.DataHelper.eqSetRough(primaryValues, secondaryValues);
         break;
       case Spah.SpahQL.QueryParser.COMPARISON_LT:
-        return Spah.State.DataHelper.ltSet(primaryValues, secondaryValues);
+        return Spah.SpahQL.DataHelper.ltSet(primaryValues, secondaryValues);
         break;
       case Spah.SpahQL.QueryParser.COMPARISON_GT:
-        return Spah.State.DataHelper.gtSet(primaryValues, secondaryValues);
+        return Spah.SpahQL.DataHelper.gtSet(primaryValues, secondaryValues);
         break;
       case Spah.SpahQL.QueryParser.COMPARISON_LTE:
-        return Spah.State.DataHelper.lteSet(primaryValues, secondaryValues);
+        return Spah.SpahQL.DataHelper.lteSet(primaryValues, secondaryValues);
         break;
       case Spah.SpahQL.QueryParser.COMPARISON_GTE:
-        return Spah.State.DataHelper.gteSet(primaryValues, secondaryValues);
+        return Spah.SpahQL.DataHelper.gteSet(primaryValues, secondaryValues);
         break;
       case Spah.SpahQL.QueryParser.COMPARISON_JOINT_SET:
-        return Spah.State.DataHelper.jointSet(primaryValues, secondaryValues);
+        return Spah.SpahQL.DataHelper.jointSet(primaryValues, secondaryValues);
         break;
       case Spah.SpahQL.QueryParser.COMPARISON_DISJOINT_SET:
-        return !(Spah.State.DataHelper.jointSet(primaryValues, secondaryValues));
+        return !(Spah.SpahQL.DataHelper.jointSet(primaryValues, secondaryValues));
         break;
       case Spah.SpahQL.QueryParser.COMPARISON_SUPERSET:
-        return Spah.State.DataHelper.superSet(primaryValues, secondaryValues);
+        return Spah.SpahQL.DataHelper.superSet(primaryValues, secondaryValues);
         break;
       case Spah.SpahQL.QueryParser.COMPARISON_SUBSET:
-        return Spah.State.DataHelper.superSet(secondaryValues, primaryValues);
+        return Spah.SpahQL.DataHelper.superSet(secondaryValues, primaryValues);
         break;
     }
   }  
