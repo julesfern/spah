@@ -4,37 +4,33 @@ $(document).ready(function() {
   var qr = Spah.SpahQL.QueryRunner;
   // Load fixtures
   var queryData, queryTests;
+  console.log("Loading query data and fixtures...");
   
-  module("Spah.SpahQL.QueryRunner", {
-    setup: function() {
-      console.log("Loading query data and fixtures...");
-      
-      $.ajax("/client/test/fixtures/queryData.json", {
-        dataType: 'json',
-        async: false,
-        success: function(data, textStatus, jqXHR) {
-          console.log("Loaded data fixture:", data);
-          queryData = data;
-        },
-        error: function(jqXHR, textStatus, errorThrown) {
-          console.log("Failed to load query data: ", textStatus, errorThrown, jqXHR);
-        }
-      });
-      
-      $.ajax("/client/test/fixtures/queryTests.json", {
-        dataType: 'json',
-        async: false,
-        success: function(data, textStatus, jqXHR) {
-          console.log("Loaded test fixture:", data);
-          queryTests = data;
-        },
-        error: function(jqXHR, textStatus, errorThrown) {
-          console.log("Failed to load query data: ", textStatus, errorThrown, jqXHR);
-        }
-      });
-      
+  $.ajax("/client/test/fixtures/queryData.json", {
+    dataType: 'json',
+    async: false,
+    success: function(data, textStatus, jqXHR) {
+      console.log("Loaded data fixture:", data);
+      queryData = data;
+    },
+    error: function(jqXHR, textStatus, errorThrown) {
+      console.log("Failed to load query data: ", textStatus, errorThrown, jqXHR);
     }
   });
+  
+  $.ajax("/client/test/fixtures/queryTests.json", {
+    dataType: 'json',
+    async: false,
+    success: function(data, textStatus, jqXHR) {
+      console.log("Loaded test fixture:", data);
+      queryTests = data;
+    },
+    error: function(jqXHR, textStatus, errorThrown) {
+      console.log("Failed to load query tests: ", textStatus, errorThrown, jqXHR);
+    }
+  });
+  
+  module("Spah.SpahQL.QueryRunner");
   
   // error on #select with an assertion query
   
