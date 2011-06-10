@@ -272,7 +272,7 @@
        var readResult;
        
        if(query.charAt(j) == this.ATOM_SET_END) {
-         return [j+1, tokens]; // Empty set
+         return [j+1, {type: this.TOKEN_SET_LITERAL, values: tokens, isRange: usedRangeDelimiter}]; // Empty set
        }
        
        while(readResult = this.readAheadToken(j, query)) {

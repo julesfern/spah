@@ -442,10 +442,19 @@
               },
               {
                 name: "Disjoint set fail", query: "{'a','b','c'} }!{ {'c','d','e'}", result: false
+              },
+              {
+                name: "Item count on a set literal pass", query: "{true}", result: true
+              },
+              {
+                name: "Item count on a set literal fail", query: "{}", result: false
+              },
+              {
+                name: "Item truthiness on a set literal pass", query: "{true, false}", result: true
+              },
+              {
+                name: "Item truthiness on a set literal fail", query: "{false}", result: false
               }
-              
-              // item count
-              // item count query is false on false/null result
             ]
           },
           
