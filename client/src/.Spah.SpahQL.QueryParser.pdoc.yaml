@@ -57,7 +57,7 @@ file: /Users/danski/Sites/spah/client/src/Spah.SpahQL.QueryParser.js
 id: "Spah.SpahQL.QueryParser.parseQuery"
 parent_id: "Spah.SpahQL.QueryParser"
 type: class method
-line_number: 79
+line_number: 91
 description: |
   Parses a string query and returns a parsed <code>Spah.SpahQL.Query</code> instance.
   
@@ -84,7 +84,7 @@ file: /Users/danski/Sites/spah/client/src/Spah.SpahQL.QueryParser.js
 id: "Spah.SpahQL.QueryParser.readAheadToken"
 parent_id: "Spah.SpahQL.QueryParser"
 type: class method
-line_number: 158
+line_number: 170
 description: |
   Reads ahead through the given query string, starting at the current index, to identify the token at the given index.
   Returns an Array <code>{resumeAt, token, tokenType}</code> where <code>index</code> is the index at which the found token

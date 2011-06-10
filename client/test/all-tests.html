@@ -431,8 +431,19 @@
               {
                 name: "Superset Query->Set fail", query: "/arrNested/0/* }>{ {'a','b','c','d'}", result: false
               },
-              // joint set
-              // disjoint set
+              {
+                name: "Joint set pass", query: "{'a',1,2} }~{ {false,false,2}", result: true
+              },
+              {
+                name: "Joint set fail", query: "{'a','b','c'} }~{ {'d'}", result: false
+              },
+              {
+                name: "Disjoint set pass", query: "{'a','b','c'} }!{ {'d','e','f'}", result: true
+              },
+              {
+                name: "Disjoint set fail", query: "{'a','b','c'} }!{ {'c','d','e'}", result: false
+              }
+              
               // item count
               // item count query is false on false/null result
             ]

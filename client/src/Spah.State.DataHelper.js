@@ -386,6 +386,12 @@ jQuery.extend(Spah.State.DataHelper, {
     }
   },
   
+  /**
+   * Spah.State.DataHelper.eqHash(obj1, obj2[, objN]) -> Boolean result
+   *
+   * Compares two or more associative arrays for equality, enforcing strict key matching.
+   * Values are compared using the "eq" method.
+   **/
   "eqHash": function() {
     // Keys may be in any order but must have 1:1 mapping
     var hP, hI, hKeys;
@@ -404,6 +410,12 @@ jQuery.extend(Spah.State.DataHelper, {
     return true;
   },
   
+  /**
+   * Spah.State.DataHelper.eqArray(obj1, obj2[, objN]) -> Boolean result
+   *
+   * Compares two or more arrays for equality, enforcing strict ordering.
+   * Values are compared using the "eq" method.
+   **/
   "eqArray": function() {
     // Length, order and subequality must match
     var aP, aI;
@@ -424,7 +436,12 @@ jQuery.extend(Spah.State.DataHelper, {
     return true;
   },
 
-  
+  /**
+   * Spah.State.DataHelper.hashKeys(obj1, obj2[, objN]) -> Boolean result
+   *
+   * Compares two or more values of any type under simple javascript equality rules. 
+   * All arguments must be strictly equal or the function will return false.
+   **/
   "eqSimple": function() {
     var aP, aI, aT;
     aP = arguments[0]; aT = this.objectType(arguments[0]);
@@ -436,6 +453,13 @@ jQuery.extend(Spah.State.DataHelper, {
     return true;
   },
   
+  /**
+   * Spah.State.DataHelper.hashKeys(hash) -> Array of keys
+   * - hash (Object): The hash being exploded
+   *
+   * Retrieves all keys found in an associative array and returns them as an array
+   * without the corresponding values.
+   **/
   "hashKeys": function(hash) {
     var keys = [];
     for(var k in hash) {
@@ -444,6 +468,13 @@ jQuery.extend(Spah.State.DataHelper, {
     return keys.sort();
   },
   
+  /**
+   * Spah.State.DataHelper.hashValues(hash) -> Array of values
+   * - hash (Object): The hash being exploded
+   *
+   * Retrieves all values found in an associative array and returns them as an array
+   * without keys. Uniqueness is not enforced.
+   **/
   "hashValues": function(hash) {
     var values = [];
     for(var k in hash) {
@@ -452,22 +483,65 @@ jQuery.extend(Spah.State.DataHelper, {
     return values;
   },
   
+  /**
+   * Spah.State.DataHelper.mathGte(left, right) -> Boolean result
+   * - left (Object, Array, Boolean, String, Number, null): The value at the left-hand side of the comparator
+   * - right (Object, Array, Boolean, String, Number, null): The value at the right-hand side of the comparator
+   *
+   * Compares two objects of any type under the rules of Spah comparisons, returning true if the left value is
+   * greater than or equal to to the right value.
+   **/
   "mathGte": function(left, right) {
     return this.mathCompare(left, right, function(a,b) { return a >= b; });
   },
   
+  /**
+   * Spah.State.DataHelper.mathGt(left, right) -> Boolean result
+   * - left (Object, Array, Boolean, String, Number, null): The value at the left-hand side of the comparator
+   * - right (Object, Array, Boolean, String, Number, null): The value at the right-hand side of the comparator
+   *
+   * Compares two objects of any type under the rules of Spah comparisons, returning true if the left value is
+   * greater than to the right value.
+   **/
   "mathGt": function(left, right) {
     return this.mathCompare(left, right, function(a,b) { return a > b; });
   },
   
+  /**
+   * Spah.State.DataHelper.mathLte(left, right) -> Boolean result
+   * - left (Object, Array, Boolean, String, Number, null): The value at the left-hand side of the comparator
+   * - right (Object, Array, Boolean, String, Number, null): The value at the right-hand side of the comparator
+   *
+   * Compares two objects of any type under the rules of Spah comparisons, returning true if the left value is
+   * less than or equal to the right value.
+   **/
   "mathLte": function(left, right) {
     return this.mathCompare(left, right, function(a,b) { return a <= b; });
   },
   
+  /**
+   * Spah.State.DataHelper.mathLt(left, right) -> Boolean result
+   * - left (Object, Array, Boolean, String, Number, null): The value at the left-hand side of the comparator
+   * - right (Object, Array, Boolean, String, Number, null): The value at the right-hand side of the comparator
+   *
+   * Compares two objects of any type under the rules of Spah comparisons, returning true if the left value is
+   * less than the right value.
+   **/
   "mathLt": function(left, right) {
     return this.mathCompare(left, right, function(a,b) { return a < b; });
   },
   
+  /**
+   * Spah.State.DataHelper.mathCompare(left, right, callback) -> Boolean result
+   * - left (Object, Array, Boolean, String, Number, null): The value at the left-hand side of the comparator
+   * - right (Object, Array, Boolean, String, Number, null): The value at the right-hand side of the comparator
+   * - callback (Function): A callback function which will be evaluating the mathematical comparison.
+   *
+   * Compares two objects of any type under the rules of Spah comparisons - both objects must be the same type,
+   * and no type coercion will take place. The given callback function should accept two values as an argument and return the comparison result.
+   *
+   * Mostly used as a refactoring tool to wrap the global math comparison rules.
+   **/
   "mathCompare": function(left, right, callback) {
     var leftType = this.objectType(left);
     var rightType = this.objectType(right);
@@ -479,8 +553,8 @@ jQuery.extend(Spah.State.DataHelper, {
   
   /**
    * Spah.State.DataHelper.eqRough(left, right) -> Boolean result
-   * - left (*): The value at the left-hand side of the comparator
-   * - right (*): The value at the right-hand side of the comparator
+   * - left (Object, Array, Boolean, String, Number, null): The value at the left-hand side of the comparator
+   * - right (Object, Array, Boolean, String, Number, null): The value at the right-hand side of the comparator
    *
    * Compares two objects under the rules of rough equality. See readme for details.
    **/
@@ -513,18 +587,49 @@ jQuery.extend(Spah.State.DataHelper, {
     }
   },
   
+  /**
+   * Spah.State.DataHelper.eqStringRough(left, right) -> Boolean result
+   * - left (String): The value at the left-hand side of the comparator
+   * - right (String): The value at the right-hand side of the comparator
+   *
+   * Compares two strings under the rules of rough equality. The right-hand value is parsed as a RegExp
+   * and a result of true is returned if the left value matches it.
+   **/
   "eqStringRough": function(left, right) {
     return (left.match(new RegExp(right, "g")));
   },
   
+  /**
+   * Spah.State.DataHelper.eqNumberRough(left, right) -> Boolean result
+   * - left (Number): The value at the left-hand side of the comparator
+   * - right (Number): The value at the right-hand side of the comparator
+   *
+   * Compares two numbers for equality using integer accuracy only.
+   **/
   "eqNumberRough": function(left, right) {
     return (Math.floor(left) == Math.floor(right));
   },
   
+  /**
+   * Spah.State.DataHelper.eqArrayRough(left, right) -> Boolean result
+   * - left (Array): The value at the left-hand side of the comparator
+   * - right (Array): The value at the right-hand side of the comparator
+   *
+   * Compares two arrays under the rules of rough equality. A result of true
+   * is returned if the arrays are joint sets, containing any two equal values.
+   **/
   "eqArrayRough": function(left, right) {
     return this.jointSet(left, right);
   },
   
+  /**
+   * Spah.State.DataHelper.eqHashRough(left, right) -> Boolean result
+   * - left (Object): The value at the left-hand side of the comparator
+   * - right (Object): The value at the right-hand side of the comparator
+   *
+   * Compares two objects under the rules of rough equality. A result of true
+   * is returned if the hashes are joint sets, containing any two equal values at the same key.
+   **/
   "eqHashRough": function(left, right) {
     for(var k in left) {
       if(right[k] && this.eq(left[k], right[k])) return true;
@@ -532,10 +637,27 @@ jQuery.extend(Spah.State.DataHelper, {
     return false;
   },
   
+  /**
+   * Spah.State.DataHelper.eqBooleanRough(left, right) -> Boolean result
+   * - left (Boolean, null): The value at the left-hand side of the comparator
+   * - right (Boolean, null): The value at the right-hand side of the comparator
+   *
+   * Compares two boolean-type objects under the rules of rough equality. A result of true
+   * is returned if both values are truthy or if both values evaluate to false.
+   **/
   "eqBooleanRough": function(left, right) {
     return ((left && right) || (!left && !right));
   },
   
+  /**
+   * Spah.State.DataHelper.eqSetStrict(set1, set2) -> Boolean result
+   * - set1 (Array): The value at the left-hand side of the comparator
+   * - set2 (Array): The value at the right-hand side of the comparator
+   *
+   * Compares two sets under the rules of strict equality. A result of true
+   * is returned if both sets have a 1:1 relationship of values. The values
+   * do not have to appear in the same order.
+   **/
   "eqSetStrict": function(set1, set2) {
     if(set1.length != set2.length) return false;
     var foundIndexMap = [];
@@ -552,30 +674,91 @@ jQuery.extend(Spah.State.DataHelper, {
     return (foundIndexMap.length == set1.length);
   },
 
+  /**
+   * Spah.State.DataHelper.eqSetRough(set1, set2) -> Boolean result
+   * - set1 (Array): The value at the left-hand side of the comparator
+   * - set2 (Array): The value at the right-hand side of the comparator
+   *
+   * Compares two sets under the rules of rough equality. A result of true
+   * is returned if any value in the left-hand set is roughly equal to any
+   * value in the right-hand set.
+   **/
   "eqSetRough": function(set1, set2) {
     return this.jointSetWithCallback(set1, set2, function(a,b) { return this.eqRough(a,b); });
   },
   
+  /**
+   * Spah.State.DataHelper.jointSet(set1, set2) -> Boolean result
+   * - set1 (Array): The value at the left-hand side of the comparator
+   * - set2 (Array): The value at the right-hand side of the comparator
+   *
+   * Compares two sets and returns a result of true if any value in the left-hand
+   * set is strictly equal to any value from the right-hand set.
+   **/
   "jointSet": function(set1, set2) {
     return this.jointSetWithCallback(set1, set2, function(a,b) { return this.eq(a,b); });
   },
   
+  /**
+   * Spah.State.DataHelper.gteSet(set1, set2) -> Boolean result
+   * - set1 (Array): The value at the left-hand side of the comparator
+   * - set2 (Array): The value at the right-hand side of the comparator
+   *
+   * Compares two sets and returns a result of true if any value in the left-hand
+   * set is greater than or equal to any value from the right-hand set.
+   **/
   "gteSet": function(set1, set2) {
     return this.jointSetWithCallback(set1, set2, function(a,b) { return this.mathGte(a,b) });
   },
   
+  /**
+   * Spah.State.DataHelper.lteSet(set1, set2) -> Boolean result
+   * - set1 (Array): The value at the left-hand side of the comparator
+   * - set2 (Array): The value at the right-hand side of the comparator
+   *
+   * Compares two sets and returns a result of true if any value in the left-hand
+   * set is less than or equal to any value from the right-hand set.
+   **/
   "lteSet": function(set1, set2) {
     return this.jointSetWithCallback(set1, set2, function(a,b) { return this.mathLte(a,b) });
   },
   
+  /**
+   * Spah.State.DataHelper.gtSet(set1, set2) -> Boolean result
+   * - set1 (Array): The value at the left-hand side of the comparator
+   * - set2 (Array): The value at the right-hand side of the comparator
+   *
+   * Compares two sets and returns a result of true if any value in the left-hand
+   * set is greater than any value from the right-hand set.
+   **/
   "gtSet": function(set1, set2) {
     return this.jointSetWithCallback(set1, set2, function(a,b) { return this.mathGt(a,b) });
   },
   
+  /**
+   * Spah.State.DataHelper.ltSet(set1, set2) -> Boolean result
+   * - set1 (Array): The value at the left-hand side of the comparator
+   * - set2 (Array): The value at the right-hand side of the comparator
+   *
+   * Compares two sets and returns a result of true if any value in the left-hand
+   * set is less than any value from the right-hand set.
+   **/
   "ltSet": function(set1, set2) {
     return this.jointSetWithCallback(set1, set2, function(a,b) { return this.mathLt(a,b) });
   },
   
+  /**
+   * Spah.State.DataHelper.jointSetWithCallback(set1, set2, callback) -> Boolean result
+   * - set1 (Array): The value at the left-hand side of the comparator
+   * - set2 (Array): The value at the right-hand side of the comparator
+   * - callback (Function): A function to be used for comparing the values. Should accept two values as arguments.
+   *
+   * Iterates over both sets such that every combination of values from the two is passed to the callback function
+   * for comparison. If the callback function at any point returns true, the method exits and returns true. Once
+   * all combinations have been exhausted and no matches are found, false will be returned.
+   *
+   * Mostly used to refactor the various joint set methods (jointSet, eqSetRough, gteSet, gtSet, ltSet, lteSet to name a few).
+   **/
   "jointSetWithCallback": function(set1, set2, callback) {
     for(var i=0; i < set2.length; i++) {
       for(j=0; j < set1.length; j++) {
@@ -585,6 +768,14 @@ jQuery.extend(Spah.State.DataHelper, {
     return false;
   },
   
+  /**
+   * Spah.State.DataHelper.superSet(superset, subset) -> Boolean result
+   * - superset (Array): The value being asserted as a superset of the 'subset' argument.
+   * - subset (Array): The value being asserted as a subset of the 'superset' argument.
+   *
+   * Compares two sets and returns a result of true if every value in the given subset
+   * has a corresponding equal in the superset. Order of values within the sets is not enforced.
+   **/
   "superSet": function(superset, subset) {
     var foundIndexMap = [];
     isubset: for(var i=0; i < subset.length; i++) {
@@ -598,6 +789,20 @@ jQuery.extend(Spah.State.DataHelper, {
       }
     }
     return (subset.length == foundIndexMap.length);
+  },
+  
+  /**
+   * Spah.State.DataHelper.truthySet(set) -> Boolean result
+   * - set (Array): The value being asserted as a "truthy" set.
+   *
+   * Asserts that a set may be considered "truthy", i.e. containing one or more
+   * values that evaluate to true under javascript language rules.
+   **/
+  "truthySet": function(set) {
+    for(var i=0; i < set.length; i++) {
+      if(set[i]) return true;
+    }
+    return false;
   }
   
 });
