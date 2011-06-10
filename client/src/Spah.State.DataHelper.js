@@ -61,14 +61,14 @@ jQuery.extend(Spah.State.DataHelper, {
     var path = path || ""; // the current path stack
     var modifications = {}; // a collector for paths and their modification types
     var modified = false; // set to true if a modification occurred at this tree depth
-    var mergeResult = null;
+    var mergeResult;
     var deltaType = this.objectType(delta);
     var targetType = this.objectType(target);
     var target = target;
     
     if(topStack) {
       Spah.log("State merge: Beginning merge of delta->target :", delta, target);
-      var target = jQuery.extend({}, target);
+      target = jQuery.extend({}, target);
     }
     
     
@@ -159,7 +159,7 @@ jQuery.extend(Spah.State.DataHelper, {
     //Spah.log("State update: Processing array merge at "+path);
     for(a=0; a<Math.max(delta.length, target.length); a++) {
       arrPath = path+"/"+a;
-      mergeResult = this.merge(delta[a], target[a], arrPath);
+      var mergeResult = this.merge(delta[a], target[a], arrPath);
       
       if(a < delta.length) {
         // Modify
@@ -195,7 +195,7 @@ jQuery.extend(Spah.State.DataHelper, {
     // Log modification at root
     modifications[path] = this.modificationSymbol(delta, null);
     // Create modifications for inner keys
-    target = [];
+    var target = [];
     for(i=0; i<delta.length; i++) {
       arrPath = path+"/"+i;
       mergeResult = this.merge(delta[i], target[i], arrPath);
@@ -209,6 +209,7 @@ jQuery.extend(Spah.State.DataHelper, {
   "nullifyArray": function(target, path) {
     var modifications = {};
     var modified = true;
+    var mergeResult = null;
     var i, arrPath;
 
     // Log modifications at hash root
@@ -226,6 +227,7 @@ jQuery.extend(Spah.State.DataHelper, {
     var modifications = {};
     var modified = false;
     var k, keyList, key, sKey;
+    var mergeResult = null;
     
     keyList = [];
     for(key in delta) {
@@ -258,7 +260,7 @@ jQuery.extend(Spah.State.DataHelper, {
     // Log modification at hash root
     modifications[path] = this.modificationSymbol(delta, null);
     // Create modifications for inner keys
-    target = {};
+    var target = {};
     for(hKey in delta) {
       hashPath = path+"/"+hKey;
       mergeResult = this.merge(delta[hKey], target[hKey], hashPath);
@@ -272,7 +274,7 @@ jQuery.extend(Spah.State.DataHelper, {
     var modifications = {};
     var modified = true;
     var hKey, hashPath;
-
+    var mergeResult = null;
     // Log modifications at hash root
     modifications[path] = this.modificationSymbol(null, target);
     // Log removal of each key
@@ -761,7 +763,7 @@ jQuery.extend(Spah.State.DataHelper, {
    **/
   "jointSetWithCallback": function(set1, set2, callback) {
     for(var i=0; i < set2.length; i++) {
-      for(j=0; j < set1.length; j++) {
+      for(var j=0; j < set1.length; j++) {
         if(callback.apply(this, [set1[j], set2[i]])) return true;
       }
     }

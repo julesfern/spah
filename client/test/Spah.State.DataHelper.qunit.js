@@ -42,7 +42,7 @@ $(document).ready(function() {
   
   test("Merges arrays correctly", function() {
     var mergeResult = Spah.State.DataHelper.merge(Fixtures.State.Arrays.delta, Fixtures.State.Arrays.target);
-    var updates = mergeResult.modifications; data = mergeResult.data;
+    var updates = mergeResult.modifications; var data = mergeResult.data;
     var expectedState = Fixtures.State.Arrays.expected;
     
     // Manually assert everything about the updated data
@@ -64,12 +64,12 @@ $(document).ready(function() {
     
     // Assert identical keys, values and counts
     var expectedCount = 0;
-    for(expectedKey in expectedModifications) {
+    for(var expectedKey in expectedModifications) {
       equal(updates[expectedKey], expectedModifications[expectedKey], expectedKey+" matched update type");
       expectedCount++;
     }
     var actualCount = 0;
-    for(countKey in updates) {
+    for(var countKey in updates) {
       actualCount++;
     }
     equal(actualCount, expectedCount, "Updates had correct key count");
@@ -93,7 +93,7 @@ $(document).ready(function() {
   
   test("Merges hashes correctly", function() {
     var mergeResult = Spah.State.DataHelper.merge(Fixtures.State.Hashes.delta, Fixtures.State.Hashes.target);
-    var updates = mergeResult.modifications; data = mergeResult.data;
+    var updates = mergeResult.modifications; var data = mergeResult.data;
     var expectedState = Fixtures.State.Hashes.expected;
     
     // Manually assert everything about the updated data
@@ -111,12 +111,12 @@ $(document).ready(function() {
     
     // Assert identical keys, values and counts
     var expectedCount = 0;
-    for(expectedKey in expectedModifications) {
+    for(var expectedKey in expectedModifications) {
       equal(updates[expectedKey], expectedModifications[expectedKey], expectedKey+" matched update type");
       expectedCount++;
     }
     var actualCount = 0;
-    for(countKey in updates) {
+    for(var countKey in updates) {
       actualCount++;
     }
     equal(actualCount, expectedCount, "Updates had correct key count");
@@ -147,7 +147,7 @@ $(document).ready(function() {
   
   test("Merges base object types correctly", function() {
     var mergeResult = Spah.State.DataHelper.merge(Fixtures.State.BaseTypes.delta, Fixtures.State.BaseTypes.target);
-    var updates = mergeResult.modifications; data = mergeResult.data;
+    var updates = mergeResult.modifications; var data = mergeResult.data;
     var expectedState = Fixtures.State.BaseTypes.expected;
     
     // Manually assert everything about the updated data
@@ -160,12 +160,12 @@ $(document).ready(function() {
     
     // Assert identical keys, values and counts
     var expectedCount = 0;
-    for(expectedKey in expectedModifications) {
+    for(var expectedKey in expectedModifications) {
       equal(updates[expectedKey], expectedModifications[expectedKey], expectedKey+" matched update type");
       expectedCount++;
     }
     var actualCount = 0;
-    for(countKey in updates) {
+    for(var countKey in updates) {
       actualCount++;
     }
     equal(actualCount, expectedCount, "Updates had correct key count");
@@ -186,7 +186,7 @@ $(document).ready(function() {
   
   test("Merges the complex fixture correctly", function() {
     var mergeResult = Spah.State.DataHelper.merge(Fixtures.State.Complex.delta, Fixtures.State.Complex.target);
-    var updates = mergeResult.modifications; data = mergeResult.data;
+    var updates = mergeResult.modifications; var data = mergeResult.data;
     
     // Manually assert everything about the updated data
     var expectedModifications = {
