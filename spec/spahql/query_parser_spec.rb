@@ -18,11 +18,7 @@ describe Spah::SpahQL::QueryParser do
     Spah::SpahQL::QueryParser.read_ahead_string_literal(0, "foo, bar").should be_nil
     
     # Errors
-    begin
-      Spah::SpahQL::QueryParser.read_ahead_string_literal(3, "---'foobar---")
-      [].should == "exception wasn't raised"
-    rescue
-    end
+    lambda { Spah::SpahQL::QueryParser.read_ahead_string_literal(3, "---'foobar---") }.should raise_error
   end
   
   it "Returns a correct new index and found string when reading ahead for numeric literals" do
@@ -59,9 +55,75 @@ describe Spah::SpahQL::QueryParser do
     path_comp[1][:recursive].should be_true
     path_comp[1][:filter_queries].length.should == 2
   end
-  it "Returns a correct new index and found string when reading ahead for filter queries"
-  it "Returns a correct new index and found string when reading ahead for set literals"
-  it "Returns a correct new index and found string when reading ahead for selection queries"
-  it "Returns the correct structure when parsing full queries"
-  it "Parses a flat root query"
+  
+  it "Returns a correct new index and found string when reading ahead for filter queries" do
+    res = Spah::SpahQL::QueryParser.read_ahead_filter_query(5, "/key1[/moo == ']']")
+    res[0].should == 18
+    res[1].should_not be_nil
+  end
+  
+  it "Returns a correct new index and found string when reading ahead for selection queries" do
+    res = Spah::SpahQL::QueryParser.read_ahead_selection_query(0, "/key1//key2[$/foo=='bar']/.explode[//foo == 2][//bar == 3]")
+    res[0].should == 58
+    res[1].should == {
+      :use_root => false, 
+      :path_components => [
+        {:key => "key1", :property => nil, :recursive => false, :filter_queries => []},
+        {:key => "key2", :property => nil, :recursive => true, :filter_queries => [
+          Spah::SpahQL::QueryParser.parse_query("$/foo=='bar'")
+        ]},
+        {:key => nil, :property => "explode", :recursive => false, :filter_queries => [
+          Spah::SpahQL::QueryParser.parse_query("//foo == 2"), 
+          Spah::SpahQL::QueryParser.parse_query("//bar == 3")
+        ]}
+      ],
+      :type => Spah::SpahQL::QueryParser::TOKEN_SELECTION_QUERY
+    }
+  end
+  
+  it "Returns a correct new index and found string when reading ahead for set literals" do
+    Spah::SpahQL::QueryParser.read_ahead_set_literal(0, "{1,'2,',true}").should == [
+      13, {:type => Spah::SpahQL::QueryParser::TOKEN_SET_LITERAL, :values => [1,"2,",true], :is_range => false}
+    ]
+    Spah::SpahQL::QueryParser.read_ahead_set_literal(2, "--{1.5,false,true}--").should == [
+      18, {:type => Spah::SpahQL::QueryParser::TOKEN_SET_LITERAL, :values => [1.5,false,true], :is_range => false}
+    ]
+    Spah::SpahQL::QueryParser.read_ahead_set_literal(2, "--{'a'..'d'}--").should == [
+      12, {:type => Spah::SpahQL::QueryParser::TOKEN_SET_LITERAL, :values => ['a','d'], :is_range => true}
+    ]
+    
+    # Errors
+    lambda { Spah::SpahQL::QueryParser.read_ahead_set_literal(0, "{'a'..'d',2}--") }.should raise_error
+    lambda { Spah::SpahQL::QueryParser.read_ahead_set_literal(0, "{'b','a'..'d'}--") }.should raise_error
+  end
+  
+  
+  it "Returns the correct structure when parsing full queries" do
+    q = Spah::SpahQL::QueryParser.parse_query("/foo//bar/.property/baz[$//bar]");
+    q.primary_token.should == {
+      :use_root => false,
+      :path_components => [
+        {:key => "foo", :property => nil, :recursive => false, :filter_queries => []},
+        {:key => "bar", :property => nil, :recursive => true, :filter_queries => []},
+        {:key => nil, :property => "property", :recursive => false, :filter_queries => []},
+        {:key => "baz", :property => nil, :recursive => false, :filter_queries => [Spah::SpahQL::QueryParser.parse_query("$//bar")]}
+      ],
+      :type => Spah::SpahQL::QueryParser::TOKEN_SELECTION_QUERY
+    }
+    
+    q.comparison_operator.should be_nil
+    q.secondary_token.should be_nil
+    q.assertion.should be_false
+  end
+  
+  it "Parses a flat root query" do
+    q = Spah::SpahQL::QueryParser.parse_query("/");
+    q.primary_token.should == {
+      :use_root => false,
+      :path_components => [
+        {:key => nil, :property => nil, :recursive => false, :filter_queries => []}
+      ],
+      :type => Spah::SpahQL::QueryParser::TOKEN_SELECTION_QUERY
+    }
+  end
 end

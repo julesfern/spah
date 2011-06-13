@@ -413,7 +413,9 @@
            scopeDepth++; queryToken += ch; j++;
          }
          else if(ch == this.ATOM_FILTER_QUERY_END) {
-           scopeDepth--; queryToken += ch; j++;
+           scopeDepth--; j++;
+           if(scopeDepth == 0) break;
+           queryToken += ch;
          }
          else if(strReadAheadResult = this.readAheadStringLiteral(j, query)) {
            queryToken += query.substring(j,strReadAheadResult[0]); j = strReadAheadResult[0];
@@ -422,8 +424,8 @@
            queryToken += ch; j++;
          }         
        }
-       if(queryToken.length > 1) { // query token includes final closing bracket
-         return [j, this.parseQuery(queryToken.substr(0, queryToken.length-1))];
+       if(queryToken.length > 0) { // query token does not include final closing bracket
+         return [j, this.parseQuery(queryToken)];
        }
        else {
          this.throwParseErrorAt(j, query, "Found unexpected ATOM_FILTER_QUERY_END, expected TOKEN_SELECTION_QUERY or TOKEN_ASSERTION_QUERY. Looked like those brackets were empty - make sure they have a query in them.");

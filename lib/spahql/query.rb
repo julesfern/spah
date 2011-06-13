@@ -8,10 +8,28 @@ module Spah
       # Instantiates a new Query instance with the given raw string.
       def initialize(raw_string)
         @raw_string = raw_string
+        @assertion = false
       end
       
       # The string from which this query was parsed.
       attr_reader :raw_string
+      
+      # The left-hand (or only) token, either a set literal or a selection query
+      attr_accessor :primary_token
+      
+      # The right-hand token, either a set literal or a selection query. Only present if there is a comparison operator also.
+      attr_accessor :secondary_token
+      
+      # The comparison operator that should be used when evaluating the two tokens as an assertion
+      attr_accessor :comparison_operator
+      
+      # A boolean flag set to indicate that this is an assertion-only query.
+      attr_accessor :assertion
+      
+      # Sugary version of #assertion
+      def assertion?
+        assertion
+      end
       
     end
   end

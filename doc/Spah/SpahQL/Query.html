@@ -100,6 +100,88 @@ execution against a dataset.
       <li class="public ">
   <span class="summary_signature">
     
+      <a href="#assertion-instance_method" title="#assertion (instance method)">- (Object) <strong>assertion</strong> </a>
+    
+
+    
+  </span>
+  
+  
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+A boolean flag set to indicate that this is an assertion-only query.
+</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#comparison_operator-instance_method" title="#comparison_operator (instance method)">- (Object) <strong>comparison_operator</strong> </a>
+    
+
+    
+  </span>
+  
+  
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+The comparison operator that should be used when evaluating the two tokens
+as an assertion.
+</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#primary_token-instance_method" title="#primary_token (instance method)">- (Object) <strong>primary_token</strong> </a>
+    
+
+    
+  </span>
+  
+  
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+The left-hand (or only) token, either a set literal or a selection query.
+</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
       <a href="#raw_string-instance_method" title="#raw_string (instance method)">- (Object) <strong>raw_string</strong> </a>
     
 
@@ -124,6 +206,33 @@ The string from which this query was parsed.
 </li>
 
     
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#secondary_token-instance_method" title="#secondary_token (instance method)">- (Object) <strong>secondary_token</strong> </a>
+    
+
+    
+  </span>
+  
+  
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+The right-hand token, either a set literal or a selection query.
+</p>
+</div></span>
+  
+</li>
+
+    
   </ul>
 
 
@@ -134,6 +243,30 @@ The string from which this query was parsed.
     </h2>
 
     <ul class="summary">
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#assertion%3F-instance_method" title="#assertion? (instance method)">- (Boolean) <strong>assertion?</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+Sugary version of #assertion.
+</p>
+</div></span>
+  
+</li>
+
       
         <li class="public ">
   <span class="summary_signature">
@@ -193,13 +326,15 @@ Instantiates a new Query instance with the given raw string.
 
 9
 10
-11</pre>
+11
+12</pre>
     </td>
     <td>
       <pre class="code"><span class="info file"># File 'lib/spahql/query.rb', line 9</span>
 
 <span class='def def kw'>def</span> <span class='initialize identifier id'>initialize</span><span class='lparen token'>(</span><span class='raw_string identifier id'>raw_string</span><span class='rparen token'>)</span>
   <span class='@raw_string ivar id'>@raw_string</span> <span class='assign token'>=</span> <span class='raw_string identifier id'>raw_string</span>
+  <span class='@assertion ivar id'>@assertion</span> <span class='assign token'>=</span> <span class='false false kw'>false</span>
 <span class='end end kw'>end</span>
 </pre>
     </td>
@@ -213,10 +348,140 @@ Instantiates a new Query instance with the given raw string.
     <h2>Instance Attribute Details</h2>
     
       
+      <span id="assertion=-instance_method"></span>
+      <span id="assertion-instance_method"></span>
+      <div class="method_details first">
+  <p class="signature first" id="assertion-instance_method">
+  
+    - (<tt>Object</tt>) <strong>assertion</strong> 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+A boolean flag set to indicate that this is an assertion-only query.
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+27
+28
+29</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/spahql/query.rb', line 27</span>
+
+<span class='def def kw'>def</span> <span class='assertion identifier id'>assertion</span>
+  <span class='@assertion ivar id'>@assertion</span>
+<span class='end end kw'>end</span>
+</pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id="comparison_operator=-instance_method"></span>
+      <span id="comparison_operator-instance_method"></span>
+      <div class="method_details ">
+  <p class="signature " id="comparison_operator-instance_method">
+  
+    - (<tt>Object</tt>) <strong>comparison_operator</strong> 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+The comparison operator that should be used when evaluating the two tokens
+as an assertion
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+24
+25
+26</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/spahql/query.rb', line 24</span>
+
+<span class='def def kw'>def</span> <span class='comparison_operator identifier id'>comparison_operator</span>
+  <span class='@comparison_operator ivar id'>@comparison_operator</span>
+<span class='end end kw'>end</span>
+</pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id="primary_token=-instance_method"></span>
+      <span id="primary_token-instance_method"></span>
+      <div class="method_details ">
+  <p class="signature " id="primary_token-instance_method">
+  
+    - (<tt>Object</tt>) <strong>primary_token</strong> 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+The left-hand (or only) token, either a set literal or a selection query
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+18
+19
+20</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/spahql/query.rb', line 18</span>
+
+<span class='def def kw'>def</span> <span class='primary_token identifier id'>primary_token</span>
+  <span class='@primary_token ivar id'>@primary_token</span>
+<span class='end end kw'>end</span>
+</pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
       <span id=""></span>
       <span id="raw_string-instance_method"></span>
-      <div class="method_details first">
-  <p class="signature first" id="raw_string-instance_method">
+      <div class="method_details ">
+  <p class="signature " id="raw_string-instance_method">
   
     - (<tt>Object</tt>) <strong>raw_string</strong>  <span class="extras">(readonly)</span>
   
@@ -239,12 +504,12 @@ The string from which this query was parsed.
       <pre class="lines">
 
 
-14
 15
-16</pre>
+16
+17</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/spahql/query.rb', line 14</span>
+      <pre class="code"><span class="info file"># File 'lib/spahql/query.rb', line 15</span>
 
 <span class='def def kw'>def</span> <span class='raw_string identifier id'>raw_string</span>
   <span class='@raw_string ivar id'>@raw_string</span>
@@ -255,13 +520,116 @@ The string from which this query was parsed.
 </table>
 </div>
     
+      
+      <span id="secondary_token=-instance_method"></span>
+      <span id="secondary_token-instance_method"></span>
+      <div class="method_details ">
+  <p class="signature " id="secondary_token-instance_method">
+  
+    - (<tt>Object</tt>) <strong>secondary_token</strong> 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+The right-hand token, either a set literal or a selection query. Only
+present if there is a comparison operator also.
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+21
+22
+23</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/spahql/query.rb', line 21</span>
+
+<span class='def def kw'>def</span> <span class='secondary_token identifier id'>secondary_token</span>
+  <span class='@secondary_token ivar id'>@secondary_token</span>
+<span class='end end kw'>end</span>
+</pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
   </div>
 
+
+  <div id="instance_method_details" class="method_details_list">
+    <h2>Instance Method Details</h2>
+    
+    
+      <div class="method_details first">
+  <p class="signature first" id="assertion?-instance_method">
+  
+    - (<tt>Boolean</tt>) <strong>assertion?</strong> 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+Sugary version of #assertion
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  <h3>Returns:</h3>
+<ul class="return">
+  
+    <li>
+      
+        <span class='type'>(<tt>Boolean</tt>)</span>
+      
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+30
+31
+32</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/spahql/query.rb', line 30</span>
+
+<span class='def def kw'>def</span> <span class='assertion? fid id'>assertion?</span>
+  <span class='assertion identifier id'>assertion</span>
+<span class='end end kw'>end</span>
+</pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+  </div>
 
 </div>
     
     <div id="footer">
-  Generated on Mon Jun 13 19:17:47 2011 by 
+  Generated on Mon Jun 13 21:23:44 2011 by 
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.6.8 (ruby-1.8.7).
 </div>
