@@ -53,8 +53,13 @@ $(document).ready(function() {
     deepEqual(Spah.SpahQL.QueryParser.readAheadPathComponent(5, "/key1//key2"), [11, {key: "key2", property: null, recursive: true, filterQueries: []}]);
     deepEqual(Spah.SpahQL.QueryParser.readAheadPathComponent(5, "/key1//.size"), [12, {key: null, property: "size", recursive: true, filterQueries: []}]);
     
-    // Errors
     // Property with filter query
+    var path_comp = Spah.SpahQL.QueryParser.readAheadPathComponent(5, "/key1//foo[/a == /b][/foo == 3]");
+    equal(31, path_comp[0]);
+    equal("foo", path_comp[1].key);
+    equal(null, path_comp[1].property);
+    equal(true, path_comp[1].recursive);
+    equal(2, path_comp[1].filterQueries.length);
   });
   
   test("Returns a correct new index and found number when reading ahead for filter queries", function() {

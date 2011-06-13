@@ -1,0 +1,5 @@
+lib/spahql/spahql.rb 5427884b545c4f5cce4b93ace27c2209db8ce3df
+lib/spahql/errors.rb 46c3085f1a0164b9931c2c03bf4a552ae76a1ae0
+lib/spahql/query_parser.rb dcb1a745b77b9d7bc1680eddab935e0d65ba369d
+lib/spah.rb 9d0db9476a547221f235beca8b592545cc63e702
+lib/spahql/query.rb e90825add52a24a5009e770dcdd95c922ec13814

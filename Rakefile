@@ -54,6 +54,13 @@ task :default => :spec
 require 'yard'
 YARD::Rake::YardocTask.new
 
+task :docs do
+  puts "Generating ruby docs using YARD"
+  Rake::Task["yard"].invoke
+  puts "Generating client docs using PDOC"
+  Rake::Task["client:docs"].invoke
+end
+
 namespace :client do
   desc "Build the javascript application from source. N.B. Google Closure must be in your environment path."
   task :build, :compiler do |t, args|
