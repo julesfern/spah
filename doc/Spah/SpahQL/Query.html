@@ -247,6 +247,30 @@ The right-hand token, either a set literal or a selection query.
         <li class="public ">
   <span class="summary_signature">
     
+      <a href="#%3D%3D-instance_method" title="#== (instance method)">- (Object) <strong>==</strong>(other_query) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+Equality helper.
+</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
       <a href="#assertion%3F-instance_method" title="#assertion? (instance method)">- (Boolean) <strong>assertion?</strong> </a>
     
 
@@ -572,7 +596,53 @@ present if there is a comparison operator also.
     
     
       <div class="method_details first">
-  <p class="signature first" id="assertion?-instance_method">
+  <p class="signature first" id="==-instance_method">
+  
+    - (<tt>Object</tt>) <strong>==</strong>(other_query) 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+Equality helper
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+35
+36
+37
+38
+39
+40</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/spahql/query.rb', line 35</span>
+
+<span class='def def kw'>def</span> <span class='eq op'>==</span><span class='lparen token'>(</span><span class='other_query identifier id'>other_query</span><span class='rparen token'>)</span>
+  <span class='lparen token'>(</span><span class='other_query identifier id'>other_query</span><span class='dot token'>.</span><span class='is_a? fid id'>is_a?</span><span class='lparen token'>(</span><span class='self self kw'>self</span><span class='dot token'>.</span><span class='class identifier id'>class</span><span class='rparen token'>)</span><span class='rparen token'>)</span> <span class='and and kw'>and</span> 
+  <span class='other_query identifier id'>other_query</span><span class='dot token'>.</span><span class='primary_token identifier id'>primary_token</span> <span class='eq op'>==</span> <span class='self self kw'>self</span><span class='dot token'>.</span><span class='primary_token identifier id'>primary_token</span> <span class='and and kw'>and</span> 
+  <span class='other_query identifier id'>other_query</span><span class='dot token'>.</span><span class='comparison_operator identifier id'>comparison_operator</span> <span class='eq op'>==</span> <span class='self self kw'>self</span><span class='dot token'>.</span><span class='comparison_operator identifier id'>comparison_operator</span> <span class='and and kw'>and</span>
+  <span class='other_query identifier id'>other_query</span><span class='dot token'>.</span><span class='secondary_token identifier id'>secondary_token</span> <span class='eq op'>==</span> <span class='self self kw'>self</span><span class='dot token'>.</span><span class='secondary_token identifier id'>secondary_token</span>
+<span class='end end kw'>end</span>
+</pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <p class="signature " id="assertion?-instance_method">
   
     - (<tt>Boolean</tt>) <strong>assertion?</strong> 
   
@@ -629,7 +699,7 @@ Sugary version of #assertion
 </div>
     
     <div id="footer">
-  Generated on Mon Jun 13 21:23:44 2011 by 
+  Generated on Tue Jun 14 12:03:46 2011 by 
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.6.8 (ruby-1.8.7).
 </div>

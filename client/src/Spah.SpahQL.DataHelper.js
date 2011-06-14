@@ -11,7 +11,7 @@ Spah.State = window["Spah"]["State"];
 
 // Declare and export class
 Spah.SpahQL.DataHelper = function() { };
-window["Spah"]["State"]["Merger"] = Spah.SpahQL.DataHelper;
+window["Spah"]["SpahQL"]["DataHelper"] = Spah.SpahQL.DataHelper;
 
 // Singletons
 jQuery.extend(Spah.SpahQL.DataHelper, {

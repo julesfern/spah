@@ -1,0 +1,23 @@
+---
+id: "Spah.SpahQL.Token.Simple"
+parent_id: "Spah.SpahQL.Token"
+type: class
+superclass_id: "Spah.SpahQL.Token.Base"
+line_number: 6
+description: |
+  A simple superclass for all simple tokens that carry a single value or subtoken.
+
+file: /Users/danski/Sites/spah/client/src/Spah.SpahQL.Token.Simple.js
+
+---
+id: "new Spah.SpahQL.Token.Simple"
+parent_id: "Spah.SpahQL.Token.Simple"
+type: constructor
+line_number: 27
+description: |
+  Instantiate a new simple token with the given primitive value.
+
+signatures:
+ -
+  signature: "new Spah.SpahQL.Token.Simple(value)"
+file: /Users/danski/Sites/spah/client/src/Spah.SpahQL.Token.Simple.js

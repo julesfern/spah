@@ -1,0 +1,10 @@
+---
+id: "Spah.SpahQL.Token"
+parent_id: "Spah.SpahQL"
+type: class
+line_number: 7
+description: |
+  A containing module for all token types - queries, filters, comparison operators, sets, literals etc.
+  that are encountered during the parsing process.
+
+file: /Users/danski/Sites/spah/client/src/Spah.SpahQL.Token.js

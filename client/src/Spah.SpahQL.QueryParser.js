@@ -44,10 +44,6 @@
    COMPARISON_DISJOINT_SET: "}!{",
 
    
-   // Atom configuration: strings
-   ATOM_QUOTE_SINGLE: "'",
-   ATOM_QUOTE_DOUBLE: '"',
-   ATOM_ESCAPE: '\\',
    // Atom configuration: numerics
    ATOM_NUMERIC_POINT: ".",
    ATOM_NUMERIC_NEGATIVE: "-",
@@ -187,37 +183,6 @@
      else return null;
    },
    
-   // Reads the string literal ahead and returns the found string and a new index
-   // or null if no string lit found at this index
-   readAheadStringLiteral: function(i, query) {
-     var ch = query.charAt(i);
-     if(ch == this.ATOM_QUOTE_SINGLE || ch == this.ATOM_QUOTE_DOUBLE) {
-       var j = 0;       
-       var quoteType = ch;
-       var str = "";
-       while(true) {
-         j++;
-         if(query.length < i+j) {
-           this.throwParseErrorAt(i, query, "Encountered EOL when expecting "+((quoteType==this.ATOM_QUOTE_SINGLE)? "ATOM_QUOTE_SINGLE":"ATOM_QUOTE_DOUBLE"));
-         }
-         else if(query.charAt(i+j) == quoteType) {
-           j++; break;
-         }
-         else if(query.charAt(i+j) == this.ATOM_ESCAPE) {
-           // Found escape, append next char
-           str+=query.charAt(i+j+1);
-           j++;
-         }
-         else {
-           str += query.charAt(i+j);
-         }
-       }
-       return [i+j, str];
-     }
-     else {
-      return null; 
-     }
-   },
    // As readAheadStringLiteral but for integer and floating-point numbers
    readAheadNumericLiteral: function(i, query) {
      var ch = query.charAt(i);

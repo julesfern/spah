@@ -31,6 +31,14 @@ module Spah
         assertion
       end
       
+      # Equality helper
+      def ==(other_query)
+        (other_query.is_a?(self.class)) and 
+        other_query.primary_token == self.primary_token and 
+        other_query.comparison_operator == self.comparison_operator and
+        other_query.secondary_token == self.secondary_token
+      end
+      
     end
   end
 end

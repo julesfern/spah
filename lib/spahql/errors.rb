@@ -28,11 +28,12 @@ module Spah
           @query
         end
         
-      end
+      end#class CompilerError
       
       # An error triggered while executing a SpahQL query
-      class RuntimeError < ::RuntimeError
-      end
+      class RunnerError < ::RuntimeError
+      end#class RunnerError
+      
     end
   end
 end

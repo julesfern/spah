@@ -1,3 +1,10 @@
+require File.join(File.dirname(__FILE__), "token", "comparison_operator")
+require File.join(File.dirname(__FILE__), "token", "string")
+require File.join(File.dirname(__FILE__), "token", "numeric")
+require File.join(File.dirname(__FILE__), "token", "boolean")
+require File.join(File.dirname(__FILE__), "token", "set")
+require File.join(File.dirname(__FILE__), "token", "selection_query")
+
 module Spah
   module SpahQL
     
@@ -5,83 +12,6 @@ module Spah
     # Also maintains an in-memory cache of previously-parsed queries for speed.
     class QueryParser
 
-      # The strict equality operator as used in the parser
-      COMPARISON_STRICT_EQUALITY = "==".freeze
-      # The rough equality operator as used in the parser
-      COMPARISON_ROUGH_EQUALITY = "=~".freeze
-      # The inequality operator as used in the parser
-      COMPARISON_INEQUALITY = "!=".freeze
-      # The less than operator as used in the parser
-      COMPARISON_LT = "<".freeze
-      # The greater than operator as used in the parser
-      COMPARISON_GT = ">".freeze
-      # The less than (or equal to) operator as used in the parser
-      COMPARISON_LTE = "<=".freeze
-      # The greater than (or equal to) operator as used in the parser
-      COMPARISON_GTE = ">=".freeze
-      # The joint set operator as used in the parser
-      COMPARISON_JOINT_SET = "}~{".freeze
-      # The superset operator as used in the parser
-      COMPARISON_SUPERSET = "}>{".freeze
-      # The subset operator as used in the parser
-      COMPARISON_SUBSET = "}<{".freeze
-      # The disjoint set operator as used in the parser
-      COMPARISON_DISJOINT_SET = "}!{".freeze 
-      # All valid SpahQL operators collected into an array for convenience.
-      COMPARISON_OPERATORS = [
-        COMPARISON_STRICT_EQUALITY, COMPARISON_ROUGH_EQUALITY, COMPARISON_INEQUALITY,
-        COMPARISON_LT, COMPARISON_GT, COMPARISON_LTE, COMPARISON_GTE,
-        COMPARISON_JOINT_SET, COMPARISON_SUPERSET, COMPARISON_SUBSET, COMPARISON_DISJOINT_SET
-      ].freeze
-     
-      # A single quote
-      ATOM_QUOTE_SINGLE = "'".freeze
-      # A double quote
-      ATOM_QUOTE_DOUBLE = '"'.freeze
-      # A string escape
-      ATOM_ESCAPE = '\\'.freeze
-      # A decimal point
-      ATOM_NUMERIC_POINT = ".".freeze
-      # The prefix for negative numbers
-      ATOM_NUMERIC_NEGATIVE = "-".freeze
-      # A boolean true
-      ATOM_BOOLEAN_TRUE = "true".freeze
-      # A boolean false
-      ATOM_BOOLEAN_FALSE = "false".freeze
-      # The opening character for a set literal
-      ATOM_SET_START = "{".freeze
-      # The terminating character for a set literal
-      ATOM_SET_END = "}".freeze
-      # The delimiter for multi-value sets
-      ATOM_SET_ARRAY_DELIMITER = ",".freeze
-      # The delimter for range sets
-      ATOM_SET_RANGE_DELIMITER = "..".freeze
-      # The delimiter expected at the beginning of any path segment
-      ATOM_PATH_DELIMITER = "/".freeze
-      # The prefix for any query that is forced to run against the root data scope rather than its local scope.
-      ATOM_PATH_ROOT = "$".freeze
-      # The opening character for an inline filter query
-      ATOM_FILTER_QUERY_START = "[".freeze
-      # The terminating character for an inline filter query
-      ATOM_FILTER_QUERY_END = "]".freeze
-      # The prefix for a property or other virtual key when used in a path segment
-      ATOM_PROPERTY_IDENTIFIER = ".".freeze
-      # The wildcard glyph for use in path components
-      ATOM_PATH_WILDCARD = "*".freeze
-      
-      # A token representing a string literal in or out of a set
-      TOKEN_STRING_LITERAL = "TOKEN_STRING_LITERAL".freeze
-      # A token representing an integer or floating-point literal, in or out of a set
-      TOKEN_NUMERIC_LITERAL =  "TOKEN_NUMERIC_LITERAL".freeze
-      # A token representing a boolean literal i.e. true or false
-      TOKEN_BOOLEAN_LITERAL = "TOKEN_BOOLEAN_LITERAL".freeze
-      # A token representing a set literal
-      TOKEN_SET_LITERAL = "TOKEN_SET_LITERAL".freeze
-      # A token representing one or more path components chained into a selection query
-      TOKEN_SELECTION_QUERY = "TOKEN_SELECTION_QUERY".freeze
-      # A token representing any of the comparison operators specified in COMPARISON_OPERATORS
-      TOKEN_COMPARISON_OPERATOR = "TOKEN_COMPARISON_OPERATOR".freeze
-      
       # In-memory query cache, keyed by string representation (with spaces removed)
       @@query_cache = {}
       
@@ -113,27 +43,25 @@ module Spah
         i=0; read_result = nil;
         while(read_result = read_ahead_token(i, query)) do
           # Handle read result
-          i = read_result[:resume_at]
-          token_type = read_result[:token_type]
-          token = read_result[:token]
+          i = read_result[0]
+          token = read_result[1]
           
-          if(token_type == TOKEN_COMPARISON_OPERATOR)
+          if(token.is_a?(Spah::SpahQL::Token::ComparisonOperator))
             # comparison operator, error if != one token stashed
             if(parsed_query.primary_token && parsed_query.secondary_token.nil?)
               parsed_query.comparison_operator = token
               parsed_query.assertion = true
             else
               raise Spah::SpahQL::Errors::CompilerError.new(
-                    i+j, query, 
+                    i, query, 
                     "Found unexpected TOKEN_COMPARISON_OPERATOR, expected EOL"
                     )
             end#if: valid comparison operator
           else
             # Stash simple types - strings, numerics, booleans - into a set
-            if([TOKEN_NUMERIC_LITERAL, TOKEN_STRING_LITERAL, TOKEN_BOOLEAN_LITERAL].include?(token_type))
+            if(token.is_a?(Spah::SpahQL::Token::Simple))
               # Convert to set literal
-              read_result[:token] = {:type => TOKEN_SET_LITERAL, :values => [read_result[:token]], :is_range => false}
-              read_result[:token_type] = TOKEN_SET_LITERAL
+              token = token.to_set
             end
             
             # Now set query tokens appropriately
@@ -143,8 +71,8 @@ module Spah
               else
                 # invalid: two tokens and no comparison?
                 raise Spah::SpahQL::Errors::CompilerError.new(
-                      i+j, query, 
-                      "Found unexpected #{token_type}, expected EOL or TOKEN_COMPARISON_OPERATOR"
+                      i, query, 
+                      "Found unexpected #{token.class}, expected EOL or TOKEN_COMPARISON_OPERATOR"
                       )
               end
             else
@@ -162,371 +90,18 @@ module Spah
       # @return [Hash, nil] A hash with keys :resume_at, :token, :token_type, or nil.
       def self.read_ahead_token(i, query)
         r = nil
-        if(r = read_ahead_comparison_operator(i, query))
-          type = TOKEN_COMPARISON_OPERATOR 
-        elsif(r = read_ahead_string_literal(i, query))
-          type = TOKEN_STRING_LITERAL
-        elsif(r = read_ahead_numeric_literal(i, query))
-          type = TOKEN_NUMERIC_LITERAL 
-        elsif(r = read_ahead_boolean_literal(i, query))
-          type = TOKEN_BOOLEAN_LITERAL
-        elsif(r = read_ahead_set_literal(i, query))
-          type = TOKEN_SET_LITERAL
-        elsif(r = read_ahead_selection_query(i, query))
-          type = TOKEN_SELECTION_QUERY 
+        [ 
+          Spah::SpahQL::Token::ComparisonOperator,
+          Spah::SpahQL::Token::String,
+          Spah::SpahQL::Token::Numeric,
+          Spah::SpahQL::Token::Boolean,
+          Spah::SpahQL::Token::Set,
+          Spah::SpahQL::Token::SelectionQuery
+        ].each do |klass|
+          res = klass.parse_at(i, query)
+          return res unless res.nil?
         end
-        
-        return (r)? {:resume_at => r[0], :token => r[1], :token_type => type} : nil;        
-      end
-
-      # Detects string literals at the given index in the given string query.
-      #
-      # @param [Numeric] i The index at which to detect the token
-      # @param [String] query The string query
-      # @return [Array, nil] An array in the form [resumeIndex, foundToken], or nil if no token was found.
-      def self.read_ahead_string_literal(i, query)
-        ch = query[i,1]
-        if(ch == ATOM_QUOTE_SINGLE or ch == ATOM_QUOTE_DOUBLE)
-          quote_type = ch; j = 0; str = "";
-          while(true) do
-            # Run through until terminator found
-            j += 1
-            ch = query[i+j,1]
-            if(query.length < i+j)
-              # unexpected EOL
-              raise Spah::SpahQL::Errors::CompilerError.new(
-                    i+j, query, 
-                    "Encountered EOL when expecting #{(quote_type==ATOM_QUOTE_SINGLE)? "ATOM_QUOTE_SINGLE" : "ATOM_QUOTE_DOUBLE"}"
-                    )
-            elsif(ch == quote_type)
-              # string terminated
-              j += 1
-              break
-            elsif(ch == ATOM_ESCAPE)
-              # escape, skip ahead
-              str << query[i+j+1, 1]
-              j += 1;
-            else
-              # build string
-              str << ch
-            end #if: character match
-          end #while
-          return [i+j, str]
-        end #if: token match
-        # No match
         return nil
-      end
-      
-      # Detects numeric literals at the given index in the given string query.
-      #
-      # @param [Numeric] i The index at which to detect the token
-      # @param [String] query The string query
-      # @return [Array, nil] An array in the form [resumeIndex, foundToken], or nil if no token was found.
-      def self.read_ahead_numeric_literal(i, query)
-        ch = query[i,1]
-        numreg = /\d/
-        if(ch.match(numreg) or (ch == ATOM_NUMERIC_NEGATIVE and query[i+1,1].match(numreg)))
-          j = 0; num = ch; point_found = false;
-          while(true) do
-            j += 1; ch = query[i+j, 1];
-            if(query.length < i+j)
-              # EOL
-            elsif(ch == ATOM_NUMERIC_POINT)
-              # found point
-              if(point_found)
-                # Rewind and surrender
-                j -= 1
-                break
-              else
-                point_found = true
-                num << ch
-              end
-            elsif(ch.match(numreg))
-              # found more numerics, append to token
-              num << ch
-            else
-              # found non-numeric
-              break
-            end #if: character match
-          end#while
-          return [i+j, ((point_found)? num.to_f : num.to_i)]
-        end #if: token match
-        # No match
-        return nil
-      end
-      
-      # Detects boolean literals at the given index in the given string query.
-      #
-      # @param [Numeric] i The index at which to detect the token
-      # @param [String] query The string query
-      # @return [Array, nil] An array in the form [resumeIndex, foundToken], or nil if no token was found.
-      def self.read_ahead_boolean_literal(i, query)
-        return [i+ATOM_BOOLEAN_TRUE.length, true] if(query[i, ATOM_BOOLEAN_TRUE.length] == ATOM_BOOLEAN_TRUE) 
-        return [i+ATOM_BOOLEAN_FALSE.length, false] if(query[i, ATOM_BOOLEAN_FALSE.length] == ATOM_BOOLEAN_FALSE)
-        return nil
-      end
-      
-      # Detects comparison operators at the given index in the given string query.
-      #
-      # @param [Numeric] i The index at which to detect the token
-      # @param [String] query The string query
-      # @return [Array, nil] An array in the form [resumeIndex, foundToken], or nil if no token was found.
-      def self.read_ahead_comparison_operator(i, query)
-        return [i+3, query[i,3]] if(COMPARISON_OPERATORS.include?(query[i,3]))  
-        return [i+2, query[i,2]] if(COMPARISON_OPERATORS.include?(query[i,2])) 
-        return [i+1, query[i,1]] if(COMPARISON_OPERATORS.include?(query[i,1])) 
-        return nil
-      end
-      
-      # Detects a selection query at the given index in the given string query.
-      # A selection query may be composed of an optional root flag followed by one or more
-      # path components, read using read_ahead_path_component.
-      #
-      # @param [Numeric] i The index at which to detect the token
-      # @param [String] query The string query
-      # @return [Array, nil] An array in the form [resumeIndex, foundToken], or nil if no token was found.
-      def self.read_ahead_selection_query(i, query)
-        ch = query[i,1]
-        if(ch == ATOM_PATH_ROOT || ch == ATOM_PATH_DELIMITER)
-          query_token = {:use_root => false, :path_components => [], :type => TOKEN_SELECTION_QUERY}
-          j = i
-          
-          # Set root flag if found
-          if(ch == ATOM_PATH_ROOT)
-            if(query[j+1,1] != ATOM_PATH_DELIMITER)
-              raise Spah::SpahQL::Errors::CompilerError.new(
-                    j+1, query, 
-                    "Found unexpected character '"+query[j+1,1]+"', expected ATOM_PATH_DELIMITER"
-                    )
-            end#if: root character not followed by query
-            # Exception dealt with, now set root flag and wind ahead
-            query_token[:use_root] = true
-            j += 1
-          end#if: root query
-          
-          # Now read in the path components
-          path_component = nil
-          while(path_component = read_ahead_path_component(j, query)) do
-            query_token[:path_components] << path_component[1];
-            j = path_component[0];
-          end#while
-         return [j, query_token];
-          
-        end#if: token match
-        # No match
-        return nil        
-      end
-      
-      # Detects a path component at the given index in the given string query.
-      # A path component is composed of one or more path delimiters follows by a key or property name
-      # and an optional set of filter queries, read ahead using read_ahead_filter_query.
-      #
-      # @param [Numeric] i The index at which to detect the token
-      # @param [String] query The string query
-      # @return [Array, nil] An array in the form [resumeIndex, foundToken], or nil if no token was found.
-      def self.read_ahead_path_component(i, query)
-        ch = query[i, 1]
-        if(ch == ATOM_PATH_DELIMITER)
-          j = i+1;
-          # Set up the blank path component
-          path_component = {:key => nil, :property => nil, :recursive => false, :filter_queries => []}
-          using_property = false
-          
-          # 1. Handle recursive
-          if(query[j,1] == ATOM_PATH_DELIMITER)
-            path_component[:recursive] = true
-            j += 1
-          end#if: recursive
-          
-          # 2. Wildcards
-          if(query[j,1] == ATOM_PATH_WILDCARD)
-            path_component[:key] = ATOM_PATH_WILDCARD
-            j += 1          
-          else
-          # 3. Identify key type
-            if(query[j,1] == ATOM_PROPERTY_IDENTIFIER)
-              using_property = true
-              j += 1
-            elsif(query[j,1] == ATOM_PATH_DELIMITER)
-              raise Spah::SpahQL::Errors::CompilerError.new(
-                    j+1, query, 
-                    "Too many ATOM_PATH_DELIMITER in a row - maximum allowed is two."
-                    )
-            end#if: property identifier found or too many slashes
-            
-            # 4. Read key or property name
-            keyname_result = read_ahead_inline_variable_reference(j, query)
-            if(keyname_result.nil? and using_property)
-              raise Spah::SpahQL::Errors::CompilerError.new(
-                    j, query, 
-                    "Unexpected character #{query[j,1]}, expected TOKEN_PROPERTY"
-                    )
-            elsif(keyname_result)
-              # stash found key
-              path_component[(using_property)? :property : :key] = keyname_result[1]
-              j = keyname_result[0]
-            end#if:keyname or propertyname found
-          end#if: wildcard/property/key
-          
-          # 5. Read filter queries
-          filter_query_result = nil
-          while(filter_query_result = read_ahead_filter_query(j, query)) do
-            path_component[:filter_queries] << filter_query_result[1]
-            j = filter_query_result[0]
-          end
-          
-          return [j, path_component]
-        end#if: token match
-        # No match
-        return nil
-      end
-      
-      # Detects a filter query at the given index in the given string query.
-      # A filter query is a selection or assertion query wrapped in the ATOM_FILTER_QUERY_START and
-      # ATOM_FILTER_QUERY_END character atoms and is parsed as an independent using parse_query. 
-      # 
-      # This has the benefit of putting filter queries into the pre-parsed query cache.
-      #
-      # @param [Numeric] i The index at which to detect the token
-      # @param [String] query The string query
-      # @return [Array, nil] An array in the form [resumeIndex, foundToken], or nil if no token was found.
-      def self.read_ahead_filter_query(i, query)
-        ch = query[i,1]
-        if(ch == ATOM_FILTER_QUERY_START)
-          j = i+1; depth = 1; query_token = "";
-          
-          while(depth > 0) do
-            ch = query[j,1]
-            if(j > query.length)
-              raise Spah::SpahQL::Errors::CompilerError.new(
-                     j, query, 
-                     "Found unexpected EOL, expected ATOM_FILTER_QUERY_END. (Bracket depth: #{depth})"
-                     )
-            elsif(ch == ATOM_FILTER_QUERY_START)
-              depth += 1; query_token << ch; j += 1;
-            elsif(ch == ATOM_FILTER_QUERY_END)
-              depth -= 1; j += 1;
-              break if(depth == 0)
-              query_token << ch; 
-            elsif(string_result = read_ahead_string_literal(j, query))
-              # String literals - we use the internal string reader as it will ignore any square brackets within the quote marks.
-              # The resume index is used to bulk-append the characters to the query token
-              query_token += query[j..string_result[0]-1]
-              j = string_result[0]
-            else
-              # Regular append
-              query_token << ch
-              j += 1
-            end
-          end#while: depth
-          
-          if(query_token.length > 0) # query token does not include final closing bracket
-             return [j, parse_query(query_token)]
-          else
-           raise Spah::SpahQL::Errors::CompilerError.new(
-                 j, query, 
-                 "Found unexpected ATOM_FILTER_QUERY_END, expected TOKEN_SELECTION_QUERY or TOKEN_ASSERTION_QUERY. Looked like those brackets were empty - make sure they have a query in them."
-                 )
-          end#if: token length
-          
-        end#if: token match
-        # No match
-        return nil
-      end
-      
-      # Detects a set literal at the given index in the given string query.
-      # A set literal is composed of one or more string literals, numeric literals, boolean literals
-      # or selection queries wrapped in the ATOM_SET_START and ATOM_SET_END character atoms. 
-      # 
-      # Within the set, selection queries are parsed and cached using parse_query. The ATOM_SET_ARRAY_DELIMITER
-      # is used to separate values. Alternatively the ATOM_SET_RANGE_DELIMITER may be used to create a macro or
-      # "range" set containing a numeric or alphabetic range. The two types of delimiters may not be mixed.
-      #
-      # @param [Numeric] i The index at which to detect the token
-      # @param [String] query The string query
-      # @return [Array, nil] An array in the form [resumeIndex, foundToken], or nil if no token was found.
-      def self.read_ahead_set_literal(i, query)
-        ch = query[i, 1]
-        if(ch == ATOM_SET_START)
-          j = i+1
-          tokens = []
-          used_array_delimiter = false
-          used_range_delimiter = false
-          
-          # Empty sets
-          if(query[j, 1] == ATOM_SET_END)
-             return [j+1, {:type => TOKEN_SET_LITERAL, :values => tokens, :is_range => used_range_delimiter}]
-          end#if: empty set
-          
-          # Populated sets - do the while/read_ahead thing
-          read_result = nil
-          while(read_result = read_ahead_token(j, query)) do
-            t_type = read_result[:token_type]
-            allowed_tokens = [TOKEN_NUMERIC_LITERAL, TOKEN_STRING_LITERAL, TOKEN_BOOLEAN_LITERAL, TOKEN_SELECTION_QUERY]
-            if(allowed_tokens.include?(t_type))
-              # wind ahead
-              j = read_result[:resume_at]
-              # stash in set
-              tokens << read_result[:token]
-              # find delimiter or closing bracket
-              if(query[j, 1] == ATOM_SET_ARRAY_DELIMITER)
-                # found array delimiter
-                if(used_range_delimiter)
-                  # Mixed delimiters, throw a wobbler
-                  raise Spah::SpahQL::Errors::CompilerError.new(
-                         j, query, 
-                         "Found unexpected ATOM_SET_RANGE_DELIMITER, already used ATOM_SET_ARRAY_DELIMITER and delimiters may not be mixed."
-                         )
-                end#if: used range delimiter when array delimiter used
-                used_array_delimiter = true
-                j += 1
-              elsif(query[j, ATOM_SET_RANGE_DELIMITER.length] == ATOM_SET_RANGE_DELIMITER)
-                # found range delimiter
-                if(used_array_delimiter)
-                  # mixed delimiters, throw wobbler
-                  raise Spah::SpahQL::Errors::CompilerError.new(
-                         j, query, 
-                         "Found unexpected ATOM_SET_ARRAY_DELIMITER, already used ATOM_SET_RANGE_DELIMITER and delimiters may not be mixed."
-                         )
-                end#if: used array delimiter when range delimiter used
-                used_range_delimiter = true
-                j += ATOM_SET_RANGE_DELIMITER.length
-              elsif(query[j, 1] == ATOM_SET_END)
-                # end set
-                j += 1
-                break
-              else
-                # dunno, throw toys out the pram
-                raise Spah::SpahQL::Errors::CompilerError.new(
-                       j, query, 
-                       "Found unexpected character #{query[j,1]}, expected ATOM_SET_ARRAY_DELIMITER, ATOM_SET_RANGE_DELIMITER or ATOM_SET_END"
-                       )
-              end#if: character match
-            else
-              raise Spah::SpahQL::Errors::CompilerError.new(
-                     j, query, 
-                     "Found unexpected #{t_type}, expected one of #{allowed_tokens.join(",")}"
-                     )
-            end#allowed tokens
-          end#while: read tokens
-
-          # Return match
-          return [j, {:type => TOKEN_SET_LITERAL, :values => tokens, :is_range => used_range_delimiter}];
-          
-        end#if: token match
-        # No match
-        return nil
-      end
-      
-      # Reads ahead for alphanumeric, underscore and hyphen characters
-      def self.read_ahead_inline_variable_reference(i, query)
-         valid = /[\w\d_-]/; j=i; token = "";
-         m = nil
-         while(m = query[j,1].match(valid)) do
-           token += m[0]
-           j += 1
-         end#while
-         return (token.length > 0)? [j, token] : nil;
       end
       
     end

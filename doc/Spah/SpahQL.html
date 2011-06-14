@@ -59,18 +59,35 @@
   
   
     <dt class="r1 last">Defined in:</dt>
-    <dd class="r1 last">lib/spahql/query.rb<span class="defines">,<br />
-  lib/spahql/errors.rb,<br /> lib/spahql/spahql.rb,<br /> lib/spahql/query_parser.rb</span>
+    <dd class="r1 last">lib/spahql/spahql.rb<span class="defines">,<br />
+  lib/spahql/query.rb,<br /> lib/spahql/errors.rb,<br /> lib/spahql/token/set.rb,<br /> lib/spahql/token/base.rb,<br /> lib/spahql/token/simple.rb,<br /> lib/spahql/query_parser.rb,<br /> lib/spahql/token/string.rb,<br /> lib/spahql/token/boolean.rb,<br /> lib/spahql/token/numeric.rb,<br /> lib/spahql/token/key_name.rb,<br /> lib/spahql/token/filter_query.rb,<br /> lib/spahql/token/path_component.rb,<br /> lib/spahql/token/selection_query.rb,<br /> lib/spahql/token/comparison_operator.rb</span>
 </dd>
   
 </dl>
 <div class="clear"></div>
 
-<h2>Defined Under Namespace</h2>
+<h2>Overview</h2><div class="docstring">
+  <div class="discussion">
+    <p>
+The public API module for all SpahQL related objects, including the query
+parser and all its token subtypes, the query runner and the various
+SpahQL-related exception classes.
+</p>
+<p>
+This is the module you care about if you want to run your own SpahQL
+queries against JSON data in isolation.
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+</div><h2>Defined Under Namespace</h2>
 <p class="children">
    
     
-      <strong class="modules">Modules:</strong> <span class='object_link'><a href="SpahQL/Errors.html" title="Spah::SpahQL::Errors (module)">Errors</a></span>
+      <strong class="modules">Modules:</strong> <span class='object_link'><a href="SpahQL/Errors.html" title="Spah::SpahQL::Errors (module)">Errors</a></span>, <span class='object_link'><a href="SpahQL/Token.html" title="Spah::SpahQL::Token (module)">Token</a></span>
     
    
     
@@ -86,7 +103,7 @@
 </div>
     
     <div id="footer">
-  Generated on Mon Jun 13 21:23:44 2011 by 
+  Generated on Tue Jun 14 12:03:47 2011 by 
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.6.8 (ruby-1.8.7).
 </div>

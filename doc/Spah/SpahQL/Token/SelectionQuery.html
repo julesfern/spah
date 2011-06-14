@@ -1,0 +1,665 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Class: Spah::SpahQL::Token::SelectionQuery</title>
+<link rel="stylesheet" href="../../../css/style.css" type="text/css" media="screen" charset="utf-8" />
+<link rel="stylesheet" href="../../../css/common.css" type="text/css" media="screen" charset="utf-8" />
+
+<script type="text/javascript" charset="utf-8">
+  relpath = '../../..';
+  if (relpath != '') relpath += '/';
+</script>
+<script type="text/javascript" charset="utf-8" src="../../../js/jquery.js"></script>
+<script type="text/javascript" charset="utf-8" src="../../../js/app.js"></script>
+
+  </head>
+  <body>
+    <script type="text/javascript" charset="utf-8">
+      if (window.top.frames.main) document.body.className = 'frames';
+    </script>
+    
+    <div id="header">
+      <div id="menu">
+  
+    <a href="../../../_index.html">Index (S)</a> &raquo; 
+    <span class='title'><span class='object_link'><a href="../../../Spah.html" title="Spah (module)">Spah</a></span></span> &raquo; <span class='title'><span class='object_link'><a href="../../SpahQL.html" title="Spah::SpahQL (module)">SpahQL</a></span></span> &raquo; <span class='title'><span class='object_link'><a href="../Token.html" title="Spah::SpahQL::Token (module)">Token</a></span></span>
+     &raquo; 
+    <span class="title">SelectionQuery</span>
+  
+  
+  <div class="noframes"><span class="title">(</span><a href="." target="_top">no frames</a><span class="title">)</span></div>
+</div>
+
+      <div id="search">
+  <a id="class_list_link" href="#">Class List</a>
+  <a id="method_list_link" href="#">Method List</a>
+  <a id ="file_list_link" href="#">File List</a>
+</div>
+
+      <div class="clear"></div>
+    </div>
+    
+    <iframe id="search_frame"></iframe>
+    
+    <div id="content"><h1>Class: Spah::SpahQL::Token::SelectionQuery
+  
+  
+  
+</h1>
+
+<dl class="box">
+  
+    <dt class="r1">Inherits:</dt>
+    <dd class="r1">
+      <span class="inheritName"><span class='object_link'><a href="Base.html" title="Spah::SpahQL::Token::Base (class)">Base</a></span></span>
+      
+        <ul class="fullTree">
+          <li>Object</li>
+          
+            <li class="next"><span class='object_link'><a href="Base.html" title="Spah::SpahQL::Token::Base (class)">Base</a></span></li>
+          
+            <li class="next">Spah::SpahQL::Token::SelectionQuery</li>
+          
+        </ul>
+        <a href="#" class="inheritanceTree">show all</a>
+      
+      </dd>
+    
+  
+  
+    
+  
+    
+  
+  
+  
+    <dt class="r2 last">Defined in:</dt>
+    <dd class="r2 last">lib/spahql/token/selection_query.rb</dd>
+  
+</dl>
+<div class="clear"></div>
+
+<h2>Overview</h2><div class="docstring">
+  <div class="discussion">
+    <p>
+A token representing a standalone selection query.
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+</div>
+  <h2>Constant Summary</h2>
+  
+    <dl class="constants">
+      
+        <dt id="ATOM_PATH_ROOT-constant" class="">ATOM_PATH_ROOT =
+          <div class="docstring">
+  <div class="discussion">
+    <p>
+The prefix for any query that is forced to run against the root data scope
+rather than its local scope.
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+</div>
+        </dt>
+        <dd><pre class="code"><span class='string val'>&quot;$&quot;</span><span class='dot token'>.</span><span class='freeze identifier id'>freeze</span>
+</pre></dd>
+      
+    </dl>
+  
+
+
+  
+  
+  
+  
+  <h2>Instance Attribute Summary <small>(<a href="#" class="summary_toggle">collapse</a>)</small></h2>
+  <ul class="summary">
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#path_components-instance_method" title="#path_components (instance method)">- (Object) <strong>path_components</strong> </a>
+    
+
+    
+  </span>
+  
+  
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+An array of Spah::SpahQL::Token::PathComponent instances.
+</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#use_root-instance_method" title="#use_root (instance method)">- (Object) <strong>use_root</strong> </a>
+    
+
+    
+  </span>
+  
+  
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+A boolean flag indicating whether or not this query is locked to the root
+data scope.
+</p>
+</div></span>
+  
+</li>
+
+    
+  </ul>
+
+
+  
+    <h2>
+      Class Method Summary
+      <small>(<a href="#" class="summary_toggle">collapse</a>)</small>
+    </h2>
+
+    <ul class="summary">
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#parse_at-class_method" title="parse_at (class method)">+ (Array<sup>?</sup>) <strong>parse_at</strong>(i, query) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+Detects a selection query at the given index in the given string query.
+</p>
+</div></span>
+  
+</li>
+
+      
+    </ul>
+  
+    <h2>
+      Instance Method Summary
+      <small>(<a href="#" class="summary_toggle">collapse</a>)</small>
+    </h2>
+
+    <ul class="summary">
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#%3D%3D-instance_method" title="#== (instance method)">- (Object) <strong>==</strong>(other_token) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#initialize-instance_method" title="#initialize (instance method)">- (SelectionQuery) <strong>initialize</strong> </a>
+    
+
+    
+  </span>
+  
+    <span class="note title constructor">constructor</span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+Create a new token with blank-slate defaults.
+</p>
+</div></span>
+  
+</li>
+
+      
+    </ul>
+  
+
+
+  
+  
+  
+  
+  <div id="constructor_details" class="method_details_list">
+  <h2>Constructor Details</h2>
+  
+    <div class="method_details first">
+  <p class="signature first" id="initialize-instance_method">
+  
+    - (<tt><span class='object_link'><a href="" title="Spah::SpahQL::Token::SelectionQuery (class)">SelectionQuery</a></span></tt>) <strong>initialize</strong> 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+Create a new token with blank-slate defaults
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+65
+66
+67
+68</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/spahql/token/selection_query.rb', line 65</span>
+
+<span class='def def kw'>def</span> <span class='initialize identifier id'>initialize</span>
+  <span class='self self kw'>self</span><span class='dot token'>.</span><span class='use_root identifier id'>use_root</span> <span class='assign token'>=</span> <span class='false false kw'>false</span>
+  <span class='self self kw'>self</span><span class='dot token'>.</span><span class='path_components identifier id'>path_components</span> <span class='assign token'>=</span> <span class='lbrack token'>[</span><span class='rbrack token'>]</span>
+<span class='end end kw'>end</span>
+</pre>
+    </td>
+  </tr>
+</table>
+</div>
+  
+</div>
+
+  <div id="instance_attr_details" class="attr_details">
+    <h2>Instance Attribute Details</h2>
+    
+      
+      <span id="path_components=-instance_method"></span>
+      <span id="path_components-instance_method"></span>
+      <div class="method_details first">
+  <p class="signature first" id="path_components-instance_method">
+  
+    - (<tt>Object</tt>) <strong>path_components</strong> 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+An array of Spah::SpahQL::Token::PathComponent instances.
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+17
+18
+19</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/spahql/token/selection_query.rb', line 17</span>
+
+<span class='def def kw'>def</span> <span class='path_components identifier id'>path_components</span>
+  <span class='@path_components ivar id'>@path_components</span>
+<span class='end end kw'>end</span>
+</pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id="use_root=-instance_method"></span>
+      <span id="use_root-instance_method"></span>
+      <div class="method_details ">
+  <p class="signature " id="use_root-instance_method">
+  
+    - (<tt>Object</tt>) <strong>use_root</strong> 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+A boolean flag indicating whether or not this query is locked to the root
+data scope.
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+15
+16
+17</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/spahql/token/selection_query.rb', line 15</span>
+
+<span class='def def kw'>def</span> <span class='use_root identifier id'>use_root</span>
+  <span class='@use_root ivar id'>@use_root</span>
+<span class='end end kw'>end</span>
+</pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+  </div>
+
+
+  <div id="class_method_details" class="method_details_list">
+    <h2>Class Method Details</h2>
+    
+    
+      <div class="method_details first">
+  <p class="signature first" id="parse_at-class_method">
+  
+    + (<tt>Array</tt><sup>?</sup>) <strong>parse_at</strong>(i, query) 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+Detects a selection query at the given index in the given string query. A
+selection query may be composed of an optional root flag followed by one or
+more path components, read using read_ahead_path_component.
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  <h3>Parameters:</h3>
+<ul class="param">
+  
+    <li>
+      
+        <span class='type'>(<tt><span class='object_link'><a href="Numeric.html" title="Spah::SpahQL::Token::Numeric (class)">Numeric</a></span></tt>)</span>
+      
+      
+        <span class='name'>i</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'><p>
+The index at which to detect the token
+</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='type'>(<tt><span class='object_link'><a href="String.html" title="Spah::SpahQL::Token::String (class)">String</a></span></tt>)</span>
+      
+      
+        <span class='name'>query</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'><p>
+The string query
+</p>
+</div>
+      
+    </li>
+  
+</ul>
+<h3>Returns:</h3>
+<ul class="return">
+  
+    <li>
+      
+        <span class='type'>(<tt>Array</tt>, <tt>nil</tt>)</span>
+      
+      
+      
+      
+        &mdash;
+        <div class='inline'><p>
+An array in the form [resumeIndex, foundToken], or nil if no token was
+found.
+</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/spahql/token/selection_query.rb', line 26</span>
+
+<span class='def def kw'>def</span> <span class='self self kw'>self</span><span class='dot token'>.</span><span class='parse_at identifier id'>parse_at</span><span class='lparen token'>(</span><span class='i identifier id'>i</span><span class='comma token'>,</span> <span class='query identifier id'>query</span><span class='rparen token'>)</span>
+    <span class='ch identifier id'>ch</span> <span class='assign token'>=</span> <span class='query identifier id'>query</span><span class='lbrack token'>[</span><span class='i identifier id'>i</span><span class='comma token'>,</span><span class='integer val'>1</span><span class='rbrack token'>]</span>
+    <span class='first_component identifier id'>first_component</span> <span class='assign token'>=</span> <span class='nil nil kw'>nil</span>
+    <span class='comment val'># Find first path component using path component parser</span>
+    <span class='if if kw'>if</span><span class='lparen token'>(</span><span class='ch identifier id'>ch</span> <span class='eq op'>==</span> <span class='ATOM_PATH_ROOT constant id'>ATOM_PATH_ROOT</span> <span class='orop op'>||</span> <span class='first_component identifier id'>first_component</span> <span class='assign token'>=</span> <span class='Spah constant id'>Spah</span><span class='colon2 op'>::</span><span class='SpahQL constant id'>SpahQL</span><span class='colon2 op'>::</span><span class='Token constant id'>Token</span><span class='colon2 op'>::</span><span class='PathComponent constant id'>PathComponent</span><span class='dot token'>.</span><span class='parse_at identifier id'>parse_at</span><span class='lparen token'>(</span><span class='i identifier id'>i</span><span class='comma token'>,</span> <span class='query identifier id'>query</span><span class='rparen token'>)</span><span class='rparen token'>)</span>
+      <span class='query_token identifier id'>query_token</span> <span class='assign token'>=</span> <span class='self self kw'>self</span><span class='dot token'>.</span><span class='new identifier id'>new</span>
+      <span class='j identifier id'>j</span> <span class='assign token'>=</span> <span class='i identifier id'>i</span>
+
+      <span class='comment val'># Set root flag if found</span>
+      <span class='if if kw'>if</span><span class='lparen token'>(</span><span class='ch identifier id'>ch</span> <span class='eq op'>==</span> <span class='ATOM_PATH_ROOT constant id'>ATOM_PATH_ROOT</span><span class='rparen token'>)</span>
+        <span class='first_component identifier id'>first_component</span> <span class='assign token'>=</span> <span class='Spah constant id'>Spah</span><span class='colon2 op'>::</span><span class='SpahQL constant id'>SpahQL</span><span class='colon2 op'>::</span><span class='Token constant id'>Token</span><span class='colon2 op'>::</span><span class='PathComponent constant id'>PathComponent</span><span class='dot token'>.</span><span class='parse_at identifier id'>parse_at</span><span class='lparen token'>(</span><span class='j identifier id'>j</span><span class='plus op'>+</span><span class='integer val'>1</span><span class='comma token'>,</span> <span class='query identifier id'>query</span><span class='rparen token'>)</span>
+        <span class='if if kw'>if</span><span class='lparen token'>(</span><span class='first_component identifier id'>first_component</span><span class='dot token'>.</span><span class='nil? fid id'>nil?</span><span class='rparen token'>)</span>
+          <span class='raise identifier id'>raise</span> <span class='Spah constant id'>Spah</span><span class='colon2 op'>::</span><span class='SpahQL constant id'>SpahQL</span><span class='colon2 op'>::</span><span class='Errors constant id'>Errors</span><span class='colon2 op'>::</span><span class='CompilerError constant id'>CompilerError</span><span class='dot token'>.</span><span class='new identifier id'>new</span><span class='lparen token'>(</span>
+                <span class='j identifier id'>j</span><span class='plus op'>+</span><span class='integer val'>1</span><span class='comma token'>,</span> <span class='query identifier id'>query</span><span class='comma token'>,</span> 
+                <span class='string val'>&quot;Found unexpected character '&quot;</span><span class='plus op'>+</span><span class='query identifier id'>query</span><span class='lbrack token'>[</span><span class='j identifier id'>j</span><span class='plus op'>+</span><span class='integer val'>1</span><span class='comma token'>,</span><span class='integer val'>1</span><span class='rbrack token'>]</span><span class='plus op'>+</span><span class='string val'>&quot;', expected TOKEN_PATH_COMPONENT&quot;</span>
+                <span class='rparen token'>)</span>
+        <span class='end end kw'>end</span><span class='comment val'>#if: root character not followed by query</span>
+        <span class='comment val'># Exception dealt with, now set root flag and wind ahead</span>
+        <span class='query_token identifier id'>query_token</span><span class='dot token'>.</span><span class='use_root identifier id'>use_root</span> <span class='assign token'>=</span> <span class='true true kw'>true</span>
+        <span class='j identifier id'>j</span> <span class='opasgn op'>+=</span> <span class='integer val'>1</span>
+      <span class='end end kw'>end</span><span class='comment val'>#if: root query</span>
+
+      <span class='comment val'># Now read in the path components, start with the first found then go for the additionals</span>
+      <span class='j identifier id'>j</span> <span class='assign token'>=</span> <span class='first_component identifier id'>first_component</span><span class='lbrack token'>[</span><span class='integer val'>0</span><span class='rbrack token'>]</span>
+      <span class='query_token identifier id'>query_token</span><span class='dot token'>.</span><span class='path_components identifier id'>path_components</span> <span class='lshft op'>&lt;&lt;</span> <span class='first_component identifier id'>first_component</span><span class='lbrack token'>[</span><span class='integer val'>1</span><span class='rbrack token'>]</span>
+      
+      <span class='path_component identifier id'>path_component</span> <span class='assign token'>=</span> <span class='nil nil kw'>nil</span>
+      <span class='while while kw'>while</span><span class='lparen token'>(</span><span class='path_component identifier id'>path_component</span> <span class='assign token'>=</span> <span class='Spah constant id'>Spah</span><span class='colon2 op'>::</span><span class='SpahQL constant id'>SpahQL</span><span class='colon2 op'>::</span><span class='Token constant id'>Token</span><span class='colon2 op'>::</span><span class='PathComponent constant id'>PathComponent</span><span class='dot token'>.</span><span class='parse_at identifier id'>parse_at</span><span class='lparen token'>(</span><span class='j identifier id'>j</span><span class='comma token'>,</span> <span class='query identifier id'>query</span><span class='rparen token'>)</span><span class='rparen token'>)</span> <span class='do do kw'>do</span>
+        <span class='query_token identifier id'>query_token</span><span class='dot token'>.</span><span class='path_components identifier id'>path_components</span> <span class='lshft op'>&lt;&lt;</span> <span class='path_component identifier id'>path_component</span><span class='lbrack token'>[</span><span class='integer val'>1</span><span class='rbrack token'>]</span><span class='semicolon token'>;</span>
+        <span class='j identifier id'>j</span> <span class='assign token'>=</span> <span class='path_component identifier id'>path_component</span><span class='lbrack token'>[</span><span class='integer val'>0</span><span class='rbrack token'>]</span><span class='semicolon token'>;</span>
+      <span class='end end kw'>end</span><span class='comment val'>#while</span>
+     <span class='return return kw'>return</span> <span class='lbrack token'>[</span><span class='j identifier id'>j</span><span class='comma token'>,</span> <span class='query_token identifier id'>query_token</span><span class='rbrack token'>]</span><span class='semicolon token'>;</span>
+
+    <span class='end end kw'>end</span><span class='comment val'>#if: token match</span>
+    <span class='comment val'># No match</span>
+    <span class='return return kw'>return</span> <span class='nil nil kw'>nil</span>        
+  <span class='end end kw'>end</span>
+  
+  <span class='comment val'># Create a new token with blank-slate defaults</span>
+  <span class='def def kw'>def</span> <span class='initialize identifier id'>initialize</span>
+    <span class='self self kw'>self</span><span class='dot token'>.</span><span class='use_root identifier id'>use_root</span> <span class='assign token'>=</span> <span class='false false kw'>false</span>
+    <span class='self self kw'>self</span><span class='dot token'>.</span><span class='path_components identifier id'>path_components</span> <span class='assign token'>=</span> <span class='lbrack token'>[</span><span class='rbrack token'>]</span>
+  <span class='end end kw'>end</span>
+  
+  <span class='def def kw'>def</span> <span class='eq op'>==</span><span class='lparen token'>(</span><span class='other_token identifier id'>other_token</span><span class='rparen token'>)</span>
+    <span class='lparen token'>(</span><span class='other_token identifier id'>other_token</span><span class='dot token'>.</span><span class='is_a? fid id'>is_a?</span><span class='lparen token'>(</span><span class='self self kw'>self</span><span class='dot token'>.</span><span class='class identifier id'>class</span><span class='rparen token'>)</span><span class='rparen token'>)</span> <span class='and and kw'>and</span> <span class='other_token identifier id'>other_token</span><span class='dot token'>.</span><span class='use_root identifier id'>use_root</span> <span class='eq op'>==</span> <span class='self self kw'>self</span><span class='dot token'>.</span><span class='use_root identifier id'>use_root</span> <span class='and and kw'>and</span> <span class='other_token identifier id'>other_token</span><span class='dot token'>.</span><span class='path_components identifier id'>path_components</span> <span class='eq op'>==</span> <span class='self self kw'>self</span><span class='dot token'>.</span><span class='path_components identifier id'>path_components</span>
+  <span class='end end kw'>end</span>
+  
+<span class='end end kw'>end</span>
+</pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+  </div>
+
+  <div id="instance_method_details" class="method_details_list">
+    <h2>Instance Method Details</h2>
+    
+    
+      <div class="method_details first">
+  <p class="signature first" id="==-instance_method">
+  
+    - (<tt>Object</tt>) <strong>==</strong>(other_token) 
+  
+
+  
+</p><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+70
+71
+72</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/spahql/token/selection_query.rb', line 70</span>
+
+<span class='def def kw'>def</span> <span class='eq op'>==</span><span class='lparen token'>(</span><span class='other_token identifier id'>other_token</span><span class='rparen token'>)</span>
+  <span class='lparen token'>(</span><span class='other_token identifier id'>other_token</span><span class='dot token'>.</span><span class='is_a? fid id'>is_a?</span><span class='lparen token'>(</span><span class='self self kw'>self</span><span class='dot token'>.</span><span class='class identifier id'>class</span><span class='rparen token'>)</span><span class='rparen token'>)</span> <span class='and and kw'>and</span> <span class='other_token identifier id'>other_token</span><span class='dot token'>.</span><span class='use_root identifier id'>use_root</span> <span class='eq op'>==</span> <span class='self self kw'>self</span><span class='dot token'>.</span><span class='use_root identifier id'>use_root</span> <span class='and and kw'>and</span> <span class='other_token identifier id'>other_token</span><span class='dot token'>.</span><span class='path_components identifier id'>path_components</span> <span class='eq op'>==</span> <span class='self self kw'>self</span><span class='dot token'>.</span><span class='path_components identifier id'>path_components</span>
+<span class='end end kw'>end</span>
+</pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+  </div>
+
+</div>
+    
+    <div id="footer">
+  Generated on Tue Jun 14 12:03:47 2011 by 
+  <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
+  0.6.8 (ruby-1.8.7).
+</div>
+
+  </body>
+</html>

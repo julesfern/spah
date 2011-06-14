@@ -2,31 +2,6 @@ $(document).ready(function() {
   
   module("Spah.SpahQL.QueryParser");
   
-  test("Returns a correct new index and found string when reading ahead for string literals", function() {
-    expect(12);
-    // Double quotes
-    deepEqual([5,"foo"], Spah.SpahQL.QueryParser.readAheadStringLiteral(0, '"foo", bar'));
-    deepEqual([5,"foo"], Spah.SpahQL.QueryParser.readAheadStringLiteral(0, '"foo"'));
-    deepEqual([11,"foobar"], Spah.SpahQL.QueryParser.readAheadStringLiteral(3, '---"foobar"---'));
-    deepEqual([11,"foobar"], Spah.SpahQL.QueryParser.readAheadStringLiteral(3, '---"foobar"---'));
-    deepEqual([13,'foo\"bar'], Spah.SpahQL.QueryParser.readAheadStringLiteral(3, '---"foo\\"bar"'));
-    
-    // Single quotes
-    deepEqual([5,"foo"], Spah.SpahQL.QueryParser.readAheadStringLiteral(0, "'foo', bar"));
-    deepEqual([5,"foo"], Spah.SpahQL.QueryParser.readAheadStringLiteral(0, "'foo'"));
-    deepEqual([11,"foobar"], Spah.SpahQL.QueryParser.readAheadStringLiteral(3, "---'foobar'---"));
-    deepEqual([11,"foobar"], Spah.SpahQL.QueryParser.readAheadStringLiteral(3, "---'foobar'---"));
-    deepEqual([13,"foo'bar"], Spah.SpahQL.QueryParser.readAheadStringLiteral(3, "---'foo\\\'bar'-"));
-    
-    // No quotes
-    equal(null, Spah.SpahQL.QueryParser.readAheadStringLiteral(0, "foo, bar"));
-    
-    // Errors
-    try { Spah.SpahQL.QueryParser.readAheadStringLiteral(3, "---'foobar---") }
-    catch(e) { ok(e) }
-    
-  });
-  
   test("Returns a correct new index and found number when reading ahead for numeric literals", function() {
     // Ints
     deepEqual([1,7], Spah.SpahQL.QueryParser.readAheadNumericLiteral(0, '7, bar'));
