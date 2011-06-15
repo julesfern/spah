@@ -13,7 +13,7 @@
   jQuery.extend(Spah.SpahQL.Token.Base, {
     
     /**
-     * Spah.SpahQL.Token.Base.parseAt(index, queryString) -> Array[resumeindex, foundtoken] or null
+     * Spah.SpahQL.Token.Base.parseAt(index, queryString) -> Array\[resumeIndex, foundToken\] or null
      * Should be overridden by the child class.
      **/
     "parseAt": function() {

@@ -39,7 +39,7 @@ module Spah
         #
         # @param [Numeric] i The index at which to detect the token
         # @param [String] query The string query
-        # @return [Array, nil] An array in the form [resumeIndex, foundToken], or nil if no token was found.
+        # @return [Array, nil] An array in the form \[resumeIndex, foundToken\], or nil if no token was found.
         def self.parse_at(i, query)
           ch = query[i, 1]
           if(ch == ATOM_SET_START)
@@ -55,7 +55,7 @@ module Spah
 
             # Populated sets - do the while/read_ahead thing
             read_result = nil
-            while(read_result = Spah::SpahQL::QueryParser.read_ahead_token(j, query)) do
+            while(read_result = Spah::SpahQL::Token.parse_at(j, query)) do
               allowed_tokens = [Spah::SpahQL::Token::Numeric, Spah::SpahQL::Token::String, Spah::SpahQL::Token::Boolean, Spah::SpahQL::Token::SelectionQuery]
               if(allowed_tokens.include?(read_result[1].class))
                 # wind ahead

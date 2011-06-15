@@ -40,7 +40,7 @@ module Spah
         #
         # @param [Numeric] i The index at which to detect the token
         # @param [String] query The string query
-        # @return [Array, nil] An array in the form [resumeIndex, foundToken], or nil if no token was found.
+        # @return [Array, nil] An array in the form \[resumeIndex, foundToken\], or nil if no token was found.
         def self.parse_at(i, query)
           [3,2,1].each do |c|
             if(COMPARISON_OPERATORS.include?(query[i,c]))

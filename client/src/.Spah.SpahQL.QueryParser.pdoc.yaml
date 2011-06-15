@@ -24,40 +24,10 @@ signatures:
 file: /Users/danski/Sites/spah/client/src/Spah.SpahQL.QueryParser.js
 
 ---
-id: "Spah.SpahQL.QueryParser.dotProperties"
-parent_id: "Spah.SpahQL.QueryParser"
-type: class property
-line_number: 24
-description: |
-
-
-signatures:
- -
-  signature: "Spah.SpahQL.QueryParser.dotProperties"
-  return_value: "Array of allowed property calls"
-file: /Users/danski/Sites/spah/client/src/Spah.SpahQL.QueryParser.js
-
----
-id: "Spah.SpahQL.QueryParser.comparisonOperators"
-parent_id: "Spah.SpahQL.QueryParser"
-type: class property
-line_number: 33
-description: |
-  Allowed set comparison operators. Detection of an allowed comparator throws the
-  current subquery into "truthiness" mode, where it will return a boolean result
-  rather than a resultset.
-
-signatures:
- -
-  signature: "Spah.SpahQL.QueryParser.comparisonOperators"
-  return_value: "Array of allowed comparators"
-file: /Users/danski/Sites/spah/client/src/Spah.SpahQL.QueryParser.js
-
----
 id: "Spah.SpahQL.QueryParser.parseQuery"
 parent_id: "Spah.SpahQL.QueryParser"
 type: class method
-line_number: 91
+line_number: 33
 description: |
   Parses a string query and returns a parsed <code>Spah.SpahQL.Query</code> instance.
   
@@ -81,32 +51,15 @@ arguments:
 file: /Users/danski/Sites/spah/client/src/Spah.SpahQL.QueryParser.js
 
 ---
-id: "Spah.SpahQL.QueryParser.readAheadToken"
+id: "Spah.SpahQL.QueryParser.throwParseErrorAt"
 parent_id: "Spah.SpahQL.QueryParser"
 type: class method
-line_number: 170
+line_number: 100
 description: |
-  Reads ahead through the given query string, starting at the current index, to identify the token at the given index.
-  Returns an Array <code>{resumeAt, token, tokenType}</code> where <code>index</code> is the index at which the found token
-  concludes, and at which the expression parser should resume.
-  
-  Returns <code>null</code> if no valid tokens are found.
+  Throws an exception at the given index in the given query string with the given error message.
 
 signatures:
  -
-  signature: "Spah.SpahQL.QueryParser.readAheadToken(i, query)"
-  return_value: "Object token descriptor"
-arguments:
- -
-  name: i
-  types: [Number]
-  description: >
-    The index at which to start reading the string
-
- -
-  name: query
-  types: [String]
-  description: >
-    The raw string of the query
-
+  signature: "Spah.SpahQL.QueryParser.throwParseErrorAt(i, query, message)"
+  return_value: "void"
 file: /Users/danski/Sites/spah/client/src/Spah.SpahQL.QueryParser.js

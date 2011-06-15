@@ -33,7 +33,7 @@ module Spah
         #
         # @param [Numeric] i The index at which to detect the token
         # @param [String] query The string query
-        # @return [Array, nil] An array in the form [resumeIndex, foundToken], or nil if no token was found.
+        # @return [Array, nil] An array in the form \[resumeIndex, foundToken\], or nil if no token was found.
         def self.parse_at(i, query)
           ch = query[i, 1]
           if(ch == ATOM_PATH_DELIMITER)
@@ -73,7 +73,7 @@ module Spah
                       )
               elsif(keyname_result)
                 # stash found key
-                path_component.send((using_property)? :"property=" : :"key=", keyname_result[1].value) 
+                path_component.send((using_property)? :"property=" : :"key=", keyname_result[1]) 
                 j = keyname_result[0]
               end#if:keyname or propertyname found
             end#if: wildcard/property/key
@@ -81,7 +81,7 @@ module Spah
             # 5. Read filter queries
             filter_query_result = nil
             while(filter_query_result = Spah::SpahQL::Token::FilterQuery.parse_at(j, query)) do
-              path_component.filter_queries << filter_query_result[1].value
+              path_component.filter_queries << filter_query_result[1]
               j = filter_query_result[0]
             end
 

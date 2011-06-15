@@ -1,0 +1,27 @@
+---
+id: "Spah.SpahQL.Token.FilterQuery"
+parent_id: "Spah.SpahQL.Token"
+type: class
+superclass_id: "Spah.SpahQL.Token.Simple"
+line_number: 7
+description: |
+  A token describing any path component within a selection query, comprised of one or two path delimiters
+  followed by a key or property name and an optional set of filter query tokens.
+
+file: /Users/danski/Sites/spah/client/src/Spah.SpahQL.Token.FilterQuery.js
+
+---
+id: "Spah.SpahQL.Token.FilterQuery.parseAt"
+parent_id: "Spah.SpahQL.Token.FilterQuery"
+type: class method
+line_number: 26
+description: |
+  Reads the given queryString starting at the given index and attempts to identify and parse
+  a filter query token. If found, the token will be returned in a tuple \[resumeIndex, foundToken\].
+  Returns null if nothing is found.
+
+signatures:
+ -
+  signature: "Spah.SpahQL.Token.FilterQuery.parseAt(index, queryString)"
+  return_value: "Array result or null"
+file: /Users/danski/Sites/spah/client/src/Spah.SpahQL.Token.FilterQuery.js

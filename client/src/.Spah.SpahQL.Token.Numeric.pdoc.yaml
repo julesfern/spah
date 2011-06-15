@@ -1,0 +1,25 @@
+---
+id: "Spah.SpahQL.Token.Numeric"
+parent_id: "Spah.SpahQL.Token"
+type: class
+superclass_id: "Spah.SpahQL.Token.Simple"
+line_number: 6
+description: |
+  A simple token wrapping an integer or floating-point numeric literal value.
+
+file: /Users/danski/Sites/spah/client/src/Spah.SpahQL.Token.Numeric.js
+
+---
+id: "Spah.SpahQL.Token.Numeric.parseAt"
+parent_id: "Spah.SpahQL.Token.Numeric"
+type: class method
+line_number: 24
+description: |
+  Identifies a numeric literal at the given index in the given string query and returns null
+  if no token is identified, or a tuple of terminating index and the instantiated token if successful.
+
+signatures:
+ -
+  signature: "Spah.SpahQL.Token.Numeric.parseAt(i, query)"
+  return_value: "Array\\[resumeIndex, foundToken\\] or null"
+file: /Users/danski/Sites/spah/client/src/Spah.SpahQL.Token.Numeric.js

@@ -21,3 +21,17 @@ signatures:
  -
   signature: "new Spah.SpahQL.Token.Simple(value)"
 file: /Users/danski/Sites/spah/client/src/Spah.SpahQL.Token.Simple.js
+
+---
+id: "Spah.SpahQL.Token#toSet"
+parent_id: "Spah.SpahQL.Token"
+type: instance method
+line_number: 36
+description: |
+  Wraps this token up in a set, allowing it to be used as a top-level evaluatable token.
+
+signatures:
+ -
+  signature: "Spah.SpahQL.Token#toSet()"
+  return_value: "Spah.SpahQL.Token.Set"
+file: /Users/danski/Sites/spah/client/src/Spah.SpahQL.Token.Simple.js

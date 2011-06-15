@@ -26,6 +26,15 @@
      **/
     "init": function(value) {
       this.value = value;
+    },
+    
+    /**
+     * Spah.SpahQL.Token#toSet() -> Spah.SpahQL.Token.Set
+     * 
+     * Wraps this token up in a set, allowing it to be used as a top-level evaluatable token.
+     **/
+    "toSet": function() {
+      return new Spah.SpahQL.Token.Set([this]);
     }
     
   });

@@ -1,14 +1,13 @@
 describe Spah::SpahQL::Token::PathComponent do
   
   it "Returns a correct new index and found string when reading ahead for path components" do
-    
     tests = {
-      [0, "/key1"] => [5, {:key => "key1", :property => nil, :recursive => false, :filter_queries => []}],
-      [5, "/key1//key2"] => [11, {:key => "key2", :property => nil, :recursive => true, :filter_queries => []}],
-      [5, "/key1//.size"] => [12, {:key => nil, :property => "size", :recursive => true, :filter_queries => []}],
-      [5, "/key1//foo[/a == /b][/foo == 3]"] => [31, {:key => "foo", :property => nil, :recursive => true, :filter_queries => [
-        Spah::SpahQL::QueryParser.parse_query("/a == /b"),
-        Spah::SpahQL::QueryParser.parse_query("/foo == 3"),
+      [0, "/key1"] => [5, {:key => Spah::SpahQL::Token::KeyName.new("key1"), :property => nil, :recursive => false, :filter_queries => []}],
+      [5, "/key1//key2"] => [11, {:key => Spah::SpahQL::Token::KeyName.new("key2"), :property => nil, :recursive => true, :filter_queries => []}],
+      [5, "/key1//.size"] => [12, {:key => nil, :property => Spah::SpahQL::Token::KeyName.new("size"), :recursive => true, :filter_queries => []}],
+      [5, "/key1//foo[/a == /b][/foo == 3]"] => [31, {:key => Spah::SpahQL::Token::KeyName.new("foo"), :property => nil, :recursive => true, :filter_queries => [
+        Spah::SpahQL::Token::FilterQuery.new(Spah::SpahQL::QueryParser.parse_query("/a == /b")),
+        Spah::SpahQL::Token::FilterQuery.new(Spah::SpahQL::QueryParser.parse_query("/foo == 3")),
       ]}]
     }
     

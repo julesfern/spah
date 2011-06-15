@@ -1,0 +1,98 @@
+---
+id: "Spah.SpahQL.Token.PathComponent"
+parent_id: "Spah.SpahQL.Token"
+type: class
+superclass_id: "Spah.SpahQL.Token.Base"
+line_number: 7
+description: |
+  A token describing any path component within a selection query, comprised of one or two path delimiters
+  followed by a key or property name and an optional set of filter query tokens.
+
+file: /Users/danski/Sites/spah/client/src/Spah.SpahQL.Token.PathComponent.js
+
+---
+id: "Spah.SpahQL.Token.PathComponent.parseAt"
+parent_id: "Spah.SpahQL.Token.PathComponent"
+type: class method
+line_number: 27
+description: |
+  Reads the given queryString starting at the given index and attempts to identify and parse
+  a path component token. If found, the token will be returned in a tuple \[resumeIndex, foundToken\].
+  Returns null if nothing is found.
+
+signatures:
+ -
+  signature: "Spah.SpahQL.Token.PathComponent.parseAt(index, queryString)"
+  return_value: "Array result or null"
+file: /Users/danski/Sites/spah/client/src/Spah.SpahQL.Token.PathComponent.js
+
+---
+id: "Spah.SpahQL.Token.PathComponent#key"
+parent_id: "Spah.SpahQL.Token.PathComponent"
+type: instance property
+line_number: 91
+description: |
+  The key specified in this path component, if a keyname was used.
+
+signatures:
+ -
+  signature: "Spah.SpahQL.Token.PathComponent#key"
+  return_value: "String"
+file: /Users/danski/Sites/spah/client/src/Spah.SpahQL.Token.PathComponent.js
+
+---
+id: "Spah.SpahQL.Token.PathComponent#property"
+parent_id: "Spah.SpahQL.Token.PathComponent"
+type: instance property
+line_number: 98
+description: |
+  The property specified in this path component, if a property name was used.
+
+signatures:
+ -
+  signature: "Spah.SpahQL.Token.PathComponent#property"
+  return_value: "String"
+file: /Users/danski/Sites/spah/client/src/Spah.SpahQL.Token.PathComponent.js
+
+---
+id: "Spah.SpahQL.Token.PathComponent#recursive"
+parent_id: "Spah.SpahQL.Token.PathComponent"
+type: instance property
+line_number: 106
+description: |
+  A flag indicating whether or not this path component should recurse through its
+  scope data during evaluation.
+
+signatures:
+ -
+  signature: "Spah.SpahQL.Token.PathComponent#recursive"
+  return_value: "Boolean"
+file: /Users/danski/Sites/spah/client/src/Spah.SpahQL.Token.PathComponent.js
+
+---
+id: "Spah.SpahQL.Token.PathComponent#filterQueries"
+parent_id: "Spah.SpahQL.Token.PathComponent"
+type: instance property
+line_number: 114
+description: |
+  Lists all filter queries associated with this path component, in the order in which they were
+  encountered during parsing.
+
+signatures:
+ -
+  signature: "Spah.SpahQL.Token.PathComponent#filterQueries"
+  return_value: "Array Token.FilterQuery"
+file: /Users/danski/Sites/spah/client/src/Spah.SpahQL.Token.PathComponent.js
+
+---
+id: "new Spah.SpahQL.Token.PathComponent"
+parent_id: "Spah.SpahQL.Token.PathComponent"
+type: constructor
+line_number: 121
+description: |
+  Instantiate a path component token with blank-slate values
+
+signatures:
+ -
+  signature: "new Spah.SpahQL.Token.PathComponent(key, property, recursive, filterQueries)"
+file: /Users/danski/Sites/spah/client/src/Spah.SpahQL.Token.PathComponent.js

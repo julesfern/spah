@@ -41,7 +41,7 @@ module Spah
         parsed_query = Spah::SpahQL::Query.new(query)
         
         i=0; read_result = nil;
-        while(read_result = read_ahead_token(i, query)) do
+        while(read_result = Spah::SpahQL::Token.parse_at(i, query)) do
           # Handle read result
           i = read_result[0]
           token = read_result[1]
@@ -82,26 +82,6 @@ module Spah
         end#while
         
         return cache_query(parsed_query, query)
-      end
-      
-      # Detects a token of any type and returns the resume index and the found token, along with the type of token encountered.
-      # @param [Numeric] i The index at which to detect the token
-      # @param [String] query The string query
-      # @return [Hash, nil] A hash with keys :resume_at, :token, :token_type, or nil.
-      def self.read_ahead_token(i, query)
-        r = nil
-        [ 
-          Spah::SpahQL::Token::ComparisonOperator,
-          Spah::SpahQL::Token::String,
-          Spah::SpahQL::Token::Numeric,
-          Spah::SpahQL::Token::Boolean,
-          Spah::SpahQL::Token::Set,
-          Spah::SpahQL::Token::SelectionQuery
-        ].each do |klass|
-          res = klass.parse_at(i, query)
-          return res unless res.nil?
-        end
-        return nil
       end
       
     end

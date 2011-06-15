@@ -16,7 +16,7 @@ module Spah
         #
         # @param [Numeric] i The index at which to detect the token
         # @param [String] query The string query
-        # @return [Array, nil] An array in the form [resumeIndex, foundToken], or nil if no token was found.
+        # @return [Array, nil] An array in the form \[resumeIndex, foundToken\], or nil if no token was found.
         def self.parse_at(i, query)
           return [i+ATOM_BOOLEAN_TRUE.length, self.new(true)] if(query[i, ATOM_BOOLEAN_TRUE.length] == ATOM_BOOLEAN_TRUE) 
           return [i+ATOM_BOOLEAN_FALSE.length, self.new(false)] if(query[i, ATOM_BOOLEAN_FALSE.length] == ATOM_BOOLEAN_FALSE)

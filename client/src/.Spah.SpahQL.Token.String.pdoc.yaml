@@ -13,7 +13,7 @@ file: /Users/danski/Sites/spah/client/src/Spah.SpahQL.Token.String.js
 id: "Spah.SpahQL.Token.String.parseAt"
 parent_id: "Spah.SpahQL.Token.String"
 type: class method
-line_number: 20
+line_number: 25
 description: |
   Identifies a string literal at the given index in the given string query and returns null
   if no token is identified, or a tuple of terminating index and the instantiated token if successful.
@@ -21,5 +21,5 @@ description: |
 signatures:
  -
   signature: "Spah.SpahQL.Token.String.parseAt(i, query)"
-  return_value: "Array[resumeIndex, foundToken] or null"
+  return_value: "Array\\[resumeIndex, foundToken\\] or null"
 file: /Users/danski/Sites/spah/client/src/Spah.SpahQL.Token.String.js

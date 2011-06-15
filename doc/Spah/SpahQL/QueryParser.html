@@ -200,31 +200,6 @@ pre-parsed query from memory if the given string has already been parsed.
 </li>
 
       
-        <li class="public ">
-  <span class="summary_signature">
-    
-      <a href="#read_ahead_token-class_method" title="read_ahead_token (class method)">+ (Hash<sup>?</sup>) <strong>read_ahead_token</strong>(i, query) </a>
-    
-
-    
-  </span>
-  
-  
-  
-  
-  
-  
-
-  
-    <span class="summary_desc"><div class='inline'><p>
-Detects a token of any type and returns the resume index and the found
-token, along with the type of token encountered.
-</p>
-</div></span>
-  
-</li>
-
-      
     </ul>
   
 
@@ -503,27 +478,7 @@ the string parsed into a runnable parsed query instance
 84
 85
 86
-87
-88
-89
-90
-91
-92
-93
-94
-95
-96
-97
-98
-99
-100
-101
-102
-103
-104
-105
-106
-107</pre>
+87</pre>
     </td>
     <td>
       <pre class="code"><span class="info file"># File 'lib/spahql/query_parser.rb', line 33</span>
@@ -539,7 +494,7 @@ the string parsed into a runnable parsed query instance
     <span class='parsed_query identifier id'>parsed_query</span> <span class='assign token'>=</span> <span class='Spah constant id'>Spah</span><span class='colon2 op'>::</span><span class='SpahQL constant id'>SpahQL</span><span class='colon2 op'>::</span><span class='Query constant id'>Query</span><span class='dot token'>.</span><span class='new identifier id'>new</span><span class='lparen token'>(</span><span class='query identifier id'>query</span><span class='rparen token'>)</span>
     
     <span class='i identifier id'>i</span><span class='assign token'>=</span><span class='integer val'>0</span><span class='semicolon token'>;</span> <span class='read_result identifier id'>read_result</span> <span class='assign token'>=</span> <span class='nil nil kw'>nil</span><span class='semicolon token'>;</span>
-    <span class='while while kw'>while</span><span class='lparen token'>(</span><span class='read_result identifier id'>read_result</span> <span class='assign token'>=</span> <span class='read_ahead_token identifier id'>read_ahead_token</span><span class='lparen token'>(</span><span class='i identifier id'>i</span><span class='comma token'>,</span> <span class='query identifier id'>query</span><span class='rparen token'>)</span><span class='rparen token'>)</span> <span class='do do kw'>do</span>
+    <span class='while while kw'>while</span><span class='lparen token'>(</span><span class='read_result identifier id'>read_result</span> <span class='assign token'>=</span> <span class='Spah constant id'>Spah</span><span class='colon2 op'>::</span><span class='SpahQL constant id'>SpahQL</span><span class='colon2 op'>::</span><span class='Token constant id'>Token</span><span class='dot token'>.</span><span class='parse_at identifier id'>parse_at</span><span class='lparen token'>(</span><span class='i identifier id'>i</span><span class='comma token'>,</span> <span class='query identifier id'>query</span><span class='rparen token'>)</span><span class='rparen token'>)</span> <span class='do do kw'>do</span>
       <span class='comment val'># Handle read result</span>
       <span class='i identifier id'>i</span> <span class='assign token'>=</span> <span class='read_result identifier id'>read_result</span><span class='lbrack token'>[</span><span class='integer val'>0</span><span class='rbrack token'>]</span>
       <span class='token identifier id'>token</span> <span class='assign token'>=</span> <span class='read_result identifier id'>read_result</span><span class='lbrack token'>[</span><span class='integer val'>1</span><span class='rbrack token'>]</span>
@@ -582,148 +537,6 @@ the string parsed into a runnable parsed query instance
     <span class='return return kw'>return</span> <span class='cache_query identifier id'>cache_query</span><span class='lparen token'>(</span><span class='parsed_query identifier id'>parsed_query</span><span class='comma token'>,</span> <span class='query identifier id'>query</span><span class='rparen token'>)</span>
   <span class='end end kw'>end</span>
   
-  <span class='comment val'># Detects a token of any type and returns the resume index and the found token, along with the type of token encountered.</span>
-  <span class='comment val'># @param [Numeric] i The index at which to detect the token</span>
-  <span class='comment val'># @param [String] query The string query</span>
-  <span class='comment val'># @return [Hash, nil] A hash with keys :resume_at, :token, :token_type, or nil.</span>
-  <span class='def def kw'>def</span> <span class='self self kw'>self</span><span class='dot token'>.</span><span class='read_ahead_token identifier id'>read_ahead_token</span><span class='lparen token'>(</span><span class='i identifier id'>i</span><span class='comma token'>,</span> <span class='query identifier id'>query</span><span class='rparen token'>)</span>
-    <span class='r identifier id'>r</span> <span class='assign token'>=</span> <span class='nil nil kw'>nil</span>
-    <span class='lbrack token'>[</span> 
-      <span class='Spah constant id'>Spah</span><span class='colon2 op'>::</span><span class='SpahQL constant id'>SpahQL</span><span class='colon2 op'>::</span><span class='Token constant id'>Token</span><span class='colon2 op'>::</span><span class='ComparisonOperator constant id'>ComparisonOperator</span><span class='comma token'>,</span>
-      <span class='Spah constant id'>Spah</span><span class='colon2 op'>::</span><span class='SpahQL constant id'>SpahQL</span><span class='colon2 op'>::</span><span class='Token constant id'>Token</span><span class='colon2 op'>::</span><span class='String constant id'>String</span><span class='comma token'>,</span>
-      <span class='Spah constant id'>Spah</span><span class='colon2 op'>::</span><span class='SpahQL constant id'>SpahQL</span><span class='colon2 op'>::</span><span class='Token constant id'>Token</span><span class='colon2 op'>::</span><span class='Numeric constant id'>Numeric</span><span class='comma token'>,</span>
-      <span class='Spah constant id'>Spah</span><span class='colon2 op'>::</span><span class='SpahQL constant id'>SpahQL</span><span class='colon2 op'>::</span><span class='Token constant id'>Token</span><span class='colon2 op'>::</span><span class='Boolean constant id'>Boolean</span><span class='comma token'>,</span>
-      <span class='Spah constant id'>Spah</span><span class='colon2 op'>::</span><span class='SpahQL constant id'>SpahQL</span><span class='colon2 op'>::</span><span class='Token constant id'>Token</span><span class='colon2 op'>::</span><span class='Set constant id'>Set</span><span class='comma token'>,</span>
-      <span class='Spah constant id'>Spah</span><span class='colon2 op'>::</span><span class='SpahQL constant id'>SpahQL</span><span class='colon2 op'>::</span><span class='Token constant id'>Token</span><span class='colon2 op'>::</span><span class='SelectionQuery constant id'>SelectionQuery</span>
-    <span class='rbrack token'>]</span><span class='dot token'>.</span><span class='each identifier id'>each</span> <span class='do do kw'>do</span> <span class='bitor op'>|</span><span class='klass identifier id'>klass</span><span class='bitor op'>|</span>
-      <span class='res identifier id'>res</span> <span class='assign token'>=</span> <span class='klass identifier id'>klass</span><span class='dot token'>.</span><span class='parse_at identifier id'>parse_at</span><span class='lparen token'>(</span><span class='i identifier id'>i</span><span class='comma token'>,</span> <span class='query identifier id'>query</span><span class='rparen token'>)</span>
-      <span class='return return kw'>return</span> <span class='res identifier id'>res</span> <span class='unless unless_mod kw'>unless</span> <span class='res identifier id'>res</span><span class='dot token'>.</span><span class='nil? fid id'>nil?</span>
-    <span class='end end kw'>end</span>
-    <span class='return return kw'>return</span> <span class='nil nil kw'>nil</span>
-  <span class='end end kw'>end</span>
-  
-<span class='end end kw'>end</span>
-</pre>
-    </td>
-  </tr>
-</table>
-</div>
-    
-      <div class="method_details ">
-  <p class="signature " id="read_ahead_token-class_method">
-  
-    + (<tt>Hash</tt><sup>?</sup>) <strong>read_ahead_token</strong>(i, query) 
-  
-
-  
-</p><div class="docstring">
-  <div class="discussion">
-    <p>
-Detects a token of any type and returns the resume index and the found
-token, along with the type of token encountered.
-</p>
-
-
-  </div>
-</div>
-<div class="tags">
-  <h3>Parameters:</h3>
-<ul class="param">
-  
-    <li>
-      
-        <span class='type'>(<tt>Numeric</tt>)</span>
-      
-      
-        <span class='name'>i</span>
-      
-      
-      
-        &mdash;
-        <div class='inline'><p>
-The index at which to detect the token
-</p>
-</div>
-      
-    </li>
-  
-    <li>
-      
-        <span class='type'>(<tt>String</tt>)</span>
-      
-      
-        <span class='name'>query</span>
-      
-      
-      
-        &mdash;
-        <div class='inline'><p>
-The string query
-</p>
-</div>
-      
-    </li>
-  
-</ul>
-<h3>Returns:</h3>
-<ul class="return">
-  
-    <li>
-      
-        <span class='type'>(<tt>Hash</tt>, <tt>nil</tt>)</span>
-      
-      
-      
-      
-        &mdash;
-        <div class='inline'><p>
-A hash with keys :resume_at, :token, :token_type, or nil.
-</p>
-</div>
-      
-    </li>
-  
-</ul>
-
-</div><table class="source_code">
-  <tr>
-    <td>
-      <pre class="lines">
-
-
-91
-92
-93
-94
-95
-96
-97
-98
-99
-100
-101
-102
-103
-104
-105</pre>
-    </td>
-    <td>
-      <pre class="code"><span class="info file"># File 'lib/spahql/query_parser.rb', line 91</span>
-
-<span class='def def kw'>def</span> <span class='self self kw'>self</span><span class='dot token'>.</span><span class='read_ahead_token identifier id'>read_ahead_token</span><span class='lparen token'>(</span><span class='i identifier id'>i</span><span class='comma token'>,</span> <span class='query identifier id'>query</span><span class='rparen token'>)</span>
-  <span class='r identifier id'>r</span> <span class='assign token'>=</span> <span class='nil nil kw'>nil</span>
-  <span class='lbrack token'>[</span> 
-    <span class='Spah constant id'>Spah</span><span class='colon2 op'>::</span><span class='SpahQL constant id'>SpahQL</span><span class='colon2 op'>::</span><span class='Token constant id'>Token</span><span class='colon2 op'>::</span><span class='ComparisonOperator constant id'>ComparisonOperator</span><span class='comma token'>,</span>
-    <span class='Spah constant id'>Spah</span><span class='colon2 op'>::</span><span class='SpahQL constant id'>SpahQL</span><span class='colon2 op'>::</span><span class='Token constant id'>Token</span><span class='colon2 op'>::</span><span class='String constant id'>String</span><span class='comma token'>,</span>
-    <span class='Spah constant id'>Spah</span><span class='colon2 op'>::</span><span class='SpahQL constant id'>SpahQL</span><span class='colon2 op'>::</span><span class='Token constant id'>Token</span><span class='colon2 op'>::</span><span class='Numeric constant id'>Numeric</span><span class='comma token'>,</span>
-    <span class='Spah constant id'>Spah</span><span class='colon2 op'>::</span><span class='SpahQL constant id'>SpahQL</span><span class='colon2 op'>::</span><span class='Token constant id'>Token</span><span class='colon2 op'>::</span><span class='Boolean constant id'>Boolean</span><span class='comma token'>,</span>
-    <span class='Spah constant id'>Spah</span><span class='colon2 op'>::</span><span class='SpahQL constant id'>SpahQL</span><span class='colon2 op'>::</span><span class='Token constant id'>Token</span><span class='colon2 op'>::</span><span class='Set constant id'>Set</span><span class='comma token'>,</span>
-    <span class='Spah constant id'>Spah</span><span class='colon2 op'>::</span><span class='SpahQL constant id'>SpahQL</span><span class='colon2 op'>::</span><span class='Token constant id'>Token</span><span class='colon2 op'>::</span><span class='SelectionQuery constant id'>SelectionQuery</span>
-  <span class='rbrack token'>]</span><span class='dot token'>.</span><span class='each identifier id'>each</span> <span class='do do kw'>do</span> <span class='bitor op'>|</span><span class='klass identifier id'>klass</span><span class='bitor op'>|</span>
-    <span class='res identifier id'>res</span> <span class='assign token'>=</span> <span class='klass identifier id'>klass</span><span class='dot token'>.</span><span class='parse_at identifier id'>parse_at</span><span class='lparen token'>(</span><span class='i identifier id'>i</span><span class='comma token'>,</span> <span class='query identifier id'>query</span><span class='rparen token'>)</span>
-    <span class='return return kw'>return</span> <span class='res identifier id'>res</span> <span class='unless unless_mod kw'>unless</span> <span class='res identifier id'>res</span><span class='dot token'>.</span><span class='nil? fid id'>nil?</span>
-  <span class='end end kw'>end</span>
-  <span class='return return kw'>return</span> <span class='nil nil kw'>nil</span>
 <span class='end end kw'>end</span>
 </pre>
     </td>
@@ -736,7 +549,7 @@ A hash with keys :resume_at, :token, :token_type, or nil.
 </div>
     
     <div id="footer">
-  Generated on Tue Jun 14 12:03:46 2011 by 
+  Generated on Wed Jun 15 15:41:52 2011 by 
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.6.8 (ruby-1.8.7).
 </div>

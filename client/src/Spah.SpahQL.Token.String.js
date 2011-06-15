@@ -17,7 +17,7 @@
     ATOM_ESCAPE: '\\',
     
     /**
-     * Spah.SpahQL.Token.String.parseAt(i, query) -> Array[resumeIndex, foundToken] or null
+     * Spah.SpahQL.Token.String.parseAt(i, query) -> Array\[resumeIndex, foundToken\] or null
      *
      * Identifies a string literal at the given index in the given string query and returns null
      * if no token is identified, or a tuple of terminating index and the instantiated token if successful.

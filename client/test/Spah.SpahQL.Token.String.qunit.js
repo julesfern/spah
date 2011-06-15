@@ -3,29 +3,18 @@ $(document).ready(function() {
   module("Spah.SpahQL.Token.String");
   
   test("Returns a correct new index and found string when reading ahead for string literals", function() {
-    expect(22);
+    expect(12);
     
-    var tests = [
-      [[0, '"foo", bar'], [5,"foo"]],
-      [[0, '"foo"'], [5,"foo"]],
-      [[3, '---"foobar"---'], [11,"foobar"]],
-      [[3, '---"foobar"---'], [11,"foobar"]],
-      [[3, '---"foo\\"bar"'], [13,'foo\"bar']],
-      [[0, "'foo', bar"], [5,"foo"]],
-      [[0, "'foo'"], [5,"foo"]],
-      [[3, "---'foobar'---"], [11,"foobar"]],
-      [[3, "---'foobar'---"], [11,"foobar"]],
-      [[3, "---'foo\\\'bar'-"], [13,"foo'bar"]],
-    ];
-    
-    for(var i in tests) {
-      var input = tests[i][0];
-      var output = tests[i][1];
-      var result = Spah.SpahQL.Token.String.parseAt(input[0], input[1]);
-      
-      equal(result[0], output[0]);
-      equal(result[1].value, output[1]);
-    }
+    deepEqual([5, new Spah.SpahQL.Token.String("foo")], Spah.SpahQL.Token.String.parseAt(0, '"foo", bar'));
+    deepEqual([5, new Spah.SpahQL.Token.String("foo")], Spah.SpahQL.Token.String.parseAt(0, '"foo"'));
+    deepEqual([11, new Spah.SpahQL.Token.String("foobar")], Spah.SpahQL.Token.String.parseAt(3, '---"foobar"---'));
+    deepEqual([11, new Spah.SpahQL.Token.String("foobar")], Spah.SpahQL.Token.String.parseAt(3, '---"foobar"---'));
+    deepEqual([13, new Spah.SpahQL.Token.String('foo\"bar')], Spah.SpahQL.Token.String.parseAt(3, '---"foo\\"bar"'));
+    deepEqual([5, new Spah.SpahQL.Token.String("foo")], Spah.SpahQL.Token.String.parseAt(0, "'foo', bar"));
+    deepEqual([5, new Spah.SpahQL.Token.String("foo")], Spah.SpahQL.Token.String.parseAt(0, "'foo'"));
+    deepEqual([11, new Spah.SpahQL.Token.String("foobar")], Spah.SpahQL.Token.String.parseAt(3, "---'foobar'---"));
+    deepEqual([11, new Spah.SpahQL.Token.String("foobar")], Spah.SpahQL.Token.String.parseAt(3, "---'foobar'---"));
+    deepEqual([13, new Spah.SpahQL.Token.String("foo'bar")], Spah.SpahQL.Token.String.parseAt(3, "---'foo\\'bar'"));
     
     // No quotes
     equal(null, Spah.SpahQL.Token.String.parseAt(0, "foo, bar"));

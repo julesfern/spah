@@ -1,0 +1,68 @@
+---
+id: "Spah.SpahQL.Token.Set"
+parent_id: "Spah.SpahQL.Token"
+type: class
+superclass_id: "Spah.SpahQL.Token.Base"
+line_number: 7
+description: |
+  A wrappping class for any set literal, containing one or more values.
+  May qualify as a range if the range operator is used during parsing.
+
+file: /Users/danski/Sites/spah/client/src/Spah.SpahQL.Token.Set.js
+
+---
+id: "Spah.SpahQL.Token.Set.parseAt"
+parent_id: "Spah.SpahQL.Token.Set"
+type: class method
+line_number: 28
+description: |
+  Reads the given queryString starting at the given index and attempts to identify and parse
+  a set literal token. If found, the token will be returned in a tuple \[resumeIndex, foundToken\].
+  Returns null if nothing is found.
+
+signatures:
+ -
+  signature: "Spah.SpahQL.Token.Set.parseAt(index, queryString)"
+  return_value: "Array result or null"
+file: /Users/danski/Sites/spah/client/src/Spah.SpahQL.Token.Set.js
+
+---
+id: "Spah.SpahQL.Token.Set#tokens"
+parent_id: "Spah.SpahQL.Token.Set"
+type: instance property
+line_number: 96
+description: |
+  Contains all tokens included in this set, in the order in which they were encountered.
+
+signatures:
+ -
+  signature: "Spah.SpahQL.Token.Set#tokens"
+  return_value: "Array Token"
+file: /Users/danski/Sites/spah/client/src/Spah.SpahQL.Token.Set.js
+
+---
+id: "Spah.SpahQL.Token.Set#isRange"
+parent_id: "Spah.SpahQL.Token.Set"
+type: instance property
+line_number: 103
+description: |
+  A flag indicating whether or not this token is to be evaluated as a range.
+
+signatures:
+ -
+  signature: "Spah.SpahQL.Token.Set#isRange"
+  return_value: "Boolean"
+file: /Users/danski/Sites/spah/client/src/Spah.SpahQL.Token.Set.js
+
+---
+id: "new Spah.SpahQL.Token.Set"
+parent_id: "Spah.SpahQL.Token.Set"
+type: constructor
+line_number: 110
+description: |
+  Instantiate a new set token with the given list of tokens.
+
+signatures:
+ -
+  signature: "new Spah.SpahQL.Token.Set(value)"
+file: /Users/danski/Sites/spah/client/src/Spah.SpahQL.Token.Set.js
