@@ -80,6 +80,41 @@
     "init": function(pathComponents, useRoot) {
       this.pathComponents = pathComponents || [];
       this.useRoot = useRoot || false;
-    }
+    },
+    
+    /**
+     * Spah.SpahQL.Token.SelectionQuery#evaluate(rootData, scopeData, scopePath) -> Array of Spah.SpahQL.QueryResult instances
+     * - rootData (Object): The entire root-level data structure being queried
+     * - scopeData (Object): The data for the scope at which this query is being executed.
+     * - scopePath (String): The string path for the root of the scopeData argument.
+     *
+     * Evaluates all the path components in the given query in turn, creating an array of QueryResult instances.
+     **/
+    "evaluate": function(rootData, scopeData, scopePath) {
+      // Start off with a simulated result using the data required by the query
+      var results = [
+        new Spah.SpahQL.QueryResult(
+          ((this.useRoot)? null : scopePath) || "/", 
+          ((this.useRoot)? rootData : scopeData)
+        )
+      ];
+
+      // Loop path components and pass reduced data
+      for(var i=0; i< this.pathComponents.length; i++) {
+        var pc = this.pathComponents[i];
+        var pcResults = []; // The results, flattened, for this path component   
+
+        for(var j=0; j < results.length; j++) {
+          // Run each result from the previous iteration through the path component evaluator.
+          // Resultset for initial run is defined at top of this method.
+          pcResults = pcResults.concat(this.pc.evaluate(rootData, results[j].value, results[j].path));
+        }
+        results = pcResults;
+        
+        // only continue if there are results to work with
+        if(results.length == 0) break;
+      }
+      return results;
+    },
     
   });
