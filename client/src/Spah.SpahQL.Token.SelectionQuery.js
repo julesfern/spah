@@ -107,7 +107,7 @@
         for(var j=0; j < results.length; j++) {
           // Run each result from the previous iteration through the path component evaluator.
           // Resultset for initial run is defined at top of this method.
-          pcResults = pcResults.concat(this.pc.evaluate(rootData, results[j].value, results[j].path));
+          pcResults = pcResults.concat(pc.evaluate(rootData, results[j].value, results[j].path));
         }
         results = pcResults;
         

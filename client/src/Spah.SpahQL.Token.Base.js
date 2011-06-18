@@ -27,6 +27,10 @@
     
     "init": function() {
       
-    }
+    },
+    
+    "throwRuntimeError": function(token, message) {
+      throw new Error("Parse error: '"+(message||"failure to execute")+"' in token "+token+".");
+    },
     
   });

@@ -141,7 +141,7 @@
      * Used primarily in Token.SelectionQuery#evaluate to map each path component to a set of results, allowing the query process to be 
      * effectively forked or halted.
      **/
-    evalSelectionQueryPathComponent: function(rootData, scopeData, path) {
+    "evaluate": function(rootData, scopeData, path) {
       var results;
       var scopePath = (!path || path == "/")? "" : path; // Root path is blanked for easy appending 
 
@@ -165,13 +165,12 @@
         var fI, rI;
         var filteredResults = [];
         for(fI=0; fI<this.filterQueries.length; fI++) {
-          var filterQueryToken = this.filterQueries[fI]
-          var filterQuery = filterQueryToken.value;
+          var filterQueryToken = this.filterQueries[fI];
 
           // Loop results and assert filters against the result's data
           for(rI = 0; rI < results.length; rI++) {
             var r = results[rI];
-            if(filteredResults.indexOf(r) < 0 && Spah.SpahQL.QueryRunner.assert(filterQuery, rootData, r.value)) {
+            if(filteredResults.indexOf(r) < 0 && filterQueryToken.evaluate(rootData, r.value)) {
               filteredResults.push(r);
             }
           }

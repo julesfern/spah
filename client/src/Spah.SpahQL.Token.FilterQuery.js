@@ -61,6 +61,15 @@
   // Instance methods
   jQuery.extend(Spah.SpahQL.Token.FilterQuery.prototype, Spah.SpahQL.Token.Simple.prototype, {
     
-
+    /**
+     * Spah.SpahQL.Token.FilterQuery#evaluate(rootData, scopeData, path) -> Boolean
+     * - rootData (Object): The entire root-level data structure being queried
+     * - scopeData (Object): The data for the scope at which this query is being executed.
+     *
+     * Evaluates this filter query as an assertion.
+     **/
+    "evaluate": function(rootData, scopeData) {
+      return Spah.SpahQL.QueryRunner.assert(this.value, rootData, scopeData);
+    }
     
   });
