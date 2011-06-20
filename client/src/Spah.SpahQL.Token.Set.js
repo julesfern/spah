@@ -164,18 +164,17 @@
      * - start (Number): The number at the start of the range (10 is the start value for {10..8})
      * - end (Number): The number at the start of the range (8 is the end value for {10..8})
      *
+     * Works with a ruby-style evaluation. Reverse ranges evaluate as empty. Symmetrical ranges e.g. 10..10 evaluate with 
+     * one result.
+     *
      * Evaluates a numeric range literal, generating an array of QueryResults containing all values in the range.
      **/
     evalNumericRange: function(start, end) {
       var results = [];
-      var i = start;
-      var d = (start>=end)? -1 : 1;
-      while(true) {
+      // Return empty set for reverse ranges
+      if(end < start) return results;
+      for(var i=start; i<=end; i++) {
         results.push(new Spah.SpahQL.QueryResult(null, i));
-        i = i+d;
-        if((d < 0 && i < end) || (d > 0 && i > end)) {
-          break;
-        }
       }
       return results;
     },
@@ -188,20 +187,127 @@
      * Evaluates a string range literal, generating an array of QueryResults containing all values in the range.
      * String range literals are evaluated as numeric ranges using a radix of 35, and transposing the generated numeric values 
      * back into strings before returning them.
+     *
+     * Evaluates with a ruby-style behaviour, for instance:
+     * "a".."c" -> a, b, c
+     * "ab".."ad" -> ab, ac, ad
+     * "a1".."b2" -> a1, a2...... a8, a9, b1, b2
+     * "1b".."2b" -> 1b, 1c, 1d...... 1x, 1y, 1z, 2a, 2b
+     *
+     * So: Each digit is cycled based on a its type, and at the culmination of each digit's cycle the next highest-order
+     * digit is iterated. The types of digit are number, lowercase char and uppercase char.
+     *
+     * If the digits cannot be cycled to a match, as in the example "1a".."b1" where the digits are of differing types, the
+     * initial value is iterated to its peak and will terminate at that point. The generated range is equivalent in this case
+     * to "1a".."9z".
+     *
+     * If the values appear to be reversed (e.g. "z".."a", "9a".."3a", "D1".."A1") then in ruby style the range will evaluate
+     * as empty.
+     *
+     * We do this by defining three character code ranges for certain character types - integers(48-57), lower case characters (97-122)
+     * and uppercase characters (65-90). If any two characters belong to the same range then they are mutually iterable.
+     *
+     * There is a special case for single-character ranges where if the initial value sits outside of these ranges, it is iterated
+     * towards the destination value until it reaches the destination value or until it reaches the end of one of the predefined
+     * ranges above. For instance, "}".."~" will iterate successfully, but "x".."}" despite being an increasing range in raw
+     * character code terms will only evaluate to "x","y","z". In the case of a range like ")".."a" (character code 41 to 97) the iterator
+     * will enter the numeric character range (48-57) and in doing so will terminate at char code 57, character "9".
+     *
+     * In ranges with multiple digits, characters outside the three defined ranges are locked and do not iterate.
      **/
     evalStringRange: function(start, end) {
       var results = [];
-      var radix = 35;
-      var s = parseInt(start, radix); var e = parseInt(end, radix);
-      var i = s;
-      var d = (s>=e)? -1 : 1;
-      while(true) {
-        results.push(new Spah.SpahQL.QueryResult(null, i.toString(radix)));
-        i = i+d;
-        if((d < 0 && i < e) || (d > 0 && i > e)) {
-          break;
+      
+      // Figure out if this is a reversed or symmetrical range. 
+      // Another easy comparison: Symmetrical ranges have one entry
+      if(start == end) return [new Spah.SpahQL.QueryResult(null, start)];
+      // Easy comparison: One string is shorter than the other or the range is reversed
+      if((start > end)||(start.length!=end.length)) return results; 
+      
+      // Columnar charcode indexes:
+      // integer: 48..57 == "0".."9"
+      // ucase: 65..90 == "A".."Z"
+      // lcase: 97..122 == "a".."z"
+      
+      // We're going to treat this like a slot machine. 
+      // Create an array of "locks" which are locked columns in the range.
+      var locks = [];
+      var allLocked = true;
+      for(var c=0; c<start.length; c++) {
+        var code = start.charCodeAt(c);
+        // If outside of range, lock
+        locks[c] = ((code >= 48 && code <= 57) || (code >= 65 && code <= 90) || (code >= 97 && code <= 122))? false : true;
+        allLocked = (locks[c]==true && allLocked==true);
+        // If all others are locked and this is last column, unlock
+        if(allLocked && c == start.length-1) locks[c] = false;
+      }
+            
+      var nextWorkingCol = function(wC) {
+        for(var w=wC-1; w>-2; w--) {
+          if(locks[w] == false) return w;
         }
       }
+      
+      var gen = start+""; // clone start
+      iterating: while(true) {
+        // ^^^^
+        // When the workingCol hits -1 we know we popped a carry on the highest-order digit and maxed the string
+        // If nextString == end then we hit the range target and should break.
+        // Push the last-iterated result
+        //results.push(new Spah.SpahQL.QueryResult(null, gen));
+        results.push(gen);
+        if(gen == end) break iterating;
+        
+        // Iterate until carrying stops, giving us our new stop value for the next increment
+        var workingCol = nextWorkingCol(start.length),
+            carry = true,
+            next = "";        
+        
+        carrying: while(true) {
+          // Iterate start string and push new results. Break on maxing all unlocked columns or on reaching end token.
+          // Iteration works on the lowest-order unlocked column and may generate a carry operation, which resets the current working
+          // column to its lowest value and increments the next highest-order unlocked column. This in turn may generate a carry operation.
+          // If the overall highest-order unlocked column generates a carry when incremented, then the string is maxed and the range
+          // terminates.
+          next = (function(str) {
+              // Iterates a character and generates a new string and potentially a carry.
+              var carry = false;
+              var cCode = str.charCodeAt(0);
+              var nCode;
+              if(cCode == 57) {
+                carry = true;
+                nCode = 48;
+              }
+              else if(cCode == 90) {
+                carry = true;
+                nCode = 65;
+              }
+              else if(cCode == 122) {
+                carry = true;
+                nCode = 97;
+              }
+              else if(cCode == 127) {
+                carry = true;
+                nCode = cCode;
+              } 
+              else {
+                nCode = cCode+1;
+              }
+              return [String.fromCharCode(nCode), carry];
+          })(gen.charAt(workingCol));
+          
+          gen = gen.split(""); gen.splice(workingCol,1,next[0]); gen = gen.join("");
+          if(next[1]==true) {
+            // Next next highest-order unlocked col
+            workingCol = nextWorkingCol(workingCol);
+            if(workingCol < 0) break iterating;
+          }
+          else {
+            break carrying;
+          }
+        }
+      }
+      
       return results;
     },
     
