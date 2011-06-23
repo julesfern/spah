@@ -4,12 +4,7 @@
  * A simple token wrapping a valid variable or identifier value.
  **/
  
-  // Define and export
-  Spah.SpahQL.Token.KeyName = function(value) { this.init(value) };
-  window["Spah"]["SpahQL"]["Token"]["KeyName"] = Spah.SpahQL.Token.KeyName;
-  
-  // Singletons
-  jQuery.extend(Spah.SpahQL.Token.KeyName, Spah.SpahQL.Token.Simple, {
+Spah.classExtend("Spah.SpahQL.Token.KeyName", Spah.SpahQL.Token.Simple, {
     
     /**
      * Spah.SpahQL.Token.KeyName.parseAt(i, query) -> Array\[resumeIndex, foundToken\] or null
@@ -27,9 +22,4 @@
       return (token.length > 0)? [j, new this(token)] : null;
     }
     
-  });
-  
-  // Instance methods
-  jQuery.extend(Spah.SpahQL.Token.KeyName.prototype, Spah.SpahQL.Token.Simple.prototype, {
-    
-  });
+});

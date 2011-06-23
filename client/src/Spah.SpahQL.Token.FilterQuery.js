@@ -5,12 +5,10 @@
  * followed by a key or property name and an optional set of filter query tokens.
  **/
  
-  // Define and export
-  Spah.SpahQL.Token.FilterQuery = function(value) { this.init(value) };
-  window["Spah"]["SpahQL"]["Token"]["FilterQuery"] = Spah.SpahQL.Token.FilterQuery;
-  
-  // Singletons
-  jQuery.extend(Spah.SpahQL.Token.FilterQuery, Spah.SpahQL.Token.Simple, {
+Spah.classExtend("Spah.SpahQL.Token.FilterQuery", Spah.SpahQL.Token.Simple, {
+
+    // Singleton
+    // -----------------------
 
     // Atom configuration: paths
     ATOM_FILTER_QUERY_START: "[",
@@ -56,10 +54,9 @@
       return null;
     }
     
-  });
-  
-  // Instance methods
-  jQuery.extend(Spah.SpahQL.Token.FilterQuery.prototype, Spah.SpahQL.Token.Simple.prototype, {
+}, {
+    
+    // Instance
     
     /**
      * Spah.SpahQL.Token.FilterQuery#evaluate(rootData, scopeData, path) -> Boolean
@@ -72,4 +69,4 @@
       return Spah.SpahQL.QueryRunner.assert(this.value, rootData, scopeData);
     }
     
-  });
+});

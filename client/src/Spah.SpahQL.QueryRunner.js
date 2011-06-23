@@ -6,11 +6,10 @@
  *
  * Unless you're spelunking or fixing bugs, the only methods you care about are _select_ and _assert_.
  **/
-Spah.SpahQL.QueryRunner = function() {};
-window["Spah"]["SpahQL"]["QueryRunner"] = Spah.SpahQL.QueryRunner;
-
-// Singletons
-jQuery.extend(Spah.SpahQL.QueryRunner, {
+Spah.classCreate("Spah.SpahQL.QueryRunner", {
+  
+  // Singletons
+  // ------------------------
   
   /**
    * Spah.SpahQL.QueryRunner.select(query, rootData[,scopeData, scopePath]) -> Array of Spah.SpahQL.QueryResult instances

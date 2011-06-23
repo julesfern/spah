@@ -6,10 +6,7 @@
  **/
  
 // Define and export
-Spah.SpahQL.Token = {};
-window["Spah"]["SpahQL"]["Token"] = Spah.SpahQL.Token;
-
-jQuery.extend(Spah.SpahQL.Token, {
+Spah.classCreate("Spah.SpahQL.Token", {
   
   /**
    * Spah.SpahQL.Token.parseAt(i, query) -> Array result
@@ -36,9 +33,3 @@ jQuery.extend(Spah.SpahQL.Token, {
   },
   
 });
-
-jQuery.extend(Spah.SpahQL.Token.prototype, {
-  
-
-  
-})

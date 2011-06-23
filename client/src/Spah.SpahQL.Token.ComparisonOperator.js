@@ -4,12 +4,7 @@
  * A simple token wrapping a string literal value.
  **/
  
-  // Define and export
-  Spah.SpahQL.Token.ComparisonOperator = function(value) { this.init(value) };
-  window["Spah"]["SpahQL"]["Token"]["ComparisonOperator"] = Spah.SpahQL.Token.ComparisonOperator;
-  
-  // Singletons
-  jQuery.extend(Spah.SpahQL.Token.ComparisonOperator, Spah.SpahQL.Token.Simple, {
+Spah.classExtend("Spah.SpahQL.Token.ComparisonOperator", Spah.SpahQL.Token.Simple, {
     
     COMPARISON_OPERATORS: ["==", "=~", ">", "<", ">=", "<=", "!=", "}~{", "}>{", "}<{", "}!{"],
     COMPARISON_STRICT_EQUALITY: "==",
@@ -36,9 +31,4 @@
       else return null;
     }
     
-  });
-  
-  // Instance methods
-  jQuery.extend(Spah.SpahQL.Token.ComparisonOperator.prototype, Spah.SpahQL.Token.Simple.prototype, {
-    
-  });
+});

@@ -4,12 +4,10 @@
  * A simple token wrapping an integer or floating-point numeric literal value.
  **/
  
-  // Define and export
-  Spah.SpahQL.Token.Numeric = function(value) { this.init(value) };
-  window["Spah"]["SpahQL"]["Token"]["Numeric"] = Spah.SpahQL.Token.Numeric;
-  
-  // Singletons
-  jQuery.extend(Spah.SpahQL.Token.Numeric, Spah.SpahQL.Token.Simple, {
+Spah.classExtend("Spah.SpahQL.Token.Numeric", Spah.SpahQL.Token.Simple, {
+    
+    // Singleton
+    // -------------------------
     
     // Atom configuration: numerics
     ATOM_NUMERIC_POINT: ".",
@@ -59,9 +57,4 @@
        }
     }
     
-  });
-  
-  // Instance methods
-  jQuery.extend(Spah.SpahQL.Token.Numeric.prototype, Spah.SpahQL.Token.Simple.prototype, {
-    
-  });
+});

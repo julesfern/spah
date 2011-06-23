@@ -8,7 +8,7 @@
  * The main SpahQL module also provides the frontend 
  **/
 
-Spah.SpahQL = Spah.classCreate("SpahQL", {
+Spah.SpahQL = Spah.classCreate("Spah.SpahQL", {
   
   /** 
    * Spah.SpahQL.select(query, data[, path]) -> QueryResultSet

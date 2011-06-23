@@ -5,17 +5,13 @@
  * Queries are parsed only once, upon registration. The QueryParser maintains a cache of pre-existing parsed queries keyed by the original query string.
  **/
  
- // Define and export
- Spah.SpahQL.Query = function() {};
- window["Spah"]["SpahQL"]["Query"] = Spah.SpahQL.Query;
+Spah.classCreate("Spah.SpahQL.Query", {
+  // Singletons
+  // ---------------------
+},{
  
- // Singletons
- jQuery.extend(Spah.SpahQL.Query, {
-   
- });
- 
- // Instance
- jQuery.extend(Spah.SpahQL.Query.prototype, {
+  // Instance
+  // ----------------------
    
    /**
     * Spah.SpahQL.Query#rawString -> String original representation

@@ -76,8 +76,8 @@ Spah["classCreate"] = function(name, klassProps, instanceProps) {
   
   // Register on the Spah constant
   var nameNS = name.split(".");
-  var target = Spah;
-  for(var n=0; n<nameNS.length; n++) {
+  var target = window[nameNS[0]];
+  for(var n=1; n<nameNS.length; n++) {
     if(n < nameNS.length-1) {
       // intermediary key
       target[nameNS[n]] = target[nameNS[n]] || {};

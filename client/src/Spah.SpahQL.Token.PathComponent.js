@@ -5,12 +5,10 @@
  * followed by a key or property name and an optional set of filter query tokens.
  **/
  
-  // Define and export
-  Spah.SpahQL.Token.PathComponent = function(key, property, recursive, filterQueries) { this.init(key, property, recursive, filterQueries); };
-  window["Spah"]["SpahQL"]["Token"]["PathComponent"] = Spah.SpahQL.Token.PathComponent;
+Spah.classExtend("Spah.SpahQL.Token.PathComponent", Spah.SpahQL.Token.Base, {
   
-  // Singletons
-  jQuery.extend(Spah.SpahQL.Token.PathComponent, Spah.SpahQL.Token.Base, {
+    // Singleton
+    // ---------------------------
 
     // Atom configuration: paths
     ATOM_PATH_DELIMITER: "/",
@@ -78,10 +76,10 @@
       return null;
     }
     
-  });
+},{
   
-  // Instance methods
-  jQuery.extend(Spah.SpahQL.Token.PathComponent.prototype, Spah.SpahQL.Token.Base.prototype, {
+    // Instance
+    // ----------------------------------------
     
     // Constants for known symbols
     PROPERTY_TYPE: "type",
@@ -268,4 +266,4 @@
       return results;
     }
     
-  });
+});

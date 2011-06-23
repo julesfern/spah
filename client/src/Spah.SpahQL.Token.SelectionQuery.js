@@ -5,12 +5,10 @@
  * path components.
  **/
  
-  // Define and export
-  Spah.SpahQL.Token.SelectionQuery = function(pathComponents, useRoot) { this.init(pathComponents, useRoot) };
-  window["Spah"]["SpahQL"]["Token"]["SelectionQuery"] = Spah.SpahQL.Token.SelectionQuery;
-  
-  // Singletons
-  jQuery.extend(Spah.SpahQL.Token.SelectionQuery, Spah.SpahQL.Token.Base, {
+Spah.classExtend("Spah.SpahQL.Token.SelectionQuery", Spah.SpahQL.Token.Base, {
+
+    // Singleton
+    // --------------------------
 
     // Atom configuration: paths
     ATOM_PATH_ROOT: "$",
@@ -52,11 +50,11 @@
       return null;
     }
     
-  });
-  
-  // Instance methods
-  jQuery.extend(Spah.SpahQL.Token.SelectionQuery.prototype, Spah.SpahQL.Token.Base.prototype, {
-    
+}, {
+
+    // Instance 
+    // --------------------
+   
     /**
      * Spah.SpahQL.Token.SelectionQuery#pathComponents -> Array Token.PathComponent
      *
@@ -115,6 +113,6 @@
         if(results.length == 0) break;
       }
       return results;
-    },
+    }
     
-  });
+});

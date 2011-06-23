@@ -5,32 +5,30 @@
  * that are encountered during the parsing process
  **/
  
-  // Define and export
-  Spah.SpahQL.Token.Base = function() { this.init() };
-  window["Spah"]["SpahQL"]["Token"]["Base"] = Spah.SpahQL.Token.Base;
+Spah.classCreate("Spah.SpahQL.Token.Base", {
   
-  // Singletons
-  jQuery.extend(Spah.SpahQL.Token.Base, {
-    
-    /**
-     * Spah.SpahQL.Token.Base.parseAt(index, queryString) -> Array\[resumeIndex, foundToken\] or null
-     * Should be overridden by the child class.
-     **/
-    "parseAt": function() {
-      throw "I should have been overridden. Something is disastrously wrong.";
-    }
-    
-  });
+  // Singleton
+  // ---------------------
   
-  // Instance methods
-  jQuery.extend(Spah.SpahQL.Token.Base.prototype, {
+  /**
+   * Spah.SpahQL.Token.Base.parseAt(index, queryString) -> Array\[resumeIndex, foundToken\] or null
+   * Should be overridden by the child class.
+   **/
+  "parseAt": function() {
+    throw "I should have been overridden. Something is disastrously wrong.";
+  }
+  
+}, {
+  
+  // Instances
+  // ----------------------
+  
+  "init": function() {
     
-    "init": function() {
-      
-    },
-    
-    "throwRuntimeError": function(token, message) {
-      throw new Error("Parse error: '"+(message||"failure to execute")+"' in token "+token+".");
-    },
-    
-  });
+  },
+  
+  "throwRuntimeError": function(token, message) {
+    throw new Error("Parse error: '"+(message||"failure to execute")+"' in token "+token+".");
+  }
+  
+});

@@ -4,15 +4,14 @@
  * A simple model wrapping an individual result returned from a SpahQL query.
  **/
  
-/**
- * new Spah.SpahQL.QueryResult(path, value)
- *
- * Creates a new instance with the specified path and value.
- **/
-Spah.SpahQL.QueryResult = function(path, value) { this.path = path; this.value = value; };
-window["Spah"]["SpahQL"]["QueryResult"] = Spah.SpahQL.QueryResult;
 
-Spah.SpahQL.QueryResult.prototype = {
+Spah.classCreate("Spah.SpahQL.QueryResult", {
+  // Singletons
+  // --------------------
+},{
+  
+  // Instance
+  // -------------------
   
   /**
    * Spah.SpahQL.QueryResult#path -> String path or null
@@ -27,6 +26,16 @@ Spah.SpahQL.QueryResult.prototype = {
    * 
    * The raw value of this query result as represented in the queried object.
    **/
-  "value": null
+  "value": null,
   
-};
+  /**
+   * new Spah.SpahQL.QueryResult(path, value)
+   *
+   * Creates a new instance with the specified path and value.
+   **/
+  "init": function(path, value) {
+    this.path = path; 
+    this.value = value; 
+  }
+  
+});

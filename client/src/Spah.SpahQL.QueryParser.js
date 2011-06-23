@@ -5,12 +5,10 @@
  * Maintains a cache of previously-parsed queries for speed.
  **/
  
- // Define and export
- Spah.SpahQL.QueryParser = function() {};
- window["Spah"]["SpahQL"]["QueryParser"] = Spah.SpahQL.QueryParser;
- 
- // Singletons
- jQuery.extend(Spah.SpahQL.QueryParser, {
+Spah.classCreate("Spah.SpahQL.QueryParser", {
+   
+   // Singletons
+   // ---------------------------------
    
    /**
     * Spah.SpahQL.QueryParser.queryCache -> Object cached queries
