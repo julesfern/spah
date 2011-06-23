@@ -153,7 +153,7 @@
         // Loop - evaluate queries
         for(var i in this.tokens) {
           var token = this.tokens[i];
-          results = results.concat(token.evaluate(rootData, scopeData));
+          results = results.concat(token.evaluate(rootData, scopeData, scopePath));
         }
       }
       return results;
@@ -254,8 +254,7 @@
         // When the workingCol hits -1 we know we popped a carry on the highest-order digit and maxed the string
         // If nextString == end then we hit the range target and should break.
         // Push the last-iterated result
-        //results.push(new Spah.SpahQL.QueryResult(null, gen));
-        results.push(gen);
+        results.push(new Spah.SpahQL.QueryResult(null, gen));
         if(gen == end) break iterating;
         
         // Iterate until carrying stops, giving us our new stop value for the next increment

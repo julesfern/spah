@@ -25,3 +25,30 @@ signatures:
   signature: "Spah.SpahQL.Token.FilterQuery.parseAt(index, queryString)"
   return_value: "Array result or null"
 file: /Users/danski/Sites/spah/client/src/Spah.SpahQL.Token.FilterQuery.js
+
+---
+id: "Spah.SpahQL.Token.FilterQuery#evaluate"
+parent_id: "Spah.SpahQL.Token.FilterQuery"
+type: instance method
+line_number: 71
+description: |
+  Evaluates this filter query as an assertion.
+
+signatures:
+ -
+  signature: "Spah.SpahQL.Token.FilterQuery#evaluate(rootData, scopeData, path)"
+  return_value: "Boolean"
+arguments:
+ -
+  name: rootData
+  types: [Object]
+  description: >
+    The entire root-level data structure being queried
+
+ -
+  name: scopeData
+  types: [Object]
+  description: >
+    The data for the scope at which this query is being executed.
+
+file: /Users/danski/Sites/spah/client/src/Spah.SpahQL.Token.FilterQuery.js

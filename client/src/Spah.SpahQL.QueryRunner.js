@@ -13,51 +13,54 @@ window["Spah"]["SpahQL"]["QueryRunner"] = Spah.SpahQL.QueryRunner;
 jQuery.extend(Spah.SpahQL.QueryRunner, {
   
   /**
-   * Spah.SpahQL.QueryRunner.select(query, rootData[,scopeData]) -> Array of Spah.SpahQL.QueryResult instances
+   * Spah.SpahQL.QueryRunner.select(query, rootData[,scopeData, scopePath]) -> Array of Spah.SpahQL.QueryResult instances
    * - query (Spah.SpahQL.Query): A parsed query instance
    * - rootData (Object): The root data context against which to run the query
    * - scopeData (Object): An optional additional data context which will be the local scope for this query. If not set, will be set internally to <code>rootData</code>.
+   * - scopePath (String): An optional path indicating the scope to which this query has been restricted.
    *
    * Executes a selection query against the given dataset. Returns an array of result instances.
    **/
-  "select": function(query, rootData, scopeData) {
+  "select": function(query, rootData, scopeData, scopePath) {
     if(query.assertion) throw new Spah.SpahQL.Errors.SpahQLRunTimeError("Attempted to select from an assertion query.");
     // Now move on
     scopeData = scopeData || rootData;
-    return query.primaryToken.evaluate(rootData, scopeData);
+    return query.primaryToken.evaluate(rootData, scopeData, scopePath);
   },
   
   /**
-   * Spah.SpahQL.QueryRunner.assert(query, rootData[, scopeData]) -> Boolean result
+   * Spah.SpahQL.QueryRunner.assert(query, rootData[, scopeData, scopePath]) -> Boolean result
    * - query (Spah.SpahQL.Query): A parsed query instance
    * - rootData (Object): The root data context against which to run the query
    * - scopeData (Object): An optional additional data context which will be the local scope for this query. If not set, will be set internally to <code>rootData</code>.
+   * - scopePath (String): An optional path indicating the scope to which this query has been restricted.
    *
    * Executes and ssserts the truthiness of a selection or assertion query against the given dataset. 
    * Returns a boolean indicating the overall result of the query - if the query is not an assertion
    * query, it will return true if the query returns one or more results.
    **/
-  "assert": function(query, rootData, scopeData) {
+  "assert": function(query, rootData, scopeData, scopePath) {
     scopeData = scopeData || rootData;
-    return this.evalAssertion(query.primaryToken, query.secondaryToken, query.comparisonOperator, rootData, scopeData);
+    return this.evalAssertion(query.primaryToken, query.secondaryToken, query.comparisonOperator, rootData, scopeData, scopePath);
   },
   
   /**
-   * Spah.SpahQL.QueryRunner.evalAssertion(primaryToken, secondaryToken, comparisonOperator, rootData, scopeData) -> Boolean result
+   * Spah.SpahQL.QueryRunner.evalAssertion(primaryToken, secondaryToken, comparisonOperator, rootData, scopeData, scopePath) -> Boolean result
    * - primaryToken (Object): A selection query or set literal token as delivered by the query parser.
    * - secondaryToken (Object): A selection query or set literal token as delivered by the query parser. May be null.
    * - comparisonOperator (String): The comparison operator that will be used to compare the primary and secondary result sets.
    * - rootData (Object): A root data context for any selection queries that appear in the literal
    * - scopeData (Object): A scoped data context for the scope at which selection queries in the set will be evaluated.
+   * - scopePath (String): An optional path indicating the scope to which this query has been restricted.
    *
    * Executes an assertion query. If the secondary token is null, then the primary token will be evaluated and the assertion
    * will be successful (returning true) if the primary resultset contains one or more "truthy" values (i.e. if it is not simply
    * full of nulls and/or false values). If the secondary token is provided, then the two tokens will be evaluated and their
    * result sets compared using the provided operator.
    **/
-  evalAssertion: function(primaryToken, secondaryToken, comparisonOperator, rootData, scopeData) {
+  evalAssertion: function(primaryToken, secondaryToken, comparisonOperator, rootData, scopeData, scopePath) {
     // Evaluate the tokens
-    var primarySet = primaryToken.evaluate(rootData, scopeData);
+    var primarySet = primaryToken.evaluate(rootData, scopeData, scopePath);
     var primaryValues = [];
     for(var p in primarySet) {
       primaryValues.push(primarySet[p].value);
@@ -65,7 +68,7 @@ jQuery.extend(Spah.SpahQL.QueryRunner, {
     
     var secondarySet, secondaryValues;
     if(secondaryToken) {
-      secondarySet = secondaryToken.evaluate(rootData, scopeData);
+      secondarySet = secondaryToken.evaluate(rootData, scopeData, scopePath);
       secondaryValues = [];
       for(var s in secondarySet) {
         secondaryValues.push(secondarySet[s].value);

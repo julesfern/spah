@@ -67,3 +67,36 @@ signatures:
  -
   signature: "new Spah.SpahQL.Token.SelectionQuery(pathComponents, useRoot)"
 file: /Users/danski/Sites/spah/client/src/Spah.SpahQL.Token.SelectionQuery.js
+
+---
+id: "Spah.SpahQL.Token.SelectionQuery#evaluate"
+parent_id: "Spah.SpahQL.Token.SelectionQuery"
+type: instance method
+line_number: 93
+description: |
+  Evaluates all the path components in the given query in turn, creating an array of QueryResult instances.
+
+signatures:
+ -
+  signature: "Spah.SpahQL.Token.SelectionQuery#evaluate(rootData, scopeData, scopePath)"
+  return_value: "Array of Spah.SpahQL.QueryResult instances"
+arguments:
+ -
+  name: rootData
+  types: [Object]
+  description: >
+    The entire root-level data structure being queried
+
+ -
+  name: scopeData
+  types: [Object]
+  description: >
+    The data for the scope at which this query is being executed.
+
+ -
+  name: scopePath
+  types: [String]
+  description: >
+    The string path for the root of the scopeData argument.
+
+file: /Users/danski/Sites/spah/client/src/Spah.SpahQL.Token.SelectionQuery.js

@@ -229,14 +229,6 @@
       ]
     },
     {
-      "name": "Numeric literal downwards order", "query": "{10..8}",
-      "result": [
-        [null, 10],
-        [null, 9],
-        [null, 8]
-      ]
-    },
-    {
       "name": "String range literal", "query": "{'a'..'d'}",
       "result": [
         [null, "a"],
@@ -246,12 +238,11 @@
       ]
     },
     {
-      "name": "String range literal backwards", "query": "{'f'..'c'}",
+      "name": "String range literal complex", "query": "{'a)'..'c)'}",
       "result": [
-        [null, "f"],
-        [null, "e"],
-        [null, "d"],
-        [null, "c"]
+        [null, "a)"],
+        [null, "b)"],
+        [null, "c)"]
       ]
     }
     ],
