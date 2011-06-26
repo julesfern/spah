@@ -8,4 +8,4 @@ get "/" do
 end
 get "/client/tests" do
   redirect '/client/test/all-tests.html'
-end
+end

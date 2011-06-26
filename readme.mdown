@@ -1,7 +1,19 @@
-Spah: Single-Page Application Helper
-====================================
+Spah: Stateful pages, not single pages.
+=======================================
 
 <img src="https://img.skitch.com/20110504-c79qr916mcwtnq4m63uqc3dibq.jpg" />
+
+What are the best things about a single-page web app? You can maintain a complex page state and keep your server-side controllers resource-centric rather than page-centric. You can lazy-load ancillary data to increase initial load performance.
+
+What are the worst things? Inability to render markup on the server side makes your app useless as a source of indexing cues and microdata. Long startup times.
+
+Spah takes the best from both worlds and lets you:
+
+- **Be a good web citizen**. With Spah, every URL in your site may be curled, indexed, bookmarked and shared just like a web page should.
+- **Progressively enhance**. Once a user with a modern browser has loaded a page from your app, the single-page paradigm takes over and all new data may be loaded asynchronously. Users with older browsers - even those without Javascript enabled - get to use your site synchronously.
+- **Keep it stateful.** Spah's job is to manage the state of your UI and ensure that the markup seen in the user's browser matches that state. The state contains everything in your UI, from lists of model objects through to user preferences and unsaved form variables. You decide which bits of the state are hard-rendered as HTML and which bits are used to trigger more advanced client-side behaviours, while Spah syncs and updates the state on each call to the server.
+- **Avoid repetition.** Do all this with _zero_ code duplication between client and server. Spah solves the difficult problems of shared client/server templating and state management, leaving you to work on your app.
+- **Use other libraries.** Spah doesn't opinionate about client-side model frameworks or REST paradigms or how you authenticate with your API. Spah only cares about JSON, jQuery and having access to a Spah-compatible server.
 
 Contents
 ========
@@ -33,7 +45,7 @@ Contents
 [responders]: #responding_to_state_changes_with_javascript
 [eager_state_changes]: #eager_client_state_changes
 
-[rails_example]: #example_rails_application
+[node_example]: #example_node_application
 [sinatra_example]: #example_sinatra_application
 [force_synchronous]: #forcing_links_and_forms_to_load_synchronously
 [defaults]: #default_client_behaviour
@@ -66,7 +78,7 @@ Contents
 9. [Forcing links and forms to load synchronously][force_synchronous]
 10. TODO: [Default client behaviours][defaults] (automatically update doc title from /title path, automatically add async behaviour, automatically manage history)
 11. TODO: [Eager client state changes][eager_state_changes] (mark parts of the tree as "expected to get new data" to trigger load notifications. automatically revert to previous state on load failure and dispatch failure event)
-12. TODO: [Examples: Example Rails application][rails_example]
+12. TODO: [Examples: Example Node.js application][node_example]
 13. TODO: [Examples: Example Sinatra application][sinatra_example]
 14. [Appendix A: SpahQL expression spec][app_expression_spec]
 15. [Appendix B: SpahQL query execution spec][app_execution_spec]
@@ -74,31 +86,24 @@ Contents
 Introduction
 ============
 
-Spah is both a server-side rubygem and a client-side javascript library. Together, the two parts are used to build dynamic single-page
-web applications that:
+Spah itself is a client, written in Javascript, and a server application which may currently be either Node.js or Ruby-flavoured.
 
-* Don't break the web, and keep the document as king. With Spah, every resource may be curled, scraped and indexed just as with a static site.
-* Cold boot into full-fledged javascript applications from any of your application's URLs.
-* Provide graceful continuation of interface state between pages when an action absolutely must be performed synchronously.
-
-The central concept in Spah is the **state**. Spah manages the state of your application as a hash which may contain more hashes, booleans, 
-strings and arrays. You, as the developer of your application, define the overall structure of the state. As an example, the state for this
-documentation page might be something like:
+The central concept in Spah is the **state**. The state is essentially a JSON object describing everything about a user's UI - everything from the models objects shown in a list to the current navigation tab selected, from the contents of a particular form to whether or not the user opened the comment box yet. The state for this page might look something like:
 
      {
-       "class": "Spah", // Currently viewing the Spah class
-       "method": null, // No specific method selected
-       "search-query": "" // No search term entered in search box
+       "package": "Spah.js", // Currently viewing the Spah class
+       "file": {
+			name: "readme.mdown", // Got the readme.mdown file open
+			content: "Spah: Stateful pages, not single pages.\n...." // Full textdump of file
+		 }
      }
 
-On each request to the server, Spah will attach the state in JSON form to the request. The server modifies the state and returns a
-new JSON object containing the updates. The Spah client merges the updates into the state and dispatches events to which you may subscribe.
+Whenever the user clicks a link, submits a form or otherwise navigates within your site, Spah intervenes and, if possible, the navigation is halted and replaced with an asynchronous request to the server. Spah attaches the state to the request, and gets back a series of modifications. The Spah client then has a number of ways in which it can react to those changes.
 
 The server
 ==========
-A Spah application is assumed to be a RESTish ruby application - in our examples we'll be using Rails. As always, all validation and data
-persistence is handled by your models. All routing by the router, and all request logic in the controllers. Where a Spah app differs is in
-the view layer.
+A Spah server is assumed to be a resource-centric Node.js or Sinatra application. As always, all validation and data
+persistence is handled on the server side by your app's models. All routing will be in your app's router, and all request logic in its controllers. Where a Spah app differs is in the view layer.
 
 *Figure 1: A crap approach to single-page apps*
 
@@ -611,7 +616,7 @@ Default client behaviour
 Eager client state changes
 ==========================
 
-Example Rails application
+Example Node application
 =========================
 
 Example Sinatra application
