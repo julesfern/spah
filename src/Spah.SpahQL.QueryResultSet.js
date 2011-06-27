@@ -71,6 +71,7 @@ Spah.classCreate("Spah.SpahQL.QueryResultSet", {
    **/
   "each": function(callback) {
     for(var i=0; i<this.length(); i++) {
+      console.log("calling", this.item(i), [i, this.length()]);
       if(callback.apply(this.item(i), [i, this.length()]) == false) return false;
     }
     return true;
@@ -146,12 +147,9 @@ Spah.classCreate("Spah.SpahQL.QueryResultSet", {
    * if any result fails to be asserted.
    **/
   "assert": function(query) {
-    var result = this.each(function(i, total) {
-      var r = this.assert(query);
-      console.log("asserting: "+this.path+"="+this.value+", "+r, i, total);
+    return this.each(function(i, total) {
       return this.assert(query);
     });
-    return result;
   },
   
 });

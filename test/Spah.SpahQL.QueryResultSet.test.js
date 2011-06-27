@@ -52,7 +52,7 @@ $(document).ready(function() {
     
     ok(Spah.SpahQL.select("/foo", data).assert("/yes"));
     ok(!Spah.SpahQL.select("/foo", data).assert("/no"));
-    ok(!Spah.SpahQL.select("/foo", data).assert("/*"));
+    ok(Spah.SpahQL.select("/foo", data).assert("/*"));
   });
   
 });
