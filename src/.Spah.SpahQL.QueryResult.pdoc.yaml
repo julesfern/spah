@@ -1,0 +1,132 @@
+---
+id: "Spah.SpahQL.QueryResult"
+parent_id: "Spah.SpahQL"
+type: class
+line_number: 6
+description: |
+  A simple model wrapping an individual result returned from a SpahQL query.
+
+file: /Users/danski/Sites/spah/src/Spah.SpahQL.QueryResult.js
+
+---
+id: "Spah.SpahQL.QueryResult#path"
+parent_id: "Spah.SpahQL.QueryResult"
+type: instance property
+line_number: 22
+description: |
+  The SpahQL object path from which this result was garnered, if it was gathered from an object path.
+  Results garnered from literals will not have paths associated with them.
+
+signatures:
+ -
+  signature: "Spah.SpahQL.QueryResult#path"
+  return_value: "String path or null"
+file: /Users/danski/Sites/spah/src/Spah.SpahQL.QueryResult.js
+
+---
+id: "Spah.SpahQL.QueryResult#value"
+parent_id: "Spah.SpahQL.QueryResult"
+type: instance property
+line_number: 29
+description: |
+  The raw value of this query result as represented in the queried object.
+
+signatures:
+ -
+  signature: "Spah.SpahQL.QueryResult#value"
+  return_value: "Array, object, boolean, string or null"
+file: /Users/danski/Sites/spah/src/Spah.SpahQL.QueryResult.js
+
+---
+id: "Spah.SpahQL.QueryResult#sourceData"
+parent_id: "Spah.SpahQL.QueryResult"
+type: instance property
+line_number: 36
+description: |
+  The data in which this query result was found.
+
+signatures:
+ -
+  signature: "Spah.SpahQL.QueryResult#sourceData"
+  return_value: "Object"
+file: /Users/danski/Sites/spah/src/Spah.SpahQL.QueryResult.js
+
+---
+id: "new Spah.SpahQL.QueryResult"
+parent_id: "Spah.SpahQL.QueryResult"
+type: constructor
+line_number: 44
+description: |
+  Creates a new instance with the specified path and value.
+  The sourceData argument specifies the root data context in which this result was found.
+
+signatures:
+ -
+  signature: "new Spah.SpahQL.QueryResult(path, value, sourceData)"
+file: /Users/danski/Sites/spah/src/Spah.SpahQL.QueryResult.js
+
+---
+id: "Spah.SpahQL.QueryResult#parentPath"
+parent_id: "Spah.SpahQL.QueryResult"
+type: instance method
+line_number: 58
+description: |
+  Returns the path for the object in the queried data which contains this result.
+  If this result is the root, the method will return null. If this result was
+  not produced by a path at all, but rather a set literal, range or other construct,
+  it will return null.
+
+signatures:
+ -
+  signature: "Spah.SpahQL.QueryResult#parentPath()"
+  return_value: "String or null"
+file: /Users/danski/Sites/spah/src/Spah.SpahQL.QueryResult.js
+
+---
+id: "Spah.SpahQL.QueryResult#parent"
+parent_id: "Spah.SpahQL.QueryResult"
+type: instance method
+line_number: 69
+description: |
+  Retrieves the parent object from the data construct that originally generated this
+  query result. Remember to always assume that the data may have been modified in the
+  meantime.
+
+signatures:
+ -
+  signature: "Spah.SpahQL.QueryResult#parent()"
+  return_value: "null, Spah.SpahQL.QueryResult"
+file: /Users/danski/Sites/spah/src/Spah.SpahQL.QueryResult.js
+
+---
+id: "Spah.SpahQL.QueryResult#select"
+parent_id: "Spah.SpahQL.QueryResult"
+type: instance method
+line_number: 82
+description: |
+  Runs a selection query scoped to this result's path and data, and returns the results.
+  For instance:
+  
+       select("/foo/foo").first().select("/foo") // Is exactly the same as just querying for /foo/foo/foo.
+
+signatures:
+ -
+  signature: "Spah.SpahQL.QueryResult#select(query)"
+  return_value: "Spah.SpahQL.QueryResultSet"
+file: /Users/danski/Sites/spah/src/Spah.SpahQL.QueryResult.js
+
+---
+id: "Spah.SpahQL.QueryResult#assert"
+parent_id: "Spah.SpahQL.QueryResult"
+type: instance method
+line_number: 93
+description: |
+  Runs an assertion query scoped to this result's path and data, and returns the result. For instance:
+  
+       select("/foo/foo").first().assert("/foo") // Is exactly the same as just asserting /foo/foo/foo.
+
+signatures:
+ -
+  signature: "Spah.SpahQL.QueryResult#assert(query)"
+  return_value: "Spah.SpahQL.QueryResultSet"
+file: /Users/danski/Sites/spah/src/Spah.SpahQL.QueryResult.js

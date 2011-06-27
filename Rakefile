@@ -49,8 +49,8 @@ namespace :client do
       require 'json'
       require 'maruku'
       
-      input_dir = File.join(File.dirname(__FILE__), "client", "src")
-      output_dir = File.join(File.dirname(__FILE__), "doc", "client")
+      input_dir = File.join(File.dirname(__FILE__), "src")
+      output_dir = File.join(File.dirname(__FILE__), "doc-build")
       puts "Generating documents #{input_dir} => #{output_dir}..."
     
       #if(Dir.exist?(output_dir))

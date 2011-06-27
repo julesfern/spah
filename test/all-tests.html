@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Spah - all client tests</title>
+    
+    <script type="text/javascript" src="dependency/jquery.1.5.2.min.js"></script>
+    <script type="text/javascript" src="dependency/mustache.js"></script>
+    
+    <script type="text/javascript" src="qunit/qunit.js"></script>
+    <link rel="stylesheet" href="qunit/qunit.css" type="text/css">
+    
+    <!-- Libs -->
+    <script type="text/javascript" src="../src/Spah.js"></script>
+    <script type="text/javascript" src="../src/Spah.SpahQL.js"></script>
+    <script type="text/javascript" src="../src/Spah.SpahQL.Errors.js"></script>
+    <script type="text/javascript" src="../src/Spah.SpahQL.Query.js"></script>
+    <script type="text/javascript" src="../src/Spah.SpahQL.QueryResult.js"></script>
+    <script type="text/javascript" src="../src/Spah.SpahQL.QueryResultSet.js"></script>
+    <script type="text/javascript" src="../src/Spah.SpahQL.QueryParser.js"></script>
+    <script type="text/javascript" src="../src/Spah.SpahQL.QueryRunner.js"></script>
+    <script type="text/javascript" src="../src/Spah.SpahQL.DataHelper.js"></script>
+    <script type="text/javascript" src="../src/Spah.SpahQL.Token.js"></script>
+    <script type="text/javascript" src="../src/Spah.SpahQL.Token.Base.js"></script>
+    <script type="text/javascript" src="../src/Spah.SpahQL.Token.Simple.js"></script>
+    <script type="text/javascript" src="../src/Spah.SpahQL.Token.String.js"></script>
+    <script type="text/javascript" src="../src/Spah.SpahQL.Token.Numeric.js"></script>
+    <script type="text/javascript" src="../src/Spah.SpahQL.Token.Boolean.js"></script>
+    <script type="text/javascript" src="../src/Spah.SpahQL.Token.Set.js"></script>
+    <script type="text/javascript" src="../src/Spah.SpahQL.Token.ComparisonOperator.js"></script>
+    <script type="text/javascript" src="../src/Spah.SpahQL.Token.FilterQuery.js"></script>
+    <script type="text/javascript" src="../src/Spah.SpahQL.Token.PathComponent.js"></script>
+    <script type="text/javascript" src="../src/Spah.SpahQL.Token.SelectionQuery.js"></script>
+    <script type="text/javascript" src="../src/Spah.SpahQL.Token.KeyName.js"></script>
+    <script type="text/javascript" src="../src/Spah.State.js"></script>
+    
+    <!-- Setup -->
+    <script type="text/javascript">
+      //Spah.verbose = true;
+    </script>    
+    
+    <!-- TESTS -->
+    <script type="text/javascript" src="Spah.test.js"></script>
+    <script type="text/javascript" src="Spah.SpahQL.test.js"></script>
+    <script type="text/javascript" src="Spah.SpahQL.Query.test.js"></script>
+    <script type="text/javascript" src="Spah.SpahQL.QueryParser.test.js"></script>
+    <script type="text/javascript" src="Spah.SpahQL.QueryRunner.test.js"></script>    
+    <script type="text/javascript" src="Spah.SpahQL.QueryResult.test.js"></script>
+    <script type="text/javascript" src="Spah.SpahQL.QueryResultSet.test.js"></script>
+    <script type="text/javascript" src="Spah.SpahQL.Token.String.test.js"></script>
+    <script type="text/javascript" src="Spah.SpahQL.Token.Numeric.test.js"></script>
+    <script type="text/javascript" src="Spah.SpahQL.Token.Boolean.test.js"></script>
+    <script type="text/javascript" src="Spah.SpahQL.Token.Set.test.js"></script>
+    <script type="text/javascript" src="Spah.SpahQL.Token.ComparisonOperator.test.js"></script>
+    <script type="text/javascript" src="Spah.SpahQL.Token.FilterQuery.test.js"></script>
+    <script type="text/javascript" src="Spah.SpahQL.Token.PathComponent.test.js"></script>
+    <script type="text/javascript" src="Spah.SpahQL.Token.SelectionQuery.test.js"></script>
+    <script type="text/javascript" src="Spah.SpahQL.Token.KeyName.test.js"></script>
+    
+    <script type="text/javascript" src="Spah.SpahQL.DataHelper.test.js"></script>
+    <!-- /TESTS -->
+  </head>
+  <body>
+    <h1 id="qunit-header">Spah - all client tests</h1>
+    <h2 id="qunit-banner"></h2>
+    <div id="qunit-testrunner-toolbar"></div>
+    <h2 id="qunit-userAgent"></h2>
+    <ol id="qunit-tests"></ol>
+    <div id="qunit-fixture">
+      
+      <a href="/async" id="async_link">Async link</a>
+      <a href="/sync" id="sync_link" data-async="false">Synchronous link</a>
+      
+      <script type="text/javascript">
+        var Fixtures = {
+          State: {
+            
+            Arrays: {
+              target: {
+                same: [0,"1",true,null],
+                leave: [0,"1",true,null],
+                modify: [0,"1",true,null],
+                lengthen: [],
+                shorten: [0,1,2,3],
+                nullify: [0]
+              },
+              delta: {
+                same: [0,"1",true,null],
+                modify: [0,"1",false,3],
+                lengthen: [0,1,2],
+                shorten: [0],
+                nullify: null
+              },
+              expected: {
+                same: [0,"1",true,null],
+                leave: [0,"1",true,null],
+                modify: [0,"1",false,3],
+                lengthen: [0,1,2],
+                shorten: [0],
+                nullify: null
+              }
+            },
+            
+            Hashes: {
+              target: {
+                same: {foo: "bar", bar: "baz"},
+                leave: {foo: "bar", bar: "baz"},
+                modify: {original: "original", leave: "leave"},
+                lengthen: {},
+                shorten: {foo: "bar", bar: "baz"},
+                nullify: {foo: "bar", bar: "baz"}
+              },
+              delta: {
+                same: {foo: "bar", bar: "baz"},
+                modify: {original: "modified"},
+                lengthen: {added: true},
+                shorten: {foo: "bar", bar: null},
+                nullify: null
+              },
+              expected: {
+                same: {foo: "bar", bar: "baz"},
+                leave: {foo: "bar", bar: "baz"},
+                modify: {original: "modified", leave: "leave"},
+                lengthen: {added: true},
+                shorten: {foo: "bar", bar: null},
+                nullify: null
+              }
+            },
+            
+            BaseTypes: {
+              target: {
+                sameStr: "same",
+                leaveStr: "leave",
+                modifyStr: "original",
+                sameBool: true,
+                leaveBool: false,
+                modifyBool: false,
+                sameNum: 1,
+                leaveNum: 0,
+                modifyNum: 0,
+                nullify: "nullme"
+              },
+              delta: {
+                sameStr: "same",
+                modifyStr: "modified",
+                sameBool: true,
+                modifyBool: true,
+                sameNum: 1,
+                modifyNum: 1,
+                nullify: null
+              },
+              expected: {
+                sameStr: "same",
+                leaveStr: "leave",
+                modifyStr: "modified",
+                sameBool: true,
+                leaveBool: false,
+                modifyBool: true,
+                sameNum: 1,
+                leaveNum: 0,
+                modifyNum: 1,
+                nullify: null
+              }
+            },
+            
+            
+            Complex: {
+              target: {
+                modify: {
+                  nullify: "not null",
+                  str: "original",
+                  array_leave: [0,1,2],
+                  array_modify: [0,1,2,3,4,5],
+                  array_shorten: [0,1,2,3,4,5],
+                  bool: false,
+                  obj_modify: {
+                    foo: "foo original",
+                    bar: "bar original"
+                  },
+                  array_replace_with_object: [0,1],
+                  object_replace_with_array: {foo: "bar"},
+                  remove_hash_in_array: [{foo: "bar"}, {foo: "bar"}, {foo: "bar"}]
+                },
+                leave: {
+                  string: "original",
+                  array: [0,1,3],
+                  obj: {foo: "bar", bar: "baz"},
+                  bool: false,
+                  "null": null
+                }
+              },
+              delta: {
+                modify: {
+                  nullify: null,
+                  str: "modified",
+                  array_modify: [0,1,2,"modified",4,null,"added"],
+                  array_shorten: [0,1,2,3,4],
+                  bool: true,
+                  obj_modify: {
+                    foo: "foo modified"
+                  },
+                  array_replace_with_object: {foo: "bar"},
+                  object_replace_with_array: [0,1],
+                  remove_hash_in_array: [{foo: "bar"}, {foo: "bar"}],
+                  created: "i'm new!"
+                },
+                created: {
+                  created_str: "created",
+                  created_arr: [0],
+                  created_obj: {foo: "bar"}
+                }
+              }
+            }
+          }
+        };
+      </script>
+    </div>
+  </body>
+</html>

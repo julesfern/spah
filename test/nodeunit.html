@@ -1,0 +1,52 @@
+<html>
+  <head>
+    <title>Spah - Nodeunit browser tests</title>
+    
+    <!-- Test framework -->
+    <script src="dependency/nodeunit/examples/browser/nodeunit.js"></script>
+    
+    <!-- Dependencies -->
+    <script type="text/javascript" src="dependency/jquery.1.5.2.min.js"></script>
+    <script type="text/javascript" src="dependency/mustache.js"></script>
+    
+    <!-- Libs -->
+    <script type="text/javascript" src="../src/Spah.js"></script>
+    <script type="text/javascript" src="../src/Spah.SpahQL.js"></script>
+    <script type="text/javascript" src="../src/Spah.SpahQL.Errors.js"></script>
+    <script type="text/javascript" src="../src/Spah.SpahQL.Query.js"></script>
+    <script type="text/javascript" src="../src/Spah.SpahQL.QueryResult.js"></script>
+    <script type="text/javascript" src="../src/Spah.SpahQL.QueryParser.js"></script>
+    <script type="text/javascript" src="../src/Spah.SpahQL.QueryRunner.js"></script>
+    <script type="text/javascript" src="../src/Spah.SpahQL.DataHelper.js"></script>
+    <script type="text/javascript" src="../src/Spah.SpahQL.Token.js"></script>
+    <script type="text/javascript" src="../src/Spah.SpahQL.Token.Base.js"></script>
+    <script type="text/javascript" src="../src/Spah.SpahQL.Token.Simple.js"></script>
+    <script type="text/javascript" src="../src/Spah.SpahQL.Token.String.js"></script>
+    <script type="text/javascript" src="../src/Spah.SpahQL.Token.Numeric.js"></script>
+    <script type="text/javascript" src="../src/Spah.SpahQL.Token.Boolean.js"></script>
+    <script type="text/javascript" src="../src/Spah.SpahQL.Token.Set.js"></script>
+    <script type="text/javascript" src="../src/Spah.SpahQL.Token.ComparisonOperator.js"></script>
+    <script type="text/javascript" src="../src/Spah.SpahQL.Token.FilterQuery.js"></script>
+    <script type="text/javascript" src="../src/Spah.SpahQL.Token.PathComponent.js"></script>
+    <script type="text/javascript" src="../src/Spah.SpahQL.Token.SelectionQuery.js"></script>
+    <script type="text/javascript" src="../src/Spah.SpahQL.Token.KeyName.js"></script>
+    <script type="text/javascript" src="../src/Spah.State.js"></script>
+    
+    <script type="text/javascript">
+      // These are CommonJS tests so we'll set up a mock exports object for the tests to append to.
+      // Then we'll run the whole lot.
+      window.exports = {};
+    </script>
+    
+    <!-- Tests -->
+    <script type="text/javascript" src="Spah.SpahQL.Token.String.test.js"></script>
+    
+  </head>
+  <body>
+    <script>
+      $(document).ready(function() {
+        nodeunit.run(exports);
+      })
+    </script>
+  </body>
+</html>

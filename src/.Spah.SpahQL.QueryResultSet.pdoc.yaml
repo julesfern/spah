@@ -1,0 +1,159 @@
+---
+id: "Spah.SpahQL.QueryResultSet"
+parent_id: "Spah.SpahQL"
+type: class
+line_number: 6
+description: |
+  Wraps an array of QueryResult objects and provides manipulation and traversal methods upon the set.
+
+file: /Users/danski/Sites/spah/src/Spah.SpahQL.QueryResultSet.js
+
+---
+id: "new Spah.SpahQL.QueryResultSet"
+parent_id: "Spah.SpahQL.QueryResultSet"
+type: constructor
+line_number: 22
+description: |
+  Creates a new resultset from an array of QueryResult objects
+
+signatures:
+ -
+  signature: "new Spah.SpahQL.QueryResultSet(results)"
+arguments:
+ -
+  name: results
+  types: [Array]
+  description: >
+    An array of query result objects.
+
+file: /Users/danski/Sites/spah/src/Spah.SpahQL.QueryResultSet.js
+
+---
+id: "Spah.SpahQL.QueryResultSet#all"
+parent_id: "Spah.SpahQL.QueryResultSet"
+type: instance method
+line_number: 31
+description: |
+  Returns all items in the result set.
+
+signatures:
+ -
+  signature: "Spah.SpahQL.QueryResultSet#all()"
+  return_value: "Array of Spah.SpahQL.QueryResult objects"
+file: /Users/danski/Sites/spah/src/Spah.SpahQL.QueryResultSet.js
+
+---
+id: "Spah.SpahQL.QueryResultSet#all"
+parent_id: "Spah.SpahQL.QueryResultSet"
+type: instance method
+line_number: 40
+description: |
+  Returns the first item in the result set.
+
+signatures:
+ -
+  signature: "Spah.SpahQL.QueryResultSet#all()"
+  return_value: "null, Spah.SpahQL.QueryResult"
+file: /Users/danski/Sites/spah/src/Spah.SpahQL.QueryResultSet.js
+
+---
+id: "Spah.SpahQL.QueryResultSet#item"
+parent_id: "Spah.SpahQL.QueryResultSet"
+type: instance method
+line_number: 49
+description: |
+  Returns the item in the result set at the given index, or null.
+
+signatures:
+ -
+  signature: "Spah.SpahQL.QueryResultSet#item(index)"
+  return_value: "null, Spah.SpahQL.QueryResult"
+file: /Users/danski/Sites/spah/src/Spah.SpahQL.QueryResultSet.js
+
+---
+id: "Spah.SpahQL.QueryResultSet#length"
+parent_id: "Spah.SpahQL.QueryResultSet"
+type: instance method
+line_number: 58
+description: |
+  Returns the number of results in this resultset.
+
+signatures:
+ -
+  signature: "Spah.SpahQL.QueryResultSet#length()"
+  return_value: "Integer"
+file: /Users/danski/Sites/spah/src/Spah.SpahQL.QueryResultSet.js
+
+---
+id: "Spah.SpahQL.QueryResultSet#each"
+parent_id: "Spah.SpahQL.QueryResultSet"
+type: instance method
+line_number: 72
+description: |
+  Executes the callback function with each item in this resultset. The
+  loop is halted if the callback at any time returns false. This method will
+  return true if the loop completes, and false if it is halted midway. If the callback
+  function does not return anything, the loop will continue to completion.
+
+signatures:
+ -
+  signature: "Spah.SpahQL.QueryResultSet#each(callback)"
+  return_value: "Boolean"
+arguments:
+ -
+  name: callback
+  types: [Function]
+  description: >
+    A callback to execute against each result in the set. The callback will receive the arguments (index, total). within the function, the <code>this</code> keyword will refer to the QueryResult for this iteration.
+
+file: /Users/danski/Sites/spah/src/Spah.SpahQL.QueryResultSet.js
+
+---
+id: "Spah.SpahQL.QueryResultSet#map"
+parent_id: "Spah.SpahQL.QueryResultSet"
+type: instance method
+line_number: 87
+description: |
+  Executes the callback function with each item in this resultset. The return value from
+  each iteration of the callback is appended to an array, which is returned at the end of the loop.
+
+signatures:
+ -
+  signature: "Spah.SpahQL.QueryResultSet#map(callback)"
+  return_value: "Array"
+arguments:
+ -
+  name: callback
+  types: [Function]
+  description: >
+    A callback to execute against each result in the set. The callback will receive the arguments (result, index, total), within the function, the <code>this</code> keyword will refer to the QueryResult for this iteration.
+
+file: /Users/danski/Sites/spah/src/Spah.SpahQL.QueryResultSet.js
+
+---
+id: "Spah.SpahQL.QueryResultSet#parentPath"
+parent_id: "Spah.SpahQL.QueryResultSet"
+type: instance method
+line_number: 100
+description: |
+  Retrieves the parent path for the first item in this resultset.
+
+signatures:
+ -
+  signature: "Spah.SpahQL.QueryResultSet#parentPath()"
+  return_value: "null or String"
+file: /Users/danski/Sites/spah/src/Spah.SpahQL.QueryResultSet.js
+
+---
+id: "Spah.SpahQL.QueryResultSet#parent"
+parent_id: "Spah.SpahQL.QueryResultSet"
+type: instance method
+line_number: 110
+description: |
+  Retrieves the parent object for the first item in this resultset.
+
+signatures:
+ -
+  signature: "Spah.SpahQL.QueryResultSet#parent()"
+  return_value: "null or QueryResult"
+file: /Users/danski/Sites/spah/src/Spah.SpahQL.QueryResultSet.js

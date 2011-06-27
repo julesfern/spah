@@ -1,0 +1,75 @@
+PathDelimiter ::= "/";
+PathWildcard ::= "*";
+ArrayDelimiter ::= ",";
+RangeDelimiter ::= "..";
+SingleQuote ::= "'";
+DoubleQuote ::= "\"";
+Negative ::= "-";
+DecimalPoint ::= ".";
+PropertyIdentifier ::= ".";
+RootScopeFlag ::= "$";
+SetStart ::= "{";
+SetEnd ::= "}";
+FilterStart ::= "[";
+FilterEnd ::= "]";
+BooleanTrue ::= "true";
+BooleanFalse ::= "false";
+StrictEquality ::= "==";
+RoughEquality ::= "=~";
+Inequality ::= "!=";
+GT ::= ">";
+LT ::= "<";
+LTE ::= LT, "=";
+GTE ::= GT, "=";
+SetEquality ::= "}={";
+DisjointSet ::= "}!{";
+JointSet ::= "}~{";
+Superset ::= "}>{";
+Subset ::= "}<{";
+
+(* Tokens *)
+
+ComparisonOperator ::= StrictEquality | RoughEquality
+						| Inequality | GT | LT | GTE | LTE
+						| SetEquality | DisjointSet
+						| JointSet | Superset | Subset;
+
+Digit ::= "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" ;
+
+AlphaChar ::= "A" | "B" | "C" | "D" | "E" | "F" | "G"
+                     | "H" | "I" | "J" | "K" | "L" | "M" | "N"
+                     | "O" | "P" | "Q" | "R" | "S" | "T" | "U"
+                     | "V" | "W" | "X" | "Y" | "Z" | "a" | "b"
+							| "c" | "d" | "e" | "f" | "g" | "h" | "i"
+							| "j" | "k" | "l" | "m" | "n" | "o" | "p"
+							| "q" | "r" | "s" | "t" | "u" | "v" | "w"
+							| "x" | "y" | "z";
+AlphaNumChar ::= AlphaChar | Digit;
+
+NumericLiteral ::= [Negative], Digit, {Digit}, [DecimalPoint, Digit, {Digit}];
+
+SingleQuoteString ::= SingleQuote, {all characters - SingleQuote}, SingleQuote;
+DoubleQuoteString ::= DoubleQuote, {all characters - DoubleQuote}, DoubleQuote;
+StringLiteral ::= SingleQuoteString | DoubleQuoteString;
+BooleanLiteral ::= BooleanTrue | BooleanFalse;
+
+PrimitiveLiteral ::= NumericLiteral | StringLiteral | BooleanLiteral;
+
+SetMember ::= PrimitiveLiteral | SelectionQuery;
+
+SetArrayLiteral ::= SetStart, ( SetEnd |  {SetMember, ArrayDelimiter}, SetMember, SetEnd );
+SetRangeLiteral ::= SetStart, SetMember, RangeDelimiter, SetMember, SetEnd;
+
+SetLiteral ::= SetArrayLiteral | SetRangeLiteral;
+
+SelectionQuery ::= [RootScopeFlag], PathComponent, {PathComponent};
+PathComponent ::= PathDelimiter, [PathWildcard | (PropertyIdentifier, KeyName) | KeyName], {FilterQuery};
+
+KeyName ::= AlphaNumChar, {AlphaNumChar};
+
+FilterQuery ::= FilterStart, RunnableAssertion, FilterEnd;
+
+RunnableSelection ::= SetLiteral | SelectionQuery;
+RunnableAssertion ::= RunnableSelection, [ComparisonOperator, RunnableSelection];
+
+SpahQL ::= RunnableAssertion;

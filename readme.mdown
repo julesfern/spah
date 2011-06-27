@@ -3,9 +3,9 @@ Spah: Stateful pages, not single pages.
 
 <img src="https://img.skitch.com/20110504-c79qr916mcwtnq4m63uqc3dibq.jpg" />
 
-What are the best things about a single-page web app? You can maintain a complex page state and keep your server-side controllers resource-centric rather than page-centric. You can lazy-load ancillary data to increase initial load performance.
+What are the best things about a single-page web app? You can maintain a complex page state and keep your server-side controllers resource-centric rather than page-centric. You can lazy-load ancillary data to increase initial load performance. You can keep all of your view code in one place.
 
-What are the worst things? Inability to render markup on the server side makes your app useless as a source of indexing cues and microdata. Long startup times.
+What are the worst things? Inability to render markup on the server side makes your app useless as a source of indexing cues and microdata. Long startup times. You'll need to duplicate a lot of code. Hashbang URLs are nasty.
 
 Spah takes the best from both worlds and lets you:
 
@@ -13,7 +13,23 @@ Spah takes the best from both worlds and lets you:
 - **Progressively enhance**. Once a user with a modern browser has loaded a page from your app, the single-page paradigm takes over and all new data may be loaded asynchronously. Users with older browsers - even those without Javascript enabled - get to use your site synchronously.
 - **Keep it stateful.** Spah's job is to manage the state of your UI and ensure that the markup seen in the user's browser matches that state. The state contains everything in your UI, from lists of model objects through to user preferences and unsaved form variables. You decide which bits of the state are hard-rendered as HTML and which bits are used to trigger more advanced client-side behaviours, while Spah syncs and updates the state on each call to the server.
 - **Avoid repetition.** Do all this with _zero_ code duplication between client and server. Spah solves the difficult problems of shared client/server templating and state management, leaving you to work on your app.
-- **Use other libraries.** Spah doesn't opinionate about client-side model frameworks or REST paradigms or how you authenticate with your API. Spah only cares about JSON, jQuery and having access to a Spah-compatible server.
+- **Use other libraries.** Spah doesn't opinionate about client-side model frameworks or REST paradigms or how you authenticate with your API. Spah only cares about JSON, jQuery and having access to a Spah-compatible server. The Spah server libraries are not full-stack web frameworks, but libraries intended to be woven into your wider Node.js/Rails/Sinatra application stack. To be completely clear: Spah is code that manages the state of a UI in a complex web app, and nothing more. You bring your own app stack preferences to the table.
+
+TODO: Introduction for modules:
+- Spah core
+	- SpahQL
+	- Document runner
+	- Template handling
+- Spah client gets everything from core, plus:
+	- Link, form and navigation handling
+	- State reduction
+	- Event handlers
+	- History manager
+- Spah server gets everything from core, plus:
+	- Default states
+	- Blueprint compiler
+	- State expansion
+	
 
 Contents
 ========
@@ -109,8 +125,7 @@ persistence is handled on the server side by your app's models. All routing will
 
 <img src="https://img.skitch.com/20110504-73a3ftde7d731kbepxg2p7w1.jpg" />
 
-Instead of hiding away template logic in server-side ruby, template logic is moved to a place where both the client AND the server have access
-to it - [the document itself][document_logic].
+Instead of hiding away template logic in server-side code, template logic is moved to a place where both the client AND the server have access to it - [the document itself][document_logic].
 
 A Spah HTML render takes the **state** and a **prototype layout** and gloms to the two together. The HTML layout contains [logic encoded in HTML5 data
 attributes][document_logic], and Spah will pre-process the document **before sending it down the wire**. This way, any view can be cold-rendered by a request

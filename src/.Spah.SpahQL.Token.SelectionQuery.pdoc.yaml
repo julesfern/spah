@@ -1,0 +1,102 @@
+---
+id: "Spah.SpahQL.Token.SelectionQuery"
+parent_id: "Spah.SpahQL.Token"
+type: class
+superclass_id: "Spah.SpahQL.Token.Base"
+line_number: 7
+description: |
+  A token describing any selection query, comprised of an optional root flag followed by one or more
+  path components.
+
+file: /Users/danski/Sites/spah/src/Spah.SpahQL.Token.SelectionQuery.js
+
+---
+id: "Spah.SpahQL.Token.SelectionQuery.parseAt"
+parent_id: "Spah.SpahQL.Token.SelectionQuery"
+type: class method
+line_number: 23
+description: |
+  Reads the given queryString starting at the given index and attempts to identify and parse
+  a selection query token. If found, the token will be returned in a tuple \[resumeIndex, foundToken\].
+  Returns null if nothing is found.
+
+signatures:
+ -
+  signature: "Spah.SpahQL.Token.SelectionQuery.parseAt(index, queryString)"
+  return_value: "Array result or null"
+file: /Users/danski/Sites/spah/src/Spah.SpahQL.Token.SelectionQuery.js
+
+---
+id: "Spah.SpahQL.Token.SelectionQuery#pathComponents"
+parent_id: "Spah.SpahQL.Token.SelectionQuery"
+type: instance property
+line_number: 64
+description: |
+  Contains all path components that comprise this selection query, in the order in which they
+  were encountered during parsing.
+
+signatures:
+ -
+  signature: "Spah.SpahQL.Token.SelectionQuery#pathComponents"
+  return_value: "Array Token.PathComponent"
+file: /Users/danski/Sites/spah/src/Spah.SpahQL.Token.SelectionQuery.js
+
+---
+id: "Spah.SpahQL.Token.SelectionQuery#useRoot"
+parent_id: "Spah.SpahQL.Token.SelectionQuery"
+type: instance property
+line_number: 71
+description: |
+  A flag indicating whether or not this query is locked to the root data context.
+
+signatures:
+ -
+  signature: "Spah.SpahQL.Token.SelectionQuery#useRoot"
+  return_value: "Boolean"
+file: /Users/danski/Sites/spah/src/Spah.SpahQL.Token.SelectionQuery.js
+
+---
+id: "new Spah.SpahQL.Token.SelectionQuery"
+parent_id: "Spah.SpahQL.Token.SelectionQuery"
+type: constructor
+line_number: 78
+description: |
+  Instantiate a new selection query token with blank-slate values.
+
+signatures:
+ -
+  signature: "new Spah.SpahQL.Token.SelectionQuery(pathComponents, useRoot)"
+file: /Users/danski/Sites/spah/src/Spah.SpahQL.Token.SelectionQuery.js
+
+---
+id: "Spah.SpahQL.Token.SelectionQuery#evaluate"
+parent_id: "Spah.SpahQL.Token.SelectionQuery"
+type: instance method
+line_number: 91
+description: |
+  Evaluates all the path components in the given query in turn, creating an array of QueryResult instances.
+
+signatures:
+ -
+  signature: "Spah.SpahQL.Token.SelectionQuery#evaluate(rootData, scopeData, scopePath)"
+  return_value: "Array of Spah.SpahQL.QueryResult instances"
+arguments:
+ -
+  name: rootData
+  types: [Object]
+  description: >
+    The entire root-level data structure being queried
+
+ -
+  name: scopeData
+  types: [Object]
+  description: >
+    The data for the scope at which this query is being executed.
+
+ -
+  name: scopePath
+  types: [String]
+  description: >
+    The string path for the root of the scopeData argument.
+
+file: /Users/danski/Sites/spah/src/Spah.SpahQL.Token.SelectionQuery.js

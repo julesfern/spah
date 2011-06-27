@@ -1,9 +1,0 @@
----
-id: "Spah.SpahQL"
-parent_id: "Spah"
-type: class
-line_number: 6
-description: |
-  Wrapper for SpahQL behaviours such as parsing and running queries.
-
-file: /Users/danski/Sites/spah/client/src/Spah.SpahQL.js
