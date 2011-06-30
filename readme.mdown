@@ -1,17 +1,21 @@
+<img src="https://img.skitch.com/20110504-c79qr916mcwtnq4m63uqc3dibq.jpg" />
+
 Spah: Stateful pages, not single pages.
 =======================================
 
-<img src="https://img.skitch.com/20110504-c79qr916mcwtnq4m63uqc3dibq.jpg" />
+Single-page web apps are a hit - and with good reason. The promise of lush, stateful web UI that hangs off your service's developer API is almost too good to ignore.
 
-What are the best things about a single-page web app? You can maintain a complex page state and keep your server-side controllers resource-centric rather than page-centric. You can lazy-load ancillary data to increase initial load performance. You can keep all of your view code in one place.
+But why single page? Is it really important that your app sits on a single URL in the browser? No. The important thing that single-page apps give you is **state**. The ability to pull data into a page without destroying the existing in-browser state - and to keep your remote app nice, clean and resource-centric in the process. Single-pagedness is just a side-effect of the way in which we're currently achieving this.
 
-What are the worst things? Inability to render markup on the server side makes your app useless as a source of indexing cues and microdata. Long startup times. You'll need to duplicate a lot of code. Hashbang URLs are nasty.
+And in the process of putting entire applications on a single URL, we're giving up so much. We're making our pages unfriendly to search engines, to consumers of microdata, to open graph clients. We're resorting to cheap tricks like hashbang URLs to simulate things that we could easily be providing through more appropriate techniques. Sure, if you're building a mail client or a word processor then one page makes sense. But there's a whole class of apps that are either using these single-page techniques inappropriately, or using multi-page behaviours where persistent UI state simply produces too much code overhead. 
 
-Spah takes the best from both worlds and lets you:
+This is why Spah exists.
+
+Spah takes the best from both the single- and multi-page paradigms and lets you:
 
 - **Be a good web citizen**. With Spah, every URL in your site may be curled, indexed, bookmarked and shared just like a web page should.
-- **Progressively enhance**. Once a user with a modern browser has loaded a page from your app, the single-page paradigm takes over and all new data may be loaded asynchronously. Users with older browsers - even those without Javascript enabled - get to use your site synchronously.
-- **Keep it stateful.** Spah's job is to manage the state of your UI and ensure that the markup seen in the user's browser matches that state. The state contains everything in your UI, from lists of model objects through to user preferences and unsaved form variables. You decide which bits of the state are hard-rendered as HTML and which bits are used to trigger more advanced client-side behaviours, while Spah syncs and updates the state on each call to the server.
+- **Progressively enhance**. Once a user with a modern browser has loaded a page from your app, the single-page paradigm takes over and all new data may be loaded asynchronously, without destroying the in-browser state of your page. Users with older browsers - even those without Javascript enabled, if you've done it right - get to use your site synchronously.
+- **Keep it stateful.** Spah's job is to manage the state of your UI and ensure that the markup seen in the user's browser matches that state. The state contains everything in your UI, from lists of model objects through to user preferences and unsaved form content. You decide which bits of the state are hard-rendered as HTML and which bits are used to trigger more advanced client-side behaviours, while Spah syncs and updates the state on each call to the server.
 - **Avoid repetition.** Do all this with _zero_ code duplication between client and server. Spah solves the difficult problems of shared client/server templating and state management, leaving you to work on your app.
 - **Use other libraries.** Spah doesn't opinionate about client-side model frameworks or REST paradigms or how you authenticate with your API. Spah only cares about JSON, jQuery and having access to a Spah-compatible server. The Spah server libraries are not full-stack web frameworks, but libraries intended to be woven into your wider Node.js/Rails/Sinatra application stack. To be completely clear: Spah is code that manages the state of a UI in a complex web app, and nothing more. You bring your own app stack preferences to the table.
 
@@ -907,5 +911,3 @@ Example execution flow:
     query = "//baz/.size" // returns the sizes of all keys named "baz"
 
 There is no other special behaviour for properties - they simply act like key names.
-
-TODO: comparisons

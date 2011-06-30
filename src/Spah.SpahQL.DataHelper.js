@@ -797,6 +797,29 @@ Spah.classCreate("Spah.SpahQL.DataHelper", {
       if(set[i]) return true;
     }
     return false;
+  },
+  
+  /**
+   * Spah.SpahQL.DataHelper.coerceKeyForObject(key, obj) -> String, Integer, null
+   * - key (Integer, String): The key to be coerced.
+   * - obj (Object): The value being inspected
+   *
+   * When you want to set a key on an anonymous object, you'll want to coerce the
+   * key to the correct type - numbers for arrays, strings for objects. This function does that.
+   * Returns null if the key can't be coerced for the given object.
+   **/
+  "coerceKeyForObject": function(key, obj) {
+    var t = this.objectType(obj);
+    if(t == "array") {
+      var k = parseInt(key);
+      return isNaN(k)? null : k;
+    }
+    else if(t == "object") {
+      var k = key.toString();
+      return (k.match(/^\s*$/))? null : k;
+    }
+    return null;
   }
+  
   
 });

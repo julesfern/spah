@@ -71,7 +71,6 @@ Spah.classCreate("Spah.SpahQL.QueryResultSet", {
    **/
   "each": function(callback) {
     for(var i=0; i<this.length(); i++) {
-      console.log("calling", this.item(i), [i, this.length()]);
       if(callback.apply(this.item(i), [i, this.length()]) == false) return false;
     }
     return true;
@@ -150,6 +149,63 @@ Spah.classCreate("Spah.SpahQL.QueryResultSet", {
     return this.each(function(i, total) {
       return this.assert(query);
     });
+  },
+  
+  /**
+   * Spah.SpahQL.QueryResultSet#set(key, value) -> Boolean
+   * - key (Integer, String): The that you want to set.
+   * - value (String): The value to which you want that key set.
+   *
+   * Calls set(key, value) on the first result in this result set and returns
+   * the boolean response.
+   **/
+  "set": function(key, value) {
+    var r = this.first();
+    return (r)? r.set(key, value) : false;
+  },
+  
+  /**
+   * Spah.SpahQL.QueryResultSet#replace(value) -> Boolean
+   * - value (Object): The value to replace the first result in this set.
+   *
+   * Calls replace(value) on the first result in this result set and returns
+   * the boolean response.
+   **/
+  "replace": function(value) {
+    var r = this.first();
+    return (r)? r.replace(value) : false;
+  },
+  
+  /**
+   * Spah.SpahQL.QueryResultSet#replaceAll(value) -> QueryResultSet
+   * - value (Object): The value to replace all results in this set.
+   *
+   * Calls replace(value) on each result in this result set and returns
+   * the set with values altered where possible.
+   **/
+  "replaceAll": function(value) {
+    this.each(function() {
+      this.replace(value);
+    });
+    return this;
+  },
+  
+  /**
+   * Spah.SpahQL.QueryResultSet#replaceEach(value, testCallback) -> QueryResultSet
+   * - value (Object): The value to replace any results where the test function is passed.
+   * - testCallback (Function): A function used to test each result in the set. The function will have the same
+   *    scope and arguments as the callback used in #each.
+   *
+   * Calls a test function for each result in this set in turn, and calls replace(value) on those results for which
+   * the test function returns <code>true</code>. Returns this set with the values modified.
+   **/
+  "replaceEach": function(value, testCallback) {
+    this.each(function(index, total) {
+      if(testCallback.apply(this, [index, total]) == true) {
+        this.replace(value);
+      }
+    });
+    return this;
   },
   
 });

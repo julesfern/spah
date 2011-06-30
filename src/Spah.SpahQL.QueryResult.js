@@ -56,7 +56,21 @@ Spah.classCreate("Spah.SpahQL.QueryResult", {
    * it will return null.
    **/
   "parentPath": function() {
-    return (!this.path || this.path == "/")? null : this.path.substring(0, this.path.lastIndexOf("/"));
+    var p = (!this.path || this.path == "/")? null : this.path.substring(0, this.path.lastIndexOf("/"));
+    return (p=="")? "/" : p;
+  },
+  
+  /**
+   * Spah.SpahQL.QueryResult#keyName() -> String or null
+   * 
+   * Returns the name for this object, based on its path. If this result is the root
+   * or if the result was not created from a path query then the method will return null.
+   *
+   *      select("/foo").first().keyName() //-> "foo"
+   *      select("/foo/bar/.size").first().keyName() // -> ".size"
+   **/
+  "keyName": function() {
+    return (!this.path || this.path == "/")? null : this.path.substring(this.path.lastIndexOf("/")+1);
   },
   
   /**
@@ -92,6 +106,61 @@ Spah.classCreate("Spah.SpahQL.QueryResult", {
    **/
   "assert": function(query) {
     return Spah.SpahQL.assert(query, this.sourceData, this.value, this.path);
-  }
+  },
   
+  /**
+   * Spah.SpahQL.QueryResult#set(key, value) -> Boolean
+   * - key (Integer, String): The key to set on this object
+   * - value (Object): The value to attribute to the given key.
+   *
+   * If this result has an array or object value, modified this result
+   * by setting the given key to the given value. Returns true if the 
+   * key is set successfully and false if the new value is rejected
+   * because this result isn't enumerable.
+   **/
+  "set": function(key, value) {
+    var k = Spah.SpahQL.DataHelper.coerceKeyForObject(key, this.value);
+    if(k != null) {
+      if(!Spah.SpahQL.DataHelper.eq(value, this.value[k])) {
+        this.value[k] = value;
+        this.modified();
+      }
+      return true;
+    }
+    return false;
+  },
+  
+  /**
+   * Spah.SpahQL.QueryResult#replace(value) -> Boolean
+   * - value (Object): The value to replace this query result's value.
+   *
+   * Replaces the data on this query result, modifying the queried data
+   * in the process. If this result is the root object, the replace will
+   * not be performed and will return false. If this result was not created
+   * from a path query then the replace method will simply set the value
+   * on this result instance and return true. Otherwise, the result of
+   * setting this result's key on the parent object will be returned.
+   *
+   *      // Equivalent to
+   *      myResult.parent().set(myResult.keyName(), value);
+   **/
+  "replace": function(value) {
+    var k = this.keyName();
+    if(this.path != "/" && !Spah.SpahQL.DataHelper.eq(this.value, value)) {
+        this.value = value;
+        var p = this.parent();
+        if(p) {
+          return (p&&k)? p.set(k, value) : false; 
+        }
+        else {
+          this.modified();
+          return true;
+        }
+    }
+    return false;
+  },
+  
+  "modified": function() {
+    
+  }
 });

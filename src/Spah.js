@@ -91,6 +91,28 @@ Spah["classCreate"] = function(name, klassProps, instanceProps) {
 };
 
 /**
+ * Spah.inBrowser() -> Boolean
+ *
+ * Returns true if the runtime environment is identified as being in-browser.
+ **/
+Spah["inBrowser"] = function() {
+  return (typeof(window) != "undefined");
+}
+
+/**
+ * Spah.isHeadless() -> Boolean
+ *
+ * Returns true if the runtime environment is identified as being headless e.g. a Node.js runtime.
+ **/
+Spah["isHeadless"] = function() {
+  return !this.inBrowser();
+}
+
+Spah["inCommonJS"] = function() {
+  return (typeof(exports) == "object");
+}
+
+/**
  * Spah.classExtend(name, superKlass[, klassProps][, instanceProps]) -> Function
  * - name (String): The name for the new Spah class without the "Spah" namespace. E.g. to create Spah.Foo.Bar, use classCreate("Foo.Bar")
  * - superKlass (Function): The class to be extended non-destructively.
