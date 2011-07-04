@@ -81,4 +81,29 @@ $(document).ready(function() {
     equal(res.value, "bar-replaced");    
   })
   
+  test("Registers a callback at a child path", function() {
+    var data = {foo: {bar: {baz: "val"}}};
+    var callbackCounts = [0,0,0];
+    var callback0 = function() { callbackCounts[0]++; };
+    var callback1 = function() { callbackCounts[1]++; };
+    var callback2 = function() { callbackCounts[2]++; };
+    
+    var root = Spah.SpahQL.select("/", data).first();
+        root.modified(callback0);
+        root.modified("/newkey", callback1);
+        
+    var foo = root.select("/foo").first();
+        foo.modified("/newkey", callback2);
+    
+    root.set("foo", "bar");
+    deepEqual(callbackCounts, [1,0,0]);
+    root.set("newkey", "newval");
+    deepEqual(callbackCounts, [2,1,0]);
+    foo.set("arbitrary", "arb");
+    deepEqual(callbackCounts, [3,1,0]);
+    foo.set("newkey", "newval");
+    deepEqual(callbackCounts, [4,1,1]);
+    
+  });
+  
 });

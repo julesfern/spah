@@ -157,3 +157,153 @@ signatures:
   signature: "Spah.SpahQL.QueryResultSet#parent()"
   return_value: "null or QueryResult"
 file: /Users/danski/Sites/spah/src/Spah.SpahQL.QueryResultSet.js
+
+---
+id: "Spah.SpahQL.QueryResultSet#select"
+parent_id: "Spah.SpahQL.QueryResultSet"
+type: instance method
+line_number: 122
+description: |
+  Executes a scoped selection query for each result in the set,
+  and compresses the results into a single resultset made unique by result path.
+
+signatures:
+ -
+  signature: "Spah.SpahQL.QueryResultSet#select(query)"
+  return_value: "QueryResultSet"
+arguments:
+ -
+  name: query
+  types: [String]
+  description: >
+    The query to be executed.
+
+file: /Users/danski/Sites/spah/src/Spah.SpahQL.QueryResultSet.js
+
+---
+id: "Spah.SpahQL.QueryResultSet#assert"
+parent_id: "Spah.SpahQL.QueryResultSet"
+type: instance method
+line_number: 148
+description: |
+  Executes a scoped assertion query for each result in the set,
+  returning true if all results are successfully asserted and false
+  if any result fails to be asserted.
+
+signatures:
+ -
+  signature: "Spah.SpahQL.QueryResultSet#assert(query)"
+  return_value: "Boolean"
+arguments:
+ -
+  name: query
+  types: [String]
+  description: >
+    The assertion query to be executed.
+
+file: /Users/danski/Sites/spah/src/Spah.SpahQL.QueryResultSet.js
+
+---
+id: "Spah.SpahQL.QueryResultSet#set"
+parent_id: "Spah.SpahQL.QueryResultSet"
+type: instance method
+line_number: 162
+description: |
+  - key (Integer, String): The that you want to set.
+  - value (String): The value to which you want that key set.
+  
+  Calls set(key, value) on the first result in this result set and returns
+  the boolean response.
+
+signatures:
+ -
+  signature: "Spah.SpahQL.QueryResultSet#set(key, value)"
+  return_value: "Boolean"
+file: /Users/danski/Sites/spah/src/Spah.SpahQL.QueryResultSet.js
+
+---
+id: "Spah.SpahQL.QueryResultSet#replace"
+parent_id: "Spah.SpahQL.QueryResultSet"
+type: instance method
+line_number: 174
+description: |
+  Calls replace(value) on the first result in this result set and returns
+  the boolean response.
+
+signatures:
+ -
+  signature: "Spah.SpahQL.QueryResultSet#replace(value)"
+  return_value: "Boolean"
+arguments:
+ -
+  name: value
+  types: [Object]
+  description: >
+    The value to replace the first result in this set.
+
+file: /Users/danski/Sites/spah/src/Spah.SpahQL.QueryResultSet.js
+
+---
+id: "Spah.SpahQL.QueryResultSet#replaceAll"
+parent_id: "Spah.SpahQL.QueryResultSet"
+type: instance method
+line_number: 186
+description: |
+  Calls replace(value) on each result in this result set and returns
+  the set with values altered where possible.
+
+signatures:
+ -
+  signature: "Spah.SpahQL.QueryResultSet#replaceAll(value)"
+  return_value: "QueryResultSet"
+arguments:
+ -
+  name: value
+  types: [Object]
+  description: >
+    The value to replace all results in this set.
+
+file: /Users/danski/Sites/spah/src/Spah.SpahQL.QueryResultSet.js
+
+---
+id: "Spah.SpahQL.QueryResultSet#replaceEach"
+parent_id: "Spah.SpahQL.QueryResultSet"
+type: instance method
+line_number: 202
+description: |
+  Calls a test function for each result in this set in turn, and calls replace(value) on those results for which
+  the test function returns <code>true</code>. Returns this set with the values modified.
+
+signatures:
+ -
+  signature: "Spah.SpahQL.QueryResultSet#replaceEach(value, testCallback)"
+  return_value: "QueryResultSet"
+arguments:
+ -
+  name: value
+  types: [Object]
+  description: >
+    The value to replace any results where the test function is passed.
+
+ -
+  name: testCallback
+  types: [Function]
+  description: >
+    A function used to test each result in the set. The function will have the same scope and arguments as the callback used in #each.
+
+file: /Users/danski/Sites/spah/src/Spah.SpahQL.QueryResultSet.js
+
+---
+id: "Spah.SpahQL.QueryResultSet#modified"
+parent_id: "Spah.SpahQL.QueryResultSet"
+type: instance method
+line_number: 217
+description: |
+  Calls modified(callback) on every result in this set, registering the same callback function
+  for modifications to every path represented in this result set.
+
+signatures:
+ -
+  signature: "Spah.SpahQL.QueryResultSet#modified(callback)"
+  return_value: "void"
+file: /Users/danski/Sites/spah/src/Spah.SpahQL.QueryResultSet.js

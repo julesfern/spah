@@ -83,10 +83,28 @@ signatures:
 file: /Users/danski/Sites/spah/src/Spah.SpahQL.QueryResult.js
 
 ---
+id: "Spah.SpahQL.QueryResult#keyName"
+parent_id: "Spah.SpahQL.QueryResult"
+type: instance method
+line_number: 72
+description: |
+  Returns the name for this object, based on its path. If this result is the root
+  or if the result was not created from a path query then the method will return null.
+  
+       select("/foo").first().keyName() //-> "foo"
+       select("/foo/bar/.size").first().keyName() // -> ".size"
+
+signatures:
+ -
+  signature: "Spah.SpahQL.QueryResult#keyName()"
+  return_value: "String or null"
+file: /Users/danski/Sites/spah/src/Spah.SpahQL.QueryResult.js
+
+---
 id: "Spah.SpahQL.QueryResult#parent"
 parent_id: "Spah.SpahQL.QueryResult"
 type: instance method
-line_number: 69
+line_number: 83
 description: |
   Retrieves the parent object from the data construct that originally generated this
   query result. Remember to always assume that the data may have been modified in the
@@ -102,7 +120,7 @@ file: /Users/danski/Sites/spah/src/Spah.SpahQL.QueryResult.js
 id: "Spah.SpahQL.QueryResult#select"
 parent_id: "Spah.SpahQL.QueryResult"
 type: instance method
-line_number: 82
+line_number: 96
 description: |
   Runs a selection query scoped to this result's path and data, and returns the results.
   For instance:
@@ -119,7 +137,7 @@ file: /Users/danski/Sites/spah/src/Spah.SpahQL.QueryResult.js
 id: "Spah.SpahQL.QueryResult#assert"
 parent_id: "Spah.SpahQL.QueryResult"
 type: instance method
-line_number: 93
+line_number: 107
 description: |
   Runs an assertion query scoped to this result's path and data, and returns the result. For instance:
   
@@ -129,4 +147,90 @@ signatures:
  -
   signature: "Spah.SpahQL.QueryResult#assert(query)"
   return_value: "Spah.SpahQL.QueryResultSet"
+file: /Users/danski/Sites/spah/src/Spah.SpahQL.QueryResult.js
+
+---
+id: "Spah.SpahQL.QueryResult#set"
+parent_id: "Spah.SpahQL.QueryResult"
+type: instance method
+line_number: 121
+description: |
+  - key (Integer, String): The key to set on this object
+  - value (Object): The value to attribute to the given key.
+  
+  If this result has an array or object value, modified this result
+  by setting the given key to the given value. Returns true if the
+  key is set successfully and false if the new value is rejected
+  because this result isn't enumerable.
+
+signatures:
+ -
+  signature: "Spah.SpahQL.QueryResult#set(key, value)"
+  return_value: "Boolean"
+file: /Users/danski/Sites/spah/src/Spah.SpahQL.QueryResult.js
+
+---
+id: "Spah.SpahQL.QueryResult#replace"
+parent_id: "Spah.SpahQL.QueryResult"
+type: instance method
+line_number: 148
+description: |
+  Replaces the data on this query result, modifying the queried data
+  in the process. If this result is the root object, the replace will
+  not be performed and will return false. If this result was not created
+  from a path query then the replace method will simply set the value
+  on this result instance and return true. Otherwise, the result of
+  setting this result's key on the parent object will be returned.
+  
+       // Equivalent to
+       myResult.parent().set(myResult.keyName(), value);
+
+signatures:
+ -
+  signature: "Spah.SpahQL.QueryResult#replace(value)"
+  return_value: "Boolean"
+arguments:
+ -
+  name: value
+  types: [Object]
+  description: >
+    The value to replace this query result's value.
+
+file: /Users/danski/Sites/spah/src/Spah.SpahQL.QueryResult.js
+
+---
+id: "Spah.SpahQL.QueryResult#triggerModificationCallbacks"
+parent_id: "Spah.SpahQL.QueryResult"
+type: instance method
+line_number: 171
+description: |
+  Used to trigger callbacks following a modification on this result or on a subkey of this object.
+  You probably don't want to use this in your app code.
+
+signatures:
+ -
+  signature: "Spah.SpahQL.QueryResult#triggerModificationCallbacks(oldValue, newValue, relativePath)"
+  return_value: "void"
+file: /Users/danski/Sites/spah/src/Spah.SpahQL.QueryResult.js
+
+---
+id: "Spah.SpahQL.QueryResult#modified"
+parent_id: "Spah.SpahQL.QueryResult"
+type: instance method
+line_number: 194
+description: |
+  - pathOrCallback (Function, String): The path relative to this result to which you want to bind the listener.
+  - callback (Function): If pathOrCallback is given as a string, this second argument should be the callback function.
+  
+  Registers a callback to be triggered when data within this path (including descendants of this path)
+  is modified on the object from which this query result was generated. The callback is not bound to this
+  particular result instance, but instead registered on the Spah.SpahQL.Callbacks module.
+  
+  Upon modification, the callback will be triggered with arguments path (the path of the modified data),
+  value (the new value for the path specified in the path argument), oldvalue (the value prior to modification).
+
+signatures:
+ -
+  signature: "Spah.SpahQL.QueryResult#modified(pathOrCallback[, callback])"
+  return_value: "void"
 file: /Users/danski/Sites/spah/src/Spah.SpahQL.QueryResult.js

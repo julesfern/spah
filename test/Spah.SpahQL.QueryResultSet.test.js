@@ -85,4 +85,14 @@ $(document).ready(function() {
     equal(data.str2, "2");
   });
   
+  test("modified(callback) registers callbacks for every result", function() {
+    Spah.SpahQL.Callbacks.reset();
+    var set = Spah.SpahQL.select("/*[/.type == 'string']", data);
+    
+    set.modified(function() { return 15; });
+    
+    ok(Spah.SpahQL.Callbacks.callbacks["/str1"]);
+    ok(Spah.SpahQL.Callbacks.callbacks["/str2"]);
+  });
+  
 });

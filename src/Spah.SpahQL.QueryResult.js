@@ -122,8 +122,9 @@ Spah.classCreate("Spah.SpahQL.QueryResult", {
     var k = Spah.SpahQL.DataHelper.coerceKeyForObject(key, this.value);
     if(k != null) {
       if(!Spah.SpahQL.DataHelper.eq(value, this.value[k])) {
+        var prev = this.value[k];
         this.value[k] = value;
-        this.modified();
+        this.triggerModificationCallbacks(prev, value, "/"+k);
       }
       return true;
     }
@@ -147,20 +148,58 @@ Spah.classCreate("Spah.SpahQL.QueryResult", {
   "replace": function(value) {
     var k = this.keyName();
     if(this.path != "/" && !Spah.SpahQL.DataHelper.eq(this.value, value)) {
+        var prev = this.value;
         this.value = value;
         var p = this.parent();
         if(p) {
           return (p&&k)? p.set(k, value) : false; 
         }
         else {
-          this.modified();
+          this.triggerModificationCallbacks(prev, value);
           return true;
         }
     }
     return false;
   },
   
-  "modified": function() {
+  /**
+   * Spah.SpahQL.QueryResult#triggerModificationCallbacks(oldValue, newValue, relativePath) -> void
+   *
+   * Used to trigger callbacks following a modification on this result or on a subkey of this object.
+   * You probably don't want to use this in your app code.
+   **/
+  "triggerModificationCallbacks": function(oldValue, newValue, relativePath) {
+    var modifiedAbsolutePath;
+    if(relativePath) {
+      modifiedAbsolutePath = ((this.path=="/")? "" : this.path)+relativePath;
+    }
+    else {
+      modifiedAbsolutePath = this.path;
+    }
+    Spah.SpahQL.Callbacks.pathModifiedOnObject(modifiedAbsolutePath, this.sourceData, oldValue, newValue)
+  },
+  
+  /**
+   * Spah.SpahQL.QueryResult#modified(pathOrCallback[, callback]) -> void
+   * - pathOrCallback (Function, String): The path relative to this result to which you want to bind the listener.
+   * - callback (Function): If pathOrCallback is given as a string, this second argument should be the callback function.
+   *
+   * Registers a callback to be triggered when data within this path (including descendants of this path)
+   * is modified on the object from which this query result was generated. The callback is not bound to this
+   * particular result instance, but instead registered on the Spah.SpahQL.Callbacks module.
+   *
+   * Upon modification, the callback will be triggered with arguments path (the path of the modified data),
+   * value (the new value for the path specified in the path argument), oldvalue (the value prior to modification).
+   **/
+  "modified": function(pathOrCallback, callback) {
+    // Get callback func
+    var cbFunc = (callback)? callback : pathOrCallback;
+    // Get path for event
+    var pathArg = (callback)? pathOrCallback : null;
+    var path = (this.path=="/")? (pathArg||this.path) : this.path + (pathArg||"");
     
+    Spah.SpahQL.Callbacks.addCallbackForPathModifiedOnObject(path, this.sourceData, cbFunc);
   }
+  
+  
 });

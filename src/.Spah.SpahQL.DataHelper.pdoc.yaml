@@ -645,3 +645,22 @@ arguments:
     The value being asserted as a "truthy" set.
 
 file: /Users/danski/Sites/spah/src/Spah.SpahQL.DataHelper.js
+
+---
+id: "Spah.SpahQL.DataHelper.coerceKeyForObject"
+parent_id: "Spah.SpahQL.DataHelper"
+type: class method
+line_number: 811
+description: |
+  - key (Integer, String): The key to be coerced.
+  - obj (Object): The value being inspected
+  
+  When you want to set a key on an anonymous object, you'll want to coerce the
+  key to the correct type - numbers for arrays, strings for objects. This function does that.
+  Returns null if the key can't be coerced for the given object.
+
+signatures:
+ -
+  signature: "Spah.SpahQL.DataHelper.coerceKeyForObject(key, obj)"
+  return_value: "String, Integer, null"
+file: /Users/danski/Sites/spah/src/Spah.SpahQL.DataHelper.js

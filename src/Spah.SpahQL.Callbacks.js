@@ -41,13 +41,35 @@ Spah.classCreate("Spah.SpahQL.Callbacks", {
   
   /**
    * Spah.SpahQL.Callbacks.pathModifiedOnObject(path, data, oldvalue, newvalue) -> void
+   * - path (String): The absolute path for the modified object
+   * - data (Object): The root data context that was modified
+   * - oldvalue (Object): The value previously found at the modified path
+   * - newvalue (Object): The new, up-to-date value for the modified path. If null, the path is considered deleted.
    *
    * Receives a signal from any modified query result that the data at a specific path has been replaced,
-   * and triggers event dispatchers registered against the same path on the same data construct (using pointer
-   * equality.)
+   * and triggers event dispatchers registered against the same path and higher that were registered using the same
+   * on the same root data construct (using pointer equality.).
    **/
   "pathModifiedOnObject": function(path, data, oldvalue, newvalue) {
+    if(!path) return;
     
+    var currentPath = path;
+    while(currentPath.lastIndexOf("/") >= 0) {
+      // Raise alerts on path
+      var pathCallbacks = this.callbacks[currentPath];
+      
+      if(pathCallbacks) {
+        for(var i=0; i<pathCallbacks.length; i++) {
+          if(pathCallbacks[i][0] == data) {
+            // Trigger callback
+            (pathCallbacks[i][1]).call(this, currentPath, newvalue, oldvalue);
+          }
+        }
+      }
+      
+      // Chop path
+      currentPath = (currentPath.lastIndexOf("/") == 0 && currentPath.length>1)? "/" : currentPath.substring(0, currentPath.lastIndexOf("/"));
+    }
   },
   
   "addCallbackForPathModifiedOnObject": function(path, object, callback) {
@@ -60,7 +82,8 @@ Spah.classCreate("Spah.SpahQL.Callbacks", {
     if(pathCallbacks) {
       for(var i=pathCallbacks.length-1; i>=0; i--) {
         if(pathCallbacks[i][0] == object && pathCallbacks[i][1] == callback) {
-          this.callbacks[path] = pathCallbacks.splice(i,1);
+          pathCallbacks.splice(i,1);
+          break;
         }
       }
     }

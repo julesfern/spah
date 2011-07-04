@@ -208,5 +208,17 @@ Spah.classCreate("Spah.SpahQL.QueryResultSet", {
     return this;
   },
   
+  /**
+   * Spah.SpahQL.QueryResultSet#modified(callback) -> void
+   *
+   * Calls modified(callback) on every result in this set, registering the same callback function
+   * for modifications to every path represented in this result set.
+   **/
+  "modified": function(callback) {
+    this.each(function() {
+      this.modified(callback);
+    });
+  },
+  
 });
  

@@ -107,10 +107,38 @@ arguments:
 file: /Users/danski/Sites/spah/src/Spah.js
 
 ---
+id: "Spah.inBrowser"
+parent_id: "Spah"
+type: class method
+line_number: 98
+description: |
+  Returns true if the runtime environment is identified as being in-browser.
+
+signatures:
+ -
+  signature: "Spah.inBrowser()"
+  return_value: "Boolean"
+file: /Users/danski/Sites/spah/src/Spah.js
+
+---
+id: "Spah.isHeadless"
+parent_id: "Spah"
+type: class method
+line_number: 107
+description: |
+  Returns true if the runtime environment is identified as being headless e.g. a Node.js runtime.
+
+signatures:
+ -
+  signature: "Spah.isHeadless()"
+  return_value: "Boolean"
+file: /Users/danski/Sites/spah/src/Spah.js
+
+---
 id: "Spah.classExtend"
 parent_id: "Spah"
 type: class method
-line_number: 103
+line_number: 125
 description: |
   Creates a new class that extends another class. Follows the same rules as Spah.classCreate. The superclass does not
   need to be a part of the Spah package.

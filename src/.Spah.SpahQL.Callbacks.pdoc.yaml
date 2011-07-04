@@ -1,0 +1,93 @@
+---
+id: "Spah.SpahQL.Callbacks"
+parent_id: "Spah.SpahQL"
+type: class
+line_number: 6
+description: |
+  Stores and manages the dispatch of modification callbacks on any data source that can be queried with SpahQL.
+
+file: /Users/danski/Sites/spah/src/Spah.SpahQL.Callbacks.js
+
+---
+id: "Spah.SpahQL.Callbacks.callbacks"
+parent_id: "Spah.SpahQL.Callbacks"
+type: class property
+line_number: 19
+description: |
+  A dictionary of all registered SpahQL callbacks, keyed by path. The value
+  is an array containing many arrays, each with a pointer to the object to which the callback refers, and the
+  callback function itself.
+
+signatures:
+ -
+  signature: "Spah.SpahQL.Callbacks.callbacks"
+  return_value: "Object"
+file: /Users/danski/Sites/spah/src/Spah.SpahQL.Callbacks.js
+
+---
+id: "Spah.SpahQL.Callbacks.callbacksForPathInObject"
+parent_id: "Spah.SpahQL.Callbacks"
+type: class method
+line_number: 31
+description: |
+
+
+signatures:
+ -
+  signature: "Spah.SpahQL.Callbacks.callbacksForPathInObject(path, object)"
+  return_value: "Array"
+arguments:
+ -
+  name: path
+  types: [String]
+  description: >
+    The path for which you are pulling all registered callbacks.
+
+ -
+  name: object
+  types: [Object]
+  description: >
+    The object (which should have previously been queried with SpahQL) in which the path exists.
+
+file: /Users/danski/Sites/spah/src/Spah.SpahQL.Callbacks.js
+
+---
+id: "Spah.SpahQL.Callbacks.pathModifiedOnObject"
+parent_id: "Spah.SpahQL.Callbacks"
+type: class method
+line_number: 53
+description: |
+  Receives a signal from any modified query result that the data at a specific path has been replaced,
+  and triggers event dispatchers registered against the same path and higher that were registered using the same
+  on the same root data construct (using pointer equality.).
+
+signatures:
+ -
+  signature: "Spah.SpahQL.Callbacks.pathModifiedOnObject(path, data, oldvalue, newvalue)"
+  return_value: "void"
+arguments:
+ -
+  name: path
+  types: [String]
+  description: >
+    The absolute path for the modified object
+
+ -
+  name: data
+  types: [Object]
+  description: >
+    The root data context that was modified
+
+ -
+  name: oldvalue
+  types: [Object]
+  description: >
+    The value previously found at the modified path
+
+ -
+  name: newvalue
+  types: [Object]
+  description: >
+    The new, up-to-date value for the modified path. If null, the path is considered deleted.
+
+file: /Users/danski/Sites/spah/src/Spah.SpahQL.Callbacks.js

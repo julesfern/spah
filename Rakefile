@@ -50,7 +50,7 @@ namespace :client do
       require 'maruku'
       
       input_dir = File.join(File.dirname(__FILE__), "src")
-      output_dir = File.join(File.dirname(__FILE__), "doc-build")
+      output_dir = File.join(File.dirname(__FILE__), "doc-html")
       puts "Generating documents #{input_dir} => #{output_dir}..."
     
       #if(Dir.exist?(output_dir))
