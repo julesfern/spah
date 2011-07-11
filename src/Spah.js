@@ -12,7 +12,7 @@
  * See [Default client behaviour](../../index.html#default_client_behaviour) to learn what actions Spah performs on initialisation.
  * For more information on Spah, see the main [Readme](../index.html) ([also available on Github](https://github.com/danski/spah#readme))
  **/
-Spah = function() {};
+var Spah = function() {};
 
 /**
  * Spah.logMessages -> Array
@@ -96,7 +96,7 @@ Spah["classCreate"] = function(name, klassProps, instanceProps) {
  * Returns true if the runtime environment is identified as being in-browser.
  **/
 Spah["inBrowser"] = function() {
-  return (typeof(window) != "undefined");
+  return (typeof(window) != "undefined" && typeof(window.location) == "object");
 }
 
 /**
@@ -145,6 +145,11 @@ Spah["classExtend"] = function(name, superKlass, klassProps, instanceProps) {
   return this.classCreate(name, targetKlassProps, targetInstanceProps);
 }
 
-// Export master class if running in the client environment
-if(typeof(window) != "undefined") window["Spah"] = Spah;
-exports = Spah;
+if(Spah.inBrowser()) {
+  // Export master class if running in the client environment
+  window["Spah"] = Spah;
+}
+else {
+  // Do CommonJS module export otherwise
+  exports = Spah;
+}

@@ -48,27 +48,53 @@ Spah.classCreate("Spah.SpahQL.Callbacks", {
    *
    * Receives a signal from any modified query result that the data at a specific path has been replaced,
    * and triggers event dispatchers registered against the same path and higher that were registered using the same
-   * on the same root data construct (using pointer equality.).
+   * on the same root data construct (using pointer equality.)
    **/
   "pathModifiedOnObject": function(path, data, oldvalue, newvalue) {
     if(!path) return;
     
-    var currentPath = path;
-    while(currentPath.lastIndexOf("/") >= 0) {
-      // Raise alerts on path
-      var pathCallbacks = this.callbacks[currentPath];
+    // Create the dispatch strategy based on the modified paths, to avoid duplicate dispatch.
+    // IMPORTANT: Deepest paths dispatch first.
+    var dispatchQueue = [];
+    // Use comparison function to get a full accounting for what has changed inside that scope
+    var scopeModifications = Spah.SpahQL.DataHelper.compare(oldvalue, newvalue, path);    
+    for(var modifiedPath in scopeModifications) {
+      // Get the oldvalue, newvalue etc.
+      var modificationData = scopeModifications[modifiedPath];
+      
+      // Push path and all uptree paths onto queue, ensuring uniqueness      
+      var currentPath = modifiedPath;
+      while(currentPath.lastIndexOf("/") >= 0) {
+        if(dispatchQueue.indexOf(currentPath) < 0) dispatchQueue.push(currentPath);
+        currentPath = (currentPath.lastIndexOf("/") == 0 && currentPath.length>1)? "/" : currentPath.substring(0, currentPath.lastIndexOf("/"));
+      }
+    }
+    
+    // Sort dispatch queue based on depth
+    dispatchQueue.sort(function(a, b) {
+      // Count slashes
+      if(a == "/") return 1;
+      if(b == "/") return -1;
+      return (a.split("/").length > b.split("/").length)? -1: 1;
+    })
+    Spah.log("Path modified on data store, formulated the following dispatch strategy: ["+dispatchQueue.join(" -> ")+"]. Data store: ", data);
+    // Now run the dispatch queue
+    
+    for(var i=0; i<dispatchQueue.length; i++) {
+      var dispatchPath = dispatchQueue[i];
+      var pathCallbacks = this.callbacks[dispatchPath];
+      
+      Spah.log("Triggering registered path callbacks for "+dispatchPath+": "+((!pathCallbacks)? "No callbacks to trigger" : pathCallbacks.length+" callbacks to trigger"));
       
       if(pathCallbacks) {
-        for(var i=0; i<pathCallbacks.length; i++) {
-          if(pathCallbacks[i][0] == data) {
+        for(var j=0; j<pathCallbacks.length; j++) {
+          if(pathCallbacks[j][0] == data) {
             // Trigger callback
-            (pathCallbacks[i][1]).call(this, currentPath, newvalue, oldvalue);
+            
+            (pathCallbacks[j][1])(dispatchPath, Spah.SpahQL.select(dispatchPath, data).first());
           }
         }
       }
-      
-      // Chop path
-      currentPath = (currentPath.lastIndexOf("/") == 0 && currentPath.length>1)? "/" : currentPath.substring(0, currentPath.lastIndexOf("/"));
     }
   },
   

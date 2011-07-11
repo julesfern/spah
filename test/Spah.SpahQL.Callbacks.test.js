@@ -54,5 +54,32 @@ $(document).ready(function() {
     baz.replace("val-replaced");
     deepEqual(callbackCounts, [4,3,2,1]);
   });
+  
+  test("Attaches the query result and path to the modification callback", function() {
+    var data = {foo: {bar: {baz: "val"}}};
+    var root = Spah.SpahQL.select("/", data).first();
+    var foo = root.select("/foo").first();
+    
+    expect(3);
+    foo.modified(function(path, result) {
+      equal(path, foo.path);
+      equal(result.path, foo.path);
+      deepEqual(result.value, {bar: {baz: "val"}, newkey: "newvalue"});
+    });
+    foo.set("newkey", "newvalue");
+  });
+  
+  test("Triggers modification callbacks on non-existent paths when setting complex values", function() {
+     var data = {foo: {bar: {baz: "val"}}};
+     var root = Spah.SpahQL.select("/", data).first();
+
+     expect(3);
+     root.modified("/foo/newarr", function(path, result) {
+       equal(path, "/foo/newarr");
+       equal(result.path, path);
+       deepEqual(result.value, ["a","b","c"]);
+     });
+     root.select("/foo").set("newarr", ["a","b","c"]);
+  });
     
 });

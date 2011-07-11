@@ -188,8 +188,9 @@ Spah.classCreate("Spah.SpahQL.QueryResult", {
    * is modified on the object from which this query result was generated. The callback is not bound to this
    * particular result instance, but instead registered on the Spah.SpahQL.Callbacks module.
    *
-   * Upon modification, the callback will be triggered with arguments path (the path of the modified data),
-   * value (the new value for the path specified in the path argument), oldvalue (the value prior to modification).
+   * Upon modification, the callback will be triggered with arguments <code>path</code> (the path of the modified data),
+   * and <code>result</code> (a QueryResult representing the newly-modified value). The <code>result</code> argument
+   * may be <code>undefined</code> if the data at that path was removed during the modification.
    **/
   "modified": function(pathOrCallback, callback) {
     // Get callback func
