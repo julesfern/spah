@@ -95,4 +95,16 @@ $(document).ready(function() {
     ok(Spah.SpahQL.Callbacks.callbacks["/str2"]);
   });
   
+  test("delete() acts on the first result", function() {
+    var set = Spah.SpahQL.select("/foo/foo", data);
+    set.delete();
+    deepEqual(data.foo, {});
+  });
+  
+  test("deleteAll() works on the entire set", function() {
+    var set  = Spah.SpahQL.select("/*", data);
+    set.deleteAll();
+    deepEqual(data, {});
+  });
+  
 });

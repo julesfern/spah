@@ -209,6 +209,29 @@ Spah.classCreate("Spah.SpahQL.QueryResultSet", {
   },
   
   /**
+   * Spah.SpahQL.QueryResultSet#delete([key0, key1, keyN]) -> QueryResult
+   *
+   * Calls delete() on the first result in this set and returns the result.
+   **/
+  "delete": function() {
+    var f = this.first();
+    return (f)? f.delete.apply(f, arguments) : f;
+  },
+  
+  /**
+   * Spah.SpahQL.QueryResultSet.deleteAll() -> QueryResultSet
+   *
+   * Calls delete() on every result in this set and returns the set,
+   * which should now have values orphaned from the original data store.
+   **/
+  "deleteAll": function() {
+    this.each(function() {
+      this.delete();
+    });
+    return this;
+  },
+  
+  /**
    * Spah.SpahQL.QueryResultSet#modified(callback) -> void
    *
    * Calls modified(callback) on every result in this set, registering the same callback function

@@ -48,6 +48,16 @@ Spah.classCreate("Spah.SpahQL.QueryResult", {
   },
   
   /**
+   * Spah.SpahQL.QueryResult#type() -> String
+   *
+   * Runs this result's value through Spah.SpahQL.DataHelper#objectType and returns the
+   * result.
+   **/
+  "type": function() {
+    return Spah.SpahQL.DataHelper.objectType(this.value);
+  },
+  
+  /**
    * Spah.SpahQL.QueryResult#parentPath() -> String or null
    * 
    * Returns the path for the object in the queried data which contains this result.
@@ -163,6 +173,79 @@ Spah.classCreate("Spah.SpahQL.QueryResult", {
   },
   
   /**
+   * Spah.SpahQL.QueryResult#delete([key1, key2, keyN]) -> QueryResult
+   *
+   * Deletes data from this result. If one or more keys is given as an argument, 
+   * those keys will be deleted from this value in reverse alphanumeric order. If no arguments are
+   * given, the entire result will be deleted from its parent.
+   *
+   * Deletion takes different effects depending on the data type of this query result.
+   * Arrays are spliced, removing the specified index from the array without leaving an empty space
+   * (hence the reverse ordering, to avoid array corruption). Objects/Hashes will have the specified
+   * keys removed, if those keys exist.
+   *
+   * The root data construct may not be deleted. This method always returns <code>this</code>.
+   **/
+  "delete": function() {
+    if(arguments.length > 0) {
+      // Key deletion
+      var keys = []; for(var i=0; i<arguments.length; i++) { keys.push(arguments[i]); };
+          keys.sort(function(a, b) { return (a.toString()>b.toString())? -1 : 1; });
+      var modified = false;
+      var oldVal, newVal;
+      var type = this.type();
+      
+      // Shallow-clone original value...
+      // Original value is cloned so that new value can remain pointed to source data.
+      if(type == "array") {
+        // Doing array splice
+        oldVal = this.value.slice(0); // shallow array clone
+      }
+      else if(type == "object") {
+        // Doing hash delete
+        oldVal = {};
+        for(var v in this.value) { 
+          // Shallow hash clone
+          oldVal[v] = this.value[v]; 
+        }
+      }
+       
+      // Loop keys and remove
+      for(var k=0; k<keys.length; k++) {
+        var cKey = Spah.SpahQL.DataHelper.coerceKeyForObject(keys[k], this.value);
+        if(cKey) {
+          if(type == "array") {
+            // Doing array splice
+            this.value.splice(cKey, 1);
+          }
+          else if(type == "object") {
+            // Doing hash delete
+            delete this.value[cKey];
+          }
+          newVal = this.value;
+        }
+      }
+      
+      if(newVal) {
+        this.triggerModificationCallbacks(oldVal, newVal);
+      }
+    }
+    else {
+      // Self-deletion
+      var k = this.keyName();
+      var p = this.parent();
+      if(p && k) {
+        console.log("self-delete ", k, p);
+        p.delete(k);
+      }
+    }
+    
+    
+    return this;
+  },
+  
+  
+  /**
    * Spah.SpahQL.QueryResult#triggerModificationCallbacks(oldValue, newValue, relativePath) -> void
    *
    * Used to trigger callbacks following a modification on this result or on a subkey of this object.
@@ -200,7 +283,8 @@ Spah.classCreate("Spah.SpahQL.QueryResult", {
     var path = (this.path=="/")? (pathArg||this.path) : this.path + (pathArg||"");
     
     Spah.SpahQL.Callbacks.addCallbackForPathModifiedOnObject(path, this.sourceData, cbFunc);
-  }
+  },
+  
   
   
 });

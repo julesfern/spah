@@ -103,7 +103,43 @@ $(document).ready(function() {
     deepEqual(callbackCounts, [3,1,0]);
     foo.set("newkey", "newval");
     deepEqual(callbackCounts, [4,1,1]);
-    
   });
+  
+  test("Deletes a child key in an array value", function() {
+    var data = {foo: [0,1,2,3]};
+    var foo = Spah.SpahQL.select("/foo", data).first();
+    var callbackCounts = [0,0];
+    foo.modified("/1", function() { callbackCounts[0]++; });
+    foo.modified("/2", function() { callbackCounts[1]++; });
+    
+    deepEqual(foo.value, [0,1,2,3]);
+    foo.delete(1, "2");
+    deepEqual(foo.value, [0,3]);
+    deepEqual(callbackCounts, [1,1]);    
+  });
+  
+  test("Deletes a child key in a hash value", function() {
+    var data = {foo: {a: 1, b: 2, c:3}};
+    var foo = Spah.SpahQL.select("/foo", data).first();
+    var callbackCounts = [0,0];
+    foo.modified("/a", function() { callbackCounts[0]++; });
+    foo.modified("/b", function() { callbackCounts[1]++; });
+    
+    deepEqual(foo.value, {a: 1, b: 2, c:3});
+    foo.delete("a", "b");
+    deepEqual(foo.value, {c:3});
+    deepEqual(callbackCounts, [1,1]);    
+  });
+  
+  test("Self-deletes from parent value", function() {
+    var data = {foo: {a: 1, b: 2, c:3}, bar: {a: 1, b: 2, c:3}};
+    var bar = Spah.SpahQL.select("/bar", data).first();
+    
+    deepEqual(bar.value, {a: 1, b: 2, c:3});
+    bar.delete();
+    deepEqual(data, {foo: {a: 1, b: 2, c:3}}); // also asserts that data source was modified
+  });
+  
+  
   
 });
