@@ -84,6 +84,9 @@ namespace :docs do
       opts = {}; 
       html = Maruku.new(File.read(ifile).to_s).to_html
       title = full_title(html) || otitle(ifile)
+      puts "Processing syntax highlights..."
+      
+      puts "Done highlighting."
       @document_map[ifile] = {:html=>html, :title=>title}
       puts "Done rendering markdown for #{ifile}. Identified title '#{title}'"
     end

@@ -25,16 +25,37 @@ nav {
 
 article {
   margin: 10px 30px 10px 190px;
+  max-width: 800px;
+  line-height: 1.4em;
 }
 
 article code {
   color: #FFF;
   background: #333;
+  font-size: small;
+  padding: 2px 4px;
+  border-radius: 3px;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
 }
 
 article pre {
   margin: 10px;
   padding: 10px;
   color: #FFF;
-  background: #333;
+  background: #000;
+  border-radius: 5px;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+}
+
+article ul {
+}
+article li {
+  background: #EEE;
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
 }

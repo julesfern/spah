@@ -5,6 +5,15 @@
     
     <link rel="stylesheet" href="css/normalize.css" type="text/css" media="screen" />
     <link rel="stylesheet" href="css/master.css" type="text/css" media="screen" />
+    <link rel="stylesheet" href="css/ir_black.css" type="text/css" media="screen" />
+    
+    <script type="text/javascript" src="js/highlight.pack.js"></script>
+    <script type="text/javascript" src="js/jquery.1.5.2.min.js"></script>
+    <script type="text/javascript">
+      $(document).ready(function() {
+        hljs.initHighlighting();
+      });
+    </script>
   </head>
   <body>
     
@@ -13,9 +22,8 @@
      </nav>
      
      <article>
-      <img src='https://img.skitch.com/20110504-c79qr916mcwtnq4m63uqc3dibq.jpg' />
-<h1 id='spah_stateful_pages_not_single_pages'>Spah: Stateful pages, not single pages.</h1>
-
+      <h1 id='spah_stateful_pages_not_single_pages'>Spah: Stateful pages, not single pages.</h1>
+<img src='https://img.skitch.com/20110504-c79qr916mcwtnq4m63uqc3dibq.jpg' />
 <p>Single-page web apps are a hit - and with good reason. The promise of lush, stateful web UI that hangs off your service&#8217;s developer API is almost too good to ignore.</p>
 
 <p>But why single page? Is it really important that your app sits on a single URL in the browser? No. The important thing that single-page apps give you is <strong>state</strong>. The ability to pull data into a page without destroying the existing in-browser state - and to keep your remote app nice, clean and resource-centric in the process. Single-pagedness is just a side-effect of the way in which we&#8217;re currently achieving this.</p>

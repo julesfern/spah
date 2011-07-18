@@ -49,6 +49,28 @@ Spah["log"] = function(message) {
 };
 
 /**
+ * Spah.inBrowser() -> Boolean
+ *
+ * Returns true if the runtime environment is identified as being in-browser.
+ **/
+Spah["inBrowser"] = function() {
+  return (typeof(window) != "undefined" && typeof(window.location) == "object");
+}
+
+/**
+ * Spah.isHeadless() -> Boolean
+ *
+ * Returns true if the runtime environment is identified as being headless e.g. a Node.js runtime.
+ **/
+Spah["isHeadless"] = function() {
+  return !this.inBrowser();
+}
+
+Spah["inCommonJS"] = function() {
+  return (typeof(exports) == "object");
+}
+
+/**
  * Spah.classCreate(name[, klassProps][, instanceProps]) -> Function
  * - name (String): The name for the new Spah class without the "Spah" namespace. E.g. to create Spah.Foo.Bar, use classCreate("Foo.Bar")
  * - klassProps (Object): A hash of class-level properties and functions
@@ -76,41 +98,20 @@ Spah["classCreate"] = function(name, klassProps, instanceProps) {
   var nameNS = name.split(".");
   var target = this;
   for(var n=1; n<nameNS.length; n++) {
+    var pName = nameNS[n];
     if(n < nameNS.length-1) {
       // intermediary key
-      target[nameNS[n]] = target[nameNS[n]] || {};
-      target = target[nameNS[n]];
+      target[pName] = target[pName] || {};
+      target = target[pName];
     }
     else {
       // final key
-      target[nameNS[n]] = klass;
+      target[pName] = klass;
     }
   }
   // Return class
   return klass;
 };
-
-/**
- * Spah.inBrowser() -> Boolean
- *
- * Returns true if the runtime environment is identified as being in-browser.
- **/
-Spah["inBrowser"] = function() {
-  return (typeof(window) != "undefined" && typeof(window.location) == "object");
-}
-
-/**
- * Spah.isHeadless() -> Boolean
- *
- * Returns true if the runtime environment is identified as being headless e.g. a Node.js runtime.
- **/
-Spah["isHeadless"] = function() {
-  return !this.inBrowser();
-}
-
-Spah["inCommonJS"] = function() {
-  return (typeof(exports) == "object");
-}
 
 /**
  * Spah.classExtend(name, superKlass[, klassProps][, instanceProps]) -> Function

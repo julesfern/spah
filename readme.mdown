@@ -1,7 +1,7 @@
-<img src="https://img.skitch.com/20110504-c79qr916mcwtnq4m63uqc3dibq.jpg" />
-
 Spah: Stateful pages, not single pages.
 =======================================
+
+<img src="https://img.skitch.com/20110504-c79qr916mcwtnq4m63uqc3dibq.jpg" />
 
 Single-page web apps are a hit - and with good reason. The promise of lush, stateful web UI that hangs off your service's developer API is almost too good to ignore.
 
