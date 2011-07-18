@@ -59,7 +59,7 @@ line_number: 53
 description: |
   Receives a signal from any modified query result that the data at a specific path has been replaced,
   and triggers event dispatchers registered against the same path and higher that were registered using the same
-  on the same root data construct (using pointer equality.).
+  on the same root data construct (using pointer equality.)
 
 signatures:
  -

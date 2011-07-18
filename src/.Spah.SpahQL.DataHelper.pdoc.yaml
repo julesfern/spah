@@ -10,75 +10,26 @@ description: |
 file: /Users/danski/Sites/spah/src/Spah.SpahQL.DataHelper.js
 
 ---
-id: "Spah.SpahQL.DataHelper.merge"
+id: "Spah.SpahQL.DataHelper.compare"
 parent_id: "Spah.SpahQL.DataHelper"
 type: class method
-line_number: 51
+line_number: 18
 description: |
-  Merges the given objects and returns an object like:
-  
-       {
-         data: updatedObject,
-         modifications: modificationsKeyedByPath,
-         modified: booleanIndicatingChangesWereMade
-       }
-  
-  For instance:
-  
-       var originalState = {
-         user_authenticated: true,
-         items: [{type: "Item", id: 1}, {type: "Item", id: 2}],
-         user: {id: 9, name: "My user"}
-       }
-       var delta = {
-         items: [{type: "Item", id: 1}],
-         user: {name: "User got a new name"}
-       }
-       mergeResult = Spah.SpahQL.DataHelper.merge(delta, originalState);
-       mergeResult.data; //-> The merged data: {
-       //  user_authenticated: true,
-       //  items: [{type: "Item", id: 888}], // Note that arrays are REPLACED during a merge
-       //  user: {id: 9, name: "User got a new name"} // Note hashes are MERGED during a merge
-       //}
-       mergeResult.modifications; //-> Modifications: {
-       //  "/items": "~", // The "items" array was altered
-       //  "/items[1]": "-", // The "items" array was shortened
-       //  "/items[1]/type": "-", // The hash inside the array was deleted
-       //  "/items[1]/id": "-",
-       //  "/user": "~", // Value inside "/user" was modified
-       //  "/user/name": "~" // User's name was modified
-       //}
+  Compares two objects at the given path (defaulting to "/") and returns a hash of differences between the two,
+  keyed by path. The hash has array values, each including a SpahQL modification symbol, the original data value
+  and the delta data value.
 
 signatures:
  -
-  signature: "Spah.SpahQL.DataHelper.merge(delta, target [, path])"
-  return_value: "Object mergeData"
-arguments:
- -
-  name: delta
-  types: [Object]
-  description: >
-    The source object containing deltas intended to be written into the destination object.
-
- -
-  name: target
-  types: [Object]
-  description: >
-    The destination object for the updated data.
-
- -
-  name: path
-  types: [String]
-  description: >
-    A path used in recursion to collect modifications and act as a stack tracer.
-
+  signature: "Spah.SpahQL.DataHelper.compare(original, delta[, atPath])"
+  return_value: "Object"
 file: /Users/danski/Sites/spah/src/Spah.SpahQL.DataHelper.js
 
 ---
 id: "Spah.SpahQL.DataHelper.modificationSymbol"
 parent_id: "Spah.SpahQL.DataHelper"
 type: class method
-line_number: 333
+line_number: 75
 description: |
   Determines whether the change between two objects, assuming content inequality, is a "+" (addition), "-" (nullification) or "~" (alteration).
 
@@ -92,7 +43,7 @@ file: /Users/danski/Sites/spah/src/Spah.SpahQL.DataHelper.js
 id: "Spah.SpahQL.DataHelper.objectType"
 parent_id: "Spah.SpahQL.DataHelper"
 type: class method
-line_number: 344
+line_number: 86
 description: |
   Extends the core typeof(obj) function by adding types "array" and "null".
 
@@ -106,7 +57,7 @@ file: /Users/danski/Sites/spah/src/Spah.SpahQL.DataHelper.js
 id: "Spah.SpahQL.DataHelper.eq"
 parent_id: "Spah.SpahQL.DataHelper"
 type: class method
-line_number: 361
+line_number: 103
 description: |
   Determines content equality of two or more objects. Booleans, null values, numbers and strings are compared using
   the <code>Spah.SpahQL.DataHelper.objectType</code> method and the built-in <code>==</code> operator, but arrays
@@ -122,7 +73,7 @@ file: /Users/danski/Sites/spah/src/Spah.SpahQL.DataHelper.js
 id: "Spah.SpahQL.DataHelper.eqHash"
 parent_id: "Spah.SpahQL.DataHelper"
 type: class method
-line_number: 389
+line_number: 131
 description: |
   Compares two or more associative arrays for equality, enforcing strict key matching.
   Values are compared using the "eq" method.
@@ -137,7 +88,7 @@ file: /Users/danski/Sites/spah/src/Spah.SpahQL.DataHelper.js
 id: "Spah.SpahQL.DataHelper.eqArray"
 parent_id: "Spah.SpahQL.DataHelper"
 type: class method
-line_number: 413
+line_number: 155
 description: |
   Compares two or more arrays for equality, enforcing strict ordering.
   Values are compared using the "eq" method.
@@ -152,7 +103,7 @@ file: /Users/danski/Sites/spah/src/Spah.SpahQL.DataHelper.js
 id: "Spah.SpahQL.DataHelper.hashKeys"
 parent_id: "Spah.SpahQL.DataHelper"
 type: class method
-line_number: 439
+line_number: 181
 description: |
   Compares two or more values of any type under simple javascript equality rules.
   All arguments must be strictly equal or the function will return false.
@@ -167,7 +118,7 @@ file: /Users/danski/Sites/spah/src/Spah.SpahQL.DataHelper.js
 id: "Spah.SpahQL.DataHelper.hashKeys"
 parent_id: "Spah.SpahQL.DataHelper"
 type: class method
-line_number: 457
+line_number: 199
 description: |
   Retrieves all keys found in an associative array and returns them as an array
   without the corresponding values.
@@ -189,7 +140,7 @@ file: /Users/danski/Sites/spah/src/Spah.SpahQL.DataHelper.js
 id: "Spah.SpahQL.DataHelper.hashValues"
 parent_id: "Spah.SpahQL.DataHelper"
 type: class method
-line_number: 472
+line_number: 214
 description: |
   Retrieves all values found in an associative array and returns them as an array
   without keys. Uniqueness is not enforced.
@@ -211,7 +162,7 @@ file: /Users/danski/Sites/spah/src/Spah.SpahQL.DataHelper.js
 id: "Spah.SpahQL.DataHelper.mathGte"
 parent_id: "Spah.SpahQL.DataHelper"
 type: class method
-line_number: 488
+line_number: 230
 description: |
   - left (Object, Array, Boolean, String, Number, null): The value at the left-hand side of the comparator
   - right (Object, Array, Boolean, String, Number, null): The value at the right-hand side of the comparator
@@ -229,7 +180,7 @@ file: /Users/danski/Sites/spah/src/Spah.SpahQL.DataHelper.js
 id: "Spah.SpahQL.DataHelper.mathGt"
 parent_id: "Spah.SpahQL.DataHelper"
 type: class method
-line_number: 500
+line_number: 242
 description: |
   - left (Object, Array, Boolean, String, Number, null): The value at the left-hand side of the comparator
   - right (Object, Array, Boolean, String, Number, null): The value at the right-hand side of the comparator
@@ -247,7 +198,7 @@ file: /Users/danski/Sites/spah/src/Spah.SpahQL.DataHelper.js
 id: "Spah.SpahQL.DataHelper.mathLte"
 parent_id: "Spah.SpahQL.DataHelper"
 type: class method
-line_number: 512
+line_number: 254
 description: |
   - left (Object, Array, Boolean, String, Number, null): The value at the left-hand side of the comparator
   - right (Object, Array, Boolean, String, Number, null): The value at the right-hand side of the comparator
@@ -265,7 +216,7 @@ file: /Users/danski/Sites/spah/src/Spah.SpahQL.DataHelper.js
 id: "Spah.SpahQL.DataHelper.mathLt"
 parent_id: "Spah.SpahQL.DataHelper"
 type: class method
-line_number: 524
+line_number: 266
 description: |
   - left (Object, Array, Boolean, String, Number, null): The value at the left-hand side of the comparator
   - right (Object, Array, Boolean, String, Number, null): The value at the right-hand side of the comparator
@@ -283,7 +234,7 @@ file: /Users/danski/Sites/spah/src/Spah.SpahQL.DataHelper.js
 id: "Spah.SpahQL.DataHelper.mathCompare"
 parent_id: "Spah.SpahQL.DataHelper"
 type: class method
-line_number: 539
+line_number: 281
 description: |
   - left (Object, Array, Boolean, String, Number, null): The value at the left-hand side of the comparator
   - right (Object, Array, Boolean, String, Number, null): The value at the right-hand side of the comparator
@@ -304,7 +255,7 @@ file: /Users/danski/Sites/spah/src/Spah.SpahQL.DataHelper.js
 id: "Spah.SpahQL.DataHelper.eqRough"
 parent_id: "Spah.SpahQL.DataHelper"
 type: class method
-line_number: 555
+line_number: 297
 description: |
   - left (Object, Array, Boolean, String, Number, null): The value at the left-hand side of the comparator
   - right (Object, Array, Boolean, String, Number, null): The value at the right-hand side of the comparator
@@ -321,7 +272,7 @@ file: /Users/danski/Sites/spah/src/Spah.SpahQL.DataHelper.js
 id: "Spah.SpahQL.DataHelper.eqStringRough"
 parent_id: "Spah.SpahQL.DataHelper"
 type: class method
-line_number: 592
+line_number: 334
 description: |
   Compares two strings under the rules of rough equality. The right-hand value is parsed as a RegExp
   and a result of true is returned if the left value matches it.
@@ -349,7 +300,7 @@ file: /Users/danski/Sites/spah/src/Spah.SpahQL.DataHelper.js
 id: "Spah.SpahQL.DataHelper.eqNumberRough"
 parent_id: "Spah.SpahQL.DataHelper"
 type: class method
-line_number: 603
+line_number: 345
 description: |
   Compares two numbers for equality using integer accuracy only.
 
@@ -376,7 +327,7 @@ file: /Users/danski/Sites/spah/src/Spah.SpahQL.DataHelper.js
 id: "Spah.SpahQL.DataHelper.eqArrayRough"
 parent_id: "Spah.SpahQL.DataHelper"
 type: class method
-line_number: 615
+line_number: 357
 description: |
   Compares two arrays under the rules of rough equality. A result of true
   is returned if the arrays are joint sets, containing any two equal values.
@@ -404,7 +355,7 @@ file: /Users/danski/Sites/spah/src/Spah.SpahQL.DataHelper.js
 id: "Spah.SpahQL.DataHelper.eqHashRough"
 parent_id: "Spah.SpahQL.DataHelper"
 type: class method
-line_number: 627
+line_number: 369
 description: |
   Compares two objects under the rules of rough equality. A result of true
   is returned if the hashes are joint sets, containing any two equal values at the same key.
@@ -432,7 +383,7 @@ file: /Users/danski/Sites/spah/src/Spah.SpahQL.DataHelper.js
 id: "Spah.SpahQL.DataHelper.eqBooleanRough"
 parent_id: "Spah.SpahQL.DataHelper"
 type: class method
-line_number: 642
+line_number: 384
 description: |
   - left (Boolean, null): The value at the left-hand side of the comparator
   - right (Boolean, null): The value at the right-hand side of the comparator
@@ -450,7 +401,7 @@ file: /Users/danski/Sites/spah/src/Spah.SpahQL.DataHelper.js
 id: "Spah.SpahQL.DataHelper.eqSetStrict"
 parent_id: "Spah.SpahQL.DataHelper"
 type: class method
-line_number: 655
+line_number: 397
 description: |
   - set1 (Array): The value at the left-hand side of the comparator
   - set2 (Array): The value at the right-hand side of the comparator
@@ -469,7 +420,7 @@ file: /Users/danski/Sites/spah/src/Spah.SpahQL.DataHelper.js
 id: "Spah.SpahQL.DataHelper.eqSetRough"
 parent_id: "Spah.SpahQL.DataHelper"
 type: class method
-line_number: 680
+line_number: 422
 description: |
   - set1 (Array): The value at the left-hand side of the comparator
   - set2 (Array): The value at the right-hand side of the comparator
@@ -488,7 +439,7 @@ file: /Users/danski/Sites/spah/src/Spah.SpahQL.DataHelper.js
 id: "Spah.SpahQL.DataHelper.jointSet"
 parent_id: "Spah.SpahQL.DataHelper"
 type: class method
-line_number: 692
+line_number: 434
 description: |
   - set1 (Array): The value at the left-hand side of the comparator
   - set2 (Array): The value at the right-hand side of the comparator
@@ -506,7 +457,7 @@ file: /Users/danski/Sites/spah/src/Spah.SpahQL.DataHelper.js
 id: "Spah.SpahQL.DataHelper.gteSet"
 parent_id: "Spah.SpahQL.DataHelper"
 type: class method
-line_number: 704
+line_number: 446
 description: |
   - set1 (Array): The value at the left-hand side of the comparator
   - set2 (Array): The value at the right-hand side of the comparator
@@ -524,7 +475,7 @@ file: /Users/danski/Sites/spah/src/Spah.SpahQL.DataHelper.js
 id: "Spah.SpahQL.DataHelper.lteSet"
 parent_id: "Spah.SpahQL.DataHelper"
 type: class method
-line_number: 716
+line_number: 458
 description: |
   - set1 (Array): The value at the left-hand side of the comparator
   - set2 (Array): The value at the right-hand side of the comparator
@@ -542,7 +493,7 @@ file: /Users/danski/Sites/spah/src/Spah.SpahQL.DataHelper.js
 id: "Spah.SpahQL.DataHelper.gtSet"
 parent_id: "Spah.SpahQL.DataHelper"
 type: class method
-line_number: 728
+line_number: 470
 description: |
   - set1 (Array): The value at the left-hand side of the comparator
   - set2 (Array): The value at the right-hand side of the comparator
@@ -560,7 +511,7 @@ file: /Users/danski/Sites/spah/src/Spah.SpahQL.DataHelper.js
 id: "Spah.SpahQL.DataHelper.ltSet"
 parent_id: "Spah.SpahQL.DataHelper"
 type: class method
-line_number: 740
+line_number: 482
 description: |
   - set1 (Array): The value at the left-hand side of the comparator
   - set2 (Array): The value at the right-hand side of the comparator
@@ -578,7 +529,7 @@ file: /Users/danski/Sites/spah/src/Spah.SpahQL.DataHelper.js
 id: "Spah.SpahQL.DataHelper.jointSetWithCallback"
 parent_id: "Spah.SpahQL.DataHelper"
 type: class method
-line_number: 756
+line_number: 498
 description: |
   - set1 (Array): The value at the left-hand side of the comparator
   - set2 (Array): The value at the right-hand side of the comparator
@@ -600,7 +551,7 @@ file: /Users/danski/Sites/spah/src/Spah.SpahQL.DataHelper.js
 id: "Spah.SpahQL.DataHelper.superSet"
 parent_id: "Spah.SpahQL.DataHelper"
 type: class method
-line_number: 773
+line_number: 515
 description: |
   Compares two sets and returns a result of true if every value in the given subset
   has a corresponding equal in the superset. Order of values within the sets is not enforced.
@@ -628,7 +579,7 @@ file: /Users/danski/Sites/spah/src/Spah.SpahQL.DataHelper.js
 id: "Spah.SpahQL.DataHelper.truthySet"
 parent_id: "Spah.SpahQL.DataHelper"
 type: class method
-line_number: 795
+line_number: 537
 description: |
   Asserts that a set may be considered "truthy", i.e. containing one or more
   values that evaluate to true under javascript language rules.
@@ -650,7 +601,7 @@ file: /Users/danski/Sites/spah/src/Spah.SpahQL.DataHelper.js
 id: "Spah.SpahQL.DataHelper.coerceKeyForObject"
 parent_id: "Spah.SpahQL.DataHelper"
 type: class method
-line_number: 811
+line_number: 553
 description: |
   - key (Integer, String): The key to be coerced.
   - obj (Object): The value being inspected

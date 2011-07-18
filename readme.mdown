@@ -20,6 +20,7 @@ Spah takes the best from both the single- and multi-page paradigms and lets you:
 - **Use other libraries.** Spah doesn't opinionate about client-side model frameworks or REST paradigms or how you authenticate with your API. Spah only cares about JSON, jQuery and having access to a Spah-compatible server. The Spah server libraries are not full-stack web frameworks, but libraries intended to be woven into your wider Node.js/Rails/Sinatra application stack. To be completely clear: Spah is code that manages the state of a UI in a complex web app, and nothing more. You bring your own app stack preferences to the table.
 
 TODO: Introduction for modules:
+- Overview: How it works
 - Spah core
 	- SpahQL
 	- Document runner

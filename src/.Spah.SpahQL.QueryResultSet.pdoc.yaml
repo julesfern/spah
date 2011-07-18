@@ -294,10 +294,39 @@ arguments:
 file: /Users/danski/Sites/spah/src/Spah.SpahQL.QueryResultSet.js
 
 ---
+id: "Spah.SpahQL.QueryResultSet#delete"
+parent_id: "Spah.SpahQL.QueryResultSet"
+type: instance method
+line_number: 216
+description: |
+  Calls delete() on the first result in this set (passing the arguments given) and returns the result.
+
+signatures:
+ -
+  signature: "Spah.SpahQL.QueryResultSet#delete(key0, key1, keyN)"
+  return_value: "QueryResult"
+file: /Users/danski/Sites/spah/src/Spah.SpahQL.QueryResultSet.js
+
+---
+id: "Spah.SpahQL.QueryResultSet.deleteAll"
+parent_id: "Spah.SpahQL.QueryResultSet"
+type: class method
+line_number: 227
+description: |
+  Calls delete() on every result in this set and returns the set,
+  which should now have values orphaned from the original data store.
+
+signatures:
+ -
+  signature: "Spah.SpahQL.QueryResultSet.deleteAll()"
+  return_value: "QueryResultSet"
+file: /Users/danski/Sites/spah/src/Spah.SpahQL.QueryResultSet.js
+
+---
 id: "Spah.SpahQL.QueryResultSet#modified"
 parent_id: "Spah.SpahQL.QueryResultSet"
 type: instance method
-line_number: 217
+line_number: 240
 description: |
   Calls modified(callback) on every result in this set, registering the same callback function
   for modifications to every path represented in this result set.

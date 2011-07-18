@@ -1,10 +1,8 @@
-$(document).ready(function() {
+exports["Spah.SpahQL.QueryParser"] = {
   
-  module("Spah.SpahQL.QueryParser");
-  
-  test("Returns the correct structure when parsing full queries", function() {
+  "Returns the correct structure when parsing full queries": function(test) {
     var q = Spah.SpahQL.QueryParser.parseQuery("/foo//bar/.property/baz[$//bar] == {1,'2', /foo, true}");
-    deepEqual(
+    test.deepEqual(
       q.primaryToken,
       new Spah.SpahQL.Token.SelectionQuery([
         new Spah.SpahQL.Token.PathComponent(new Spah.SpahQL.Token.KeyName("foo")),
@@ -16,12 +14,12 @@ $(document).ready(function() {
       ])
     );
     
-    deepEqual(
+    test.deepEqual(
       q.comparisonOperator,
       new Spah.SpahQL.Token.ComparisonOperator("==")
     );
     
-    deepEqual(
+    test.deepEqual(
       q.secondaryToken,
       new Spah.SpahQL.Token.Set([
         new Spah.SpahQL.Token.Numeric(1),
@@ -32,11 +30,13 @@ $(document).ready(function() {
         new Spah.SpahQL.Token.Boolean(true)
       ])
     );
-  });
+    test.done();
+  },
   
-  test("Parses a flat root query", function() {
+  "Parses a flat root query": function(test) {
     var q = Spah.SpahQL.QueryParser.parseQuery("/");
-    deepEqual(q.primaryToken, new Spah.SpahQL.Token.SelectionQuery([new Spah.SpahQL.Token.PathComponent()]));
-  });
+    test.deepEqual(q.primaryToken, new Spah.SpahQL.Token.SelectionQuery([new Spah.SpahQL.Token.PathComponent()]));
+    test.done();
+  }
   
-});
+};

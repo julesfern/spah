@@ -1,87 +1,107 @@
-$(document).ready(function() {
+var data;
+var setup = function() {
+  data = {foo: {foo: "bar"}, booltest: {yes: true, no: false}, arrtest: ["a", "b", "c"], stringtest: "abc"};
+}
+
+exports["Spah.SpahQL.QueryResult"] = {
   
-  var data;
-  
-  module("Spah.SpahQL.QueryResult", {
-    setup: function() {
-      data = {foo: {foo: "bar"}, booltest: {yes: true, no: false}, arrtest: ["a", "b", "c"], stringtest: "abc"};
-    }
-  });
-  
-  test("Retrieves the parent path", function() {
+  "Retrieves the parent path": function(test) {
+    setup();
+    
     var res;
     res = new Spah.SpahQL.QueryResult("/", 0);
-    equal(res.parentPath(), null);
+    test.equal(res.parentPath(), null);
     res = new Spah.SpahQL.QueryResult("/foo/bar/.baz", 0);
-    equal(res.parentPath(), "/foo/bar");
-  });
+    test.equal(res.parentPath(), "/foo/bar");
+    test.done();
+  },
   
-  test("Retrieves the correct key name", function() {
+  "Retrieves the correct key name": function(test) {
+    setup();
+    
     var res;
     res = new Spah.SpahQL.QueryResult(null, 1);
-    equal(res.keyName(), null);
+    test.equal(res.keyName(), null);
     res = new Spah.SpahQL.QueryResult("/", 1);
-    equal(res.keyName(), null);
+    test.equal(res.keyName(), null);
     res = new Spah.SpahQL.QueryResult("/foo/bar/baz", 1);
-    equal(res.keyName(), "baz");
-  });
+    test.equal(res.keyName(), "baz");
+    test.done();
+  },
   
-  test("Retrieves the parent", function() {
+  "Retrieves the parent": function(test) {
+    setup();
+    
     var set = Spah.SpahQL.select("/foo/foo", data);
-    deepEqual(set.first().parent(), Spah.SpahQL.select("/foo", data).first());
-  });
+    test.deepEqual(set.first().parent(), Spah.SpahQL.select("/foo", data).first());
+    test.done();
+  },
   
-  test("Allows sub-selections", function() {
-    deepEqual(Spah.SpahQL.select("/foo", data).first().select("/foo"), Spah.SpahQL.select("/foo/foo", data));
-  });
+  "Allows sub-selections": function(test) {
+    setup();
+    
+    test.deepEqual(Spah.SpahQL.select("/foo", data).first().select("/foo"), Spah.SpahQL.select("/foo/foo", data));
+    test.done();
+  },
   
-  test("Allows sub-assertions", function() {
-    ok(Spah.SpahQL.assert("/booltest/yes", data));
-    ok(!Spah.SpahQL.assert("/booltest/no", data));
-    ok(Spah.SpahQL.select("/booltest", data).first().assert("/yes"));
-    ok(!Spah.SpahQL.select("/booltest", data).first().assert("/no"));
-  });
+  "Allows sub-assertions": function(test) {
+    setup();
+    
+    test.ok(Spah.SpahQL.assert("/booltest/yes", data));
+    test.ok(!Spah.SpahQL.assert("/booltest/no", data));
+    test.ok(Spah.SpahQL.select("/booltest", data).first().assert("/yes"));
+    test.ok(!Spah.SpahQL.select("/booltest", data).first().assert("/no"));
+    test.done();
+  },
   
-  test("May set a subkey on self and alter the root data construct in the process", function() {
+  "May set a subkey on self and alter the root data construct in the process": function(test) {
+    setup();
+    
     var res;
     
     // Test objects
     res = Spah.SpahQL.select("/foo", data).first();
-    ok(res.set(0, "zero"));
-    ok(res.set("baz", "car"));
-    ok(!res.set("", "empty"));
-    ok(!res.set(" ", "spaces"));
-    equal(data["foo"]["0"], "zero");
-    equal(data["foo"]["baz"], "car");
-    equal(data["foo"][""], null);
-    equal(data["foo"][" "], null);
+    test.ok(res.set(0, "zero"));
+    test.ok(res.set("baz", "car"));
+    test.ok(!res.set("", "empty"));
+    test.ok(!res.set(" ", "spaces"));
+    test.equal(data["foo"]["0"], "zero");
+    test.equal(data["foo"]["baz"], "car");
+    test.equal(data["foo"][""], null);
+    test.equal(data["foo"][" "], null);
     
     // Test arrays
     res = Spah.SpahQL.select("/arrtest", data).first();
-    ok(res.set(0, "replaced-a"));
-    ok(res.set("1", "replaced-b"));
-    ok(!res.set("stringkey", "stringval"));
-    deepEqual(data["arrtest"], ["replaced-a", "replaced-b", "c"]);
+    test.ok(res.set(0, "replaced-a"));
+    test.ok(res.set("1", "replaced-b"));
+    test.ok(!res.set("stringkey", "stringval"));
+    test.deepEqual(data["arrtest"], ["replaced-a", "replaced-b", "c"]);
     
     // Test strings, bools reject the set
     res = Spah.SpahQL.select("/stringtest", data).first();
-    ok(!res.set(0, "_"));
-    ok(!res.set("1", "_"));
-    equal(data["stringtest"], "abc");
-  });
+    test.ok(!res.set(0, "_"));
+    test.ok(!res.set("1", "_"));
+    test.equal(data["stringtest"], "abc");
+    test.done();
+  },
   
-  test("May replace own value on the parent", function() {
-    var res = Spah.SpahQL.select("/foo/foo", data).first();
-    equal(res.value, "bar");
-    ok(res.replace("bar-replaced"));
+  "May replace own value on the parent": function(test) {
+    setup();
     
-    equal(data.foo.foo, "bar-replaced");
-    equal(res.value, "bar-replaced");
+    var res = Spah.SpahQL.select("/foo/foo", data).first();
+    test.equal(res.value, "bar");
+    test.ok(res.replace("bar-replaced"));
+    
+    test.equal(data.foo.foo, "bar-replaced");
+    test.equal(res.value, "bar-replaced");
     res = Spah.SpahQL.select("/foo/foo", data).first();
-    equal(res.value, "bar-replaced");    
-  })
+    test.equal(res.value, "bar-replaced");    
+    test.done();
+  },
   
-  test("Registers a callback at a child path", function() {
+  "Registers a callback at a child path": function(test) {
+    setup();
+    
     var data = {foo: {bar: {baz: "val"}}};
     var callbackCounts = [0,0,0];
     var callback0 = function() { callbackCounts[0]++; };
@@ -96,50 +116,58 @@ $(document).ready(function() {
         foo.modified("/newkey", callback2);
     
     root.set("foo", "bar");
-    deepEqual(callbackCounts, [1,0,0]);
+    test.deepEqual(callbackCounts, [1,0,0]);
     root.set("newkey", "newval");
-    deepEqual(callbackCounts, [2,1,0]);
+    test.deepEqual(callbackCounts, [2,1,0]);
     foo.set("arbitrary", "arb");
-    deepEqual(callbackCounts, [3,1,0]);
+    test.deepEqual(callbackCounts, [3,1,0]);
     foo.set("newkey", "newval");
-    deepEqual(callbackCounts, [4,1,1]);
-  });
+    test.deepEqual(callbackCounts, [4,1,1]);
+    test.done();
+  },
   
-  test("Deletes a child key in an array value", function() {
+  "Deletes a child key in an array value": function(test) {
+    setup();
+    
     var data = {foo: [0,1,2,3]};
     var foo = Spah.SpahQL.select("/foo", data).first();
     var callbackCounts = [0,0];
     foo.modified("/1", function() { callbackCounts[0]++; });
     foo.modified("/2", function() { callbackCounts[1]++; });
     
-    deepEqual(foo.value, [0,1,2,3]);
+    test.deepEqual(foo.value, [0,1,2,3]);
     foo.delete(1, "2");
-    deepEqual(foo.value, [0,3]);
-    deepEqual(callbackCounts, [1,1]);    
-  });
+    test.deepEqual(foo.value, [0,3]);
+    test.deepEqual(callbackCounts, [1,1]);    
+    test.done();
+  },
   
-  test("Deletes a child key in a hash value", function() {
+  "Deletes a child key in a hash value": function(test) {
+    setup();
+    
     var data = {foo: {a: 1, b: 2, c:3}};
     var foo = Spah.SpahQL.select("/foo", data).first();
     var callbackCounts = [0,0];
     foo.modified("/a", function() { callbackCounts[0]++; });
     foo.modified("/b", function() { callbackCounts[1]++; });
     
-    deepEqual(foo.value, {a: 1, b: 2, c:3});
+    test.deepEqual(foo.value, {a: 1, b: 2, c:3});
     foo.delete("a", "b");
-    deepEqual(foo.value, {c:3});
-    deepEqual(callbackCounts, [1,1]);    
-  });
+    test.deepEqual(foo.value, {c:3});
+    test.deepEqual(callbackCounts, [1,1]);    
+    test.done();
+  },
   
-  test("Self-deletes from parent value", function() {
+  "Self-deletes from parent value": function(test) {
+    setup();
+    
     var data = {foo: {a: 1, b: 2, c:3}, bar: {a: 1, b: 2, c:3}};
     var bar = Spah.SpahQL.select("/bar", data).first();
     
-    deepEqual(bar.value, {a: 1, b: 2, c:3});
+    test.deepEqual(bar.value, {a: 1, b: 2, c:3});
     bar.delete();
-    deepEqual(data, {foo: {a: 1, b: 2, c:3}}); // also asserts that data source was modified
-  });
+    test.deepEqual(data, {foo: {a: 1, b: 2, c:3}}); // also asserts that data source was modified
+    test.done();
+  }
   
-  
-  
-});
+};

@@ -1,110 +1,152 @@
-$(document).ready(function() {
+var data;
+var setup = function() {
+  data = {foo: {foo: "bar"}, str1: "1", str2: "2"};
+}
+
+exports["Spah.SpahQL.QueryResultSet"] = {
   
-  var data;
-  
-  module("Spah.SpahQL.QueryResultSet", {
-    setup: function() {
-      data = {foo: {foo: "bar"}, str1: "1", str2: "2"};
-    }
-  });
-  
-  test("all() returns all results", function() {
+  "all() returns all results": function(test) {
+    setup();
+    
     var set = Spah.SpahQL.select("//foo", data);
-    equal(set.all().length, set.results.length);
-  });
+    test.equal(set.all().length, set.results.length);
+    test.done();
+  },
   
-  test("first() returns the first result", function() {
+  "first() returns the first result": function(test) {
+    setup();
+  
     var set = Spah.SpahQL.select("//foo", data);
-    ok(set.first() instanceof Spah.SpahQL.QueryResult);
-  });
+    test.ok(set.first() instanceof Spah.SpahQL.QueryResult);
+    test.done();
+  },
   
-  test("each() returns true on completion, false on a halt", function() {
+  "each() returns true on completion, false on a halt": function(test) {
+    setup();
+  
     var set = Spah.SpahQL.select("//foo", data);
-    ok(set.each(function(index, total) {}));
-    ok(!set.each(function(index, total) { return false; }));
-  });
+    test.ok(set.each(function(index, total) {}));
+    test.ok(!set.each(function(index, total) { return false; }));
+    test.done();
+  },
   
-  test("map() returns an ordered array", function() {
+  "map() returns an ordered array": function(test) {
+    setup();
+  
     var set = Spah.SpahQL.select("//foo", data);
-    deepEqual(set.map(function(i,t) { return [i,t]; }), [[0,2],[1,2]]);
-  });
+    test.deepEqual(set.map(function(i,t) { return [i,t]; }), [[0,2],[1,2]]);
+    test.done();
+  },
   
-  test("parentPath() acts on the first result", function() {
+  "parentPath() acts on the first result": function(test) {
+    setup();
+  
     var set = Spah.SpahQL.select("/foo/foo", data);
-    equal(set.parentPath(), "/foo");
-  });
+    test.equal(set.parentPath(), "/foo");
+    test.done();
+  },
   
-  test("parent() acts on the first result", function() {
+  "parent() acts on the first result": function(test) {
+    setup();
+  
     var set = Spah.SpahQL.select("/foo/foo", data);
-    deepEqual(set.parent(), Spah.SpahQL.select("/foo", data).first());
-  });
+    test.deepEqual(set.parent(), Spah.SpahQL.select("/foo", data).first());
+    test.done();
+  },
   
-  test("select() executes against every item in the set", function() {
+  "select() executes against every item in the set": function(test) {
+    setup();
+  
     var data = {bar: {bar: {baz: "foo", boop: "foop"}}};
     var set = Spah.SpahQL.select("//bar", data);
     
-    deepEqual(set.select("//baz"), Spah.SpahQL.select("//baz", data));
-    deepEqual(set.select("/baz"), Spah.SpahQL.select("/bar/bar/baz", data));
-  });
+    test.deepEqual(set.select("//baz"), Spah.SpahQL.select("//baz", data));
+    test.deepEqual(set.select("/baz"), Spah.SpahQL.select("/bar/bar/baz", data));
+    test.done();
+  },
   
-  test("assert() executes against every item in the set", function() {
+  "assert() executes against every item in the set": function(test) {
+    setup();
+  
     var data = {foo: {yes: true, no: false}};
     
-    ok(Spah.SpahQL.select("/foo", data).assert("/yes"));
-    ok(!Spah.SpahQL.select("/foo", data).assert("/no"));
-    ok(Spah.SpahQL.select("/foo", data).assert("/*"));
-  });
+    test.ok(Spah.SpahQL.select("/foo", data).assert("/yes"));
+    test.ok(!Spah.SpahQL.select("/foo", data).assert("/no"));
+    test.ok(Spah.SpahQL.select("/foo", data).assert("/*"));
+    test.done();
+  },
   
-  test("set() works on the first result in the set", function() {
+  "set() works on the first result in the set": function(test) {
+    setup();
+  
     var set = Spah.SpahQL.select("//foo", data);
-    ok(set.set("inner", "ok"));
-    equal(data["foo"]["inner"], "ok");
-  });
+    test.ok(set.set("inner", "ok"));
+    test.equal(data["foo"]["inner"], "ok");
+    test.done();
+  },
   
-  test("replace() works on the first result in the set", function() {
+  "replace() works on the first result in the set": function(test) {
+    setup();
+  
     var set = Spah.SpahQL.select("//foo", data);
-    ok(set.replace("replaced"));
-    equal(data["foo"], "replaced");
-  });
+    test.ok(set.replace("replaced"));
+    test.equal(data["foo"], "replaced");
+    test.done();
+  },
   
-  test("replaceAll() works on all values", function() {
+  "replaceAll() works on all values": function(test) {
+    setup();
+  
     var set = Spah.SpahQL.select("/*[/.type == 'string']", data);
     var prev = data.foo;
-    ok(set.replaceAll("replaced"));
-    equal(prev, data.foo);
-    equal(data.str1, "replaced");
-    equal(data.str2, "replaced");
-  });
+    test.ok(set.replaceAll("replaced"));
+    test.equal(prev, data.foo);
+    test.equal(data.str1, "replaced");
+    test.equal(data.str2, "replaced");
+    test.done();
+  },
   
-  test("replaceEach() replaces only if the test function returns true", function() {
+  "replaceEach() replaces only if the test function returns true": function(test) {
+    setup();
+  
     var set = Spah.SpahQL.select("/*[/.type == 'string']", data);
     set.replaceEach("replaced", function() {
       return this.path == "/str1";
     });
-    equal(data.str1, "replaced");
-    equal(data.str2, "2");
-  });
+    test.equal(data.str1, "replaced");
+    test.equal(data.str2, "2");
+    test.done();
+  },
   
-  test("modified(callback) registers callbacks for every result", function() {
+  "modified(callback) registers callbacks for every result": function(test) {
+    setup();
+  
     Spah.SpahQL.Callbacks.reset();
     var set = Spah.SpahQL.select("/*[/.type == 'string']", data);
     
     set.modified(function() { return 15; });
     
-    ok(Spah.SpahQL.Callbacks.callbacks["/str1"]);
-    ok(Spah.SpahQL.Callbacks.callbacks["/str2"]);
-  });
+    test.ok(Spah.SpahQL.Callbacks.callbacks["/str1"]);
+    test.ok(Spah.SpahQL.Callbacks.callbacks["/str2"]);
+    test.done();
+  },
   
-  test("delete() acts on the first result", function() {
+  "delete() acts on the first result": function(test) {
+    setup();
+  
     var set = Spah.SpahQL.select("/foo/foo", data);
     set.delete();
-    deepEqual(data.foo, {});
-  });
+    test.deepEqual(data.foo, {});
+    test.done();
+  },
   
-  test("deleteAll() works on the entire set", function() {
+  "deleteAll() works on the entire set": function(test) {
+    setup();
+  
     var set  = Spah.SpahQL.select("/*", data);
     set.deleteAll();
-    deepEqual(data, {});
-  });
+    test.deepEqual(data, {});
+    test.done();
+  }
   
-});
+};

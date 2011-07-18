@@ -19,9 +19,11 @@ catch(e) {
 
 require("Spah.js");
 require("Spah.SpahQL.js");
+require("Spah.SpahQL.Callbacks.js");
 require("Spah.SpahQL.Errors.js");
 require("Spah.SpahQL.Query.js");
 require("Spah.SpahQL.QueryResult.js");
+require("Spah.SpahQL.QueryResultSet.js");
 require("Spah.SpahQL.QueryParser.js");
 require("Spah.SpahQL.QueryRunner.js");
 require("Spah.SpahQL.DataHelper.js");

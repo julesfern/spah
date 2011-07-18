@@ -209,9 +209,9 @@ Spah.classCreate("Spah.SpahQL.QueryResultSet", {
   },
   
   /**
-   * Spah.SpahQL.QueryResultSet#delete([key0, key1, keyN]) -> QueryResult
+   * Spah.SpahQL.QueryResultSet#delete(key0, key1, keyN) -> QueryResult
    *
-   * Calls delete() on the first result in this set and returns the result.
+   * Calls delete() on the first result in this set (passing the arguments given) and returns the result.
    **/
   "delete": function() {
     var f = this.first();

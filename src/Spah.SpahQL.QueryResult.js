@@ -173,7 +173,7 @@ Spah.classCreate("Spah.SpahQL.QueryResult", {
   },
   
   /**
-   * Spah.SpahQL.QueryResult#delete([key1, key2, keyN]) -> QueryResult
+   * Spah.SpahQL.QueryResult#delete(key1, key2, keyN) -> QueryResult
    *
    * Deletes data from this result. If one or more keys is given as an argument, 
    * those keys will be deleted from this value in reverse alphanumeric order. If no arguments are
@@ -235,7 +235,6 @@ Spah.classCreate("Spah.SpahQL.QueryResult", {
       var k = this.keyName();
       var p = this.parent();
       if(p && k) {
-        console.log("self-delete ", k, p);
         p.delete(k);
       }
     }

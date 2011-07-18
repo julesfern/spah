@@ -86,7 +86,7 @@ Spah.classCreate("Spah.SpahQL.DataHelper", {
   "objectType": function(obj) {
     if(obj == null || obj == undefined) return "null";
     if(typeof(obj) == "object") {
-      if(jQuery.isArray(obj)) return "array";
+      if(typeof(obj.length) === 'number' && !(obj.propertyIsEnumerable("length")) && typeof(obj.splice) === 'function') return "array";
       else return "object";
     } else {
       return typeof(obj);

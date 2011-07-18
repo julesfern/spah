@@ -12,7 +12,7 @@
  * See [Default client behaviour](../../index.html#default_client_behaviour) to learn what actions Spah performs on initialisation.
  * For more information on Spah, see the main [Readme](../index.html) ([also available on Github](https://github.com/danski/spah#readme))
  **/
-var Spah = function() {};
+Spah = function() {};
 
 /**
  * Spah.logMessages -> Array

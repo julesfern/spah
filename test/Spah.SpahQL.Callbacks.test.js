@@ -1,31 +1,33 @@
-$(document).ready(function() {
+exports["Spah.SpahQL.Callbacks"] = {
   
-  module("Spah.SpahQL.Callbacks", {
-    setup: function() {
-      Spah.SpahQL.Callbacks.reset();
-    }
-  });
-  
-  test("Registers the callbacks", function() {
+  "Registers the callbacks": function(test) {
+    Spah.SpahQL.Callbacks.reset();
+    
     var data = {foo: "bar"};
     var callback = function() { return 0; };
     Spah.SpahQL.Callbacks.addCallbackForPathModifiedOnObject("/foo", data, callback);
-    deepEqual(Spah.SpahQL.Callbacks.callbacks, {"/foo": [[data, callback]]});
-  });
+    test.deepEqual(Spah.SpahQL.Callbacks.callbacks, {"/foo": [[data, callback]]});
+    test.done();
+  },
   
-  test("Removes the callbacks", function() {
+  "Removes the callbacks": function(test) {
+    Spah.SpahQL.Callbacks.reset();
+    
     var data = {foo: "bar"};
     var callback1 = function() { return 0; };
     var callback2 = function() { return 1; };
     Spah.SpahQL.Callbacks.addCallbackForPathModifiedOnObject("/foo", data, callback1);
     Spah.SpahQL.Callbacks.addCallbackForPathModifiedOnObject("/foo", data, callback2);
-    deepEqual(Spah.SpahQL.Callbacks.callbacks, {"/foo": [[data, callback1], [data, callback2]]});
+    test.deepEqual(Spah.SpahQL.Callbacks.callbacks, {"/foo": [[data, callback1], [data, callback2]]});
     
     Spah.SpahQL.Callbacks.removeCallbackForPathModifiedOnObject("/foo", data, callback2);
-    deepEqual(Spah.SpahQL.Callbacks.callbacks, {"/foo": [[data, callback1]]});
-  });
+    test.deepEqual(Spah.SpahQL.Callbacks.callbacks, {"/foo": [[data, callback1]]});
+    test.done();
+  },
   
-  test("Triggers the modification callbacks at the modified path and all higher paths.", function() {
+  "Triggers the modification callbacks at the modified path and all higher paths.": function(test) {
+    Spah.SpahQL.Callbacks.reset();
+    
     var data = {foo: {bar: {baz: "val"}}};
     var callbackCounts = [0,0,0,0];
     var callback0 = function() { callbackCounts[0]++; };
@@ -46,40 +48,46 @@ $(document).ready(function() {
     
     // Try modifying each key descending
     root.set("newkey", "newvalue");
-    deepEqual(callbackCounts, [1,0,0,0]);
+    test.deepEqual(callbackCounts, [1,0,0,0]);
     foo.set("newkey", "newvalue");
-    deepEqual(callbackCounts, [2,1,0,0]);
+    test.deepEqual(callbackCounts, [2,1,0,0]);
     bar.set("newkey", "newvalue");
-    deepEqual(callbackCounts, [3,2,1,0]);
+    test.deepEqual(callbackCounts, [3,2,1,0]);
     baz.replace("val-replaced");
-    deepEqual(callbackCounts, [4,3,2,1]);
-  });
+    test.deepEqual(callbackCounts, [4,3,2,1]);
+    test.done();
+  },
   
-  test("Attaches the query result and path to the modification callback", function() {
+  "Attaches the query result and path to the modification callback": function(test) {
+    Spah.SpahQL.Callbacks.reset();
+    
     var data = {foo: {bar: {baz: "val"}}};
     var root = Spah.SpahQL.select("/", data).first();
     var foo = root.select("/foo").first();
     
-    expect(3);
+    test.expect(3);
     foo.modified(function(path, result) {
-      equal(path, foo.path);
-      equal(result.path, foo.path);
-      deepEqual(result.value, {bar: {baz: "val"}, newkey: "newvalue"});
+      test.equal(path, foo.path);
+      test.equal(result.path, foo.path);
+      test.deepEqual(result.value, {bar: {baz: "val"}, newkey: "newvalue"});
     });
     foo.set("newkey", "newvalue");
-  });
+    test.done();
+  },
   
-  test("Triggers modification callbacks on non-existent paths when setting complex values", function() {
-     var data = {foo: {bar: {baz: "val"}}};
-     var root = Spah.SpahQL.select("/", data).first();
+  "Triggers modification callbacks on non-existent paths when setting complex values": function(test) {
+    Spah.SpahQL.Callbacks.reset();
+    var data = {foo: {bar: {baz: "val"}}};
+    var root = Spah.SpahQL.select("/", data).first();
 
-     expect(3);
-     root.modified("/foo/newarr", function(path, result) {
-       equal(path, "/foo/newarr");
-       equal(result.path, path);
-       deepEqual(result.value, ["a","b","c"]);
-     });
-     root.select("/foo").set("newarr", ["a","b","c"]);
-  });
+    test.expect(3);
+    root.modified("/foo/newarr", function(path, result) {
+      test.equal(path, "/foo/newarr");
+      test.equal(result.path, path);
+      test.deepEqual(result.value, ["a","b","c"]);
+    });
+    root.select("/foo").set("newarr", ["a","b","c"]);
+    test.done();
+  }
     
-});
+};

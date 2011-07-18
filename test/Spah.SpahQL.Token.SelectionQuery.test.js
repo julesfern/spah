@@ -1,9 +1,7 @@
-$(document).ready(function() {
+exports["Spah.SpahQL.Token.SelectionQuery"] = {
   
-  module("Spah.SpahQL.Token.SelectionQuery");
-  
-  test("Returns a correct new index and found number when reading ahead for selection queries", function() {
-    deepEqual(
+  "Returns a correct new index and found number when reading ahead for selection queries": function(test) {
+    test.deepEqual(
       Spah.SpahQL.Token.SelectionQuery.parseAt(0, "/key1//key2[$/foo=='bar']/.explode[//foo == 2][//bar == 3]"), 
       [58, new Spah.SpahQL.Token.SelectionQuery(
         [
@@ -18,7 +16,8 @@ $(document).ready(function() {
         ]
       )]);
       
-    equal(null, Spah.SpahQL.Token.SelectionQuery.parseAt(0, "0000"));
-  });
+    test.equal(null, Spah.SpahQL.Token.SelectionQuery.parseAt(0, "0000"));
+    test.done();
+  }
   
-});
+};

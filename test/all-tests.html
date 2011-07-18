@@ -1,13 +1,13 @@
-<!DOCTYPE html>
 <html>
   <head>
-    <title>Spah - all client tests</title>
+    <title>Spah - Nodeunit browser tests</title>
     
+    <!-- Test framework -->
+    <script src="dependency/nodeunit/examples/browser/nodeunit.js"></script>
+    
+    <!-- Dependencies -->
     <script type="text/javascript" src="dependency/jquery.1.5.2.min.js"></script>
     <script type="text/javascript" src="dependency/mustache.js"></script>
-    
-    <script type="text/javascript" src="qunit/qunit.js"></script>
-    <link rel="stylesheet" href="qunit/qunit.css" type="text/css">
     
     <!-- Libs -->
     <script type="text/javascript" src="../src/Spah.js"></script>
@@ -34,20 +34,23 @@
     <script type="text/javascript" src="../src/Spah.SpahQL.Token.KeyName.js"></script>
     <script type="text/javascript" src="../src/Spah.State.js"></script>
     
-    <!-- Setup -->
     <script type="text/javascript">
-      //Spah.verbose = true;
-    </script>    
+      // These are CommonJS tests so we'll set up a mock exports object for the tests to append to.
+      // Then we'll run the whole lot.
+      window.exports = {};
+    </script>
     
-    <!-- TESTS -->
-    <script type="text/javascript" src="Spah.test.js"></script>
-    <script type="text/javascript" src="Spah.SpahQL.test.js"></script>
+    <!-- QUnit -->
+    <script type="text/javascript" src="qunit/qunit.js"></script>
+    <link rel="stylesheet" href="qunit/qunit.css" type="text/css">
+    
+    <!-- Tests -->
     <script type="text/javascript" src="Spah.SpahQL.Callbacks.test.js"></script>
-    <script type="text/javascript" src="Spah.SpahQL.Query.test.js"></script>
+    <script type="text/javascript" src="Spah.SpahQL.DataHelper.test.js"></script>
     <script type="text/javascript" src="Spah.SpahQL.QueryParser.test.js"></script>
-    <script type="text/javascript" src="Spah.SpahQL.QueryRunner.test.js"></script>    
     <script type="text/javascript" src="Spah.SpahQL.QueryResult.test.js"></script>
     <script type="text/javascript" src="Spah.SpahQL.QueryResultSet.test.js"></script>
+    <script type="text/javascript" src="Spah.SpahQL.QueryRunner.test.js"></script>
     <script type="text/javascript" src="Spah.SpahQL.Token.String.test.js"></script>
     <script type="text/javascript" src="Spah.SpahQL.Token.Numeric.test.js"></script>
     <script type="text/javascript" src="Spah.SpahQL.Token.Boolean.test.js"></script>
@@ -57,11 +60,49 @@
     <script type="text/javascript" src="Spah.SpahQL.Token.PathComponent.test.js"></script>
     <script type="text/javascript" src="Spah.SpahQL.Token.SelectionQuery.test.js"></script>
     <script type="text/javascript" src="Spah.SpahQL.Token.KeyName.test.js"></script>
+    <script type="text/javascript" src="Spah.State.test.js"></script>
     
-    <script type="text/javascript" src="Spah.SpahQL.DataHelper.test.js"></script>
-    <!-- /TESTS -->
+    
+    <script>
+      $(document).ready(function() {
+        
+        // Uncomment when nodeunit for browser gets its shit together
+        // nodeunit.run(exports);
+        
+        // Remove when nodeunit for browser gets its shit together
+        // For now, let's shim the tests into QUnit
+        var MockTestScope = function() {};
+        MockTestScope.prototype = {
+          deepEqual: function() { return QUnit.deepEqual.apply(QUnit, arguments) },
+          equal: function() { return QUnit.equal.apply(QUnit, arguments) },
+          ok: function() { return QUnit.ok.apply(QUnit, arguments) },
+          expect: function() { return QUnit.expect.apply(QUnit, arguments) },
+          done: function() { QUnit.start() }
+        }
+        function qunitShim(obj) {
+          for(var k in obj) {
+            var o = obj[k];
+            if(typeof(o) == "function") {
+              // Found a test method, do scope injection
+              console.log("Mocking test: "+k);
+              asyncTest(k, function() {
+                o(new MockTestScope());
+              });
+            }
+            else {
+              // Found a hash to recurse
+              console.log("Mocking module: "+k);
+              module(k);
+              qunitShim(o);
+            }
+          }
+        }
+        qunitShim(exports);
+      })
+    </script>
   </head>
   <body>
+    <!-- Qunit only -->
     <h1 id="qunit-header">Spah - all client tests</h1>
     <h2 id="qunit-banner"></h2>
     <div id="qunit-testrunner-toolbar"></div>

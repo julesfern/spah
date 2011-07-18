@@ -10,6 +10,7 @@ LIB_VERSION = File.open(File.join(File.dirname(__FILE__), "VERSION")).read
 
 require 'rubygems'
 require 'bundler'
+
 begin
   Bundler.setup(:default, :development)
 rescue Bundler::BundlerError => e
@@ -20,63 +21,158 @@ end
 require 'rake'
 
 task :docs do
-  puts "Generating client docs using PDOC"
-  Rake::Task["client:docs"].invoke
+  puts "Generating src docs using PDOC and prose docs using Jekyll."
+  Rake::Task["docs:src"].invoke
+  Rake::Task["docs:prose"].invoke
 end
 
-namespace :client do
-  desc "Build the javascript application from source. N.B. Google Closure must be in your environment path."
-  task :build, :compiler do |t, args|
-    puts "Building"
-  end
+desc "Build the javascript application from source. N.B. Google Closure must be in your environment path."
+task :build, :compiler do |t, args|
+  puts "Building"
+end
+
+desc "Runs lint against the client's javascript source. Defaults to the Google Closure linter."
+task :lint, :linter do |t, args|
   
-  desc "Runs lint against the client's javascript source. Defaults to the Google Closure linter."
-  task :lint, :linter do |t, args|
+end  
+
+desc "Run the client-side javascript tests"
+task :test, :environment, :needs=>:build do |t, args|
+  puts "testing"
+end
     
-  end  
-  
-  desc "Run the client-side javascript tests"
-  task :test, :environment, :needs=>:build do |t, args|
-    puts "testing"
-  end
-      
-  task :docs do
-    Rake::Task["client:docs:generate"].invoke
-  end
-  namespace :docs do
-    task :generate do
-      require 'PDoc'
-      require 'json'
-      require 'maruku'
-      
-      input_dir = File.join(File.dirname(__FILE__), "src")
-      output_dir = File.join(File.dirname(__FILE__), "doc-html")
-      puts "Generating documents #{input_dir} => #{output_dir}..."
+
+namespace :docs do
+  task :prose do
+    require 'maruku'
+    require 'liquid'
+    require 'fileutils'
+    require 'pathname'
+    require 'nokogiri'
     
-      #if(Dir.exist?(output_dir))
-      #  puts "Purging existing doc folder"
-      #  Dir.rmdir
-      #end
-      #Dir.mkdir(output_dir)
-      
-      PDoc.run({
-          :source_files => Dir.glob(File.join(input_dir, "**", "/*.js")),
-          :index_page=>File.join(File.dirname(__FILE__), "readme.mdown"),
-          :destination => output_dir,
-          :syntax_highlighter => :pygments,
-          :markdown_parser => :maruku,
-          :src_code_href => proc { |model|
-            "#{LIB_GITHUB_URL}/blob/master/#{model.file.gsub(File.dirname(__FILE__)+"/", "")}##{model.line_number}"
-          },
-          :pretty_urls => false,
-          :bust_cache => true,
-          :name => LIB_NAME,
-          :short_name => 'Spah',
-          :home_url => LIB_HOMEPAGE_URL,
-          :doc_url => LIB_HOMEPAGE_URL,
-          :version => LIB_VERSION,
-          :copyright_notice => 'This work is copyright (c) 2011 Angry amoeba ltd, and is released under an MIT license.' 
-        })
+    @doc_input_dir = File.join(File.dirname(__FILE__), "doc-markdown")
+    @output_dir = File.join(File.dirname(__FILE__), "doc-html")
+
+    @template = File.read(File.join(@doc_input_dir, "_template.html")).to_s
+
+    # Get all files recursively in input dir
+    @input_files = Dir.glob(File.join(@doc_input_dir, "**", "*.mdown"))
+    
+    # Maps an input path to an output path
+    def opath(ipath)
+      ipath.gsub(@doc_input_dir, @output_dir).gsub(".mdown", ".html")
     end
+    
+    def otitle(path)
+      File.basename(path, ".mdown").capitalize
+    end
+    
+    def full_title(markup)
+      html = Nokogiri::HTML(markup)
+      if heading = html.css("h1").first
+        heading.text
+      else
+        nil
+      end      
+    end
+    
+    # Build markdown->html database
+    @document_map = {}
+    @input_files.each do |ifile|
+      puts "Preparing to render markdown->markup in #{ifile}"
+      puts "------------------------------------------------"
+      opts = {}; 
+      html = Maruku.new(File.read(ifile).to_s).to_html
+      title = full_title(html) || otitle(ifile)
+      @document_map[ifile] = {:html=>html, :title=>title}
+      puts "Done rendering markdown for #{ifile}. Identified title '#{title}'"
+    end
+    
+    puts "Done rendering markdown. Proceeding to navmap creation and template rendering."
+    
+    @input_files.each do |ifile|
+      # Markdown file and render it
+      ofile = opath(ifile)
+      title = @document_map[ifile][:title]
+      html = @document_map[ifile][:html]
+      puts "Preparing to take rendered markdown from #{ifile} into template -> #{ofile}"
+      
+      # Build a navigation map to all the other files, from this file (relative paths allow localhost access)
+      puts "--> Building navigation routes to other pages from this file"
+      nav_map = []
+      @input_files.each do |sifile|
+        sofile = opath(sifile) # This will be the file's rendered location
+        sopts = {:title=>@document_map[sifile][:title]}
+        if(sofile != ofile)
+          # Determine path relativity to this path
+          sopts[:href] = Pathname.new(sofile).relative_path_from(Pathname.new(ofile)).to_s
+          puts "To get to #{sofile} from #{ofile} you must #{sopts[:href]}"
+        end
+        nav_map << sopts
+      end
+      # Inject the source docs
+      nav_map << {:title=>"API", :href=>Pathname.new(File.join(@output_dir, "src", "index.html")).relative_path_from(Pathname.new(ofile)).to_s}
+
+
+      # Build navigation from file map
+      nav_html = "<ul>"
+      nav_map.each do |opts|
+        nav_html << "<li>"
+        nav_html << "<a href=\"#{opts[:href].gsub(/^\.\.\//, "")}\">" if opts[:href]
+        nav_html << "#{opts[:title]}"
+        nav_html << "</a>" if opts[:href]
+        nav_html << "</li>"
+      end
+      nav_html << "</ul>"
+      
+      # Now do the render
+      payload = {
+        "title" => title,
+        "navigation" => nav_html,
+        "content" => html
+      }
+      html_with_template = Liquid::Template.parse(@template).render(payload)
+      
+      # And finally commit the file
+      File.unlink(ofile) if File.exist?(ofile)
+      FileUtils.mkdir_p(File.dirname(ofile))
+      File.open(ofile, "w") {|f| f.write html_with_template }
+    end
+  end
+  
+  task :src do
+    require 'PDoc'
+    require 'json'
+    require 'maruku'
+    
+    src_input_dir = File.join(File.dirname(__FILE__), "src")
+    doc_input_dir = File.join(File.dirname(__FILE__), "doc-markdown")
+    output_dir = File.join(File.dirname(__FILE__), "doc-html", "src")
+    puts "Generating code docs from #{src_input_dir} and prose docs from #{doc_input_dir} => #{output_dir}..."
+  
+    #if(Dir.exist?(output_dir))
+    #  puts "Purging existing doc folder"
+    #  Dir.rmdir
+    #end
+    #Dir.mkdir(output_dir)
+    
+    PDoc.run({
+        :source_files => Dir.glob(File.join(src_input_dir, "**", "/*.js")),
+        :index_page=>File.join(File.dirname(__FILE__), "readme.mdown"),
+        :destination => output_dir,
+        :syntax_highlighter => :pygments,
+        :markdown_parser => :maruku,
+        :src_code_href => proc { |model|
+          "#{LIB_GITHUB_URL}/blob/master/#{model.file.gsub(File.dirname(__FILE__)+"/", "")}##{model.line_number}"
+        },
+        :pretty_urls => false,
+        :bust_cache => true,
+        :name => LIB_NAME,
+        :short_name => 'Spah',
+        :home_url => LIB_HOMEPAGE_URL,
+        :doc_url => LIB_HOMEPAGE_URL,
+        :version => LIB_VERSION,
+        :copyright_notice => 'This work is copyright (c) 2011 Angry amoeba ltd, and is released under an MIT license.' 
+      })
   end
 end

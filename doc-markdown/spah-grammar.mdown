@@ -1,75 +1,78 @@
-PathDelimiter ::= "/";
-PathWildcard ::= "*";
-ArrayDelimiter ::= ",";
-RangeDelimiter ::= "..";
-SingleQuote ::= "'";
-DoubleQuote ::= "\"";
-Negative ::= "-";
-DecimalPoint ::= ".";
-PropertyIdentifier ::= ".";
-RootScopeFlag ::= "$";
-SetStart ::= "{";
-SetEnd ::= "}";
-FilterStart ::= "[";
-FilterEnd ::= "]";
-BooleanTrue ::= "true";
-BooleanFalse ::= "false";
-StrictEquality ::= "==";
-RoughEquality ::= "=~";
-Inequality ::= "!=";
-GT ::= ">";
-LT ::= "<";
-LTE ::= LT, "=";
-GTE ::= GT, "=";
-SetEquality ::= "}={";
-DisjointSet ::= "}!{";
-JointSet ::= "}~{";
-Superset ::= "}>{";
-Subset ::= "}<{";
+Appendix: SpahQL EBNF Grammar
+=============================
 
-(* Tokens *)
+    PathDelimiter ::= "/";
+    PathWildcard ::= "*";
+    ArrayDelimiter ::= ",";
+    RangeDelimiter ::= "..";
+    SingleQuote ::= "'";
+    DoubleQuote ::= "\"";
+    Negative ::= "-";
+    DecimalPoint ::= ".";
+    PropertyIdentifier ::= ".";
+    RootScopeFlag ::= "$";
+    SetStart ::= "{";
+    SetEnd ::= "}";
+    FilterStart ::= "[";
+    FilterEnd ::= "]";
+    BooleanTrue ::= "true";
+    BooleanFalse ::= "false";
+    StrictEquality ::= "==";
+    RoughEquality ::= "=~";
+    Inequality ::= "!=";
+    GT ::= ">";
+    LT ::= "<";
+    LTE ::= LT, "=";
+    GTE ::= GT, "=";
+    SetEquality ::= "}={";
+    DisjointSet ::= "}!{";
+    JointSet ::= "}~{";
+    Superset ::= "}>{";
+    Subset ::= "}<{";
 
-ComparisonOperator ::= StrictEquality | RoughEquality
-						| Inequality | GT | LT | GTE | LTE
-						| SetEquality | DisjointSet
-						| JointSet | Superset | Subset;
+    (* Tokens *)
 
-Digit ::= "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" ;
+    ComparisonOperator ::= StrictEquality | RoughEquality
+    						| Inequality | GT | LT | GTE | LTE
+    						| SetEquality | DisjointSet
+    						| JointSet | Superset | Subset;
 
-AlphaChar ::= "A" | "B" | "C" | "D" | "E" | "F" | "G"
-                     | "H" | "I" | "J" | "K" | "L" | "M" | "N"
-                     | "O" | "P" | "Q" | "R" | "S" | "T" | "U"
-                     | "V" | "W" | "X" | "Y" | "Z" | "a" | "b"
-							| "c" | "d" | "e" | "f" | "g" | "h" | "i"
-							| "j" | "k" | "l" | "m" | "n" | "o" | "p"
-							| "q" | "r" | "s" | "t" | "u" | "v" | "w"
-							| "x" | "y" | "z";
-AlphaNumChar ::= AlphaChar | Digit;
+    Digit ::= "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" ;
 
-NumericLiteral ::= [Negative], Digit, {Digit}, [DecimalPoint, Digit, {Digit}];
+    AlphaChar ::= "A" | "B" | "C" | "D" | "E" | "F" | "G"
+                         | "H" | "I" | "J" | "K" | "L" | "M" | "N"
+                         | "O" | "P" | "Q" | "R" | "S" | "T" | "U"
+                         | "V" | "W" | "X" | "Y" | "Z" | "a" | "b"
+    							| "c" | "d" | "e" | "f" | "g" | "h" | "i"
+    							| "j" | "k" | "l" | "m" | "n" | "o" | "p"
+    							| "q" | "r" | "s" | "t" | "u" | "v" | "w"
+    							| "x" | "y" | "z";
+    AlphaNumChar ::= AlphaChar | Digit;
 
-SingleQuoteString ::= SingleQuote, {all characters - SingleQuote}, SingleQuote;
-DoubleQuoteString ::= DoubleQuote, {all characters - DoubleQuote}, DoubleQuote;
-StringLiteral ::= SingleQuoteString | DoubleQuoteString;
-BooleanLiteral ::= BooleanTrue | BooleanFalse;
+    NumericLiteral ::= [Negative], Digit, {Digit}, [DecimalPoint, Digit, {Digit}];
 
-PrimitiveLiteral ::= NumericLiteral | StringLiteral | BooleanLiteral;
+    SingleQuoteString ::= SingleQuote, {all characters - SingleQuote}, SingleQuote;
+    DoubleQuoteString ::= DoubleQuote, {all characters - DoubleQuote}, DoubleQuote;
+    StringLiteral ::= SingleQuoteString | DoubleQuoteString;
+    BooleanLiteral ::= BooleanTrue | BooleanFalse;
 
-SetMember ::= PrimitiveLiteral | SelectionQuery;
+    PrimitiveLiteral ::= NumericLiteral | StringLiteral | BooleanLiteral;
 
-SetArrayLiteral ::= SetStart, ( SetEnd |  {SetMember, ArrayDelimiter}, SetMember, SetEnd );
-SetRangeLiteral ::= SetStart, SetMember, RangeDelimiter, SetMember, SetEnd;
+    SetMember ::= PrimitiveLiteral | SelectionQuery;
 
-SetLiteral ::= SetArrayLiteral | SetRangeLiteral;
+    SetArrayLiteral ::= SetStart, ( SetEnd |  {SetMember, ArrayDelimiter}, SetMember, SetEnd );
+    SetRangeLiteral ::= SetStart, SetMember, RangeDelimiter, SetMember, SetEnd;
 
-SelectionQuery ::= [RootScopeFlag], PathComponent, {PathComponent};
-PathComponent ::= PathDelimiter, [PathWildcard | (PropertyIdentifier, KeyName) | KeyName], {FilterQuery};
+    SetLiteral ::= SetArrayLiteral | SetRangeLiteral;
 
-KeyName ::= AlphaNumChar, {AlphaNumChar};
+    SelectionQuery ::= [RootScopeFlag], PathComponent, {PathComponent};
+    PathComponent ::= PathDelimiter, [PathWildcard | (PropertyIdentifier, KeyName) | KeyName], {FilterQuery};
 
-FilterQuery ::= FilterStart, RunnableAssertion, FilterEnd;
+    KeyName ::= AlphaNumChar, {AlphaNumChar};
 
-RunnableSelection ::= SetLiteral | SelectionQuery;
-RunnableAssertion ::= RunnableSelection, [ComparisonOperator, RunnableSelection];
+    FilterQuery ::= FilterStart, RunnableAssertion, FilterEnd;
 
-SpahQL ::= RunnableAssertion;
+    RunnableSelection ::= SetLiteral | SelectionQuery;
+    RunnableAssertion ::= RunnableSelection, [ComparisonOperator, RunnableSelection];
+
+    SpahQL ::= RunnableAssertion;

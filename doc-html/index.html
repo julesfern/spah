@@ -1,78 +1,19 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
-<head>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-  <title>Spah  v0.0.0 API documentation | Home</title>
-  <meta name="generator" content="PDoc" />
-  
-  <script charset="utf-8" src="javascripts/pdoc/prototype.js" type="text/javascript"></script>
-  <script charset="utf-8" src="javascripts/pdoc/application.js" type="text/javascript"></script>
-<script charset="utf-8" src="javascripts/pdoc/tabs.js" type="text/javascript"></script>
-  <script charset="utf-8" src="javascripts/pdoc/item_index.js" type="text/javascript"></script>
-  
-  <link charset="utf-8" href="stylesheets/pdoc/api.css" media="screen, projection" rel="stylesheet" type="text/css" />
-<link charset="utf-8" href="stylesheets/pdoc/pygments.css" media="screen, projection" rel="stylesheet" type="text/css" />
-  
-  <script type="text/javascript">
-    PDoc.pathPrefix = '';
-  </script>
-</head>
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Spah - Spah: Stateful pages, not single pages.</title>
+    
+    <link rel="stylesheet" href="css/normalize.css" type="text/css" media="screen" />
+    <link rel="stylesheet" href="css/master.css" type="text/css" media="screen" />
+  </head>
   <body>
-
-    <div id="sidebar">
-      <ul id="sidebar_tabs" class="sidebar-tabs">
-        <li>
-          <a href="#menu_pane">Menu</a>
-        </li>
-        <li>
-          <a href="#search_pane">Search</a>
-        </li>
-      </ul> <!-- .sidebar-tabs -->
-
-      <form class="search-ribbon">
-        <label>
-          <span class="hidden">Search</span>
-          <input type="text" id="search" size="20" title="Search" />
-        </label>
-      </form>
-      
-      <div class="sidebar-pane scrollable" id="menu_pane">
-        <ul class="menu-items" id="api_menu"><li><div class="menu-item"><a class="class" href="Spah/index.html" title="Spah (class)">Spah</a></div><ul><li><div class="menu-item"><a class="class" href="Spah/SpahQL/index.html" title="Spah.SpahQL (class)">Spah.SpahQL</a></div><ul><li><div class="menu-item"><a class="class" href="Spah/SpahQL/Callbacks/index.html" title="Spah.SpahQL.Callbacks (class)">Spah.SpahQL.Callbacks</a></div></li>
-<li><div class="menu-item"><a class="class" href="Spah/SpahQL/DataHelper/index.html" title="Spah.SpahQL.DataHelper (class)">Spah.SpahQL.DataHelper</a></div></li>
-<li><div class="menu-item"><a class="class" href="Spah/SpahQL/Errors/index.html" title="Spah.SpahQL.Errors (class)">Spah.SpahQL.Errors</a></div><ul><li><div class="menu-item"><a class="class" href="Spah/SpahQL/Errors/SpahQLError/index.html" title="Spah.SpahQL.Errors.SpahQLError (class)">Spah.SpahQL.Errors.SpahQLError</a></div></li>
-<li><div class="menu-item"><a class="class" href="Spah/SpahQL/Errors/SpahQLRunTimeError/index.html" title="Spah.SpahQL.Errors.SpahQLRunTimeError (class)">Spah.SpahQL.Errors.SpahQLRunTimeError</a></div></li></ul></li>
-<li><div class="menu-item"><a class="class" href="Spah/SpahQL/Query/index.html" title="Spah.SpahQL.Query (class)">Spah.SpahQL.Query</a></div></li>
-<li><div class="menu-item"><a class="class" href="Spah/SpahQL/QueryParser/index.html" title="Spah.SpahQL.QueryParser (class)">Spah.SpahQL.QueryParser</a></div></li>
-<li><div class="menu-item"><a class="class" href="Spah/SpahQL/QueryResult/index.html" title="Spah.SpahQL.QueryResult (class)">Spah.SpahQL.QueryResult</a></div></li>
-<li><div class="menu-item"><a class="class" href="Spah/SpahQL/QueryResultSet/index.html" title="Spah.SpahQL.QueryResultSet (class)">Spah.SpahQL.QueryResultSet</a></div></li>
-<li><div class="menu-item"><a class="class" href="Spah/SpahQL/QueryRunner/index.html" title="Spah.SpahQL.QueryRunner (class)">Spah.SpahQL.QueryRunner</a></div></li>
-<li><div class="menu-item"><a class="class" href="Spah/SpahQL/Token/index.html" title="Spah.SpahQL.Token (class)">Spah.SpahQL.Token</a></div><ul><li><div class="menu-item"><a class="class" href="Spah/SpahQL/Token/Base/index.html" title="Spah.SpahQL.Token.Base (class)">Spah.SpahQL.Token.Base</a></div></li>
-<li><div class="menu-item"><a class="class" href="Spah/SpahQL/Token/Boolean/index.html" title="Spah.SpahQL.Token.Boolean (class)">Spah.SpahQL.Token.Boolean</a></div></li>
-<li><div class="menu-item"><a class="class" href="Spah/SpahQL/Token/ComparisonOperator/index.html" title="Spah.SpahQL.Token.ComparisonOperator (class)">Spah.SpahQL.Token.ComparisonOperator</a></div></li>
-<li><div class="menu-item"><a class="class" href="Spah/SpahQL/Token/FilterQuery/index.html" title="Spah.SpahQL.Token.FilterQuery (class)">Spah.SpahQL.Token.FilterQuery</a></div></li>
-<li><div class="menu-item"><a class="class" href="Spah/SpahQL/Token/KeyName/index.html" title="Spah.SpahQL.Token.KeyName (class)">Spah.SpahQL.Token.KeyName</a></div></li>
-<li><div class="menu-item"><a class="class" href="Spah/SpahQL/Token/Numeric/index.html" title="Spah.SpahQL.Token.Numeric (class)">Spah.SpahQL.Token.Numeric</a></div></li>
-<li><div class="menu-item"><a class="class" href="Spah/SpahQL/Token/PathComponent/index.html" title="Spah.SpahQL.Token.PathComponent (class)">Spah.SpahQL.Token.PathComponent</a></div></li>
-<li><div class="menu-item"><a class="class" href="Spah/SpahQL/Token/SelectionQuery/index.html" title="Spah.SpahQL.Token.SelectionQuery (class)">Spah.SpahQL.Token.SelectionQuery</a></div></li>
-<li><div class="menu-item"><a class="class" href="Spah/SpahQL/Token/Set/index.html" title="Spah.SpahQL.Token.Set (class)">Spah.SpahQL.Token.Set</a></div></li>
-<li><div class="menu-item"><a class="class" href="Spah/SpahQL/Token/Simple/index.html" title="Spah.SpahQL.Token.Simple (class)">Spah.SpahQL.Token.Simple</a></div></li>
-<li><div class="menu-item"><a class="class" href="Spah/SpahQL/Token/String/index.html" title="Spah.SpahQL.Token.String (class)">Spah.SpahQL.Token.String</a></div></li></ul></li></ul></li>
-<li><div class="menu-item"><a class="class" href="Spah/State/index.html" title="Spah.State (class)">Spah.State</a></div></li></ul></li></ul><!--- #api_menu =-->
-      </div> <!-- .sidebar-pane -->
-      <div class="sidebar-pane" id="search_pane">
-        <ul id="search_results" class="search-results menu-items scrollable"></ul>
-      </div> <!-- .sidebar-pane -->
-    </div> <!-- #sidebar -->
-
-    <div id="page">
-      
-
-      <div id="main" class="page-content">
-        
-
-<div class="page-introduction">
-  <img src='https://img.skitch.com/20110504-c79qr916mcwtnq4m63uqc3dibq.jpg' />
+    
+     <nav>
+      <ul><li>Spah: Stateful pages, not single pages.</li><li><a href="spah-grammar.html">Appendix: SpahQL EBNF Grammar</a></li><li><a href="src/index.html">API</a></li></ul>
+     </nav>
+     
+     <article>
+      <img src='https://img.skitch.com/20110504-c79qr916mcwtnq4m63uqc3dibq.jpg' />
 <h1 id='spah_stateful_pages_not_single_pages'>Spah: Stateful pages, not single pages.</h1>
 
 <p>Single-page web apps are a hit - and with good reason. The promise of lush, stateful web UI that hangs off your service&#8217;s developer API is almost too good to ignore.</p>
@@ -97,7 +38,51 @@
 <li><strong>Use other libraries.</strong> Spah doesn&#8217;t opinionate about client-side model frameworks or REST paradigms or how you authenticate with your API. Spah only cares about JSON, jQuery and having access to a Spah-compatible server. The Spah server libraries are not full-stack web frameworks, but libraries intended to be woven into your wider Node.js/Rails/Sinatra application stack. To be completely clear: Spah is code that manages the state of a UI in a complex web app, and nothing more. You bring your own app stack preferences to the table.</li>
 </ul>
 
-<p>TODO: Introduction for modules: - Spah core - SpahQL - Document runner - Template handling - Spah client gets everything from core, plus: - Link, form and navigation handling - State reduction - Event handlers - History manager - Spah server gets everything from core, plus: - Default states - Blueprint compiler - State expansion</p>
+<p>TODO: Introduction for modules:</p>
+
+<ul>
+<li>
+<p>Overview: How it works</p>
+</li>
+
+<li>
+<p>Spah core</p>
+
+<ul>
+<li>SpahQL</li>
+
+<li>Document runner</li>
+
+<li>Template handling</li>
+</ul>
+</li>
+
+<li>
+<p>Spah client gets everything from core, plus:</p>
+
+<ul>
+<li>Link, form and navigation handling</li>
+
+<li>State reduction</li>
+
+<li>Event handlers</li>
+
+<li>History manager</li>
+</ul>
+</li>
+
+<li>
+<p>Spah server gets everything from core, plus:</p>
+
+<ul>
+<li>Default states</li>
+
+<li>Blueprint compiler</li>
+
+<li>State expansion</li>
+</ul>
+</li>
+</ul>
 
 <h1 id='contents'>Contents</h1>
 
@@ -198,12 +183,11 @@
 <p>Spah itself is a client, written in Javascript, and a server application which may currently be either Node.js or Ruby-flavoured.</p>
 
 <p>The central concept in Spah is the <strong>state</strong>. The state is essentially a JSON object describing everything about a user&#8217;s UI - everything from the models objects shown in a list to the current navigation tab selected, from the contents of a particular form to whether or not the user opened the comment box yet. The state for this page might look something like:</p>
-<div class='highlight'><pre> <span class='p'>{</span>
-   <span class='s2'>&quot;package&quot;</span><span class='o'>:</span> <span class='s2'>&quot;Spah.js&quot;</span><span class='p'>,</span> <span class='c1'>// Currently viewing the Spah class</span>
-   <span class='s2'>&quot;file&quot;</span><span class='o'>:</span> <span class='p'>{</span>
-</pre>
-</div>
-<pre><code>		name: &quot;readme.mdown&quot;, // Got the readme.mdown file open
+
+<pre><code> {
+   &quot;package&quot;: &quot;Spah.js&quot;, // Currently viewing the Spah class
+   &quot;file&quot;: {
+		name: &quot;readme.mdown&quot;, // Got the readme.mdown file open
 		content: &quot;Spah: Stateful pages, not single pages.\n....&quot; // Full textdump of file
 	 }
  }</code></pre>
@@ -223,11 +207,13 @@
 <p><em>Figure 2: A better approach.</em></p>
 <img src='https://img.skitch.com/20110504-p13hfga9s4d6x7bpjwrw1gbyjj.jpg' />
 <p>For partials, Spah uses <a href='#templating_with_mustache'>Mustache templates</a>. All <code>.mustache</code> files in your server-side application are indexed by path on startup and made available to the rendering chain on both the client and server. Spah automatically injects the templates into your HTML layout using script tags:</p>
-<div class='highlight'><pre><span class='nt'>&lt;script </span><span class='na'>type=</span><span class='s'>&quot;text/mustache&quot;</span> <span class='na'>id=</span><span class='s'>&quot;views/my/partial&quot;</span><span class='nt'>&gt;</span>
-  <span class='p'>{{</span><span class='nx'>name</span><span class='p'>}}</span>
-<span class='nt'>&lt;/script&gt;</span>
-</pre>
-</div>
+
+<pre><code>language:html
+
+&lt;script type=&quot;text/mustache&quot; id=&quot;views/my/partial&quot;&gt;
+  {{name}}
+&lt;/script&gt;</code></pre>
+
 <p>These are semantically neutral in nature and do not alter your document&#8217;s content. Spah will also add a hidden <code>state</code> input to the end of each form in your document containing the current state, and append the state to link URLs within the current domain - this allows for graceful state handover in no-js environments.</p>
 
 <p>In environments that support JS, the state in forms and links is replaced with the current state on submission/activation.</p>
@@ -253,11 +239,11 @@
 <p>You may also bind more advanced behaviours to changes in the state using <a href='#responding_to_state_changes_with_javascript'>jQuery responders</a> and <a href='#spahql'>state queries</a></p>
 
 <p>For cleanliness, Spah keeps all of its functions, classes and behaviour within the top level <code>Spah</code> object. Initialising Spah is simple:</p>
-<div class='highlight'><pre> <span class='nx'>$</span><span class='p'>(</span><span class='nb'>document</span><span class='p'>).</span><span class='nx'>ready</span><span class='p'>(</span><span class='kd'>function</span><span class='p'>()</span> <span class='p'>{</span> 
-     <span class='nx'>Spah</span><span class='p'>.</span><span class='nx'>init</span><span class='p'>();</span> 
- <span class='p'>});</span>
-</pre>
-</div>
+
+<pre><code> $(document).ready(function() { 
+     Spah.init(); 
+ });</code></pre>
+
 <h1 id='spahql'>SpahQL</h1>
 
 <h2 id='spahql_core_concepts'>SpahQL Core concepts</h2>
@@ -275,96 +261,96 @@
 <h2 id='selection_queries'>Selection queries</h2>
 
 <p>To select items from the state, use the basic syntax:</p>
-<div class='highlight'><pre><span class='kd'>var</span> <span class='nx'>results</span> <span class='o'>=</span> <span class='nx'>Spah</span><span class='p'>.</span><span class='nx'>state</span><span class='p'>.</span><span class='nx'>select</span><span class='p'>(</span><span class='nx'>myQuery</span><span class='p'>);</span>
-</pre>
-</div>
-<p>The basic constituent of a selection query is a <em>path selector</em>. With an example object:</p>
-<div class='highlight'><pre><span class='p'>{</span>
-    <span class='nx'>myHash</span><span class='o'>:</span> <span class='p'>{</span><span class='nx'>foo</span><span class='o'>:</span> <span class='s2'>&quot;bar&quot;</span><span class='p'>,</span> <span class='nx'>bar</span><span class='o'>:</span> <span class='s2'>&quot;baz&quot;</span><span class='p'>,</span> <span class='nx'>mySubHash</span><span class='o'>:</span> <span class='p'>{</span><span class='nx'>foo</span><span class='o'>:</span> <span class='s2'>&quot;bar&quot;</span><span class='p'>,</span> <span class='nx'>bar</span><span class='o'>:</span> <span class='s2'>&quot;I&#39;M IN A HASH&quot;</span><span class='p'>}},</span>
-    <span class='nx'>myArr</span><span class='o'>:</span> <span class='p'>[</span><span class='mi'>0</span><span class='p'>,</span><span class='mi'>1</span><span class='p'>,</span><span class='mi'>2</span><span class='p'>],</span>
-    <span class='nx'>myPrimitives</span><span class='o'>:</span> <span class='p'>[</span><span class='kc'>true</span><span class='p'>,</span> <span class='kc'>false</span><span class='p'>,</span> <span class='kc'>null</span><span class='p'>,</span> <span class='s2'>&quot;foo&quot;</span><span class='p'>,</span> <span class='mi'>3</span><span class='p'>]</span>
-<span class='p'>}</span>
-</pre>
-</div>
-<p>It&#8217;s easy to make selections based on a known path. To pull up the contents of the key &#8220;myHash&#8221; in the root, use the following syntax and remember that <strong>paths always begin with a slash</strong>.</p>
-<div class='highlight'><pre><span class='nx'>results</span> <span class='o'>=</span> <span class='nx'>Spah</span><span class='p'>.</span><span class='nx'>state</span><span class='p'>.</span><span class='nx'>select</span><span class='p'>(</span><span class='s2'>&quot;/myHash&quot;</span><span class='p'>);</span>
-</pre>
-</div>
-<p>Or to pull up the contents of the subhash:</p>
-<div class='highlight'><pre><span class='nx'>results</span> <span class='o'>=</span> <span class='nx'>Spah</span><span class='p'>.</span><span class='nx'>state</span><span class='p'>.</span><span class='nx'>select</span><span class='p'>(</span><span class='s2'>&quot;/myHash/mySubHash&quot;</span><span class='p'>);</span>
-</pre>
-</div>
-<p>Recursion is supported with a double-slash anywhere in the path:</p>
-<div class='highlight'><pre><span class='c1'>// Find all entries with the key &quot;foo&quot;</span>
-<span class='nx'>results</span> <span class='o'>=</span> <span class='nx'>Spah</span><span class='p'>.</span><span class='nx'>state</span><span class='p'>.</span><span class='nx'>select</span><span class='p'>(</span><span class='s2'>&quot;//foo&quot;</span><span class='p'>);</span>
 
-<span class='c1'>// Find all entries inside myHash with the key &quot;foo&quot;</span>
-<span class='nx'>results</span> <span class='o'>=</span> <span class='nx'>Spah</span><span class='p'>.</span><span class='nx'>state</span><span class='p'>.</span><span class='nx'>select</span><span class='p'>(</span><span class='s2'>&quot;/myHash//foo&quot;</span><span class='p'>);</span>
-</pre>
-</div>
+<pre><code>var results = Spah.state.select(myQuery);</code></pre>
+
+<p>The basic constituent of a selection query is a <em>path selector</em>. With an example object:</p>
+
+<pre><code>{
+    myHash: {foo: &quot;bar&quot;, bar: &quot;baz&quot;, mySubHash: {foo: &quot;bar&quot;, bar: &quot;I&#39;M IN A HASH&quot;}},
+    myArr: [0,1,2],
+    myPrimitives: [true, false, null, &quot;foo&quot;, 3]
+}</code></pre>
+
+<p>It&#8217;s easy to make selections based on a known path. To pull up the contents of the key &#8220;myHash&#8221; in the root, use the following syntax and remember that <strong>paths always begin with a slash</strong>.</p>
+
+<pre><code>results = Spah.state.select(&quot;/myHash&quot;);</code></pre>
+
+<p>Or to pull up the contents of the subhash:</p>
+
+<pre><code>results = Spah.state.select(&quot;/myHash/mySubHash&quot;);</code></pre>
+
+<p>Recursion is supported with a double-slash anywhere in the path:</p>
+
+<pre><code>// Find all entries with the key &quot;foo&quot;
+results = Spah.state.select(&quot;//foo&quot;);
+
+// Find all entries inside myHash with the key &quot;foo&quot;
+results = Spah.state.select(&quot;/myHash//foo&quot;);</code></pre>
+
 <p>The results are always returned as a set of <code>Spah.SpahQL.QueryResult</code> objects, which each have properties <code>path</code> and <code>value</code>:</p>
-<div class='highlight'><pre><span class='nx'>results</span> <span class='o'>=</span> <span class='nx'>Spah</span><span class='p'>.</span><span class='nx'>state</span><span class='p'>.</span><span class='nx'>select</span><span class='p'>(</span><span class='s2'>&quot;/myHash//foo&quot;</span><span class='p'>);</span> <span class='c1'>//-&gt; [QueryResult, QueryResult]</span>
-<span class='nx'>results</span><span class='p'>[</span><span class='mi'>0</span><span class='p'>].</span><span class='nx'>path</span> <span class='c1'>//-&gt; &quot;/myHash/foo&quot;</span>
-<span class='nx'>results</span><span class='p'>[</span><span class='mi'>0</span><span class='p'>].</span><span class='nx'>value</span> <span class='c1'>//-&gt; &quot;bar&quot;</span>
-<span class='nx'>results</span><span class='p'>[</span><span class='mi'>1</span><span class='p'>].</span><span class='nx'>path</span> <span class='c1'>//-&gt; &quot;/myHash/mySubHash/foo&quot;</span>
-<span class='nx'>results</span><span class='p'>[</span><span class='mi'>1</span><span class='p'>].</span><span class='nx'>value</span> <span class='c1'>//-&gt; &quot;bar&quot;</span>
-</pre>
-</div>
+
+<pre><code>results = Spah.state.select(&quot;/myHash//foo&quot;); //-&gt; [QueryResult, QueryResult]
+results[0].path //-&gt; &quot;/myHash/foo&quot;
+results[0].value //-&gt; &quot;bar&quot;
+results[1].path //-&gt; &quot;/myHash/mySubHash/foo&quot;
+results[1].value //-&gt; &quot;bar&quot;</code></pre>
+
 <p>Keys in arrays are treated just like keys in hashes:</p>
-<div class='highlight'><pre><span class='c1'>// Grab the first item in /myArr</span>
-<span class='nx'>results</span> <span class='o'>=</span> <span class='nx'>Spah</span><span class='p'>.</span><span class='nx'>state</span><span class='p'>.</span><span class='nx'>select</span><span class='p'>(</span><span class='s2'>&quot;/myArr/0&quot;</span><span class='p'>)</span>
-</pre>
-</div>
+
+<pre><code>// Grab the first item in /myArr
+results = Spah.state.select(&quot;/myArr/0&quot;)</code></pre>
+
 <p>You may also use <code>*</code> as a wildcard in paths:</p>
-<div class='highlight'><pre><span class='c1'>// Grab ALL items in /myArr</span>
-<span class='nx'>results</span> <span class='o'>=</span> <span class='nx'>Spah</span><span class='p'>.</span><span class='nx'>state</span><span class='p'>.</span><span class='nx'>select</span><span class='p'>(</span><span class='s2'>&quot;/myArr/*&quot;</span><span class='p'>)</span>
-<span class='nx'>results</span><span class='p'>[</span><span class='mi'>0</span><span class='p'>].</span><span class='nx'>path</span> <span class='c1'>//-&gt; &quot;/myArr/0&quot;</span>
-<span class='nx'>results</span><span class='p'>[</span><span class='mi'>0</span><span class='p'>].</span><span class='nx'>value</span> <span class='c1'>//-&gt; 0</span>
-</pre>
-</div>
+
+<pre><code>// Grab ALL items in /myArr
+results = Spah.state.select(&quot;/myArr/*&quot;)
+results[0].path //-&gt; &quot;/myArr/0&quot;
+results[0].value //-&gt; 0</code></pre>
+
 <p>Path queries are <strong>reductive</strong>. When executed, the first part of the query is run against the top level of the object being queried, and the remaining results are handed to the next part of the path to be reduced further. This loop continues until we&#8217;re either out of results or out of path segments.</p>
 
 <p>Using these reductive characteristics, we can perform advanced queries with <strong>filter queries</strong>. Filter queries are contained in square brackets, and can be used to further reduce the results before the query runner moves on to the next path segment.</p>
-<div class='highlight'><pre><span class='c1'>// Grab /myHash, but only if it contains a key &quot;foo&quot; with any </span>
-<span class='c1'>// non-false value:</span>
-<span class='nx'>results</span> <span class='o'>=</span> <span class='nx'>Spah</span><span class='p'>.</span><span class='nx'>state</span><span class='p'>.</span><span class='nx'>select</span><span class='p'>(</span><span class='s2'>&quot;/myHash[/foo]&quot;</span><span class='p'>)</span>
 
-<span class='c1'>// Grab all items that contain a key &quot;foo&quot; with value &quot;bar&quot;</span>
-<span class='c1'>// This is an identical query to &quot;//*[/foo == &#39;bar&#39;]&quot;</span>
-<span class='nx'>results</span> <span class='o'>=</span> <span class='nx'>Spah</span><span class='p'>.</span><span class='nx'>state</span><span class='p'>.</span><span class='nx'>select</span><span class='p'>(</span><span class='s2'>&quot;//[/foo == &#39;bar&#39;]&quot;</span><span class='p'>)</span>
+<pre><code>// Grab /myHash, but only if it contains a key &quot;foo&quot; with any 
+// non-false value:
+results = Spah.state.select(&quot;/myHash[/foo]&quot;)
 
-<span class='c1'>// Grab all root-level items that have the key &quot;foo&quot; with value &quot;bar&quot;</span>
-<span class='c1'>// either on themselves or on any of their descendants.</span>
-<span class='c1'>// This is an identical query to &quot;/*[//foo == &#39;bar&#39;]&quot;</span>
-<span class='nx'>results</span> <span class='o'>=</span> <span class='nx'>Spah</span><span class='p'>.</span><span class='nx'>state</span><span class='p'>.</span><span class='nx'>select</span><span class='p'>(</span><span class='s2'>&quot;/[//foo == &#39;bar&#39;]&quot;</span><span class='p'>)</span>
+// Grab all items that contain a key &quot;foo&quot; with value &quot;bar&quot;
+// This is an identical query to &quot;//*[/foo == &#39;bar&#39;]&quot;
+results = Spah.state.select(&quot;//[/foo == &#39;bar&#39;]&quot;)
 
-<span class='c1'>// Grab all items anywhere that have key &quot;foo&quot; with value &quot;bar&quot;</span>
-<span class='c1'>// either on themselves or on any of their descendants.</span>
-<span class='c1'>// This is an identical query to &quot;//*[//foo == &#39;bar&#39;]&quot;</span>
-<span class='nx'>results</span> <span class='o'>=</span> <span class='nx'>Spah</span><span class='p'>.</span><span class='nx'>state</span><span class='p'>.</span><span class='nx'>select</span><span class='p'>(</span><span class='s2'>&quot;//[//foo == &#39;bar&#39;]&quot;</span><span class='p'>)</span>
+// Grab all root-level items that have the key &quot;foo&quot; with value &quot;bar&quot;
+// either on themselves or on any of their descendants.
+// This is an identical query to &quot;/*[//foo == &#39;bar&#39;]&quot;
+results = Spah.state.select(&quot;/[//foo == &#39;bar&#39;]&quot;)
 
-<span class='c1'>// Grab all items containing the value &quot;bar&quot; on themselves:</span>
-<span class='c1'>// This is an identical query to &quot;//*[/* == &#39;bar&#39;]&quot;</span>
-<span class='nx'>results</span> <span class='o'>=</span> <span class='nx'>Spah</span><span class='p'>.</span><span class='nx'>state</span><span class='p'>.</span><span class='nx'>select</span><span class='p'>(</span><span class='s2'>&quot;//[/* == &#39;bar&#39;]&quot;</span><span class='p'>)</span>
+// Grab all items anywhere that have key &quot;foo&quot; with value &quot;bar&quot;
+// either on themselves or on any of their descendants.
+// This is an identical query to &quot;//*[//foo == &#39;bar&#39;]&quot;
+results = Spah.state.select(&quot;//[//foo == &#39;bar&#39;]&quot;)
 
-<span class='c1'>// Grab all items containing the value &quot;bar&quot; on themselves</span>
-<span class='c1'>// or any of their descendants.</span>
-<span class='c1'>// This is an identical query to &quot;//*[//* == &#39;bar&#39;]&quot;</span>
-<span class='nx'>results</span> <span class='o'>=</span> <span class='nx'>Spah</span><span class='p'>.</span><span class='nx'>state</span><span class='p'>.</span><span class='nx'>select</span><span class='p'>(</span><span class='s2'>&quot;//[//* == &#39;bar&#39;]&quot;</span><span class='p'>)</span>
-</pre>
-</div>
+// Grab all items containing the value &quot;bar&quot; on themselves:
+// This is an identical query to &quot;//*[/* == &#39;bar&#39;]&quot;
+results = Spah.state.select(&quot;//[/* == &#39;bar&#39;]&quot;)
+
+// Grab all items containing the value &quot;bar&quot; on themselves
+// or any of their descendants.
+// This is an identical query to &quot;//*[//* == &#39;bar&#39;]&quot;
+results = Spah.state.select(&quot;//[//* == &#39;bar&#39;]&quot;)</code></pre>
+
 <p>There are a few things to note about the query inside the <code>[]</code> brackets. Firstly, it has access to the full query syntax. Secondly, it runs within the scope of the current path segment. Take this query for example:</p>
-<div class='highlight'><pre><span class='c1'>// Returns no results - myArr is on the root, and the filter query </span>
-<span class='c1'>// runs in the context of /myHash, which has no key &quot;myArr&quot;.</span>
-<span class='nx'>results</span> <span class='o'>=</span> <span class='nx'>Spah</span><span class='p'>.</span><span class='nx'>state</span><span class='p'>.</span><span class='nx'>select</span><span class='p'>(</span><span class='s2'>&quot;/myHash[/myArr]&quot;</span><span class='p'>)</span>
-</pre>
-</div>
+
+<pre><code>// Returns no results - myArr is on the root, and the filter query 
+// runs in the context of /myHash, which has no key &quot;myArr&quot;.
+results = Spah.state.select(&quot;/myHash[/myArr]&quot;)</code></pre>
+
 <p>If you want to lookup data on the root from inside a filter query, use the <code>$</code> symbol to force a path to execute on the root context:</p>
-<div class='highlight'><pre><span class='c1'>// Returns /myHash only if it contains a value with the same contents as </span>
-<span class='c1'>// /myArr on the root.</span>
-<span class='nx'>results</span> <span class='o'>=</span> <span class='nx'>Spah</span><span class='p'>.</span><span class='nx'>state</span><span class='p'>.</span><span class='nx'>select</span><span class='p'>(</span><span class='s2'>&quot;/myHash[/* == $/myArr]&quot;</span><span class='p'>)</span>
-</pre>
-</div>
+
+<pre><code>// Returns /myHash only if it contains a value with the same contents as 
+// /myArr on the root.
+results = Spah.state.select(&quot;/myHash[/* == $/myArr]&quot;)</code></pre>
+
 <p>I&#8217;m sure by now that you&#8217;ve noticed the filter queries contain <strong>comparison operators</strong>. Any query containing a comparison operator is automatically executed as an <a href='#assertion_queries'>assertion query</a>:</p>
 
 <ul>
@@ -398,9 +384,9 @@
 <p>We&#8217;ve already seen how assertion queries can be used as filters in <a href='#selection_queries'>selection queries</a>. Assertion queries are also used heavily in Spah&#8217;s <a href='#document_logic'>document logic</a> features.</p>
 
 <p>Assertion queries are run through the <code>assert</code> method on the state:</p>
-<div class='highlight'><pre><span class='nx'>result</span> <span class='o'>=</span> <span class='nx'>Spah</span><span class='p'>.</span><span class='nx'>state</span><span class='p'>.</span><span class='nx'>assert</span><span class='p'>(</span><span class='nx'>myQuery</span><span class='p'>)</span> <span class='c1'>//-&gt; true or false.</span>
-</pre>
-</div>
+
+<pre><code>result = Spah.state.assert(myQuery) //-&gt; true or false.</code></pre>
+
 <p>The <code>assert</code> method accepts both selection and assertion queries - if the given query is a selection query, the result will be <code>true</code> if the query returns one or more results with non-false (i.e. not false or null) values.</p>
 
 <p>As discussed in <a href='#spahql_core_concepts'>core concepts</a>, all comparisons in SpahQL use set arithmetic instead of traditional imperative logic and equality. SpahQL comparisons allow you to determine if:</p>
@@ -418,35 +404,35 @@
 <h2 id='assertion_queries_literals_and_sets'>Assertion queries: Literals and sets</h2>
 
 <p>SpahQL does support literals - strings, integers, floats, <code>true</code>, <code>false</code> and <code>null</code> may all be used directly in SpahQL queries:</p>
-<div class='highlight'><pre><span class='mi'>3</span> <span class='c1'>// the number 3</span>
-<span class='s2'>&quot;foo&quot;</span> <span class='c1'>// the string &quot;foo&quot;</span>
-<span class='s1'>&#39;foo&#39;</span> <span class='c1'>// the string &quot;foo&quot;</span>
-<span class='kc'>true</span> <span class='c1'>// boolean true</span>
-<span class='kc'>false</span> <span class='c1'>// boolean false</span>
-<span class='kc'>null</span> <span class='c1'>// null</span>
-</pre>
-</div>
+
+<pre><code>3 // the number 3
+&quot;foo&quot; // the string &quot;foo&quot;
+&#39;foo&#39; // the string &quot;foo&quot;
+true // boolean true
+false // boolean false
+null // null</code></pre>
+
 <p>All comparisons in SpahQL are <strong>set comparisons</strong>. A query like <code>/foo</code> returns a set of results. A literal like <code>3</code> or <code>"somestring"</code> is considered to be a set containing a single entity. Literals may be wrapped in <code>{}</code> mustaches and seperated with commas to create in-place sets:</p>
-<div class='highlight'><pre><span class='c1'>// a set containing the string &quot;3&quot; and the number 3.</span>
-<span class='p'>{</span><span class='s2'>&quot;3&quot;</span><span class='p'>,</span><span class='mi'>3</span><span class='p'>}</span>
-</pre>
-</div>
+
+<pre><code>// a set containing the string &quot;3&quot; and the number 3.
+{&quot;3&quot;,3}</code></pre>
+
 <p>Sets may also be built from a combination of literals and queries:</p>
-<div class='highlight'><pre><span class='c1'>// a set containing the string &quot;3&quot;, all the results from the </span>
-<span class='c1'>// query &quot;/bar&quot; and the string &quot;foo&quot;.</span>
-<span class='p'>{</span><span class='s2'>&quot;3&quot;</span><span class='p'>,</span><span class='err'>/bar,&quot;foo&quot;}</span>
-<span class='c1'>// note that the set is flattened - the results from &quot;/bar&quot;</span>
-<span class='c1'>// are appended to the set in-place. If /bar returned values &quot;a&quot; and &quot;b&quot;,</span>
-<span class='c1'>// this set would look like: {&quot;3&quot;,&quot;a&quot;,&quot;b&quot;,&quot;foo&quot;}</span>
-</pre>
-</div>
+
+<pre><code>// a set containing the string &quot;3&quot;, all the results from the 
+// query &quot;/bar&quot; and the string &quot;foo&quot;.
+{&quot;3&quot;,/bar,&quot;foo&quot;}
+// note that the set is flattened - the results from &quot;/bar&quot;
+// are appended to the set in-place. If /bar returned values &quot;a&quot; and &quot;b&quot;,
+// this set would look like: {&quot;3&quot;,&quot;a&quot;,&quot;b&quot;,&quot;foo&quot;}</code></pre>
+
 <p>You may also create ranges:</p>
-<div class='highlight'><pre><span class='p'>{</span><span class='s2'>&quot;a&quot;</span><span class='p'>..</span><span class='s2'>&quot;c&quot;</span><span class='p'>}</span> <span class='c1'>// a set containing &quot;a&quot;, &quot;b&quot; and &quot;c&quot;</span>
-<span class='p'>{</span><span class='mi'>0</span><span class='p'>..</span><span class='mi'>3</span><span class='p'>}</span> <span class='c1'>// a set containing 0, 1, 2 and 3.</span>
-<span class='p'>{</span><span class='s2'>&quot;a&quot;</span><span class='p'>..</span><span class='mi'>9</span><span class='p'>}</span> <span class='c1'>// COMPILER ERROR - sets must be composed of objects of the same type.</span>
-<span class='p'>{</span><span class='s2'>&quot;a&quot;</span><span class='p'>..</span><span class='o'>/</span><span class='nx'>foo</span><span class='o'>/</span><span class='nx'>bar</span><span class='p'>}</span> <span class='c1'>// COMPILE ERROR - ranges do not support path lookup.</span>
-</pre>
-</div>
+
+<pre><code>{&quot;a&quot;..&quot;c&quot;} // a set containing &quot;a&quot;, &quot;b&quot; and &quot;c&quot;
+{0..3} // a set containing 0, 1, 2 and 3.
+{&quot;a&quot;..9} // COMPILER ERROR - sets must be composed of objects of the same type.
+{&quot;a&quot;../foo/bar} // COMPILE ERROR - ranges do not support path lookup.</code></pre>
+
 <h2 id='comparison_operators'>Comparison operators</h2>
 
 <p>SpahQL&#8217;s set arithmetic uses simple operators:</p>
@@ -456,24 +442,22 @@
 <p>Set equality <code>==</code></p>
 
 <p>Asserts that both the left-hand and right-hand sets have a 1:1 relationship between their values. The values may come from different paths in the state, or be literals. The values do not have to be in the same order. Each value has its equality checked based on its type. See <a href='#object_equality'>Object equality</a>.</p>
+
+<pre><code>  // Always true:
+  Spah.state.assert(&quot;1 == 1&quot;); // integers
+  Spah.state.assert(&quot;&#39;foo&#39; == &#39;foo&#39;&quot;); // strings
+  Spah.state.assert(&quot;true&quot;); // boolean
+  Spah.state.assert(&quot;/myHash == /myHash&quot;); // queries
+  Spah.state.assert(&quot;{1,2,3} == {1..3}&quot;); // set literals
+  
+  // Always false:
+  Spah.state.assert(&quot;1 == &#39;1&#39;&quot;); // mixed types
+  Spah.state.assert(&quot;true == false&quot;); // boolean comparison
+  Spah.state.assert(&quot;false&quot;); // boolean
+  Spah.state.assert(&quot;/myHash == /myArr&quot;); // queries
+  Spah.state.assert(&quot;{1,2,3} == {&#39;a&#39;..&#39;z&#39;}&quot;); // set literals</code></pre>
 </li>
-</ul>
-<div class='highlight'><pre>    <span class='c1'>// Always true:</span>
-    <span class='nx'>Spah</span><span class='p'>.</span><span class='nx'>state</span><span class='p'>.</span><span class='nx'>assert</span><span class='p'>(</span><span class='s2'>&quot;1 == 1&quot;</span><span class='p'>);</span> <span class='c1'>// integers</span>
-    <span class='nx'>Spah</span><span class='p'>.</span><span class='nx'>state</span><span class='p'>.</span><span class='nx'>assert</span><span class='p'>(</span><span class='s2'>&quot;&#39;foo&#39; == &#39;foo&#39;&quot;</span><span class='p'>);</span> <span class='c1'>// strings</span>
-    <span class='nx'>Spah</span><span class='p'>.</span><span class='nx'>state</span><span class='p'>.</span><span class='nx'>assert</span><span class='p'>(</span><span class='s2'>&quot;true&quot;</span><span class='p'>);</span> <span class='c1'>// boolean</span>
-    <span class='nx'>Spah</span><span class='p'>.</span><span class='nx'>state</span><span class='p'>.</span><span class='nx'>assert</span><span class='p'>(</span><span class='s2'>&quot;/myHash == /myHash&quot;</span><span class='p'>);</span> <span class='c1'>// queries</span>
-    <span class='nx'>Spah</span><span class='p'>.</span><span class='nx'>state</span><span class='p'>.</span><span class='nx'>assert</span><span class='p'>(</span><span class='s2'>&quot;{1,2,3} == {1..3}&quot;</span><span class='p'>);</span> <span class='c1'>// set literals</span>
-    
-    <span class='c1'>// Always false:</span>
-    <span class='nx'>Spah</span><span class='p'>.</span><span class='nx'>state</span><span class='p'>.</span><span class='nx'>assert</span><span class='p'>(</span><span class='s2'>&quot;1 == &#39;1&#39;&quot;</span><span class='p'>);</span> <span class='c1'>// mixed types</span>
-    <span class='nx'>Spah</span><span class='p'>.</span><span class='nx'>state</span><span class='p'>.</span><span class='nx'>assert</span><span class='p'>(</span><span class='s2'>&quot;true == false&quot;</span><span class='p'>);</span> <span class='c1'>// boolean comparison</span>
-    <span class='nx'>Spah</span><span class='p'>.</span><span class='nx'>state</span><span class='p'>.</span><span class='nx'>assert</span><span class='p'>(</span><span class='s2'>&quot;false&quot;</span><span class='p'>);</span> <span class='c1'>// boolean</span>
-    <span class='nx'>Spah</span><span class='p'>.</span><span class='nx'>state</span><span class='p'>.</span><span class='nx'>assert</span><span class='p'>(</span><span class='s2'>&quot;/myHash == /myArr&quot;</span><span class='p'>);</span> <span class='c1'>// queries</span>
-    <span class='nx'>Spah</span><span class='p'>.</span><span class='nx'>state</span><span class='p'>.</span><span class='nx'>assert</span><span class='p'>(</span><span class='s2'>&quot;{1,2,3} == {&#39;a&#39;..&#39;z&#39;}&quot;</span><span class='p'>);</span> <span class='c1'>// set literals</span>
-</pre>
-</div>
-<ul>
+
 <li>
 <p>Set inequality <code>!=</code></p>
 
@@ -566,19 +550,19 @@
 <p>Properties are like imaginary paths on objects in your state. Each property uses the <code>.propertyName</code> syntax and may be used in any path query:</p>
 
 <ul>
-<li><strong>.type</strong> Returns the object type as &#8216;Object&#8217;, &#8216;Array&#8217;, &#8216;String&#8217;, &#8216;Number&#8217;, &#8216;Boolean&#8217; or &#8216;null&#8217;</li>
-</ul>
-<div class='highlight'><pre>    <span class='nx'>results</span> <span class='o'>=</span> <span class='nx'>Spah</span><span class='p'>.</span><span class='nx'>state</span><span class='p'>.</span><span class='nx'>select</span><span class='p'>(</span><span class='s2'>&quot;/myArr/.type&quot;</span><span class='p'>);</span> <span class='c1'>//-&gt; [QueryResult]</span>
-    <span class='nx'>results</span><span class='p'>[</span><span class='mi'>0</span><span class='p'>].</span><span class='nx'>path</span> <span class='c1'>//-&gt; &quot;/myArr/.type&quot;</span>
-    <span class='nx'>results</span><span class='p'>[</span><span class='mi'>0</span><span class='p'>].</span><span class='nx'>value</span> <span class='c1'>//-&gt; &#39;Array&#39;</span>
-    
-    <span class='c1'>// Find all arrays everywhere. </span>
-    <span class='nx'>results</span> <span class='o'>=</span> <span class='nx'>Spah</span><span class='p'>.</span><span class='nx'>state</span><span class='p'>.</span><span class='nx'>select</span><span class='p'>(</span><span class='s2'>&quot;//[/.type == &#39;Array&#39;]&quot;</span><span class='p'>)</span>
-    <span class='nx'>results</span><span class='p'>[</span><span class='mi'>0</span><span class='p'>].</span><span class='nx'>path</span> <span class='c1'>//-&gt; &quot;/myArr&quot;</span>
-    <span class='nx'>results</span><span class='p'>[</span><span class='mi'>1</span><span class='p'>].</span><span class='nx'>path</span> <span class='c1'>//-&gt; &quot;/myPrimitives&quot;</span>
-</pre>
-</div>
-<ul>
+<li>
+<p><strong>.type</strong> Returns the object type as &#8216;Object&#8217;, &#8216;Array&#8217;, &#8216;String&#8217;, &#8216;Number&#8217;, &#8216;Boolean&#8217; or &#8216;null&#8217;</p>
+
+<pre><code>  results = Spah.state.select(&quot;/myArr/.type&quot;); //-&gt; [QueryResult]
+  results[0].path //-&gt; &quot;/myArr/.type&quot;
+  results[0].value //-&gt; &#39;Array&#39;
+  
+  // Find all arrays everywhere. 
+  results = Spah.state.select(&quot;//[/.type == &#39;Array&#39;]&quot;)
+  results[0].path //-&gt; &quot;/myArr&quot;
+  results[1].path //-&gt; &quot;/myPrimitives&quot;</code></pre>
+</li>
+
 <li>
 <p><strong>.size</strong> Returns the object&#8217;s size if it is a String (number of characters), Array (number of items) or Object (number of keys)</p>
 
@@ -594,12 +578,12 @@
 
 <li>
 <p><strong>.explode</strong> Returns the object broken into a set that may be compared to other sets. Strings are exploded into a set of characters. Arrays and objects do not support this property - use the wildcard (*) character instead.</p>
+
+<pre><code>  // Does a string contain all these characters?
+  results = Spah.state.assert(&quot;/myStr/.explode }&gt;{ {&#39;a&#39;,&#39;b&#39;,&#39;c&#39;}&quot;)</code></pre>
 </li>
 </ul>
-<div class='highlight'><pre>    <span class='c1'>// Does a string contain all these characters?</span>
-    <span class='nx'>results</span> <span class='o'>=</span> <span class='nx'>Spah</span><span class='p'>.</span><span class='nx'>state</span><span class='p'>.</span><span class='nx'>assert</span><span class='p'>(</span><span class='s2'>&quot;/myStr/.explode }&gt;{ {&#39;a&#39;,&#39;b&#39;,&#39;c&#39;}&quot;</span><span class='p'>)</span>
-</pre>
-</div>
+
 <h1 id='document_logic'>Document logic</h1>
 
 <p>In a Spah application, document logic (show this, hide that, populate this with that) is moved away from in-place Erb views and into a place where both the client and the server will have access to it - the document itself. In doing this, we want to avoid doing anything silly like adding new tags or attributes that break HTML validity, or dirtying up your markup with billions of extra nested div elements.</p>
@@ -611,17 +595,19 @@
 <h2 id='hide_or_show_an_element'>Hide or show an element</h2>
 
 <p>Show/hide of an element is achieved by appending <code>display: none;</code> to the element&#8217;s <code>style</code> attribute if it should be hidden.</p>
-<div class='highlight'><pre><span class='nt'>&lt;form</span> <span class='na'>class=</span><span class='s'>&quot;add-tags&quot;</span> <span class='na'>data-show-if=</span><span class='s'>&quot;/user-authenticated&quot;</span><span class='nt'>&gt;</span>
-  This form will only show if the query &quot;/user-authenticated&quot; returns true
-<span class='nt'>&lt;/form&gt;</span>
 
-<span class='nt'>&lt;form</span> <span class='na'>class=</span><span class='s'>&quot;add-tags&quot;</span> <span class='na'>data-show-unless=</span><span class='s'>&quot;/user-anonymous&quot;</span><span class='nt'>&gt;</span>
+<pre><code>language:html
+
+&lt;form class=&quot;add-tags&quot; data-show-if=&quot;/user-authenticated&quot;&gt;
+  This form will only show if the query &quot;/user-authenticated&quot; returns true
+&lt;/form&gt;
+
+&lt;form class=&quot;add-tags&quot; data-show-unless=&quot;/user-anonymous&quot;&gt;
   An alternative way of expressing a similar query using 
   the &quot;data-*-unless&quot; syntax. All conditions support both 
   the -if and -unless syntaxes.
-<span class='nt'>&lt;/form&gt;</span>
-</pre>
-</div>
+&lt;/form&gt;</code></pre>
+
 <h2 id='add_or_remove_element_classes'>Add or remove element classes</h2>
 
 <p>Use the <code>data-class-[classname]-if</code> or <code>-unless</code> attribute to specify that a specific class should be appended to the element&#8217;s <code>class</code> attribute. language:html</p>
@@ -634,38 +620,46 @@
 <h2 id='set_element_id'>Set element ID</h2>
 
 <p>Use the <code>data-id-[id]-if</code> or <code>-unless</code> to specify that an element should be given a new <code>id</code> under certain circumstances. If the condition causes Spah to write the ID on an element, Spah will automatically remove the ID from any other elements that previously possessed it.</p>
-<div class='highlight'><pre><span class='nt'>&lt;li</span> <span class='na'>class=</span><span class='s'>&quot;item&quot;</span> <span class='na'>data-id-current_item-if=</span><span class='s'>&quot;/items.last/id == 3&quot;</span><span class='nt'>&gt;</span>
+
+<pre><code>language:html
+
+&lt;li class=&quot;item&quot; data-id-current_item-if=&quot;/items.last/id == 3&quot;&gt;
   This list item will have the id &quot;current_item&quot; if the last object 
   in the items array has the property &quot;id&quot; with value 3.
-<span class='nt'>&lt;/li&gt;</span>
-</pre>
-</div>
+&lt;/li&gt;</code></pre>
+
 <h2 id='stash_and_unstash_element_content'>Stash and unstash element content</h2>
 
 <p>Stashing content allows you to render semantically-null empty elements into your document, with their content stowed in a data attribute for later use. Stashing only occurs if there is no content already stashed on the element - thus stashed content may be used for state-toggling. See <a href='#advanced_document_logic_example'>example</a>.</p>
-<div class='highlight'><pre><span class='nt'>&lt;div</span>  <span class='na'>class=</span><span class='s'>&quot;new-message-notification&quot;</span> 
-      <span class='na'>data-stash-unless=</span><span class='s'>&quot;/messages[/unread]/.size &gt; 0&quot;</span><span class='nt'>&gt;</span>
-       You have new messages!
+
+<pre><code>language:html
+
+&lt;div  class=&quot;new-message-notification&quot; 
+      data-stash-unless=&quot;/messages[/unread]/.size &gt; 0&quot;&gt;
+
+      You have new messages!
   
       (This text will be moved into the &quot;data-stashed-content&quot; attribute 
       on the containing DIV element if the user has no new messages. 
       This way, your markup won&#39;t contain a hidden, but erroneous, 
       new message notification.)
-<span class='nt'>&lt;/div&gt;</span>
+&lt;/div&gt;
 
-<span class='c'>&lt;!-- When the content is stashed, the element will look like this: --&gt;</span>
-<span class='nt'>&lt;div</span>  <span class='na'>class=</span><span class='s'>&quot;new-message-notification&quot;</span> 
-      <span class='na'>data-stash-unless=</span><span class='s'>&quot;/messages[/unread]/.size &gt; 0&quot;</span> 
-      <span class='na'>data-stashed-content=</span><span class='s'>&quot;You%20have%20new%20messages%21....&quot;</span><span class='nt'>&gt;</span>
-<span class='nt'>&lt;/div&gt;</span>
-</pre>
-</div>
+&lt;!-- When the content is stashed, the element will look like this: --&gt;
+&lt;div  class=&quot;new-message-notification&quot; 
+      data-stash-unless=&quot;/messages[/unread]/.size &gt; 0&quot; 
+      data-stashed-content=&quot;You%20have%20new%20messages%21....&quot;&gt;
+&lt;/div&gt;</code></pre>
+
 <h2 id='populate_element_from_a_template'>Populate element from a template</h2>
 
 <p>Spah can use your shared <a href='#templating_with_mustache'>Mustache templates</a> to render state data into a containing element. On the client side, the Spah client will automatically add a <a href='#responding_to_state_changes_with_javascript'>jQuery responder</a> to the path referenced in the <code>data-populate-with</code> attribute, ensuring that the populated content is updated when the state is modified.</p>
-<div class='highlight'><pre><span class='nt'>&lt;ul</span> <span class='na'>class=</span><span class='s'>&quot;users&quot;</span> <span class='na'>data-populate-if=</span><span class='s'>&quot;/users/.length &gt; 0&quot;</span> 
-                  <span class='na'>data-populate-with=</span><span class='s'>&quot;/users&quot;</span> 
-                  <span class='na'>data-populate-template=</span><span class='s'>&quot;/views/users/single&quot;</span><span class='nt'>&gt;</span>
+
+<pre><code>language:html
+
+&lt;ul class=&quot;users&quot; data-populate-if=&quot;/users/.length &gt; 0&quot; 
+                  data-populate-with=&quot;/users&quot; 
+                  data-populate-template=&quot;/views/users/single&quot;&gt;
                  
   This text will be replaced with the results of running the template contained
   in an element with ID &quot;/views/users/single&quot; through Mustache.js using data from
@@ -673,9 +667,8 @@
   
   If the data found at /users is an array, the array will be wrapped in an object 
   so that Mustache can make it available: {&quot;items&quot;: [content, of, array]}
-<span class='nt'>&lt;/ul&gt;</span>
-</pre>
-</div>
+&lt;/ul&gt;</code></pre>
+
 <h2 id='using_multiple_operations_on_a_single_element'>Using multiple operations on a single element</h2>
 
 <p>All of the above operations may be combined on a single element. The order in which the operations will run is strictly defined in order of the type of operation. <code>-if</code> operations always run before <code>-unless</code> operations.</p>
@@ -695,19 +688,19 @@
 <h2 id='advanced_document_logic_example'>Advanced document logic example</h2>
 
 <p>Let&#8217;s make an advanced example: We want a list of users to default to an &#8220;empty&#8221; state, becoming populated with users if there is a non-empty list of users in the state. If the user list in the state is emptied, then the &#8220;empty&#8221; state should be restored on the element</p>
-<div class='highlight'><pre><span class='o'>&lt;</span><span class='nx'>ul</span> <span class='kr'>class</span><span class='o'>=</span><span class='s2'>&quot;users&quot;</span>
-    <span class='nx'>data</span><span class='o'>-</span><span class='kr'>class</span><span class='o'>-</span><span class='nx'>empty</span><span class='o'>-</span><span class='k'>if</span><span class='o'>=</span><span class='s2'>&quot;/users.length &lt; 1&quot;</span><span class='o'>&gt;</span>
-    <span class='nx'>data</span><span class='o'>-</span><span class='nx'>stash</span><span class='o'>-</span><span class='k'>if</span><span class='o'>=</span><span class='s2'>&quot;/users.length &gt; 0&quot;</span>
-    <span class='nx'>data</span><span class='o'>-</span><span class='nx'>populate</span><span class='o'>-</span><span class='k'>if</span><span class='o'>=</span><span class='s2'>&quot;/users.length &gt; 0&quot;</span>
-    <span class='nx'>data</span><span class='o'>-</span><span class='nx'>populate</span><span class='o'>-</span><span class='kd'>with</span><span class='o'>=</span><span class='s2'>&quot;/users&quot;</span>
-    <span class='nx'>data</span><span class='o'>-</span><span class='nx'>populate</span><span class='o'>-</span><span class='nx'>template</span><span class='o'>=</span><span class='s2'>&quot;/views/users/single&quot;</span><span class='o'>&gt;</span>
+
+<pre><code>&lt;ul class=&quot;users&quot;
+    data-class-empty-if=&quot;/users.length &lt; 1&quot;&gt;
+    data-stash-if=&quot;/users.length &gt; 0&quot;
+    data-populate-if=&quot;/users.length &gt; 0&quot;
+    data-populate-with=&quot;/users&quot;
+    data-populate-template=&quot;/views/users/single&quot;&gt;
     
-    <span class='o'>&lt;</span><span class='nx'>li</span> <span class='kr'>class</span><span class='o'>=</span><span class='s2'>&quot;empty&quot;</span><span class='o'>&gt;</span>
-      <span class='nx'>No</span> <span class='nx'>users</span> <span class='nx'>found</span><span class='p'>.</span>
-    <span class='o'>&lt;</span><span class='err'>/li&gt;</span>
-<span class='o'>&lt;</span><span class='err'>/ul&gt;</span>
-</pre>
-</div>
+    &lt;li class=&quot;empty&quot;&gt;
+      No users found.
+    &lt;/li&gt;
+&lt;/ul&gt;</code></pre>
+
 <p>Because stash operations run before populate operations, the following chain of events will occur:</p>
 
 <ol>
@@ -751,13 +744,15 @@
 <h1 id='forcing_links_and_forms_to_load_synchronously'>Forcing links and forms to load synchronously</h1>
 
 <p>To prevent Spah from adding asynchronous behaviour, add the <code>data-async="false"</code> attribute to the link or form element:</p>
-<div class='highlight'><pre><span class='nt'>&lt;a</span> <span class='na'>href=</span><span class='s'>&quot;/login&quot;</span> <span class='na'>data-async=</span><span class='s'>&quot;false&quot;</span><span class='nt'>&gt;</span>Log in<span class='nt'>&lt;/a&gt;</span>
 
-<span class='nt'>&lt;form</span> <span class='na'>action=</span><span class='s'>&quot;/login&quot;</span> <span class='na'>method=</span><span class='s'>&quot;POST&quot;</span> <span class='na'>data-async=</span><span class='s'>&quot;false&quot;</span><span class='nt'>&gt;</span>
+<pre><code>language:html
+
+&lt;a href=&quot;/login&quot; data-async=&quot;false&quot;&gt;Log in&lt;/a&gt;
+
+&lt;form action=&quot;/login&quot; method=&quot;POST&quot; data-async=&quot;false&quot;&gt;
   ...
-<span class='nt'>&lt;/form&gt;</span>
-</pre>
-</div>
+&lt;/form&gt;</code></pre>
+
 <h1 id='default_client_behaviour'>Default client behaviour</h1>
 
 <h1 id='eager_client_state_changes'>Eager client state changes</h1>
@@ -769,32 +764,32 @@
 <h1 id='appendix_spahql_expression_spec'>Appendix: SpahQL Expression spec</h1>
 
 <p>Syntax:</p>
-<div class='highlight'><pre><span class='c1'>// ATOM_FOO = &quot;foo&quot; - token matches an exact string</span>
-<span class='c1'>// ATOM_BAR = /.../ - token matches a pattern</span>
-<span class='c1'>// TOKEN_FOOBAR = ATOM_FOO[,ATOM_BAR] - atom_foo optionally followed by atom bar</span>
-<span class='c1'>// TOKEN_FOOBARBAR = (ATOM_FOO[,ATOM_BAR])+ - one or more repetitions of the group (atom_foo optionally followed by atom bar)</span>
-</pre>
-</div>
+
+<pre><code>// ATOM_FOO = &quot;foo&quot; - token matches an exact string
+// ATOM_BAR = /.../ - token matches a pattern
+// TOKEN_FOOBAR = ATOM_FOO[,ATOM_BAR] - atom_foo optionally followed by atom bar
+// TOKEN_FOOBARBAR = (ATOM_FOO[,ATOM_BAR])+ - one or more repetitions of the group (atom_foo optionally followed by atom bar)</code></pre>
+
 <p>State machine:</p>
-<div class='highlight'><pre><span class='c1'>// The expression parser is assumed to be a tokenizer. We will define the following states:</span>
-<span class='nx'>STATE_NULL</span> <span class='o'>=</span> <span class='kc'>null</span>
-<span class='nx'>STATE_PATH_QUERY</span> <span class='o'>=</span> <span class='s2'>&quot;path&quot;</span>
-<span class='nx'>STATE_KEY_NAME</span> <span class='o'>=</span> <span class='s2'>&quot;key&quot;</span>
-<span class='nx'>STATE_PROPERTY</span> <span class='o'>=</span> <span class='s2'>&quot;prop&quot;</span>
-<span class='nx'>STATE_FILTER_QUERY</span> <span class='o'>=</span> <span class='s2'>&quot;filt&quot;</span>
-<span class='nx'>STATE_STRING_LITERAL</span> <span class='o'>=</span> <span class='s2'>&quot;str&quot;</span>
-<span class='nx'>STATE_NUMERIC_LITERAL</span> <span class='o'>=</span> <span class='s2'>&quot;num&quot;</span>
-<span class='nx'>STATE_BOOLEAN_LITERAL</span> <span class='o'>=</span> <span class='s2'>&quot;bool&quot;</span>
-<span class='nx'>STATE_SET_LITERAL</span> <span class='o'>=</span> <span class='s2'>&quot;set&quot;</span>
 
-<span class='c1'>// We will also assume that the tokenizer maintains a state stack - every time</span>
-<span class='c1'>// a state is entered, it is pushed onto the STATE_STACK. When the state exits,</span>
-<span class='c1'>// the STATE_STACK is popped and control is returned to the previous state.</span>
+<pre><code>// The expression parser is assumed to be a tokenizer. We will define the following states:
+STATE_NULL = null
+STATE_PATH_QUERY = &quot;path&quot;
+STATE_KEY_NAME = &quot;key&quot;
+STATE_PROPERTY = &quot;prop&quot;
+STATE_FILTER_QUERY = &quot;filt&quot;
+STATE_STRING_LITERAL = &quot;str&quot;
+STATE_NUMERIC_LITERAL = &quot;num&quot;
+STATE_BOOLEAN_LITERAL = &quot;bool&quot;
+STATE_SET_LITERAL = &quot;set&quot;
 
-<span class='c1'>// The state machine begins in the null state. An empty state stack means you are</span>
-<span class='c1'>// in the null state.</span>
-</pre>
-</div>
+// We will also assume that the tokenizer maintains a state stack - every time
+// a state is entered, it is pushed onto the STATE_STACK. When the state exits,
+// the STATE_STACK is popped and control is returned to the previous state.
+
+// The state machine begins in the null state. An empty state stack means you are
+// in the null state.</code></pre>
+
 <p>Tokens and compiler behaviour:</p>
 <table>
   <tr style='background-color: #333; color: #FFF'>
@@ -966,10 +961,10 @@
 <h1 id='appendix_spahql_query_execution_spec'>Appendix: SpahQL query execution spec</h1>
 
 <p>SpahQL selection queries are, fundamentally, reductive. At the start of execution, a selection query is given the root data context against which it will run. As the execution moves between the path segments, the data is reduced (and possibly forked) before being passed to the next path segment:</p>
-<div class='highlight'><pre><span class='nx'>data</span> <span class='o'>=</span> <span class='p'>{</span><span class='nx'>foo</span><span class='o'>:</span> <span class='p'>{</span><span class='nx'>bar</span><span class='o'>:</span> <span class='p'>{</span><span class='nx'>baz</span><span class='o'>:</span> <span class='s2'>&quot;str&quot;</span><span class='p'>}}}</span>
-<span class='nx'>query</span> <span class='o'>=</span> <span class='s2'>&quot;/foo/bar/baz&quot;</span>
-</pre>
-</div>
+
+<pre><code>data = {foo: {bar: {baz: &quot;str&quot;}}}
+query = &quot;/foo/bar/baz&quot;</code></pre>
+
 <p>At each point in the above query:</p>
 
 <ol>
@@ -983,17 +978,17 @@
 </ol>
 
 <p>If at any point a query runs out of data, the execution is aborted and an empty result set is returned:</p>
-<div class='highlight'><pre><span class='nx'>data</span> <span class='o'>=</span> <span class='p'>{</span><span class='nx'>foo</span><span class='o'>:</span> <span class='p'>{</span><span class='nx'>bar</span><span class='o'>:</span> <span class='p'>{</span><span class='nx'>baz</span><span class='o'>:</span> <span class='s2'>&quot;str&quot;</span><span class='p'>}}}</span>
-<span class='nx'>query</span> <span class='o'>=</span> <span class='s2'>&quot;/foo/NOTBAR/baz&quot;</span>
-</pre>
-</div>
+
+<pre><code>data = {foo: {bar: {baz: &quot;str&quot;}}}
+query = &quot;/foo/NOTBAR/baz&quot;</code></pre>
+
 <p>In this case, the query exits and returns <code>[]</code> when it is unable to find any matching data for the <code>NOTBAR</code> portion of the query.</p>
 
 <p>Recursive paths force the query runner to fork the execution:</p>
-<div class='highlight'><pre><span class='nx'>data</span> <span class='o'>=</span> <span class='p'>{</span><span class='nx'>foo</span><span class='o'>:</span> <span class='p'>{</span><span class='nx'>bar</span><span class='o'>:</span> <span class='p'>{</span><span class='nx'>baz</span><span class='o'>:</span> <span class='s2'>&quot;str&quot;</span><span class='p'>,</span> <span class='nx'>bar</span><span class='o'>:</span> <span class='s2'>&quot;inner-bar&quot;</span><span class='p'>}}}</span>
-<span class='nx'>query</span> <span class='o'>=</span> <span class='s2'>&quot;/foo//bar/baz&quot;</span>
-</pre>
-</div>
+
+<pre><code>data = {foo: {bar: {baz: &quot;str&quot;, bar: &quot;inner-bar&quot;}}}
+query = &quot;/foo//bar/baz&quot;</code></pre>
+
 <p>In this instance:</p>
 
 <ol>
@@ -1009,16 +1004,16 @@
 </ol>
 
 <p>And so we can see that the overall progression is:</p>
-<div class='highlight'><pre><span class='nx'>data</span> <span class='o'>-&gt;</span> <span class='nx'>reduce</span> <span class='o'>-&gt;</span> <span class='nx'>array</span> <span class='nx'>of</span> <span class='nx'>result</span> <span class='nx'>sets</span> <span class='o'>-&gt;</span> <span class='nx'>reduce</span> <span class='o'>-&gt;</span> <span class='nx'>array</span> <span class='nx'>of</span> <span class='nx'>result</span> <span class='nx'>sets</span> <span class='o'>-&gt;</span> <span class='nx'>reduce</span> <span class='o'>-&gt;</span> <span class='nx'>finalise</span>
-</pre>
-</div>
+
+<pre><code>data -&gt; reduce -&gt; array of result sets -&gt; reduce -&gt; array of result sets -&gt; reduce -&gt; finalise</code></pre>
+
 <p>The finalisation step flattens the returned resultsets as a set of <code>QueryResult</code> objects. The final result set is a union of each of the final result sets made unique by result path.</p>
 
 <p>In the case of <strong>filters</strong>, an additional reduce step is introduced into the path segment specifying the filter:</p>
-<div class='highlight'><pre><span class='nx'>data</span> <span class='o'>=</span> <span class='p'>{</span><span class='nx'>foo</span><span class='o'>:</span> <span class='p'>{</span><span class='nx'>bar</span><span class='o'>:</span> <span class='p'>{</span><span class='nx'>baz</span><span class='o'>:</span> <span class='s2'>&quot;str&quot;</span><span class='p'>,</span> <span class='nx'>bar</span><span class='o'>:</span> <span class='s2'>&quot;inner-bar&quot;</span><span class='p'>}}}</span>
-<span class='nx'>query</span> <span class='o'>=</span> <span class='s2'>&quot;/foo/[//baz == &#39;str&#39;]&quot;</span>
-</pre>
-</div>
+
+<pre><code>data = {foo: {bar: {baz: &quot;str&quot;, bar: &quot;inner-bar&quot;}}}
+query = &quot;/foo/[//baz == &#39;str&#39;]&quot;</code></pre>
+
 <p>In this case:</p>
 
 <ol>
@@ -1034,40 +1029,13 @@
 <p>Example execution flow:</p>
 <img src='https://img.skitch.com/20110511-f6t1iwt3jq4gxyd2hnk7fyfjdd.jpg' />
 <p><strong>Properties</strong> act like special keys on paths:</p>
-<div class='highlight'><pre><span class='nx'>data</span> <span class='o'>=</span> <span class='p'>{</span><span class='nx'>foo</span><span class='o'>:</span> <span class='p'>{</span><span class='nx'>bar</span><span class='o'>:</span> <span class='p'>{</span><span class='nx'>baz</span><span class='o'>:</span> <span class='s2'>&quot;str&quot;</span><span class='p'>,</span> <span class='nx'>bar</span><span class='o'>:</span> <span class='s2'>&quot;inner-bar&quot;</span><span class='p'>}}}</span>
-<span class='nx'>query</span> <span class='o'>=</span> <span class='s2'>&quot;/.size&quot;</span> <span class='c1'>// returns the number of keys on the root object</span>
-<span class='nx'>query</span> <span class='o'>=</span> <span class='s2'>&quot;//baz/.size&quot;</span> <span class='c1'>// returns the sizes of all keys named &quot;baz&quot;</span>
-</pre>
-</div>
+
+<pre><code>data = {foo: {bar: {baz: &quot;str&quot;, bar: &quot;inner-bar&quot;}}}
+query = &quot;/.size&quot; // returns the number of keys on the root object
+query = &quot;//baz/.size&quot; // returns the sizes of all keys named &quot;baz&quot;</code></pre>
+
 <p>There is no other special behaviour for properties - they simply act like key names.</p>
-</div> <!-- .section -->
-
-              <div class="section section-sections">
-                <div class="section-title">
-                  <h3>Sections</h3>
-                </div> <!-- .section-title -->
-                <div class="section-content">
-
-  <ul class="section-list">
+     </article>
     
-  </ul>
-              </div> <!-- .section-content -->
-            </div> <!-- .section -->
-
-      </div> <!-- #main -->
-      
-      <div id="footer">
-        <p><a href="http://github.com/danski/spah">Spah</a> v0.0.0 API documentation.</p>
-        <p>
-          
-            Last updated on July 04, 2011 at 20:01 UTC.
-          
-          Generated by <a href="http://pdoc.org">PDoc</a>.
-          Uses <a href="http://famfamfam.com/lab/icons/silk/" title="famfamfam.com: Silk Icons">Silk Icons</a> and portions of <a href="http://github.com/280north/aristo/tree/master" title="280north's aristo at master - GitHub">Aristo</a>.
-        </p>
-        
-      </div> <!-- #footer -->
-
-    </div> <!-- #page -->
   </body>
 </html>
