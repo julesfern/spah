@@ -96,17 +96,22 @@ Spah["classCreate"] = function(name, klassProps, instanceProps) {
   
   // Register on the Spah constant
   var nameNS = name.split(".");
-  var target = this;
+  var targetBrowser = this;
+  var targetCommonJS = this;
   for(var n=1; n<nameNS.length; n++) {
-    var pName = nameNS[n];
+    var browserName = nameNS[n];
+    var commonJSName = browserName.toLowerCase();
     if(n < nameNS.length-1) {
       // intermediary key
-      target[pName] = target[pName] || {};
-      target = target[pName];
+      targetBrowser[browserName] = targetBrowser[browserName] || {};
+      targetBrowser = targetBrowser[browserName];
+      targetCommonJS[commonJSName] = targetCommonJS[commonJSName] || {};
+      targetCommonJS = targetCommonJS[commonJSName]
     }
     else {
       // final key
-      target[pName] = klass;
+      targetBrowser[browserName] = klass;
+      targetCommonJS[commonJSName] = klass;
     }
   }
   // Return class
