@@ -121,9 +121,9 @@ namespace :docs do
       nav_html = "<ul>"
       nav_map.each do |opts|
         nav_html << "<li>"
-        nav_html << "<a href=\"#{opts[:href].gsub(/^\.\.\//, "")}\">" if opts[:href]
+        nav_html << (opts[:href] ? "<a href=\"#{opts[:href].gsub(/^\.\.\//, "")}\">" : "<a class=\"current\" href=\"#\">")
         nav_html << "#{opts[:title]}"
-        nav_html << "</a>" if opts[:href]
+        nav_html << "</a>"
         nav_html << "</li>"
       end
       nav_html << "</ul>"

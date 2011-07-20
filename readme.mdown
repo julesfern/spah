@@ -3,7 +3,7 @@ Spah: Stateful pages, not single pages.
 
 <img src="https://img.skitch.com/20110504-c79qr916mcwtnq4m63uqc3dibq.jpg" />
 
-Single-page web apps are a hit - and with good reason. The promise of lush, stateful web UI that hangs off your service's developer API is almost too good to ignore.
+Single-page web apps are a big deal - and with good reason. The promise of lush, stateful web UI that hangs off your service's developer API is too good to ignore.
 
 But why single page? Is it really important that your app sits on a single URL in the browser? No. The important thing that single-page apps give you is **state**. The ability to pull data into a page without destroying the existing in-browser state - and to keep your remote app nice, clean and resource-centric in the process. Single-pagedness is just a side-effect of the way in which we're currently achieving this.
 
@@ -17,29 +17,16 @@ Spah takes the best from both the single- and multi-page paradigms and lets you:
 - **Progressively enhance**. Once a user with a modern browser has loaded a page from your app, the single-page paradigm takes over and all new data may be loaded asynchronously, without destroying the in-browser state of your page. Users with older browsers - even those without Javascript enabled, if you've done it right - get to use your site synchronously.
 - **Keep it stateful.** Spah's job is to manage the state of your UI and ensure that the markup seen in the user's browser matches that state. The state contains everything in your UI, from lists of model objects through to user preferences and unsaved form content. You decide which bits of the state are hard-rendered as HTML and which bits are used to trigger more advanced client-side behaviours, while Spah syncs and updates the state on each call to the server.
 - **Avoid repetition.** Do all this with _zero_ code duplication between client and server. Spah solves the difficult problems of shared client/server templating and state management, leaving you to work on your app.
-- **Use other libraries.** Spah doesn't opinionate about client-side model frameworks or REST paradigms or how you authenticate with your API. Spah only cares about JSON, jQuery and having access to a Spah-compatible server. The Spah server libraries are not full-stack web frameworks, but libraries intended to be woven into your wider Node.js/Rails/Sinatra application stack. To be completely clear: Spah is code that manages the state of a UI in a complex web app, and nothing more. You bring your own app stack preferences to the table.
-
-TODO: Introduction for modules:
-- Overview: How it works
-- Spah core
-	- SpahQL
-	- Document runner
-	- Template handling
-- Spah client gets everything from core, plus:
-	- Link, form and navigation handling
-	- State reduction
-	- Event handlers
-	- History manager
-- Spah server gets everything from core, plus:
-	- Default states
-	- Blueprint compiler
-	- State expansion
-	
+- **Use other libraries.** Spah doesn't opinionate about client-side model frameworks or REST paradigms or how you authenticate with your API. Spah only cares about JSON, jQuery and having access to a Spah-compatible server. The Spah server libraries are not full-stack web frameworks, but libraries intended to be woven into your wider Node.js/Rails/Sinatra application stack. To be completely clear: Spah is code that manages the state of a UI in a complex web app, and nothing more. You bring your own app stack preferences to the table.	
 
 Contents
 ========
 
 [introduction]: #introduction
+[intro_anatomy_of_an_spa]: #anatomy_of_a_singlepage_web_app
+[intro_state]: #the_state
+[intro_anatomy_of_a_spah_app]: #anatomy_of_a_spah_web_app
+
 [server]: #the_server
 [client]: #the_client
 
@@ -71,12 +58,23 @@ Contents
 [force_synchronous]: #forcing_links_and_forms_to_load_synchronously
 [defaults]: #default_client_behaviour
 
-[app_expression_spec]: #appendix_spahql_expression_spec
-[app_execution_spec]: #appendix_spahql_query_execution_spec
-
 1. [Introduction][introduction]
+  * [Anatomy of a single-page web app][intro_anatomy_of_an_spa]
+  * [The state][intro_state]
+  * [Anatomy of a spah app][intro_anatomy_of_a_spah_app]
 2. [The server][server]
+  * TODO Document runner
+  * TODO Template handling
+  * TODO Blueprint compiler
+  * TODO State expansion
+  * TODO Default states
 3. [The client][client]
+  * TODO Document runner
+  * TODO Template handling
+  * TODO Event handling
+  * TODO Link, form and navigation handling
+  * TODO History management
+  * TODO State reduction
 4. [Querying the state with SpahQL][spahql] 
   * [Core concepts][spahql_concepts]
   * [Selection queries][selection_state_queries]
@@ -101,34 +99,55 @@ Contents
 11. TODO: [Eager client state changes][eager_state_changes] (mark parts of the tree as "expected to get new data" to trigger load notifications. automatically revert to previous state on load failure and dispatch failure event)
 12. TODO: [Examples: Example Node.js application][node_example]
 13. TODO: [Examples: Example Sinatra application][sinatra_example]
-14. [Appendix A: SpahQL expression spec][app_expression_spec]
-15. [Appendix B: SpahQL query execution spec][app_execution_spec]
 
 Introduction
 ============
 
-Spah itself is a client, written in Javascript, and a server application which may currently be either Node.js or Ruby-flavoured.
+Spah is a framework designed to permit the development of a specific class of web application - one in which the majority of URLs absolutely must be fetchable as a generic HTML document for purposes of indexing and scraping, while maintaining highly responsive, stateful behaviour in the browser. It is also assumed that you, the developer, wish for a happy life and therefore do not want to duplicate any code, anywhere.
 
-The central concept in Spah is the **state**. The state is essentially a JSON object describing everything about a user's UI - everything from the models objects shown in a list to the current navigation tab selected, from the contents of a particular form to whether or not the user opened the comment box yet. The state for this page might look something like:
+To be clear, Spah is _not_ a Rails/Django equivalent. Nor is it a Sproutcore or Cappucino equivalent. Spah has no model objects, validation helpers, database connection managers, or request routers. Spah doesn't care what you use to do your routing or your persistence. **All Spah cares about is delivering highly stateful pages - it is a view layer for your application, nothing more**.
 
-     {
-       "package": "Spah.js", // Currently viewing the Spah class
-       "file": {
-			name: "readme.mdown", // Got the readme.mdown file open
-			content: "Spah: Stateful pages, not single pages.\n...." // Full textdump of file
-		 }
-     }
+Spah is written entirely in Javascript, and designed to run in both the browser and via a Node.js server. A ruby version of the Spah server is also planned.
 
-Whenever the user clicks a link, submits a form or otherwise navigates within your site, Spah intervenes and, if possible, the navigation is halted and replaced with an asynchronous request to the server. Spah attaches the state to the request, and gets back a series of modifications. The Spah client then has a number of ways in which it can react to those changes.
+To best explain how Spah works, it's probably best to start by looking at some other patterns for building these desktop-class web apps in order to show the decisions that drove Spah's creation.
+
+Anatomy of a single-page web app
+--------------------------------
+
+###Figure 1: The most simple web app
+
+<img src="https://img.skitch.com/20110720-mnf4xun1n6gwf461edtp12jmjf.jpg" />
+
+We all recognise this. The server renders pages as they are requested and serves them in the body of a request. As far as the client is concerned, it's pulling static HTML. It has these qualities:
+
+* _Good_: Every page is indexable and scrapable in every possible state.
+* _Good_: Since the state of the page is handled exclusively by the server, state can be maintained as the user navigates between pages.
+* **Bad**: Since the state of the page is handled exclusively by the server, maintaining state requires the developer to wrangle highly complicated query strings.
+* **Bad**: The page is expected to load with all the content it could possibly need. Response times can suffer as a result.
+
+###Figure 2: Single-page apps (or: how we learned to stop worrying and tolerate hashbangs)
+
+<img src="https://img.skitch.com/20110504-73a3ftde7d731kbepxg2p7w1.jpg" />
+
+This approach yields the much-desired "desktop" class of application, and it's a tempting approach for any app that also provides a comprehensive JSON API. But, in adopting this approach, we've made some serious concessions:
+
+* _Good_: The whole UI runs within a single page, so you can have multiple complex stateful UI elements that retain their state as the rest of the page is updated.
+* _Good_: The whole UI runs within the browser, so you've got templating handled in the client. No duplication of template code.
+* _Bad_: It needs a browser to run. You can't deliver markup for non-browser requests without creating an HTML rendering chain on the server.
+* _Bad_: We're not indexable any more. Your app only has one URL, and it serves boilerplate contentless markup. If you decide to make your URLs server-renderable, then the spectre of code duplication returns.
+* _Bad_: Response times suffer, but not because of server inefficiencies such as those seen in Figure 1. Instead, we introduce multiple HTTP turnarounds to start the app - one to load the page, several more to populate it with content.
+
+The State
+---------
+
+Anatomy of a Spah web app
+-------------------------
+
 
 The server
 ==========
 A Spah server is assumed to be a resource-centric Node.js or Sinatra application. As always, all validation and data
 persistence is handled on the server side by your app's models. All routing will be in your app's router, and all request logic in its controllers. Where a Spah app differs is in the view layer.
-
-*Figure 1: A crap approach to single-page apps*
-
-<img src="https://img.skitch.com/20110504-73a3ftde7d731kbepxg2p7w1.jpg" />
 
 Instead of hiding away template logic in server-side code, template logic is moved to a place where both the client AND the server have access to it - [the document itself][document_logic].
 
@@ -146,8 +165,6 @@ For partials, Spah uses [Mustache templates][templating]. All <code>.mustache</c
 and made available to the rendering chain on both the client and server. Spah automatically injects the templates into your HTML layout using
 script tags:
 
-    language:html
-    
     <script type="text/mustache" id="views/my/partial">
       {{name}}
     </script>
@@ -490,8 +507,6 @@ Hide or show an element
 
 Show/hide of an element is achieved by appending <code>display: none;</code> to the element's <code>style</code> attribute if it should be hidden.
 
-    language:html
-    
     <form class="add-tags" data-show-if="/user-authenticated">
       This form will only show if the query "/user-authenticated" returns true
     </form>
@@ -506,7 +521,6 @@ Add or remove element classes
 -----------------------------
 
 Use the <code>data-class-[classname]-if</code> or <code>-unless</code> attribute to specify that a specific class should be appended to the element's <code>class</code> attribute.
-    language:html
     
     <li class="item" data-class-current-if="/items[0]/important">
       This list item will have the class "important" if the first item in the 
@@ -518,8 +532,6 @@ Set element ID
 
 Use the <code>data-id-[id]-if</code> or <code>-unless</code> to specify that an element should be given a new <code>id</code> under certain circumstances. If the condition causes Spah to write the ID on an element, Spah will automatically remove the ID from any other elements that previously possessed it.
 
-    language:html
-    
     <li class="item" data-id-current_item-if="/items.last/id == 3">
       This list item will have the id "current_item" if the last object 
       in the items array has the property "id" with value 3.
@@ -530,8 +542,6 @@ Stash and unstash element content
 
 Stashing content allows you to render semantically-null empty elements into your document, with their content stowed in a data attribute for later use. Stashing only occurs if there is no content already stashed on the element - thus stashed content may be used for state-toggling. See [example][logic_example].
 
-    language:html
-    
     <div  class="new-message-notification" 
           data-stash-unless="/messages[/unread]/.size > 0">
 
@@ -554,8 +564,6 @@ Populate element from a template
 
 Spah can use your shared [Mustache templates][templating] to render state data into a containing element. On the client side, the Spah client will automatically add a [jQuery responder][responders] to the path referenced in the <code>data-populate-with</code> attribute, ensuring that the populated content is updated when the state is modified.
 
-    language:html
-    
     <ul class="users" data-populate-if="/users/.length > 0" 
                       data-populate-with="/users" 
                       data-populate-template="/views/users/single">
@@ -622,8 +630,6 @@ Forcing links and forms to load synchronously
 
 To prevent Spah from adding asynchronous behaviour, add the <code>data-async="false"</code> attribute to the link or form element:
 
-    language:html
-    
     <a href="/login" data-async="false">Log in</a>
     
     <form action="/login" method="POST" data-async="false">
@@ -641,274 +647,3 @@ Example Node application
 
 Example Sinatra application
 ===========================
-
-Appendix: SpahQL Expression spec
-================================
-
-Syntax:
-
-    // ATOM_FOO = "foo" - token matches an exact string
-    // ATOM_BAR = /.../ - token matches a pattern
-    // TOKEN_FOOBAR = ATOM_FOO[,ATOM_BAR] - atom_foo optionally followed by atom bar
-    // TOKEN_FOOBARBAR = (ATOM_FOO[,ATOM_BAR])+ - one or more repetitions of the group (atom_foo optionally followed by atom bar)
-
-State machine:
-
-    // The expression parser is assumed to be a tokenizer. We will define the following states:
-    STATE_NULL = null
-    STATE_PATH_QUERY = "path"
-    STATE_KEY_NAME = "key"
-    STATE_PROPERTY = "prop"
-    STATE_FILTER_QUERY = "filt"
-    STATE_STRING_LITERAL = "str"
-    STATE_NUMERIC_LITERAL = "num"
-    STATE_BOOLEAN_LITERAL = "bool"
-    STATE_SET_LITERAL = "set"
-    
-    // We will also assume that the tokenizer maintains a state stack - every time
-    // a state is entered, it is pushed onto the STATE_STACK. When the state exits,
-    // the STATE_STACK is popped and control is returned to the previous state.
-    
-    // The state machine begins in the null state. An empty state stack means you are
-    // in the null state.
-
-Tokens and compiler behaviour:
-
-<table>
-  <tr style="background-color: #333; color: #FFF">
-    <th colspan="3">Basic literals</th>
-  </tr>
-  <tr style="background-color: #CCC;">
-    <th>Symbol name</th>
-    <th>Symbol value</th>
-    <th>Compiler behaviour</th>
-  </tr>
-  <tr style="background-color: #EEE">
-    <td>ATOM_QUOTE</td>
-    <td><code>/("|')/</code></td>
-    <td>Enters <code>STATE_STRING_LITERAL</code>. In this state, all special atoms and tokens are ignored and simply appended to the current token until the closing quote is encountered. The string state may be entered at any point.</td>
-  </tr>
-  <tr>
-    <td>ATOM_ESCAPE</td>
-    <td><code>"\"</code></td>
-    <td>Only legal in <code>STATE_STRING_LITERAL</code>. Causes the compiler to treat the next character as an ordinary character within a string, appending it to the token without exiting the string state.</td>
-  </tr>
-  <tr style="background-color: #EEE">
-    <td>TOKEN_STRING_LITERAL</td>
-    <td><code>/(ATOM_QUOTE).*($1)/</code></td>
-    <td>A complete string literal, wrapped in identical closing quotes. This token is legal in the <code>null</code> state and within the <code>STATE_FILTER_QUERY</code> and <code>STATE_SET_LITERAL</code> state.</td>
-  </tr>
-  <tr>
-    <td>TOKEN_NUMERIC_LITERAL</td>
-    <td><code>/(\d)+?(\.(\d+))/</code></td>
-    <td>An integer or floating-point numeric literal. The value is ascertained using the runtime environment's <code>parseFloat</code> function. Legal in the <code>null</code> state and in the <code>STATE_SET_LITERAL</code> state. Encountering a numeric character in either of these states enters the <code>STATE_NUMERIC_LITERAL</code> state, which terminates upon encountering a non-numeric character or a second period character.</td>
-  </tr>
-  <tr style="background-color: #EEE">
-    <td>TOKEN_BOOLEAN_LITERAL</td>
-    <td><code>/true|false/</code></td>
-    <td>An alias for any boolean literal.</td>
-  </tr>
-  <tr>
-    <td>TOKEN_PRIMITIVE_LITERAL</td>
-    <td><code>(TOKEN_STRING_LITERAL|TOKEN_NUMERIC_LITERAL|TOKEN_BOOLEAN_LITERAL)</code></td>
-    <td>An alias for any string or numeric literal.</td>
-  </tr>
-</table>
-
-<table>
-  <tr style="background-color: #333; color: #FFF">
-    <th colspan="3">Set literals</th>
-  </tr>
-  <tr style="background-color: #CCC;">
-    <th>Symbol name</th>
-    <th>Symbol value</th>
-    <th>Compiler behaviour</th>
-  </tr>
-  <tr style="background-color: #EEE">
-    <td>ATOM_SET_START</td>
-    <td><code>"{"</code></td>
-    <td>Announces the start of a set literal. This is legal in the <code>null</code> state only. The parser discriminates between this character and any comparison operators that include this character. Enters the <code>STATE_SET_LITERAL</code> state.</td>
-  </tr>
-  <tr>
-    <td>ATOM_SET_END</td>
-    <td><code>"}"</code></td>
-    <td>Exits the <code>STATE_SET_LITERAL</code> state. Only valid in this state.</td>
-  </tr>
-  <tr style="background-color: #EEE">
-    <td>ATOM_SET_DELIMITER</td>
-    <td><code>","</code></td>
-    <td>When encountered in the <code>STATE_SET_LITERAL</code> state, prepares the parser to append a new entry to the set. Only legal in the <code>STATE_SET_LITERAL</code> state. If the separator is immediately followed by  <code>ATOM_SET_END</code>, a compiler error is thrown.</td>
-  </tr>
-  <tr>
-    <td>ATOM_SET_RANGE_DELIMITER</td>
-    <td><code>".."</code></td>
-    <td>Declares a range between the preceding literal and the following literal. The preceding literal must be the first literal in the set, and the following literal must be the last literal in the set. Both literals must be of the same primitive type. This token does not alter the state, allowing the parser to remain in <code>STATE_SET_LITERAL</code>, but it is expected to set flags preventing the parser from breaking the above rules.</td>
-  </tr>
-  <tr style="background-color: #EEE">
-    <td>TOKEN_SET_RANGE_LITERAL_STRING</td>
-    <td><code>ATOM_SET_START,TOKEN_STRING_LITERAL,ATOM_SET_RANGE_DELIMITER,TOKEN_STRING_LITERAL,ATOM_SET_END</code></td>
-    <td>An alias for a valid string range e.g. <code>{"a".."z"}</code></td>
-  </tr>
-  <tr>
-    <td>TOKEN_SET_RANGE_LITERAL_NUMERIC</td>
-    <td><code>ATOM_SET_START,TOKEN_NUMERIC_LITERAL,ATOM_SET_RANGE_DELIMITER,TOKEN_NUMERIC_LITERAL,ATOM_SET_END</code></td>
-    <td></td>
-  </tr>
-  <tr style="background-color: #EEE">
-    <td>TOKEN_SET_LITERAL_MIXED</td>
-    <td><code>ATOM_SET_START,((TOKEN_PRIMITIVE_LITERAL|TOKEN_SELECTION_QUERY)[,ATOM_SET_DELIMITER,(TOKEN_PRIMITIVE_LITERAL|TOKEN_SELECTION_QUERY)]*),ATOM_SET_END</code></td>
-    <td></td>
-  </tr>
-  <tr>
-    <td>TOKEN_SET_LITERAL</td>
-    <td><code>TOKEN_SET_RANGE_LITERAL_STRING|TOKEN_SET_RANGE_LITERAL_NUMERIC|TOKEN_SET_LITERAL_MIXED</code></td>
-    <td>An alias for any valid set literal</td>
-  </tr>
-</table>
-
-<table>
-  <tr style="background-color: #333; color: #FFF">
-    <th colspan="3">Path queries</th>
-  </tr>
-  <tr style="background-color: #CCC;">
-    <th>Symbol name</th>
-    <th>Symbol value</th>
-    <th>Compiler behaviour</th>
-  </tr>
-  <tr style="background-color: #EEE">
-    <td>ATOM_PATH_DELIMITER</td>
-    <td><code>/\/{1,2}/</code></td>
-    <td>Describes a valid join between two paths. One slash instructs the runner to execute this part of the query at the top-level of the scope object only, while two slashes instructs the runner to recurse down the scope to find all matching keys. When encountered while the parser is already in <code>STATE_PATH_QUERY</code>, the atom instructs the parser to close the current path fragment and to begin a new one.</td>
-  </tr>
-  <tr>
-    <td>ATOM_PATH_ROOT</td>
-    <td><code>"$"</code></td>
-    <td>Forces the subsequent path query to act on the root context, regardless of the current query's execution scope. Must be followed by <code>ATOM_PATH_DELIMITER</code> or else a compiler error will be thrown.</td>
-  </tr>
-  <tr style="background-color: #EEE">
-    <td>TOKEN_PATH_START</td>
-    <td><code>[ATOM_PATH_ROOT,]ATOM_PATH_DELIMITER</code></td>
-    <td>Describes a valid opener for a path query. Encountering this atom whilst in the <code>null</code> or <code>STATE_SET_LITERAL</code> states will throw the parser into the <code>STATE_PATH_QUERY</code> state.</td>
-  </tr>
-  <tr>
-    <td>TOKEN_PATH_KEYNAME</td>
-    <td><code>/\*|[a-zA-Z0-9-_]*/</code></td>
-    <td>A wildcard <code>*</code> or an optional alphanumeric path. Underscores and dashes are also supported in key names.</td>
-  </tr>
-  <tr style="background-color: #EEE">
-    <td>ATOM_FILTER_QUERY_START</td>
-    <td><code>"["</code></td>
-    <td>Instructs the parser to enter the <code>STATE_FILTER_QUERY</code> state within the current path fragment. During the <code>STATE_FILTER_QUERY</code> state, the parser reads ahead until the matching <code>ATOM_FILTER_QUERY_END</code> bracket is found. The collected token is then parsed as a separate query and attached to the current path fragment. The tokenizer should then resume at the character immediately following the <code>ATOM_FILTER_QUERY_END</code> token. **Note this means that special atoms and tokens encountered in the <code>STATE_FILTER_QUERY</code> state are ignored by the current parser context.**</td>
-  </tr>
-  <tr>
-    <td>ATOM_FILTER_QUERY_END</td>
-    <td><code>"]"</code></td>
-    <td>Causes the parser to exit the <code>STATE_FILTER_QUERY</code> state and return control to the previous state. Only allowed within <code>STATE_FILTER_QUERY</code>. Encountering this token in any other state (except <code>STATE_STRING_LITERAL</code>) should cause a compiler error.</td>
-  </tr>
-  <tr style="background-color: #EEE">
-    <td>TOKEN_PATH_PROPERTY</td>
-    <td><code>/\.\w+/</code></td>
-    <td>Instructs the parser to attach a property modifier to the current path component. Only allowable in <code>STATE_PATH_QUERY</code>.</td>
-  </tr>
-  <tr>
-    <td>TOKEN_FILTER_QUERY</td>
-    <td><code>ATOM_FILTER_QUERY_START,TOKEN_ASSERTION_QUERY,ATOM_FILTER_QUERY_END</code></td>
-    <td>An alias for any valid filter query token.</td>
-  </tr>
-  <tr style="background-color: #EEE">
-    <td>TOKEN_PATH_COMPONENT</td>
-    <td><code>(TOKEN_PATH_PROPERTY|[TOKEN_PATH_KEY][,TOKEN_FILTER_QUERY]*)</code></td>
-    <td>An alias for any valid path component. A property, or a key followed by any number of filter queries.</td>
-  </tr>
-  <tr>
-    <td>TOKEN_SELECTION_QUERY</td>
-    <td><code>TOKEN_PATH_START[,TOKEN_PATH_COMPONENT[,ATOM_PATH_DELIMITER,TOKEN_PATH_COMPONENT]+]*</code></td>
-    <td>An alias for any valid selection query. A path opener, followed by any number of path components separated with the <code>ATOM_PATH_DELIMITER</code>.</td>
-  </tr>
-</table>
-
-<table>
-  <tr style="background-color: #333; color: #FFF">
-    <th colspan="3">Comparisons and assertions</th>
-  </tr>
-  <tr style="background-color: #CCC;">
-    <th>Symbol name</th>
-    <th>Symbol value</th>
-    <th>Compiler behaviour</th>
-  </tr>
-  <tr style="background-color: #EEE">
-    <td>TOKEN_SET_COMPARISON_OPERATOR</td>
-    <td><code>/(\}[!&gt;&lt;]{1}\{)|([&lt;&gt;~!=]=)/</code></td>
-    <td>Any of the set comparison operators detailed in [Comparison operators][comparison_operators]. Only allowable in the <code>null</code> state and the <code>STATE_PATH_QUERY</code> state. Encountering this token in the <code>STATE_PATH_QUERY</code> state will cause the path query to exit.</td>
-  </tr>
-  <tr>
-    <td>TOKEN_ASSERTION_QUERY</td>
-    <td><code>(TOKEN_SELECTION_QUERY|TOKEN_SET_LITERAL)[, TOKEN_COMPARISON_OPERATOR, (TOKEN_SELECTION_QUERY|TOKEN_SET_LITERAL)]</code></td>
-    <td>An alias for any valid assertion query. At least one selection query or set literal optionally followed by a comparison operator and another set or selection query.</td>
-  </tr>
-</table>
-
-Appendix: SpahQL query execution spec
-=====================================
-
-SpahQL selection queries are, fundamentally, reductive. At the start of execution, a selection query is given the root data context against which it will run. As the execution moves between the path segments, the data is reduced (and possibly forked) before being passed to the next path segment:
-
-    data = {foo: {bar: {baz: "str"}}}
-    query = "/foo/bar/baz"
-
-At each point in the above query:
-
-1. The root <code>data</code> object is handed to the first path component, which selects the key <code>foo</code>.
-2. The resulting data <code>{bar: {baz: "str"}}</code> is handed to the next path component which selects the key <code>bar</code>
-3. The resulting data <code>{baz: "str"}</code> is handed to the final path segment, which selects the key <code>baz</code>
-4. The key "baz" is a string with value "str". This is returned as a result set with one item.
-
-If at any point a query runs out of data, the execution is aborted and an empty result set is returned:
-
-    data = {foo: {bar: {baz: "str"}}}
-    query = "/foo/NOTBAR/baz"
-
-In this case, the query exits and returns <code>[]</code> when it is unable to find any matching data for the <code>NOTBAR</code> portion of the query.
-
-Recursive paths force the query runner to fork the execution:
-
-    data = {foo: {bar: {baz: "str", bar: "inner-bar"}}}
-    query = "/foo//bar/baz"
-
-In this instance:
-
-1. The root <code>data</code> object is handed to the first path component, which selects the key <code>foo</code>.
-2. The remaining data <code>{bar: {baz: "str", bar: "inner-bar"}}</code> is handed to the next path query, which **recursively** searches for the key <code>bar</code>.
-3. The recursive search returns results from two paths: <code>/foo/bar</code>, which contains a hash, and <code>/foo/bar/bar</code> which is a value within a sub-hash.
-4. The two result sets are handed down to the <code>baz</code> portion of the query.
-5. The <code>baz</code> key appears in only one of the previous data constructs, and this result is added to the final result set.
-
-And so we can see that the overall progression is:
-
-    data -> reduce -> array of result sets -> reduce -> array of result sets -> reduce -> finalise
-
-The finalisation step flattens the returned resultsets as a set of <code>QueryResult</code> objects. The final result set is a union of each of the final result sets made unique by result path.
-
-In the case of **filters**, an additional reduce step is introduced into the path segment specifying the filter:
-
-    data = {foo: {bar: {baz: "str", bar: "inner-bar"}}}
-    query = "/foo/[//baz == 'str']"
-
-In this case:
-
-1. The root <code>data</code> object is handed to the first path segment, which retrieves the key <code>foo</code>.
-2. The resulting data is handed to the next path segment, which specifies no key - therefore all keys are acceptable.
-3. All keys in the resulting data have the filter query <code>//baz =='str'</code> run against their values. Those keys for which the filter query returns <code>true</code> are added to the result set for this path segment.
-4. The query ends - the results (all values defined directly on <code>/foo</code> that may be recursed to find a key <code>baz</code> with value <code>str</code>) are flattened and returned as the query result.
-
-Example execution flow:
-
-<img src="https://img.skitch.com/20110511-f6t1iwt3jq4gxyd2hnk7fyfjdd.jpg" />
-
-**Properties** act like special keys on paths:
-
-    data = {foo: {bar: {baz: "str", bar: "inner-bar"}}}
-    query = "/.size" // returns the number of keys on the root object
-    query = "//baz/.size" // returns the sizes of all keys named "baz"
-
-There is no other special behaviour for properties - they simply act like key names.
