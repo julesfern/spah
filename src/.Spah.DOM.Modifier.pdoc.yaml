@@ -1,0 +1,11 @@
+---
+id: "Spah.DOM.Modifier"
+parent_id: "Spah.DOM"
+type: class
+line_number: 8
+description: |
+  A generic superclass for other Modifiers to extend. Spah includes a number of built-in
+  modifiers which are part of the default set, but you can create your own for use on both the
+  client and server.
+
+file: /Users/danski/Sites/spah/src/Spah.DOM.Modifier.js

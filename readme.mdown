@@ -46,7 +46,6 @@ Contents
 [logic_chaining]: #using_multiple_operations_on_a_single_element
 [logic_example]: #advanced_document_logic_example
 
-[ruby_helpers]: #you_can_still_write_your_markup_with_ruby
 [templating]: #templating_with_mustache
 [extending_templates]: #extending_the_template_helpers
 
@@ -90,15 +89,15 @@ Contents
   * [Using multiple operations on a single element][logic_chaining]
   * TODO: Applying document logic with css selectors ({"a.loadsTickets": {"stash-if": "query"}})
   * [Advanced example][logic_example]
+  * TODO: Extending Spah with your own document modifiers
 6. TODO: [Templating with Mustache][templating]
   * TODO: Extending the template helpers
-7. TODO: [Building your markup with ruby][ruby_helpers] (erb, haml, templating, url builders)
-8. TODO: [Reacting to state changes with Javascript][responders]
-9. [Forcing links and forms to load synchronously][force_synchronous]
-10. TODO: [Default client behaviours][defaults] (automatically update doc title from /title path, automatically add async behaviour, automatically manage history)
-11. TODO: [Eager client state changes][eager_state_changes] (mark parts of the tree as "expected to get new data" to trigger load notifications. automatically revert to previous state on load failure and dispatch failure event)
-12. TODO: [Examples: Example Node.js application][node_example]
-13. TODO: [Examples: Example Sinatra application][sinatra_example]
+7. TODO: [Reacting to state changes with Javascript][responders]
+8. [Forcing links and forms to load synchronously][force_synchronous]
+9. TODO: [Default client behaviours][defaults] (automatically update doc title from /title path, automatically add async behaviour, automatically manage history)
+10. TODO: [Eager client state changes][eager_state_changes] (mark parts of the tree as "expected to get new data" to trigger load notifications. automatically revert to previous state on load failure and dispatch failure event)
+11. TODO: [Examples: Example Node.js application][node_example]
+12. TODO: [Examples: Example Sinatra application][sinatra_example]
 
 Introduction
 ============
@@ -618,9 +617,6 @@ Because stash operations run before populate operations, the following chain of 
 
 Templating with Mustache
 ========================
-
-You can still write your markup with Ruby
-=========================================
 
 Responding to state changes with Javascript
 ===========================================

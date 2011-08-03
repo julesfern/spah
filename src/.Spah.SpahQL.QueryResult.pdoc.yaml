@@ -240,7 +240,7 @@ file: /Users/danski/Sites/spah/src/Spah.SpahQL.QueryResult.js
 id: "Spah.SpahQL.QueryResult#triggerModificationCallbacks"
 parent_id: "Spah.SpahQL.QueryResult"
 type: instance method
-line_number: 254
+line_number: 253
 description: |
   Used to trigger callbacks following a modification on this result or on a subkey of this object.
   You probably don't want to use this in your app code.
@@ -255,7 +255,7 @@ file: /Users/danski/Sites/spah/src/Spah.SpahQL.QueryResult.js
 id: "Spah.SpahQL.QueryResult#modified"
 parent_id: "Spah.SpahQL.QueryResult"
 type: instance method
-line_number: 278
+line_number: 277
 description: |
   - pathOrCallback (Function, String): The path relative to this result to which you want to bind the listener.
   - callback (Function): If pathOrCallback is given as a string, this second argument should be the callback function.

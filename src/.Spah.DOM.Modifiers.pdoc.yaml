@@ -1,0 +1,147 @@
+---
+id: "Spah.DOM.Modifiers"
+parent_id: "Spah.DOM"
+type: class
+line_number: 11
+description: |
+  An instance of <code>Modifiers</code> exists on every instance of <code>Spah.DOM.Document</code>.
+  The <code>Modifiers</code> instance acts as a router for applying helper code such as stashing, classnames and
+  any other document modification to elements.
+  
+  You may add your own helpers to Spah, or disable helpers that you don't need. See #add and #remove for details.
+  Each instance of <code>Modifiers</code> registers the default helpers on creation.
+
+file: /Users/danski/Sites/spah/src/Spah.DOM.Modifiers.js
+
+---
+id: "Spah.DOM.Modifiers#modules"
+parent_id: "Spah.DOM.Modifiers"
+type: instance property
+line_number: 27
+description: |
+  The list of registered modifications.
+
+signatures:
+ -
+  signature: "Spah.DOM.Modifiers#modules"
+  return_value: "Array"
+file: /Users/danski/Sites/spah/src/Spah.DOM.Modifiers.js
+
+---
+id: "new Spah.DOM.Modifiers"
+parent_id: "Spah.DOM.Modifiers"
+type: constructor
+line_number: 35
+description: |
+  Initialises a new <code>Modifiers</code> router for use on a document, with the default helpers
+  already registered. See #defaults for details of the default helpers.
+
+signatures:
+ -
+  signature: "new Spah.DOM.Modifiers()"
+file: /Users/danski/Sites/spah/src/Spah.DOM.Modifiers.js
+
+---
+id: "Spah.DOM.Modifiers#reset"
+parent_id: "Spah.DOM.Modifiers"
+type: instance method
+line_number: 45
+description: |
+  Removes all registered modifiers.
+
+signatures:
+ -
+  signature: "Spah.DOM.Modifiers#reset()"
+  return_value: "void"
+file: /Users/danski/Sites/spah/src/Spah.DOM.Modifiers.js
+
+---
+id: "Spah.DOM.Modifiers#appendDefaults"
+parent_id: "Spah.DOM.Modifiers"
+type: instance method
+line_number: 55
+description: |
+  Appends the default modifiers (show, class, id, stash, populate) to the current list of modifiers.
+  If any of the defaults are already registered, they will be omitted in this step.
+
+signatures:
+ -
+  signature: "Spah.DOM.Modifiers#appendDefaults()"
+  return_value: "void"
+file: /Users/danski/Sites/spah/src/Spah.DOM.Modifiers.js
+
+---
+id: "Spah.DOM.Modifiers#add"
+parent_id: "Spah.DOM.Modifiers"
+type: instance method
+line_number: 71
+description: |
+  The interface requires your module to contain the instance methods:
+  
+  - **actionName()** Returns the action name for this module. This is the attribute you want your modifier to respond to - for instance, the element ID modifier is interested in attributes like "data-id-foo-if", and therefore the action name is "id".
+  - **up(element, state, flags)** Runs the modification forwards. Used when the associated assertion flips from false to true for _if_ assertions and when the associated assertion flips from true to false for _unless_ assertions. The method will receive a jQuery containing the element, the state object and any flags. Flags are derived from the attribute - if we use the attribute <code>data-class-foo-bar-if</code> the actionName will be "class" and the flags will be "foo-bar". The up and down methods are expected to interpret the flags as appropriate.
+  - **down(element, state, flags)** Runs the modification backwards. Called when the associated assertion flips from true to false for _if_ assertions and when the associated assertion flips from false to true for _unless_ assertions. Receives the same arguments as <code>up</code>
+  
+  An instance of your modifier class will be created for each document that requires it, so you may feel free to use state in the modifier instance.
+
+signatures:
+ -
+  signature: "Spah.DOM.Modifiers#add(module)"
+  return_value: "Boolean"
+arguments:
+ -
+  name: moduleKlass
+  types: [Spah.DOM.Modifier]
+  description: >
+    The modifier object to be registered. Expected to implement the modifier interface.
+
+file: /Users/danski/Sites/spah/src/Spah.DOM.Modifiers.js
+
+---
+id: "Spah.DOM.Modifiers#validate"
+parent_id: "Spah.DOM.Modifiers"
+type: instance method
+line_number: 92
+description: |
+  module (Spah.DOM.Modifier): The object to be validated against the modifier interface.
+  
+  Validates an object as being compatible with the modifier interface. Called against any modules
+  before they are added using the #add method.
+
+signatures:
+ -
+  signature: "Spah.DOM.Modifiers#validate(module)"
+  return_value: "Boolean"
+file: /Users/danski/Sites/spah/src/Spah.DOM.Modifiers.js
+
+---
+id: "Spah.DOM.Modifiers#indexOf"
+parent_id: "Spah.DOM.Modifiers"
+type: instance method
+line_number: 117
+description: |
+  module (Spah.DOM.Modifier): The modifier instance to detect on this modifier list
+  
+  Returns the found index of the given module, or -1 if it is not found.
+
+signatures:
+ -
+  signature: "Spah.DOM.Modifiers#indexOf(module)"
+  return_value: "Number"
+file: /Users/danski/Sites/spah/src/Spah.DOM.Modifiers.js
+
+---
+id: "Spah.DOM.Modifiers#remove"
+parent_id: "Spah.DOM.Modifiers"
+type: instance method
+line_number: 127
+description: |
+  module (Spah.DOM.Modifier): The modifier instance to deregister from this modifier list
+  
+  Deregisters a modifier from this list by removing any instances of the class passed in the first argument.
+
+signatures:
+ -
+  signature: "Spah.DOM.Modifiers#remove(module)"
+  return_value: "void"
+file: /Users/danski/Sites/spah/src/Spah.DOM.Modifiers.js

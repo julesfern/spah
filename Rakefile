@@ -21,7 +21,7 @@ end
 require 'rake'
 
 task :docs do
-  puts "Generating src docs using PDOC and prose docs using Jekyll."
+  puts "Generating src docs using PDOC and prose docs using Nav.js"
   Rake::Task["docs:src"].invoke
   Rake::Task["docs:prose"].invoke
 end

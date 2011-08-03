@@ -88,9 +88,7 @@ Spah["classCreate"] = function(name, klassProps, instanceProps) {
     klass[k] = klassProps[k];
   }
   // Make the instance methods
-  for(var i in instanceProps) {
-    klass.prototype[i] = instanceProps[i];
-  }
+  klass.prototype = instanceProps;
   // Default constructor
   klass.prototype.init = klass.prototype.init || function() {};
   

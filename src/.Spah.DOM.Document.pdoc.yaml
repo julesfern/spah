@@ -1,0 +1,25 @@
+---
+id: "Spah.DOM.Document"
+parent_id: "Spah.DOM"
+type: class
+line_number: 9
+description: |
+  Wraps behaviour for any HTML document - either the current loaded document on the client-side, or a Blueprint
+  document on the server side. Provides behaviour for running document modifiers when the SpahQL assertion
+  associated with an element flips between true and false. Also stores the results of each assertion on each
+  run-through so that modifiers may be triggered or left alone, as appropriate.
+
+file: /Users/danski/Sites/spah/src/Spah.DOM.Document.js
+
+---
+id: "new Spah.DOM.Document"
+parent_id: "Spah.DOM.Document"
+type: constructor
+line_number: 23
+description: |
+
+
+signatures:
+ -
+  signature: "new Spah.DOM.Document(jQ, jQDocument)"
+file: /Users/danski/Sites/spah/src/Spah.DOM.Document.js
