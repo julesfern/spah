@@ -18,6 +18,9 @@ catch(e) {
 }
 
 require("Spah.js");
+
+// SpahQL
+
 require("Spah.SpahQL.js");
 require("Spah.SpahQL.Callbacks.js");
 require("Spah.SpahQL.Errors.js");
@@ -39,6 +42,12 @@ require("Spah.SpahQL.Token.FilterQuery.js");
 require("Spah.SpahQL.Token.PathComponent.js");
 require("Spah.SpahQL.Token.SelectionQuery.js");
 require("Spah.SpahQL.Token.KeyName.js");
+
+// DOM runner
+
+require("Spah.DOM.Document.js");
+require("Spah.DOM.Modifier.js");
+require("Spah.DOM.Modifiers.js");
 
 process.chdir(__dirname);
 reporter.run(['.']);

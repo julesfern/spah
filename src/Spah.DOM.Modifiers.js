@@ -44,7 +44,7 @@ Spah.classCreate("Spah.DOM.Modifiers", {
    **/
   "reset": function() {
     this.modules = [];
-  }
+  },
   
   /** 
    * Spah.DOM.Modifiers#appendDefaults() -> void
@@ -64,16 +64,7 @@ Spah.classCreate("Spah.DOM.Modifiers", {
    * each containing the modifier instance to be triggered and the condition against which it will fire.
    **/
   "modifierChainForElement": function(elem) {
-    var attrs = elem.attributes;
-    if(attrs.length == 0) return;
-    var modElements = [];
-    for(var i=0; i < attrs.length; i++) {
-      var aName = attrs.item(i).nodeName;
-      if(aName.indexOf("data") == 0 && ((aName.indexOf("-if") == aName.length-3) || (aName.indexOf("-unless") == aName.length-7))) {
-        // Found a Spah attribute
-        
-      }
-    }
+    
   },
   
   /**
@@ -82,7 +73,7 @@ Spah.classCreate("Spah.DOM.Modifiers", {
    *
    * The interface requires your module to contain the instance methods:
    *
-   * - **actionName()** Returns the action name for this module. This is the attribute you want your modifier to respond to - for instance, the element ID modifier is interested in attributes like "data-id-foo-if", and therefore the action name is "id".
+   * - **actionName(element)** Returns the action name for this module. This is the attribute you want your modifier to respond to - for instance, the element ID modifier is interested in attributes like "data-id-foo-if", and therefore the action name is "id". Receives a jQuery containing the element in question as the only argument.
    * - **up(element, state, flags)** Runs the modification forwards. Used when the associated assertion flips from false to true for _if_ assertions and when the associated assertion flips from true to false for _unless_ assertions. The method will receive a jQuery containing the element, the state object and any flags. Flags are derived from the attribute - if we use the attribute <code>data-class-foo-bar-if</code> the actionName will be "class" and the flags will be "foo-bar". The up and down methods are expected to interpret the flags as appropriate.
    * - **down(element, state, flags)** Runs the modification backwards. Called when the associated assertion flips from true to false for _if_ assertions and when the associated assertion flips from false to true for _unless_ assertions. Receives the same arguments as <code>up</code>
    *
@@ -90,42 +81,14 @@ Spah.classCreate("Spah.DOM.Modifiers", {
    **/
   "add": function(module) {
     if(this.indexOf(module) < 0) {
-      if(this.validate(module)) {
-        // Not registered and valid to be registered
-        this.modules.push(module);
-        return true;
-      }
+      // Not registered
+      this.modules.push(module);
+      return true;
     }
     else {
       // Already registered
       return false;
     }
-  },
-  
-  /**
-   * Spah.DOM.Modifiers#validate(module) -> Boolean
-   * module (Spah.DOM.Modifier): The object to be validated against the modifier interface.
-   * 
-   * Validates an object as being compatible with the modifier interface. Called against any modules
-   * before they are added using the #add method.
-   **/
-  "validate": function(module) {
-    var klassMethods = [];
-    var instanceMethods = ["actionName", "up", "down"];
-
-    for(var i=0; i<klassMethods.length; i++) {
-      if(typeof module[klassMethods[i]] != "function") {
-        throw new Spah.DOM.Errors.InvalidModifierError("Module does not conform to the expected class method interface - should implement ::"+klassMethods[i]+". See documentation for Spah.DOM.Modifiers#add for more information.");
-        return false;
-      }
-    }
-    for(var j=0; j<instanceMethods.length; j++) {
-      if(typeof module.prototype[instanceMethods[j]] != "function")  {
-        throw new Spah.DOM.Errors.InvalidModifierError("Module does not conform to the expected instance method interface - should implement #"+instanceMethods[i]+". See documentation for Spah.DOM.Modifiers#add for more information.");
-        return false;
-      }
-    }
-    return true;
   },
   
   /**

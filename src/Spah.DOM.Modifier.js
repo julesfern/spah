@@ -17,9 +17,9 @@ Spah.classCreate("Spah.DOM.Modifier", {
   // ----------------------
   
   // action names. In attribute data-class-foo-bar-if, the action is "class" and the args are "foo-bar"
-  "actionName": function() {
+  "actionName": function(element) {
     throw new Error("Shoulda implemented modifier.actionName()");
-  }
+  },
   
   // return false if you want to break the modification chain
   // up will be triggered when the associated query flips value to true (if) or false (unless)
