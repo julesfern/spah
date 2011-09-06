@@ -4,7 +4,7 @@ parent_id: "Spah.DOM"
 type: class
 line_number: 6
 description: |
-  A containing namespace for all exceptions generated within the SpahQL library.
+  A containing namespace for all exceptions generated within the Spah.DOM library.
 
 file: /Users/danski/Sites/spah/src/Spah.DOM.Errors.js
 

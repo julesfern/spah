@@ -8,108 +8,28 @@
  **/
 Spah.classCreate("Spah.DOM.Document", {
   
-  "jQuerySrc": null,
-  
-  /**
-   * Spah.DOM.Document.compileBlueprint(docPath, templatePathMask, callback) -> void
-   * - docPath (String): The path to the HTML prototype document that will be prepared.
-   * - templatePathMask (String, Array): A path mask or array of path masks from which Mustache template files will be read.
-   * - callback (Function): The function to call once the document has been compiled. Receives the new Spah.DOM.Document instance as an argument.
-   *
-   * (Server-side only) Creates a new HTML5 blueprint document to work with. Parses the file specified in the <code>docPath</code> argument
-   * into a JSDOM environment, and then reads all Mustache files within the templatePathMask into the blueprint,
-   * inserting them into script tags at the bottom of the document body.
-   * 
-   **/
-  "compileBlueprint": function(htmlPath, templateBasePath, templatePathMask, callback) {
-    var glob = require('glob');
-    var fs = require('fs');
-    var jsDom = require('jsdom');
-    var doc;
-    
-    // Prepare the event chain
-    var html;
-    var readBlueprintFile = function() {
-      fs.readFile(htmlPath, function(fsHTTMLErr, fsHTMLData) {
-        if(fsHTTMLErr) return callback(fsHTTMLErr);
-        Spah.log("Loaded raw markup.");
-        html = fsHTMLData;
-        readTemplateGlob();
-      });
-    };
-    
-    var templateGlobMasks = (typeof templatePathMask == "string")? [templatePathMask] : templatePathMask;
-    var templateGlobIndex = 0;
-    var templatePaths = [];
-    var readTemplateGlob = function() {
-      // Exit if we're at the end of the queue
-      if(templateGlobIndex >= templateGlobMasks.length) return readTemplateFiles();
-      // Glob this queue item and move the queue forwards
-      var mask = templateBasePath+templateGlobMasks[templateGlobIndex];
-      glob.glob(mask, function(globErr, globList) {
-        templateGlobIndex++;
-        if(globErr) return callback(globErr);
-        templatePaths = templatePaths.concat(globList);
-        readTemplateGlob();
-      });
-    }
-    
-    var templateMap = {};
-    var templatePathIndex = 0;
-    var readTemplateFiles = function() {
-      Spah.log("Got template list ('"+templateBasePath+templatePathMask+"'), about to load file contents", templatePaths);
-      // Exit if done with list
-      if(templatePathIndex >= templatePaths.length) return createWindowContext();
-      // Read this file and then move on to the next one
-      var templatePath = templatePaths[templatePathIndex];
-      fs.readFile(templatePath, function(templateErr, templateData) {
-        templatePathIndex++;
-        if(templateErr) return callback(templateErr);
-        templateMap[templatePath.gsub(templateBasePath, "")] = templateData;
-        readTemplateFiles();
-      });
-    };
-    
-    var createWindowContext = function() {
-      Spah.log("Finished reading template files, about to create jsDom markup context");
-    };
-    
-    var prepareDocument = function() {
-      
-    }
-    
-    // Spring into action
-    Spah.log("About to compile a new document blueprint from '"+htmlPath+"'", this);
-    if(jQuerySrc) {
-      // Already loaded jQuery. Read Blueprint doc and continue.
-      readBlueprintFile();
-    }
-    else {
-      // Load jQuery first.
-      var jQueryPath = './lib/jquery-1.6.2.min.js';
-      fs.readFile(jQueryPath, function(jQueryErr, jQueryFileData) {
-        if(jQueryErr) return callback(jQueryErr);
-        Spah.DOM.Document.jQuerySrc = jQueryFileData;
-        readBlueprintFile();
-      });
-    }
-  }
-  
 }, {
   
   "modifiers": null,
   "jQ": null,
   "window": null,
+  "docType": null,
   
   "queryResultsLastRun": {},
   "queryResultsThisRun": {},
   
   /**
-   * new Spah.DOM.Document(jQ, jQDocument)
+   * new Spah.DOM.Document(jQ, jQDocument, docType)
+   * - jQ (Object): The jQuery context for this document.
+   * - contextWindow (DOMWindow): The window containing the jQuery context.
+   * - docType (String): The docType for rendering purposes. Defaults to the HTML5 doctype "<!DOCTYPE html>"
+   *
+   * Create a new Document instance ready for manipulation.
    **/
-  "init": function(jQ, contextWindow) {
+  "init": function(jQ, contextWindow, docType) {
     this.jQ = jQ;
     this.window = contextWindow;
+    this.docType = docType || '<!DOCTYPE html>';
     this.modifiers = new Spah.DOM.Modifiers();
     
     this.queryResultsLastRun = {};

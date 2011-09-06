@@ -71,14 +71,31 @@ signatures:
 file: /Users/danski/Sites/spah/src/Spah.DOM.Modifiers.js
 
 ---
+id: "Spah.DOM.Modifiers#modifierChainForElement"
+parent_id: "Spah.DOM.Modifiers"
+type: instance method
+line_number: 66
+description: |
+  elem (HTMLElement): A jQuery object containing the element being processed.
+  
+  Analyses the attributes and content of the given element and returns an ordered array of tuples,
+  each containing the modifier instance to be triggered and the condition against which it will fire.
+
+signatures:
+ -
+  signature: "Spah.DOM.Modifiers#modifierChainForElement(elem)"
+  return_value: "Array<Spah.DOM.Modifier>"
+file: /Users/danski/Sites/spah/src/Spah.DOM.Modifiers.js
+
+---
 id: "Spah.DOM.Modifiers#add"
 parent_id: "Spah.DOM.Modifiers"
 type: instance method
-line_number: 71
+line_number: 82
 description: |
   The interface requires your module to contain the instance methods:
   
-  - **actionName()** Returns the action name for this module. This is the attribute you want your modifier to respond to - for instance, the element ID modifier is interested in attributes like "data-id-foo-if", and therefore the action name is "id".
+  - **actionName(element)** Returns the action name for this module. This is the attribute you want your modifier to respond to - for instance, the element ID modifier is interested in attributes like "data-id-foo-if", and therefore the action name is "id". Receives a jQuery containing the element in question as the only argument.
   - **up(element, state, flags)** Runs the modification forwards. Used when the associated assertion flips from false to true for _if_ assertions and when the associated assertion flips from true to false for _unless_ assertions. The method will receive a jQuery containing the element, the state object and any flags. Flags are derived from the attribute - if we use the attribute <code>data-class-foo-bar-if</code> the actionName will be "class" and the flags will be "foo-bar". The up and down methods are expected to interpret the flags as appropriate.
   - **down(element, state, flags)** Runs the modification backwards. Called when the associated assertion flips from true to false for _if_ assertions and when the associated assertion flips from false to true for _unless_ assertions. Receives the same arguments as <code>up</code>
   
@@ -98,27 +115,10 @@ arguments:
 file: /Users/danski/Sites/spah/src/Spah.DOM.Modifiers.js
 
 ---
-id: "Spah.DOM.Modifiers#validate"
-parent_id: "Spah.DOM.Modifiers"
-type: instance method
-line_number: 92
-description: |
-  module (Spah.DOM.Modifier): The object to be validated against the modifier interface.
-  
-  Validates an object as being compatible with the modifier interface. Called against any modules
-  before they are added using the #add method.
-
-signatures:
- -
-  signature: "Spah.DOM.Modifiers#validate(module)"
-  return_value: "Boolean"
-file: /Users/danski/Sites/spah/src/Spah.DOM.Modifiers.js
-
----
 id: "Spah.DOM.Modifiers#indexOf"
 parent_id: "Spah.DOM.Modifiers"
 type: instance method
-line_number: 117
+line_number: 100
 description: |
   module (Spah.DOM.Modifier): The modifier instance to detect on this modifier list
   
@@ -134,7 +134,7 @@ file: /Users/danski/Sites/spah/src/Spah.DOM.Modifiers.js
 id: "Spah.DOM.Modifiers#remove"
 parent_id: "Spah.DOM.Modifiers"
 type: instance method
-line_number: 127
+line_number: 110
 description: |
   module (Spah.DOM.Modifier): The modifier instance to deregister from this modifier list
   

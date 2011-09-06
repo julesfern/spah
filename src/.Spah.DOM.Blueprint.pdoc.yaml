@@ -1,0 +1,55 @@
+---
+id: "Spah.DOM.Blueprint"
+parent_id: "Spah.DOM"
+type: class
+superclass_id: "Spah.DOM.Document"
+line_number: 10
+description: |
+  A "blueprint" is a server-side representation of your application's layout. Blueprints are used during Spah's
+  cold-rendering cycle, when a user is requesting a page via a regular non-ajax HTTP request.
+  
+  The blueprint is *compiled* from a source HTML file, and a list of mustache template files that should be injected
+  into the blueprint. At any time you may have the blueprint render the correct output for any given UI state.
+
+file: /Users/danski/Sites/spah/src/Spah.DOM.Blueprint.js
+
+---
+id: "Spah.DOM.Blueprint.compile"
+parent_id: "Spah.DOM.Blueprint"
+type: class method
+line_number: 30
+description: |
+  - docPath (String): The path to the HTML prototype document that will be prepared.
+  - templatePathMask (String, Array): A path mask or array of path masks from which Mustache template files will be read.
+  - callback (Function): The function to call once the document has been compiled. Receives two arguments (error, blueprintInstance).
+  
+  (Server-side only) Creates a new HTML5 blueprint document to work with. Parses the file specified in the <code>docPath</code> argument
+  into a JSDOM environment, and then reads all Mustache files within the templatePathMask into the blueprint,
+  inserting them into script tags at the bottom of the document body.
+  
+  GOTCHA: If your markup is not valid (for instance, opening a tag that expects to be closed, then never closing it)
+  you run the risk of leaving unanswered callbacks from jsdom, which can result in a node process that does not exit
+  properly.
+
+signatures:
+ -
+  signature: "Spah.DOM.Blueprint.compile(docPath, templatePathMask, callback)"
+  return_value: "void"
+file: /Users/danski/Sites/spah/src/Spah.DOM.Blueprint.js
+
+---
+id: "Spah.DOM.Blueprint#render"
+parent_id: "Spah.DOM.Blueprint"
+type: instance method
+line_number: 147
+description: |
+  -> state (Spah.SpahQL.QueryResult): The state object that will be used to render the document's markup
+  -> callback (Function): A callback function that will receive (err, markup) as arguments, where 'markup' is the full generated markup to be rendered on the client.
+  
+  Renders markup for the given state
+
+signatures:
+ -
+  signature: "Spah.DOM.Blueprint#render(state, callback)"
+  return_value: "void"
+file: /Users/danski/Sites/spah/src/Spah.DOM.Blueprint.js

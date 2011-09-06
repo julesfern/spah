@@ -42,8 +42,8 @@ Spah["init"] = function(options) {
  **/
 Spah["log"] = function(message) {
   this.logMessages.push(message);
-  if(this.verbose && window && window.console) {
-    console.log.apply(window.console, arguments);
+  if(this.verbose && typeof(console) != "undefined") {
+    console.log.apply(console, arguments);
   }
   return message;
 };

@@ -160,7 +160,7 @@ namespace :docs do
     #Dir.mkdir(output_dir)
     
     PDoc.run({
-        :source_files => Dir.glob(File.join(src_input_dir, "**", "/*.js")),
+        :source_files => Dir.glob(File.join(src_input_dir, "/*.js")),
         :index_page=>File.join(File.dirname(__FILE__), "readme.mdown"),
         :destination => output_dir,
         :syntax_highlighter => :pygments,

@@ -15,11 +15,106 @@ file: /Users/danski/Sites/spah/src/Spah.DOM.Document.js
 id: "new Spah.DOM.Document"
 parent_id: "Spah.DOM.Document"
 type: constructor
-line_number: 23
+line_number: 29
 description: |
-
+  Create a new Document instance ready for manipulation.
 
 signatures:
  -
-  signature: "new Spah.DOM.Document(jQ, jQDocument)"
+  signature: "new Spah.DOM.Document(jQ, jQDocument, docType)"
+arguments:
+ -
+  name: jQ
+  types: [Object]
+  description: >
+    The jQuery context for this document.
+
+ -
+  name: contextWindow
+  types: [DOMWindow]
+  description: >
+    The window containing the jQuery context.
+
+ -
+  name: docType
+  types: [String]
+  description: >
+    The docType for rendering purposes. Defaults to the HTML5 doctype "<!DOCTYPE html>"
+
+file: /Users/danski/Sites/spah/src/Spah.DOM.Document.js
+
+---
+id: "Spah.DOM.Document#run"
+parent_id: "Spah.DOM.Document"
+type: instance method
+line_number: 47
+description: |
+  Runs all conditional logic in the document and modifies the document accordingly. Runs synchronously
+  in the browser and asynchronously in the Node.js environment.
+
+signatures:
+ -
+  signature: "Spah.DOM.Document#run(stateQueryResult)"
+  return_value: "void"
+arguments:
+ -
+  name: stateQueryResult
+  types: [Spah.SpahQL.QueryResult]
+  description: >
+    The root-level state object with path "/"
+
+ -
+  name: callback
+  types: [Function]
+  description: >
+    (Server-side only) A callback function to be executed when the run has completed. The callback will receive the document as an argument.
+
+file: /Users/danski/Sites/spah/src/Spah.DOM.Document.js
+
+---
+id: "Spah.DOM.Document#runSync"
+parent_id: "Spah.DOM.Document"
+type: instance method
+line_number: 69
+description: |
+  Synchronous version of #run.
+
+signatures:
+ -
+  signature: "Spah.DOM.Document#runSync(stateQueryResult)"
+  return_value: "void"
+arguments:
+ -
+  name: stateQueryResult
+  types: [Spah.SpahQL.QueryResult]
+  description: >
+    The root-level state object with path "/"
+
+file: /Users/danski/Sites/spah/src/Spah.DOM.Document.js
+
+---
+id: "Spah.DOM.Document#runElementSync"
+parent_id: "Spah.DOM.Document"
+type: instance method
+line_number: 85
+description: |
+  Runs a DOM element through the modifier chain, running any modifiers that apply to the element.
+
+signatures:
+ -
+  signature: "Spah.DOM.Document#runElementSync(elem, stateQueryResult)"
+  return_value: "void"
+arguments:
+ -
+  name: elem
+  types: [DOMElement]
+  description: >
+    The element to be examined and run through the modifier chain
+
+ -
+  name: stateQueryResult
+  types: [Spah.SpahQL.QueryResult]
+  description: >
+    The query result object that will be the scope for this element's assertion queries.
+
 file: /Users/danski/Sites/spah/src/Spah.DOM.Document.js

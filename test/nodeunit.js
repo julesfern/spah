@@ -46,6 +46,7 @@ require("Spah.SpahQL.Token.KeyName.js");
 // DOM runner
 
 require("Spah.DOM.Document.js");
+require("Spah.DOM.Blueprint.js");
 require("Spah.DOM.Modifier.js");
 require("Spah.DOM.Modifiers.js");
 
