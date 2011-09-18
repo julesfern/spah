@@ -47,8 +47,8 @@ require("Spah.SpahQL.Token.KeyName.js");
 
 require("Spah.DOM.Document.js");
 require("Spah.DOM.Blueprint.js");
-require("Spah.DOM.Modifier.js");
 require("Spah.DOM.Modifiers.js");
+require("Spah.DOM.Modifiers.Defaults.js");
 
 process.chdir(__dirname);
 reporter.run(['.']);

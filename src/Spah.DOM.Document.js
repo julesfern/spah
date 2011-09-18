@@ -89,7 +89,7 @@ Spah.classCreate("Spah.DOM.Document", {
     // Run this element through any matching modifiers
     for(var i=0; i<modChain.length; i++) {
       var modifier = modChain[i];
-      var actionName = modifier.actionName(elem);
+      var actionName = modifier.actionName(elem, this.jQ, this.window);
       var expectation, assertion, modifierArgs;
       var actionPrefix = "data-"+actionName;
       
@@ -125,8 +125,8 @@ Spah.classCreate("Spah.DOM.Document", {
           // If so, call the appropriate up/down method on the modifier
           // Up: result matches expectation
           // Down: result opposeses expectation
-          if(result == expectation) modifier.up(elem, stateQueryResult, modifierArgs);
-          else modifier.down(elem, stateQueryResult, modifierArgs);
+          if(result == expectation) modifier.up(elem, modifierArgs, stateQueryResult, this.jQ, this.window);
+          else modifier.down(elem, modifierArgs, stateQueryResult, this.jQ, this.window);
         }
         // Also stash the results from this run
         this.queryResultsThisRun[assertion] = result;

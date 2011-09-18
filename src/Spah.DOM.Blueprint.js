@@ -145,7 +145,18 @@ Spah.classExtend("Spah.DOM.Blueprint", Spah.DOM.Document, {
    * Renders markup for the given state
    **/
   "render": function(state, callback) {
-    
+    this.run(state, function(doc) {
+      callback(null, doc.toString())
+    });
+  },
+
+  /**
+   * Spah.DOM.Blueprint#toString() -> String
+   *
+   * Returns a string representation of the document's current markup.
+   **/
+  "toString": function() {
+    return this.docType+this.window.document.innerHTML;
   }
   
 });

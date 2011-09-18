@@ -144,7 +144,7 @@ namespace :docs do
   end
   
   task :src do
-    require 'PDoc'
+    require 'PDoc' rescue require 'pdoc'
     require 'json'
     require 'maruku'
     

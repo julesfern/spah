@@ -1,0 +1,9 @@
+---
+id: "Spah.DOM.Modifiers.Defaults"
+parent_id: "Spah.DOM.Modifiers"
+type: class
+line_number: 6
+description: |
+  A module containing the default Spah document modifiers.
+
+file: /Users/danski/Sites/spah/src/Spah.DOM.Modifiers.Defaults.js

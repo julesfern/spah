@@ -2,7 +2,6 @@ exports["Spah.DOM.Blueprint"] = {
   
   "Compiles the blueprint asynchronously": function(test) {
     test.expect(5);
-    Spah.verbose = true;
     
     Spah.DOM.Blueprint.compile("./fixtures/layout.html", "./fixtures/views", "/**/*.mustache", function(err, doc) {
       test.ok(!err);
@@ -10,7 +9,6 @@ exports["Spah.DOM.Blueprint"] = {
       test.ok(doc.jQ);
       test.ok(doc.window);
       test.equal(doc.docType, '<!DOCTYPE html>');
-      Spah.verbose = false;
       test.done();
     });    
   },
@@ -19,6 +17,16 @@ exports["Spah.DOM.Blueprint"] = {
     test.expect(1);
     Spah.DOM.Blueprint.compile("./fixtures/layout.html", "./fixtures/views", "/**/*.notexist", function(err, doc) {
       test.equal(doc.jQ("script").length, 0);
+      test.done();
+    });
+  },
+
+  "Renders as a string": function(test) {
+    test.expect(3);
+    Spah.DOM.Blueprint.compile("./fixtures/layout.html", "./fixtures/views", "/**/*.mustache", function(err, doc) {
+      test.ok(typeof(doc.docType) == "string");
+      test.ok(doc.window);
+      test.equal(doc.toString(), doc.docType+doc.window.document.innerHTML);
       test.done();
     });
   }

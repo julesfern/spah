@@ -1,8 +1,8 @@
-Spah.classExtend("Spah.DOM.GoodModifier", Spah.DOM.Modifier, {}, {
+var goodModifier = {
   "actionName": function(elem) { return "good"; },
   "up": function(elem, state, flags) { },
-  "down": function(elem, state, flags) { },
-});
+  "down": function(elem, state, flags) { }
+};
 
 exports["Spah.DOM.Modifiers"] = {
   
@@ -10,14 +10,14 @@ exports["Spah.DOM.Modifiers"] = {
     var modifiers = new Spah.DOM.Modifiers();
         modifiers.reset();
     test.equal(modifiers.modules.length, 0);
-    test.ok(modifiers.add(new Spah.DOM.GoodModifier()));
+    test.ok(modifiers.add(goodModifier));
     test.equal(modifiers.modules.length, 1);
     test.done();
   },
   
   
   "Removes a module": function(test) { 
-    var mod = new Spah.DOM.GoodModifier();
+    var mod = goodModifier;
     var modifiers = new Spah.DOM.Modifiers();
         modifiers.reset();
         

@@ -53,31 +53,39 @@ Spah.classCreate("Spah.DOM.Modifiers", {
    * If any of the defaults are already registered, they will be omitted in this step.
    **/
   "appendDefaults": function() {
-    
+    this.add(Spah.DOM.Modifiers.Defaults.Show);
+    this.add(Spah.DOM.Modifiers.Defaults.ClassName);
+    this.add(Spah.DOM.Modifiers.Defaults.ElementId);
+    this.add(Spah.DOM.Modifiers.Defaults.Stash);
+    this.add(Spah.DOM.Modifiers.Defaults.Populate);
   },
-  
-  /**
-   * Spah.DOM.Modifiers#modifierChainForElement(elem) -> Array<Spah.DOM.Modifier>
-   * elem (HTMLElement): A jQuery object containing the element being processed.
-   *
-   * Analyses the attributes and content of the given element and returns an ordered array of tuples,
-   * each containing the modifier instance to be triggered and the condition against which it will fire.
-   **/
-  "modifierChainForElement": function(elem) {
-    
-  },
+
   
   /**
    * Spah.DOM.Modifiers#add(module) -> Boolean
-   * - moduleKlass (Spah.DOM.Modifier): The modifier object to be registered. Expected to implement the modifier interface.
+   * - module (Object): The modifier object to be registered. Expected to implement the modifier interface.
    *
-   * The interface requires your module to contain the instance methods:
+   * The interface requires your module to contain the methods:
    *
-   * - **actionName(element)** Returns the action name for this module. This is the attribute you want your modifier to respond to - for instance, the element ID modifier is interested in attributes like "data-id-foo-if", and therefore the action name is "id". Receives a jQuery containing the element in question as the only argument.
-   * - **up(element, state, flags)** Runs the modification forwards. Used when the associated assertion flips from false to true for _if_ assertions and when the associated assertion flips from true to false for _unless_ assertions. The method will receive a jQuery containing the element, the state object and any flags. Flags are derived from the attribute - if we use the attribute <code>data-class-foo-bar-if</code> the actionName will be "class" and the flags will be "foo-bar". The up and down methods are expected to interpret the flags as appropriate.
-   * - **down(element, state, flags)** Runs the modification backwards. Called when the associated assertion flips from true to false for _if_ assertions and when the associated assertion flips from false to true for _unless_ assertions. Receives the same arguments as <code>up</code>
+   * - **actionName(element, $, window)** Returns the action name for this module. This is the attribute you want your modifier to respond to - for instance, the element ID modifier is interested in attributes like "data-id-foo-if", and therefore the action name is "id". Receives a jQuery containing the element in question as the only argument.
+   * - **up(element, flags, state, $, window)** Runs the modification forwards. Used when the associated assertion flips from false to true for _if_ assertions and when the associated assertion flips from true to false for _unless_ assertions. The method will receive a jQuery containing the element, the state object and any flags. Flags are derived from the attribute - if we use the attribute <code>data-class-foo-bar-if</code> the actionName will be "class" and the flags will be "foo-bar". The up and down methods are expected to interpret the flags as appropriate.
+   * - **down(element, flags, state, $, window)** Runs the modification backwards. Called when the associated assertion flips from true to false for _if_ assertions and when the associated assertion flips from false to true for _unless_ assertions. Receives the same arguments as <code>up</code>
    *
-   * An instance of your modifier class will be created for each document that requires it, so you may feel free to use state in the modifier instance.
+   * In each case the arguments are as follows:
+   * - "element" is a jQuery containing the element in question
+   * - "flags" are any arguments given by the attribute name (see below)
+   * - "state" is the Spah state (a Spah.SpahQL.QueryResult object)
+   * - "$" is the main jQuery object itself
+   * - "window" is the context DOMWindow for the document runner. Call window.document for the document itself.
+   *
+   * Regarding flags, let's take a look at the ClassName modifier when it processes 
+   * the attributes <code>data-class-foo-bar-if="/foo/bar"</code> and <code>data-class-baz-unless="/notbaz"</code>
+   *
+   * The ClassName modifier returns an actionName of "class" for all elements. When Spah's document runner
+   * encounters this attribute, the ClassName modifier is matched and passed "foo-bar" as the flags for the
+   * first attribute and "baz" for the second attribute.
+   *
+   * It is up to you how your modifiers process flags when they are asked to run up or down.
    **/
   "add": function(module) {
     if(this.indexOf(module) < 0) {

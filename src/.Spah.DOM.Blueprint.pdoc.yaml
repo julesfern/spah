@@ -53,3 +53,17 @@ signatures:
   signature: "Spah.DOM.Blueprint#render(state, callback)"
   return_value: "void"
 file: /Users/danski/Sites/spah/src/Spah.DOM.Blueprint.js
+
+---
+id: "Spah.DOM.Blueprint#toString"
+parent_id: "Spah.DOM.Blueprint"
+type: instance method
+line_number: 158
+description: |
+  Returns a string representation of the document's current markup.
+
+signatures:
+ -
+  signature: "Spah.DOM.Blueprint#toString()"
+  return_value: "String"
+file: /Users/danski/Sites/spah/src/Spah.DOM.Blueprint.js
