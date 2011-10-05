@@ -40,11 +40,14 @@
       <div class="sidebar-pane scrollable" id="menu_pane">
         <ul class="menu-items" id="api_menu"><li><div class="menu-item"><a class="class current-parent" href="../../../../Spah/index.html" title="Spah (class)">Spah</a></div><ul><li><div class="menu-item"><a class="class current-parent" href="../../../../Spah/DOM/index.html" title="Spah.DOM (class)">Spah.DOM</a></div><ul><li><div class="menu-item"><a class="class" href="../../../../Spah/DOM/Blueprint/index.html" title="Spah.DOM.Blueprint (class)">Spah.DOM.Blueprint</a></div></li>
 <li><div class="menu-item"><a class="class current-parent" href="../../../../Spah/DOM/Document/index.html" title="Spah.DOM.Document (class)">Spah.DOM.Document</a></div><ul><li><div class="menu-item"><a class="constructor current" href="../../../../Spah/DOM/Document/new/index.html" title="new Spah.DOM.Document (constructor)">new</a></div></li>
+<li><div class="menu-item"><a class="class-property" href="../../../../Spah/DOM/Document/defaultModifiers/index.html" title="Spah.DOM.Document.defaultModifiers (class property)">defaultModifiers</a></div></li>
+<li><div class="menu-item"><a class="instance-method" href="../../../../Spah/DOM/Document/prototype/addModifiers/index.html" title="Spah.DOM.Document#addModifiers (instance method)">addModifiers</a></div></li>
+<li><div class="menu-item"><a class="instance-method" href="../../../../Spah/DOM/Document/prototype/removeModifiers/index.html" title="Spah.DOM.Document#removeModifiers (instance method)">removeModifiers</a></div></li>
 <li><div class="menu-item"><a class="instance-method" href="../../../../Spah/DOM/Document/prototype/run/index.html" title="Spah.DOM.Document#run (instance method)">run</a></div></li>
 <li><div class="menu-item"><a class="instance-method" href="../../../../Spah/DOM/Document/prototype/runElementSync/index.html" title="Spah.DOM.Document#runElementSync (instance method)">runElementSync</a></div></li>
 <li><div class="menu-item"><a class="instance-method" href="../../../../Spah/DOM/Document/prototype/runSync/index.html" title="Spah.DOM.Document#runSync (instance method)">runSync</a></div></li></ul></li>
 <li><div class="menu-item"><a class="class" href="../../../../Spah/DOM/Errors/index.html" title="Spah.DOM.Errors (class)">Spah.DOM.Errors</a></div><ul><li><div class="menu-item"><a class="class" href="../../../../Spah/DOM/Errors/InvalidModifierError/index.html" title="Spah.DOM.Errors.InvalidModifierError (class)">Spah.DOM.Errors.InvalidModifierError</a></div></li></ul></li>
-<li><div class="menu-item"><a class="class" href="../../../../Spah/DOM/Modifiers/index.html" title="Spah.DOM.Modifiers (class)">Spah.DOM.Modifiers</a></div><ul><li><div class="menu-item"><a class="class" href="../../../../Spah/DOM/Modifiers/Defaults/index.html" title="Spah.DOM.Modifiers.Defaults (class)">Spah.DOM.Modifiers.Defaults</a></div></li></ul></li></ul></li>
+<li><div class="menu-item"><a class="class" href="../../../../Spah/DOM/Modifiers/index.html" title="Spah.DOM.Modifiers (class)">Spah.DOM.Modifiers</a></div></li></ul></li>
 <li><div class="menu-item"><a class="class" href="../../../../Spah/SpahQL/index.html" title="Spah.SpahQL (class)">Spah.SpahQL</a></div><ul><li><div class="menu-item"><a class="class" href="../../../../Spah/SpahQL/Callbacks/index.html" title="Spah.SpahQL.Callbacks (class)">Spah.SpahQL.Callbacks</a></div></li>
 <li><div class="menu-item"><a class="class" href="../../../../Spah/SpahQL/DataHelper/index.html" title="Spah.SpahQL.DataHelper (class)">Spah.SpahQL.DataHelper</a></div></li>
 <li><div class="menu-item"><a class="class" href="../../../../Spah/SpahQL/Errors/index.html" title="Spah.SpahQL.Errors (class)">Spah.SpahQL.Errors</a></div><ul><li><div class="menu-item"><a class="class" href="../../../../Spah/SpahQL/Errors/SpahQLError/index.html" title="Spah.SpahQL.Errors.SpahQLError (class)">Spah.SpahQL.Errors.SpahQLError</a></div></li>
@@ -96,7 +99,7 @@
 </ul>
 
 
-  <p id="src_code_href"><a href="http://github.com/danski/spah/blob/master/src/Spah.DOM.Document.js#29">src code</a></p>
+  <p id="src_code_href"><a href="http://github.com/danski/spah/blob/master/src/Spah.DOM.Document.js#43">src code</a></p>
 
 
 <h2 class="page-title">
@@ -112,7 +115,7 @@
   <div class="section-content">
     <div class="method-description">
       
-        <pre class="syntax"><code class="ebnf">new Spah.DOM.Document(jQ, jQDocument, docType)</code></pre>
+        <pre class="syntax"><code class="ebnf">new Spah.DOM.Document(jQ, jQDocument, docType, modifiers)</code></pre>
 
   <ul class="argument-list">
     
@@ -140,6 +143,14 @@
          &ndash; The docType for rendering purposes. Defaults to the HTML5 doctype &#8220;&lt;!DOCTYPE html&gt;&#8221;
       </li>
     
+      <li>
+        <code class="argument-name">modifiers</code>
+        
+          <span class="argument-types">(<code>Array</code>)</span>
+        
+         &ndash; An optional array of modifiers to be registered. If not supplied, the default modifiers are registered. See #addModifier to learn about document modifiers. You may always append Spah.DOM.Document.defaultModifiers later, if you wish.
+      </li>
+    
   </ul> <!-- .argument-list -->
 
       
@@ -162,7 +173,7 @@
         <p><a href="http://github.com/danski/spah">Spah</a> v0.0.0 API documentation.</p>
         <p>
           
-            Last updated on September 18, 2011 at 10:27 UTC.
+            Last updated on October 05, 2011 at 20:31 UTC.
           
           Generated by <a href="http://pdoc.org">PDoc</a>.
           Uses <a href="http://famfamfam.com/lab/icons/silk/" title="famfamfam.com: Silk Icons">Silk Icons</a> and portions of <a href="http://github.com/280north/aristo/tree/master" title="280north's aristo at master - GitHub">Aristo</a>.

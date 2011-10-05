@@ -51,10 +51,24 @@ arguments:
 file: /Users/danski/Sites/spah/src/Spah.SpahQL.QueryParser.js
 
 ---
-id: "Spah.SpahQL.QueryParser.throwParseErrorAt"
+id: "Spah.SpahQL.QueryParser.cleanQuery"
 parent_id: "Spah.SpahQL.QueryParser"
 type: class method
 line_number: 98
+description: |
+  Cleans spaces from a query, except spaces within string literals. Returns the cleaned query.
+
+signatures:
+ -
+  signature: "Spah.SpahQL.QueryParser.cleanQuery(str)"
+  return_value: "String"
+file: /Users/danski/Sites/spah/src/Spah.SpahQL.QueryParser.js
+
+---
+id: "Spah.SpahQL.QueryParser.throwParseErrorAt"
+parent_id: "Spah.SpahQL.QueryParser"
+type: class method
+line_number: 131
 description: |
   Throws an exception at the given index in the given query string with the given error message.
 

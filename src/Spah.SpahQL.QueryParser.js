@@ -30,7 +30,7 @@ Spah.classCreate("Spah.SpahQL.QueryParser", {
     **/
    "parseQuery": function(str) {
       // Return cached query if found
-      var query = str.replace(/\s/g, ""); // Strip spaces from query
+      var query = this.cleanQuery(str);
       if(this.queryCache[query]) return this.queryCache[query];
       // Create query instance
       var parsedQuery = new Spah.SpahQL.Query();
@@ -88,6 +88,39 @@ Spah.classCreate("Spah.SpahQL.QueryParser", {
      this.queryCache[query] = parsedQuery;
      Spah.log("Generated and cached query '"+str+"' ->", parsedQuery);
      return parsedQuery;
+   },
+
+   /**
+    * Spah.SpahQL.QueryParser.cleanQuery(str) -> String
+    *
+    * Cleans spaces from a query, except spaces within string literals. Returns the cleaned query.
+    **/
+   "cleanQuery": function(str) {
+      var quoteStack = [];
+      var output = "";
+
+      for(var i=0; i<str.length; i++) {
+        var c = str.charAt(i);
+
+        // Quote?
+        if((c == '"' || c== "'") && (i==0 || str.charAt(i-1) != '\\')) {
+          // Found non-escaped quote, either deepen stack or pop stack
+          if(quoteStack[quoteStack.length-1] == c) quoteStack.pop();
+          else quoteStack.push(c);
+          // Also push character
+          output += c;
+        }
+        else if(c == " ") {
+          // Found space, append to output only if quote stack populated
+          if(quoteStack.length > 0) output += c;
+        }
+        else {
+          // Found other char, append
+          output += c;
+        }
+      }
+
+     return output; // Strip spaces from query
    },
    
    /**

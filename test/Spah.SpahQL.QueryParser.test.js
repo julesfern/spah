@@ -32,6 +32,13 @@ exports["Spah.SpahQL.QueryParser"] = {
     );
     test.done();
   },
+
+  "Cleans a query with spaces but doesn't clean spaces from string literals": function(test) {
+    var qp = Spah.SpahQL.QueryParser;
+    test.equal(qp.cleanQuery("//foo == 'bar'"), "//foo=='bar'");
+    test.equal(qp.cleanQuery("//foo == 'bar baz\" '"), "//foo=='bar baz\" '");
+    test.done();
+  },
   
   "Parses a flat root query": function(test) {
     var q = Spah.SpahQL.QueryParser.parseQuery("/");
