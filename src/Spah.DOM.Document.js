@@ -171,8 +171,8 @@ Spah.classCreate("Spah.DOM.Document", {
    **/
   "runSync": function(stateQueryResult) {
     // Start at document level
-    this.runElementSync(this.jQ("head"), state);
-    this.runElementSync(this.jQ("body"), state);
+    this.runElementSync(this.jQ("head"), stateQueryResult);
+    this.runElementSync(this.jQ("body"), stateQueryResult);
     // Reset result comparisons
     this.queryResultsLastRun = this.queryResultsThisRun;
     this.queryResultsThisRun = {};
@@ -243,7 +243,7 @@ Spah.classCreate("Spah.DOM.Document", {
     // Run each child through the modifiers, recursively
     var d = this;
     elem.children().each(function() {
-      d.runElementSync($(this), stateQueryResult);
+      d.runElementSync(d.jQ(this), stateQueryResult);
     });
   }
   

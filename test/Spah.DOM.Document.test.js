@@ -1,10 +1,11 @@
-var html;
+var html, htmlPrimitive;
 if(Spah.inBrowser()) {
 	// TODO
 }
 else {
 	var fs = require('fs');
 	html = fs.readFileSync("./fixtures/layout.html", "utf-8");	
+	htmlPrimitive = fs.readFileSync("./fixtures/layout-primitive.html", "utf-8");	
 }
 
 
@@ -83,4 +84,53 @@ exports["Spah.DOM.Document"] = {
   	});
   },
   
+  "Runs the embedded document logic with a test modifier": function(test) {
+    test.expect(11);
+  	Spah.DOM.Blueprint.compile(htmlPrimitive, function(err, doc) {
+      test.ok(!err);
+
+      var tDoc = new Spah.DOM.Document(doc.jQ, doc.window);
+      	  tDoc.addModifiers({
+      	  		"actionName": function(e) { return "test"; },
+      	  		"up": function(e, flags, state, $) { 
+	      	  		e.html(e.html()+"up");
+	      	  	},
+	      	  	"down": function(e, flags, state, $) { 
+	      	  		e.html(e.html()+"down");
+	      	  	}
+      	  });
+
+      // Create an example SpahQL state
+      var state = new Spah.SpahQL.QueryResult("/", {"test": true});
+
+      // Assert starting state
+      test.equals(tDoc.jQ("#test-if").html(), "")
+      test.equals(tDoc.jQ("#test-unless").html(), "")
+
+      // Run document
+      tDoc.runSync(state);
+	  test.equals(tDoc.jQ("#test-if").html(), "up");
+      test.equals(tDoc.jQ("#test-unless").html(), "down"); 
+
+      // Try run again with identical state
+      tDoc.runSync(state);
+	  test.equals(tDoc.jQ("#test-if").html(), "up");
+      test.equals(tDoc.jQ("#test-unless").html(), "down"); 
+
+      // Flip state and run again
+      state.set("test", false);
+      tDoc.runSync(state);
+	  test.equals(tDoc.jQ("#test-if").html(), "updown");
+      test.equals(tDoc.jQ("#test-unless").html(), "downup"); 
+
+      // And repeat
+      tDoc.runSync(state);
+	  test.equals(tDoc.jQ("#test-if").html(), "updown");
+      test.equals(tDoc.jQ("#test-unless").html(), "downup"); 
+
+      // Tada!
+      test.done();
+  	});
+  }
+
 };

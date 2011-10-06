@@ -44,7 +44,7 @@ Spah.classCreate("Spah.SpahQL.QueryResult", {
   "init": function(path, value, sourceData) {
     this.path = path; 
     this.value = value; 
-    this.sourceData = sourceData;
+    this.sourceData = sourceData || value;
   },
   
   /**
