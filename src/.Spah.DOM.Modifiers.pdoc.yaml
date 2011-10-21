@@ -1,9 +1,65 @@
 ---
-id: "Spah.DOM.Modifiers"
-parent_id: "Spah.DOM"
-type: class
-line_number: 6
+id: "Spah.DOM.Modifiers.Show.actionName"
+parent_id: "Spah.DOM.Modifiers.Show"
+type: class method
+line_number: 15
 description: |
-  A module containing the default Spah document modifiers.
+  The action name for this modifier is always "show"
 
+signatures:
+ -
+  signature: "Spah.DOM.Modifiers.Show.actionName(element)"
+  return_value: "String"
+file: /Users/danski/Sites/spah/src/Spah.DOM.Modifiers.js
+
+---
+id: "Spah.DOM.Modifiers.Show.up"
+parent_id: "Spah.DOM.Modifiers.Show"
+type: class method
+line_number: 23
+description: |
+  Shows the element using jQuery(element).show();
+
+signatures:
+ -
+  signature: "Spah.DOM.Modifiers.Show.up(element)"
+  return_value: "void"
+file: /Users/danski/Sites/spah/src/Spah.DOM.Modifiers.js
+
+---
+id: "Spah.DOM.Modifiers.Show.down"
+parent_id: "Spah.DOM.Modifiers.Show"
+type: class method
+line_number: 31
+description: |
+  Hides the element using jQuery(element).hide();
+
+signatures:
+ -
+  signature: "Spah.DOM.Modifiers.Show.down(element)"
+  return_value: "void"
+file: /Users/danski/Sites/spah/src/Spah.DOM.Modifiers.js
+
+---
+id: "Spah.DOM.Modifiers.ClassName"
+parent_id: "Spah.DOM.Modifiers"
+type: class
+line_number: 42
+description: |
+  Handles adding/removing class names from elements.
+
+file: /Users/danski/Sites/spah/src/Spah.DOM.Modifiers.js
+
+---
+id: "Spah.DOM.Modifiers.ClassName.actionName"
+parent_id: "Spah.DOM.Modifiers.ClassName"
+type: class method
+line_number: 49
+description: |
+  The action name for this modifier is always "class"
+
+signatures:
+ -
+  signature: "Spah.DOM.Modifiers.ClassName.actionName(element)"
+  return_value: "String"
 file: /Users/danski/Sites/spah/src/Spah.DOM.Modifiers.js

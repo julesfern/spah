@@ -140,14 +140,14 @@ Spah.classCreate("Spah.DOM.Document", {
   },
   
   /**
-   * Spah.DOM.Document#run(stateQueryResult) -> void
+   * Spah.DOM.Document#run(stateQueryResult, done) -> void
    * - stateQueryResult (Spah.SpahQL.QueryResult): The root-level state object with path "/"
-   * - callback (Function): (Server-side only) A callback function to be executed when the run has completed. The callback will receive the document as an argument.
+   * - done (Function): (Server-side only) A callback function to be executed when the run has completed. The callback will receive the document as an argument.
    * 
    * Runs all conditional logic in the document and modifies the document accordingly. Runs synchronously
    * in the browser and asynchronously in the Node.js environment.
    **/
-  "run": function(stateQueryResult, callback) {
+  "run": function(stateQueryResult, done) {
     var d = this;
     
     if(Spah.inBrowser()) {
@@ -158,7 +158,7 @@ Spah.classCreate("Spah.DOM.Document", {
       // Async server implementation
       process.nextTick(function() {
         d.runSync(stateQueryResult);
-        callback(d);
+        done(null, d);
       });
     }
   },
@@ -193,7 +193,7 @@ Spah.classCreate("Spah.DOM.Document", {
     for(var i=0; i<modChain.length; i++) {
       var modifier = modChain[i];
       var actionName = modifier.actionName(elem, this.jQ, this.window);
-      var expectation, assertion, modifierArgs;
+      var expectation=null, assertion=null, modifierArgs=null;
       var actionPrefix = "data-"+actionName;
       
       // Determine the assertion to be run for this modifier, and the expected

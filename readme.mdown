@@ -5,7 +5,7 @@ Spah: Stateful pages, not single pages.
 
 Single-page web apps are a big deal - and with good reason. The promise of lush, stateful web UI that hangs off your service's developer API is too good to ignore.
 
-But why single page? Is it really important that your app sits on a single URL in the browser? No. The important thing that single-page apps give you is **state**. The ability to pull data into a page without destroying the existing in-browser state - and to keep your remote app nice, clean and resource-centric in the process. Single-pagedness is just a side-effect of the way in which we're currently achieving this.
+But why single page? Is it really important that your app sits on a single URL in the browser? No. The important thing that single-page apps give you is **state**. The ability to pull data into a page without destroying the existing in-browser state - and to keep your remote app nice, clean and resource-centric in the process. Single-pagedness is just a side-effect of the way in which we are, at time of writing, achieving this.
 
 And in the process of putting entire applications on a single URL, we're giving up so much. We're making our pages unfriendly to search engines, to consumers of microdata, to open graph clients. We're resorting to cheap tricks like hashbang URLs to simulate things that we could easily be providing through more appropriate techniques. Sure, if you're building a mail client or a word processor then one page makes sense. But there's a whole class of apps that are either using these single-page techniques inappropriately, or using multi-page behaviours where persistent UI state simply produces too much code overhead. 
 

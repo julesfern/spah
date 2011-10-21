@@ -84,9 +84,11 @@ Spah.classCreate("Spah.SpahQL.DataHelper", {
    * Extends the core typeof(obj) function by adding types "array" and "null".
    **/
   "objectType": function(obj) {
+    var _ = (typeof(_)=="undefined")? require('underscore') : _;
+
     if(obj == null || obj == undefined) return "null";
     if(typeof(obj) == "object") {
-      if(typeof(obj.length) === 'number' && !(obj.propertyIsEnumerable("length")) && typeof(obj.splice) === 'function') return "array";
+      if(_.isArray(obj)) return "array";
       else return "object";
     } else {
       return typeof(obj);
@@ -101,90 +103,14 @@ Spah.classCreate("Spah.SpahQL.DataHelper", {
    * and hashes are traversed recursively and have their values compared.
    **/
   "eq": function() {
-    // Grab the types. If they're not equal, fail out early.
-    var oType, oI;
-    for(oI=0; oI < arguments.length; oI++) {
-      var aType = this.objectType(arguments[oI]);
-      if(oType && oType != aType) return false;
-      oType = aType;
-    }
-    // All objects are same type - continue w/ comparison
-    switch(oType) {
-      case "array":
-        return this.eqArray.apply(this, arguments);
-        break;
-      case "object":
-        return this.eqHash.apply(this, arguments);
-        break;
-      default:
-        return this.eqSimple.apply(this, arguments);
-        break;
-    }
-  },
-  
-  /**
-   * Spah.SpahQL.DataHelper.eqHash(obj1, obj2[, objN]) -> Boolean result
-   *
-   * Compares two or more associative arrays for equality, enforcing strict key matching.
-   * Values are compared using the "eq" method.
-   **/
-  "eqHash": function() {
-    // Keys may be in any order but must have 1:1 mapping
-    var hP, hI, hKeys;
-    hP = arguments[0]; hKeys = this.hashKeys(arguments[0]);
-    for(hI=1; hI<arguments.length; hI++) {
-      var h = arguments[hI];
-      var k = this.hashKeys(h);
-      // Compare keys
-      if(!this.eq(k, hKeys)) return false;
-      // Compare values
-      for(var iK in h) {
-        if(!this.eq(h[iK], hP[iK])) return false;
-      }      
-      hKeys = k; hP = h;
-    }
-    return true;
-  },
-  
-  /**
-   * Spah.SpahQL.DataHelper.eqArray(obj1, obj2[, objN]) -> Boolean result
-   *
-   * Compares two or more arrays for equality, enforcing strict ordering.
-   * Values are compared using the "eq" method.
-   **/
-  "eqArray": function() {
-    // Length, order and subequality must match
-    var aP, aI;
+    var aP, aI, aT;
+    var _ = (typeof(_)=="undefined")? require('underscore') : _;
+    
     aP = arguments[0];
     for(aI=1; aI<arguments.length; aI++) {
-      var a = arguments[aI];
-      var iI;
-      
-      // Compare a and aP
-      if(a.length != aP.length) return false;
-      // Values
-      for(iI=0; iI<a.length; iI++) {
-        if(!this.eq(a[iI], aP[iI])) return false;
-      }
-      
+      var a=arguments[aI];
+      if(!_.isEqual(a, aP)) return false;
       aP = a;
-    }
-    return true;
-  },
-
-  /**
-   * Spah.SpahQL.DataHelper.hashKeys(obj1, obj2[, objN]) -> Boolean result
-   *
-   * Compares two or more values of any type under simple javascript equality rules. 
-   * All arguments must be strictly equal or the function will return false.
-   **/
-  "eqSimple": function() {
-    var aP, aI, aT;
-    aP = arguments[0]; aT = this.objectType(arguments[0]);
-    for(aI=1; aI<arguments.length; aI++) {
-      var a=arguments[aI]; var t=this.objectType(a)
-      if(a != aP || t != aT) return false;
-      aP = a; aT = t;
     }
     return true;
   },
@@ -197,10 +123,8 @@ Spah.classCreate("Spah.SpahQL.DataHelper", {
    * without the corresponding values.
    **/
   "hashKeys": function(hash) {
-    var keys = [];
-    for(var k in hash) {
-      keys.push(k);
-    }
+    var _ = (typeof(_)=="undefined")? require('underscore') : _;
+    var keys = _.keys(hash)
     return keys.sort();
   },
   
@@ -212,11 +136,8 @@ Spah.classCreate("Spah.SpahQL.DataHelper", {
    * without keys. Uniqueness is not enforced.
    **/
   "hashValues": function(hash) {
-    var values = [];
-    for(var k in hash) {
-      values.push(hash[k]);
-    }
-    return values;
+    var _ = (typeof(_)=="undefined")? require('underscore') : _;
+    return _.values(hash);
   },
   
   /**
@@ -551,10 +472,11 @@ Spah.classCreate("Spah.SpahQL.DataHelper", {
    * Returns null if the key can't be coerced for the given object.
    **/
   "coerceKeyForObject": function(key, obj) {
+    var _ = (typeof(_)=="undefined")? require('underscore') : _;
     var t = this.objectType(obj);
     if(t == "array") {
       var k = parseInt(key);
-      return isNaN(k)? null : k;
+      return _.isNaN(k)? null : k;
     }
     else if(t == "object") {
       var k = key.toString();
