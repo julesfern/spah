@@ -108,11 +108,14 @@ nav {
   }
 
 article {
-  margin: 10px 30px 10px 300px;
+  margin: 10px 30px 90% 300px;
   max-width: 800px;
   line-height: 1.4em;
 }
 
+article h1 {
+  line-height: 1.3em;
+}
 article h1, article h2, article h3, article h4 {
   margin-top: 20px;
   padding: 10px 0 20px 0;

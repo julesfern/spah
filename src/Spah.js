@@ -70,28 +70,22 @@ Spah["inCommonJS"] = function() {
   return (typeof(exports) == "object");
 }
 
+Spah["Class"] = function(name) {
+  this.name = name;
+}
+Spah["Class"].prototype = {
+  super: function() { return this.prototype },
+}
+
 /**
- * Spah.classCreate(name[, klassProps][, instanceProps]) -> Function
- * - name (String): The name for the new Spah class without the "Spah" namespace. E.g. to create Spah.Foo.Bar, use classCreate("Foo.Bar")
- * - klassProps (Object): A hash of class-level properties and functions
- * - instanceProps (Object): A hash of instance-level properties and functions to be applied to the class' prototype.
+ * Spah.classRegister(name, klass) -> void
+ * - name (String): The name for the new Spah class, e.g. "Spah.Foo.Bar"
+ * - klass (Function): The class constructor being registered.
  *
- * Creates a class internal to the Spah library and namespace.
+ * Registers a created class with the Spah package using both CamelCase and commonJs-style naming schemes.
+ * The Spah package is already registered with the window or the commonJS exports object automatically.
  **/
-Spah["classCreate"] = function(name, klassProps, instanceProps) {
-  // Make the class constructor
-  var klass = function() { this.init.apply(this, arguments); };
-  klassProps = klassProps || {};
-  instanceProps = instanceProps || {};
-  // Make the singletons
-  for(var k in klassProps) {
-    klass[k] = klassProps[k];
-  }
-  // Make the instance methods
-  klass.prototype = instanceProps;
-  // Default constructor
-  klass.prototype.init = klass.prototype.init || function() {};
-  
+Spah["classRegister"] = function(name, klass) {
   // Register on the Spah constant
   var nameNS = name.split(".");
   var targetBrowser = this;
@@ -112,45 +106,92 @@ Spah["classCreate"] = function(name, klassProps, instanceProps) {
       targetCommonJS[commonJSName] = klass;
     }
   }
-  // Return class
-  return klass;
+}
+
+/**
+ * Spah.classCreate(name[, constructor][, klassProps][, instanceProps]) -> Function
+ * - name (String): The name for the new Spah class, e.g. "Spah.Foo.Bar"
+ * - constructor (Function): The constructor function for this class. If not provided, will search the prototype chain for "init"
+ * - klassProps (Object): A hash of class-level properties and functions
+ * - instanceProps (Object): A hash of instance-level properties and functions to be applied to the class' prototype.
+ *
+ * Creates a class internal to the Spah library and namespace.
+ **/
+Spah["classCreate"] = function(name, constructor, klassProps, instanceProps) {
+  // Make the class constructor
+  return Spah.classExtend(name, Object, constructor, klassProps, instanceProps)
 };
 
 /**
- * Spah.classExtend(name, superKlass[, klassProps][, instanceProps]) -> Function
+ * Spah.classExtend(name, superKlass[, constructor][, klassProps][, instanceProps]) -> Function
  * - name (String): The name for the new Spah class without the "Spah" namespace. E.g. to create Spah.Foo.Bar, use classCreate("Foo.Bar")
  * - superKlass (Function): The class to be extended non-destructively.
+ * - constructor (Function): The constructor function for this class. If not provided, will search the prototype chain for "init"
  * - klassProps (Object): A hash of class-level properties and functions
  * - instanceProps (Object): A hash of instance-level properties and functions to be applied to the class' prototype.
  *
  * Creates a new class that extends another class. Follows the same rules as Spah.classCreate. The superclass does not 
  * need to be a part of the Spah package.
  **/
-Spah["classExtend"] = function(name, superKlass, klassProps, instanceProps) {
-  var targetKlassProps = {};
-  var targetInstanceProps = {};
-  klassProps = klassProps || {};
-  instanceProps = instanceProps || {};
-  // Clone the klass and instance properties from the superclass
+Spah["classExtend"] = function(name, superKlass, constructor, klassProps, instanceProps) {
+  // Massage args
+  var con, kP, iP;
+
+  if(typeof(constructor) == "function") {
+    // Taking custom constructor arg pattern
+    kP = klassProps || {};
+    iP = instanceProps || {};
+    con = constructor;
+  }
+  else {
+    // Taking optional constructor arg pattern
+    // Transpose module arguments
+    kP = constructor || {};
+    iP = klassProps || {};
+    con = iP.init;
+  }
+
+  var klass;  
+  // Treat instance properties - create proto
+  var proto = Object.create(superKlass.prototype);
+  for(var i in iP) {
+    proto[i] = iP[i];
+  }
+
+  // Find constructor
+  if(con) {
+    // Found local constructor on instance props
+    klass = con;
+  }
+  else if(proto.init) {
+    // Found constructor up the proto chain
+    // Wrap function - TODO make this faster
+    klass = function() {
+      if(this.init) this.init.apply(this, arguments);
+    }
+  }
+  else {
+    // No constructor found, give a blank one. This is probably a singleton class.
+    klass = function() {};
+  }
+  klass.prototype = proto;
+
+  // Treat superclass class properties
   for(var s in superKlass) {
-    targetKlassProps[s] = superKlass[s];
+    klass[s] = superKlass[s];
   }
-  for(var p in superKlass.prototype) {
-    targetInstanceProps[p] = superKlass.prototype[p];
+  // Treat class properties
+  for(var k in kP) {
+    klass[k] = kP[k];
   }
-  // Inject the subclass
-  for(var k in klassProps) {
-    targetKlassProps[k] = klassProps[k];
-  }
-  for(var i in instanceProps) {
-    targetInstanceProps[i] = instanceProps[i];
-  }
-  
-  return this.classCreate(name, targetKlassProps, targetInstanceProps);
+
+  Spah.classRegister(name, klass);
+  return klass;
 }
 
+// Finally, register the Spah constant with the environment
 if(Spah.inBrowser()) {
-  // Export master class if running in the client environment
+  // Export master class if running in the client
   window["Spah"] = Spah;
 }
 else {

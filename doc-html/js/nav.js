@@ -27,7 +27,7 @@ Nav.buildLists = function() {
   var hPrev;
   
   // target is always a LIST and we're appending LI's to it
-  navLi.append("<ul></ul>");
+  navLi.append("<ul class=\"h1\"></ul>");
   target = navLi;
   var liPrev;
   
@@ -53,15 +53,15 @@ Nav.buildLists = function() {
           liPrev.addClass("has-subtopics");
           $("a", liPrev).addClass("has-subtopics");
           liPrev.prepend("<a class=\"nav-toggle\" href=\"#\">+</a> ");
+          target.addClass(this.tagName.toLowerCase())
           target.hide();
         }
       }
       else if(this.tagName < hPrev.tagName) {
-        // Go to parent scope
         // console.log("exiting scope: "+this.tagName+" ('"+$h.html()+"')");
-        // Locate parent scope
+        // Exiting scope, determine how many exits we're making
         var prevT = target;
-        target = target.closest("li").closest("ul");
+        target = target.closest("ul."+this.tagName.toLowerCase());
       }
       // Append to current scope
       target.append(newLi);
@@ -100,6 +100,8 @@ Nav.expandTree = function(li) {
     sublist.slideDown(250);
   }
   $li.children("a.nav-toggle").html("-");
+
+  $("nav").scrollTo($li);
 }
 
 Nav.collapseTree = function(li) {
@@ -166,7 +168,7 @@ Nav.addScrollListener = function() {
     }
     else {
       var lastAboveFrameHeader;
-      $("h1, h2, h3, h4, h5, h6").each(function(i) {
+      $("h1:not(article h1:first-child), h2, h3, h4, h5, h6").each(function(i) {
         var $elem = $(this);
         var elemTop = $elem.offset().top;
         var elemBottom = elemTop + $elem.height();

@@ -431,7 +431,7 @@ SpahQL's set arithmetic uses simple operators:
 
   Asserts that one or more values from the left-hand set is greater than (or equal to) one or more values from the right-hand set.
 
-* Less than (or equal to) <code>&lt;``=</code> and <code>&lt;</code> 
+* Less than (or equal to) <code>&lt;=</code> and <code>&lt;</code> 
 
   Asserts that one or more values from the left-hand set is less than (or equal to) one or more values from the right-hand set.
 

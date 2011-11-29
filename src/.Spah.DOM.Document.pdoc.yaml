@@ -137,7 +137,7 @@ description: |
 
 signatures:
  -
-  signature: "Spah.DOM.Document#run(stateQueryResult)"
+  signature: "Spah.DOM.Document#run(stateQueryResult, done)"
   return_value: "void"
 arguments:
  -
@@ -147,7 +147,7 @@ arguments:
     The root-level state object with path "/"
 
  -
-  name: callback
+  name: done
   types: [Function]
   description: >
     (Server-side only) A callback function to be executed when the run has completed. The callback will receive the document as an argument.

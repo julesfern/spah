@@ -130,16 +130,21 @@ Spah.classCreate("Spah.DOM.Modifiers", {
 		"actionName": function(element) {
 			return "populate";
 		},
-		"up": function(element) {
-			function doPopulate() {
+		"up": function(element, flags, state, $) {
+			var doPopulate = function() {
         
       }
       // Register change listener on client
+      if(Spah.inBrowser()) {
+        
+      }
 		},
-		"down": function(element) {
+		"down": function(element, flags, state, $) {
 			
 		},
     "added": function(document) {
+      var popMod = this;
+
       /**
        * Spah.DOM.Document#addTemplate(name, body, type) -> void
        * name (String): A unique name for this template
@@ -150,11 +155,17 @@ Spah.classCreate("Spah.DOM.Modifiers", {
        * (this is enabled by default.)
        *
        * Adds a template to the document, ready to be used by the Populate modifier when rendering
-       * templated content. E
+       * templated content.
        **/
       document.addTemplate = function(name, tmp, type) {
+        // Add the template node to the end of the document body
+        this.jQ("body").append(
+          this.jQ("<script></script>").attr({"type": popMod[type]}).html(tmp)
+        );
+      };
+      document.removeTemplate = function(name) {
         
-      }
+      };
     },
     "removed": function(document) {
       delete document.addTemplate;
@@ -166,6 +177,9 @@ Spah.classCreate("Spah.DOM.Modifiers", {
     },
     "Handlebars": {
       "mimeType": "text/handlebars"
+    },
+    "Underscore": {
+      "mimeType": "text/underscore"
     }
 		
 	}
