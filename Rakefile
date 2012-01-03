@@ -144,7 +144,11 @@ namespace :docs do
   end
   
   task :src do
-    require 'PDoc' rescue require 'pdoc'
+    begin
+      require 'PDoc' 
+    rescue LoadError 
+      require 'pdoc'
+    end
     require 'json'
     require 'maruku'
     

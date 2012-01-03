@@ -1,3 +1,8 @@
+/**
+ * class Spah.DOM.Modifiers
+ *
+ * A collection of built-in modifier scripts to be applied during state deltas.
+ **/
 Spah.classCreate("Spah.DOM.Modifiers", {
 
 	/**
@@ -50,15 +55,15 @@ Spah.classCreate("Spah.DOM.Modifiers", {
 			return "class";
 		},
     /**
-     * Spah.DOM.Modifiers.ClassName.up(element, flags)
-     *
+     * Spah.DOM.Modifiers.ClassName.up(element, flags) -> void
+     * 
      * Adds the flags as a single class using jQuery(element).addClass(flags)
      **/
 		"up": function(element, flags) {
 			element.addClass(flags);
 		},
     /**
-     * Spah.DOM.Modifiers.ClassName.down(element, flags)
+     * Spah.DOM.Modifiers.ClassName.down(element, flags) -> void
      *
      * Removes the flags as a single class using jQuery(element).removeClass(flags)
      **/
@@ -84,7 +89,7 @@ Spah.classCreate("Spah.DOM.Modifiers", {
 			return "id";
 		},
     /**
-     * Spah.DOM.Modifiers.ElementId.up(element, flags)
+     * Spah.DOM.Modifiers.ElementId.up(element, flags) -> void
      *
      * Removes the id specified by the flags from any existing elements that have it, 
      * applies the id specified by the flags to this element, and stashes the element's
@@ -96,7 +101,7 @@ Spah.classCreate("Spah.DOM.Modifiers", {
 			element.attr("id", flags);
 		},
     /**
-     * Spah.DOM.Modifiers.ElementId.down(element, flags)
+     * Spah.DOM.Modifiers.ElementId.down(element, flags) -> void
      *
      * Re-applies the previously stashed ID to this element, if it had one. 
      * Otherwise the id is removed.
