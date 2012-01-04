@@ -15,9 +15,14 @@
   "build_systems": 
   [
       {
-          "name": "Nodeunit",
+          "name": "Nodeunit (All)",
           "working_dir": "$project_path",
           "cmd": ["nodeunit", "src/Spah-edge.js", "test"]
+      },
+      {
+          "name": "Nodeunit (Current class)",
+          "working_dir": "$project_path",
+          "cmd": ["nodeunit", "--reporter", "minimal", "src/Spah-edge.js", "test/${file_name/(\\.test)*\\.js/\\.test\\.js/}"]
       }
   ]
 }

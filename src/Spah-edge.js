@@ -6,7 +6,7 @@ var files = buildData.files;
 var dir = __dirname;
 for(var i in files) {
 	var path = dir+"/"+files[i];
-	console.log("Requiring "+path);
+	//console.log("Requiring "+path);
 	require(path);
 }
 
