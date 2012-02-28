@@ -131,12 +131,12 @@ Spah.classCreate("Spah.DOM.Modifiers", {
 	},
 
 	"Populate": {
-
+    
 		"actionName": function(element) {
 			return "populate";
 		},
 		"up": function(element, flags, state, $) {
-			var doPopulate = function() {
+			var doPopulate = function(e,f,s,j) {
         
       }
       // Register change listener on client
@@ -165,11 +165,20 @@ Spah.classCreate("Spah.DOM.Modifiers", {
       document.addTemplate = function(name, tmp, type) {
         // Add the template node to the end of the document body
         this.jQ("body").append(
-          this.jQ("<script></script>").attr({"type": popMod[type]}).html(tmp)
+          this.jQ("<script></script>").attr({"type": popMod.TemplateEngines[type]["mimeType"], "id": "template-"+name}).html(tmp)
         );
       };
+      /**
+       * Spah.DOM.Document#removeTemplate(name) -> void
+       * name (String): The unique name of the template to be removed
+       *
+       * This method is only present if the "Populate" modifier is registered on the document
+       * (this is enabled by default.)
+       *
+       * Removes a template previously added with #addTemplate.
+       **/
       document.removeTemplate = function(name) {
-        
+        this.jQ("script#template-"+name).remove();
       };
     },
     "removed": function(document) {
@@ -177,16 +186,18 @@ Spah.classCreate("Spah.DOM.Modifiers", {
       delete document.removeTemplate;
     },
 
-    "Mustache": {
-      "mimeType": "text/mustache"
-    },
-    "Handlebars": {
-      "mimeType": "text/handlebars"
-    },
-    "Underscore": {
-      "mimeType": "text/underscore"
+    "TemplateEngines": {
+      "Mustache": {
+        "mimeType": "text/mustache"
+      },
+      "Handlebars": {
+        "mimeType": "text/handlebars"
+      },
+      "Underscore": {
+        "mimeType": "text/underscore"
+      }  
     }
-		
+    
 	}
 
 });

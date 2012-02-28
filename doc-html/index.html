@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Spah - Spah: Stateful pages, not single pages.</title>
+    <title> - Spah: Stateful pages, not single pages.</title>
     
     <link rel="stylesheet" href="css/normalize.css" type="text/css" media="screen" />
     <link rel="stylesheet" href="css/master.css" type="text/css" media="screen" />
@@ -14,22 +14,26 @@
     <script type="text/javascript">
       $(document).ready(function() {
         hljs.initHighlighting();
-        Nav.init();
+        Nav.init("#nav-pages", "#nav-overview");
       });
     </script>
   </head>
   <body>
     
-     <nav>
-      <ul><li><a class="current" href="#">Spah: Stateful pages, not single pages.</a></li><li><a href="spah-grammar.html">Appendix: SpahQL Grammar and execution spec</a></li><li><a href="src/index.html">API</a></li></ul>
-     </nav>
+    <div class="nav-wrapper">
+      <nav id="nav-pages">
+        <ul><li><a class="current" href="#">Spah: Stateful pages, not single pages.</a></li><li><a href="spah-grammar.html">Appendix: SpahQL Grammar and execution spec</a></li><li><a href="src/index.html">API</a></li></ul>
+      </nav>
+      <nav id="nav-overview">
+      </nav>
+    </div>
      
      <article>
       <h1 id='spah_stateful_pages_not_single_pages'>Spah: Stateful pages, not single pages.</h1>
 <img src='https://img.skitch.com/20110504-c79qr916mcwtnq4m63uqc3dibq.jpg' />
 <p>Single-page web apps are a big deal - and with good reason. The promise of lush, stateful web UI that hangs off your service&#8217;s developer API is too good to ignore.</p>
 
-<p>But why single page? Is it really important that your app sits on a single URL in the browser? No. The important thing that single-page apps give you is <strong>state</strong>. The ability to pull data into a page without destroying the existing in-browser state - and to keep your remote app nice, clean and resource-centric in the process. Single-pagedness is just a side-effect of the way in which we&#8217;re currently achieving this.</p>
+<p>But why single page? Is it really important that your app sits on a single URL in the browser? No. The important thing that single-page apps give you is <strong>state</strong>. The ability to pull data into a page without destroying the existing in-browser state - and to keep your remote app nice, clean and resource-centric in the process. Single-pagedness is just a side-effect of the way in which we are, at time of writing, achieving this.</p>
 
 <p>And in the process of putting entire applications on a single URL, we&#8217;re giving up so much. We&#8217;re making our pages unfriendly to search engines, to consumers of microdata, to open graph clients. We&#8217;re resorting to cheap tricks like hashbang URLs to simulate things that we could easily be providing through more appropriate techniques. Sure, if you&#8217;re building a mail client or a word processor then one page makes sense. But there&#8217;s a whole class of apps that are either using these single-page techniques inappropriately, or using multi-page behaviours where persistent UI state simply produces too much code overhead.</p>
 
@@ -516,7 +520,7 @@ null // null</code></pre>
 </li>
 
 <li>
-<p>Less than (or equal to) <code>&lt;``=</code> and <code>&lt;</code></p>
+<p>Less than (or equal to) <code>&lt;=</code> and <code>&lt;</code></p>
 
 <p>Asserts that one or more values from the left-hand set is less than (or equal to) one or more values from the right-hand set.</p>
 </li>

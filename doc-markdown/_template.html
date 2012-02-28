@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Spah - {{title}}</title>
+    <title>{{project_name}} - {{title}}</title>
     
     <link rel="stylesheet" href="css/normalize.css" type="text/css" media="screen" />
     <link rel="stylesheet" href="css/master.css" type="text/css" media="screen" />
@@ -14,15 +14,19 @@
     <script type="text/javascript">
       $(document).ready(function() {
         hljs.initHighlighting();
-        Nav.init();
+        Nav.init("#nav-pages", "#nav-overview");
       });
     </script>
   </head>
   <body>
     
-     <nav>
-      {{navigation}}
-     </nav>
+    <div class="nav-wrapper">
+      <nav id="nav-pages">
+        {{navigation}}
+      </nav>
+      <nav id="nav-overview">
+      </nav>
+    </div>
      
      <article>
       {{content}}

@@ -1,25 +1,18 @@
 Nav = function() {
   
 }
-Nav.init = function() {
-  
-  this.buildLists();
+Nav.init = function(pageListSelector, headingListSelector) {
+  var pNav = $(pageListSelector);
+  var hNav = $(headingListSelector);
+
+  this.buildOverview(hNav);
   this.addToggleBehaviours();
   this.addLinkBehaviours();
   this.addScrollListener();
 }
 
-Nav.buildLists = function() {
-  // Find the li in the nav that doesn't have a link in it - that's the current page
-  var navItems = $("nav ul li");
-  var navLi;
-  navItems.each(function() {
-    var $this = $(this);
-    if($("a.current", $this).length > 0) {
-      navLi = $this;
-      return false;
-    }
-  });
+Nav.buildOverview = function(target) {
+
   
   // Build the heading index
   var hTags = ["h1", "h2", "h3", "h4", "h5", "h6"];
@@ -27,8 +20,8 @@ Nav.buildLists = function() {
   var hPrev;
   
   // target is always a LIST and we're appending LI's to it
-  navLi.append("<ul class=\"h1\"></ul>");
-  target = navLi;
+  target.append("<ul class=\"h1\"></ul>");
+  
   var liPrev;
   
   $(hSel, $("article")).each(function(index) {
