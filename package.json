@@ -1,0 +1,33 @@
+{
+  "name": "spah",
+  "preferGlobal": "false",
+  "version": "0.1.0",
+  "author": "Dan Glegg <dan@angryamoeba.co.uk>",
+  "description": "A framework for building single-page applications without resorting to shady tricks.",
+  "contributors": [],
+  "main": "./src/Spah-edge.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/danski/spah.git"
+  },
+  "keywords": [
+    "spa",
+    "webapp",
+    "state",
+    "stateful",
+    "application"
+  ],
+  "dependencies": {
+    "mustache"  :  "*",
+    "jquery"    :  ">=1.6.3",
+    "jsdom"     :  ">=0.2.13",
+    "underscore":  ">=1.2.2"
+  },
+  "devDependencies": {
+    "express": ">=2.5.8"
+  },
+  "license": "MIT",
+  "engine": {
+    "node": "0.5.0"
+  }
+}

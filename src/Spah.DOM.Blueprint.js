@@ -46,11 +46,12 @@ Spah.classExtend("Spah.DOM.Blueprint", Spah.DOM.Document, {
    * 
    **/
   "compile": function(html, done) {
-    var jsdom = require('jsdom');
-    
+    var jsdom = require('jsdom').jsdom();
+    var contextWindow = jsdom.createWindow();
+    var $ = require('jQuery').create(contextWindow);
     
     // Prepare the event chain
-    var extractedDocType;
+    var extractedDocType = "";
     var docTypeRegexp = /<!DOCTYPE [^>]*>/m;
     var docTypeMatch = html.match(docTypeRegexp);
     if(docTypeMatch && (html.indexOf("<!DOCTYPE") < html.indexOf("<html"))) {
@@ -58,35 +59,14 @@ Spah.classExtend("Spah.DOM.Blueprint", Spah.DOM.Document, {
       extractedDocType = docTypeMatch[0];
     }
     
-    var contextWindow;
-    var jQueryPath = './lib/jquery-1.6.2.min.js';
-    var createWindowContext = function() {
-      Spah.log("Loading blueprint markup and template payload into DOM context...");
-      jsdom.env(html, [jQueryPath], function(jsdomErr, jsdomWindow) {
-        if(jsdomErr) return done(jsdomErr);
-        contextWindow = jsdomWindow;
-        prepareDocument();
-      })
-    };
-    
-    var prepareDocument = function() {
-      Spah.log("Preparing document...");
-      
-      // Extract jQ context
-      var $ = contextWindow.jQuery;
-      
-      // Remove injected jQuery tag
-      Spah.log("Stripping jsdom jquery injection...");
-      $("script[src='"+jQueryPath+"']").remove();
-      
-            
-      Spah.log("Done. Instantiating new Blueprint and triggering callback.");
-      return done(null, new Spah.DOM.Blueprint($, contextWindow, extractedDocType));
-    }
+    Spah.log("Throwing blueprint markup into jQuery context");
+    // Yes, this looks hacky, but due to the context set at
+    // the start of this function it is legit.
+    $("html")[0].ownerDocument.innerHTML = html;
     
     // Spring into action
-    Spah.log("Beginning blueprint compilation");
-    return createWindowContext();
+    Spah.log("Done. Instantiating new Blueprint and triggering callback.");
+    return done(null, new Spah.DOM.Blueprint($, contextWindow, extractedDocType));
   }
   
 }, {

@@ -12,10 +12,10 @@
       "tab_size": 2
   },
 
-  "build_systems":
+  "build_systems": 
   [
       {
-          "name": "Nodeunit tests",
+          "name": "Nodeunit",
           "working_dir": "$project_path",
           "cmd": ["nodeunit", "src/Spah-edge.js", "test"]
       }
