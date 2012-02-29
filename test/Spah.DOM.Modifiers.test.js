@@ -3,7 +3,7 @@
 // built-in modifiers themselves in this suite.
 
 var fs = require('fs');
-var html = fs.readFileSync("./fixtures/layout.html", "utf-8");	
+var html = fs.readFileSync(__dirname+"/fixtures/layout.html", "utf-8");	
 var state = new Spah.SpahQL.QueryResult("/", {
 	"show-if": false,
 	"class-if": false,

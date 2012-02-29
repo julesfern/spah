@@ -4,8 +4,8 @@ if(Spah.inBrowser()) {
 }
 else {
 	var fs = require('fs');
-	html = fs.readFileSync("./fixtures/layout.html", "utf-8");	
-	htmlPrimitive = fs.readFileSync("./fixtures/layout-primitive.html", "utf-8");	
+	html = fs.readFileSync(__dirname+"/fixtures/layout.html", "utf-8");	
+	htmlPrimitive = fs.readFileSync(__dirname+"/fixtures/layout-primitive.html", "utf-8");	
 }
 
 

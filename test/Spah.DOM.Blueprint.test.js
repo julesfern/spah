@@ -1,4 +1,5 @@
 var fs = require('fs');
+console.log("DIRNAME "+__dirname)
 var html = fs.readFileSync(__dirname+"/fixtures/layout.html", "utf-8");
 
 exports["Spah.DOM.Blueprint"] = {

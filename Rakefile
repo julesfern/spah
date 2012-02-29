@@ -43,6 +43,8 @@ end
     
 
 namespace :docs do
+
+  desc "Generate the prose docs from the README"
   task :prose do
     require 'maruku'
     require 'liquid'
@@ -143,6 +145,7 @@ namespace :docs do
     end
   end
   
+  desc "Generate the API documentation using PDOC"
   task :src do
     begin
       require 'PDoc' 
@@ -181,5 +184,49 @@ namespace :docs do
         :version => LIB_VERSION,
         :copyright_notice => 'This work is copyright (c) 2011 Angry amoeba ltd, and is released under an MIT license.' 
       })
+  end
+
+  desc "Generate all documentation and publish to github (danski only)"
+  task :publish do
+    puts "-> Generating docs"
+    Rake::Task["docs"].invoke
+    puts "-> Publishing docs"
+
+    src_branch = "master"
+    doc_branch = "gh-pages"
+
+    # Copy to tmp directory
+    pwd = File.dirname(__FILE__)
+    src_path = File.join(pwd, "doc-html")
+    tmp_path = "/tmp/spah-docs"
+
+    puts "Copying docs to tmp path"
+
+    require 'FileUtils'
+
+    `rm -rf #{tmp_path}`
+    `cp -r #{src_path} #{tmp_path}`
+
+    puts "Chdir to git repo and saving stash"
+
+    `cd #{pwd}; git stash save`
+
+    puts "Switching to gh-pages branch"
+
+    `cd #{pwd}; git checkout #{doc_branch}; git pull --rebase`
+
+    puts "Bringing page content in"
+
+    `cp -r #{tmp_path}/* #{pwd}`
+
+    puts "Lining up the commit"
+
+    `cd #{pwd}; git add .; git commit -m "Updating docs branch"; git push`
+
+    puts "Pushed."
+
+
+    # Save stash
+
   end
 end
