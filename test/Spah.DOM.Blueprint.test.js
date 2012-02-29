@@ -1,5 +1,5 @@
 var fs = require('fs');
-var html = fs.readFileSync("./fixtures/layout.html", "utf-8");
+var html = fs.readFileSync(__dirname+"/fixtures/layout.html", "utf-8");
 
 exports["Spah.DOM.Blueprint"] = {
   

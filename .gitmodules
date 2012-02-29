@@ -1,3 +1,0 @@
-[submodule "test/dependency/nodeunit"]
-	path = test/dependency/nodeunit
-	url = git://github.com/caolan/nodeunit.git

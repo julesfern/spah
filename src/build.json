@@ -1,0 +1,29 @@
+{
+	"files": [
+		"Spah.js",
+		"Spah.SpahQL.js",
+		"Spah.SpahQL.Callbacks.js",
+		"Spah.SpahQL.Errors.js",
+		"Spah.SpahQL.Query.js",
+		"Spah.SpahQL.QueryResult.js",
+		"Spah.SpahQL.QueryResultSet.js",
+		"Spah.SpahQL.QueryParser.js",
+		"Spah.SpahQL.QueryRunner.js",
+		"Spah.SpahQL.DataHelper.js",
+		"Spah.SpahQL.Token.js",
+		"Spah.SpahQL.Token.Base.js",
+		"Spah.SpahQL.Token.Simple.js",
+		"Spah.SpahQL.Token.String.js",
+		"Spah.SpahQL.Token.Numeric.js",
+		"Spah.SpahQL.Token.Boolean.js",
+		"Spah.SpahQL.Token.Set.js",
+		"Spah.SpahQL.Token.ComparisonOperator.js",
+		"Spah.SpahQL.Token.FilterQuery.js",
+		"Spah.SpahQL.Token.PathComponent.js",
+		"Spah.SpahQL.Token.SelectionQuery.js",
+		"Spah.SpahQL.Token.KeyName.js",
+		"Spah.DOM.Modifiers.js",
+		"Spah.DOM.Document.js",
+		"Spah.DOM.Blueprint.js"
+	]
+}

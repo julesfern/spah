@@ -1,42 +1,24 @@
 /**
- * class Spah.State
+ * class Spah.State < Spah.SpahQL.QueryResult
  *
  * Spah.State is the wrapping class for the <code>state</code> defined by your application. 
  * It supports querying and assertions against the state and is also responsible for deep-merging
  * state updates from the server and dispatching modification events to your responders.
  **/
 
-// Dependencies
-Spah = window["Spah"];
+Spah.classExtend("Spah.State", Spah.SpahQL.QueryResult, {
 
-// Declare and export class
-Spah.State = function(data) { this.init(data); };
-window["Spah"]["State"] = Spah.State;
-
-// Singletons
-jQuery.extend(Spah.State, {
-  
-  
-});
-
-// Instance methods
-jQuery.extend(Spah.State.prototype, {
+}, {
   
   /**
    * new Spah.State(data)
    * - data (Object): A hash of data to act as the starting state. Note that modification events are not fired during instantiation.
    **/
   "init": function(data) {
-    this.data = data || {};
+    this.path = "/"; 
+    this.value = data || {};
+    this.sourceData = this.value;
   },
-  
-  /**
-  * Spah.State#data -> Object
-  *
-  * The raw JSON construct being managed by this Spah.State instance. If you overwrite this directly,
-  * you will be haunted by a pigeon.
-  **/
-  "data": {},
   
   /**
    * Spah.State#update(delta) -> Object hash of path modifications
@@ -57,8 +39,8 @@ jQuery.extend(Spah.State.prototype, {
    * During the merge hashes are merged, while strings, arrays and booleans are replaced if re-specified in the delta.
    **/
   "update": function(delta) {
-    updates = Spah.SpahQL.DataHelper.merge(delta, this.data);
-    this.data = updates.data;
+    updates = Spah.SpahQL.DataHelper.merge(delta, this.value);
+    this.value = updates.data;
     return updates.modifications;
   }
   
