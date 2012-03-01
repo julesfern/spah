@@ -84,6 +84,17 @@ exports["Spah.SpahQL.QueryResult"] = {
     test.equal(data["stringtest"], "abc");
     test.done();
   },
+
+  "May set subkey on self using a k/v hash of values to set": function(test) {
+    setup();
+
+    var res = Spah.SpahQL.select("/foo", data).first();
+    test.ok(res.set({"new1": "val1", "new2": "val2"}));
+
+    test.equal(res.select("/new1").first().value, "val1");
+    test.equal(res.select("/new2").first().value, "val2");
+    test.done();
+  },
   
   "May replace own value on the parent": function(test) {
     setup();

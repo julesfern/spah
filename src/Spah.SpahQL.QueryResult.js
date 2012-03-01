@@ -119,26 +119,41 @@ Spah.classCreate("Spah.SpahQL.QueryResult", {
   },
   
   /**
-   * Spah.SpahQL.QueryResult#set(key, value) -> Boolean
-   * - key (Integer, String): The key to set on this object
-   * - value (Object): The value to attribute to the given key.
+   * Spah.SpahQL.QueryResult#set(keyOrDict, value) -> Boolean
+   * - keyOrDict (Integer, String, Object): The key to set on this object, or a hash of keys and values that you want to set.
+   * - value (Object): The value to attribute to the given key. Ignored if keyOrDict is a hash.
    *
    * If this result has an array or object value, modified this result
    * by setting the given key to the given value. Returns true if the 
    * key is set successfully and false if the new value is rejected
    * because this result isn't enumerable.
    **/
-  "set": function(key, value) {
-    var k = Spah.SpahQL.DataHelper.coerceKeyForObject(key, this.value);
-    if(k != null) {
-      if(!Spah.SpahQL.DataHelper.eq(value, this.value[k])) {
-        var prev = this.value[k];
-        this.value[k] = value;
-        this.triggerModificationCallbacks(prev, value, "/"+k);
-      }
-      return true;
+  "set": function(keyOrDict, value) {
+    var values;
+    if(Spah.SpahQL.DataHelper.objectType(keyOrDict) == "object") {
+      values = keyOrDict;
     }
-    return false;
+    else {
+      values = {};
+      values[keyOrDict] = value;
+    }
+
+    for(var hKey in values) {
+      var v = values[hKey];
+      var k = Spah.SpahQL.DataHelper.coerceKeyForObject(hKey, this.value);
+
+      if(k != null) {
+        if(!Spah.SpahQL.DataHelper.eq(v, this.value[k])) {
+          var prev = this.value[k];
+          this.value[k] = v;
+          this.triggerModificationCallbacks(prev, v, "/"+k);
+        }
+      }
+      else {
+        return false;
+      }
+    }
+    return true;
   },
   
   /**

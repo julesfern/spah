@@ -152,16 +152,16 @@ Spah.classCreate("Spah.SpahQL.QueryResultSet", {
   },
   
   /**
-   * Spah.SpahQL.QueryResultSet#set(key, value) -> Boolean
-   * - key (Integer, String): The that you want to set.
-   * - value (String): The value to which you want that key set.
+   * Spah.SpahQL.QueryResultSet#set(keyOrDict[, value]) -> Boolean
+   * - keyOrDict (Integer, String, Object): The key that you want to set, or a hash of keys and values to set.
+   * - value (String): The value to which you want that key set. Ignored if keyOrDict is a hash.
    *
    * Calls set(key, value) on the first result in this result set and returns
    * the boolean response.
    **/
-  "set": function(key, value) {
+  "set": function(keyOrDict, value) {
     var r = this.first();
-    return (r)? r.set(key, value) : false;
+    return (r)? r.set(keyOrDict, value) : false;
   },
   
   /**

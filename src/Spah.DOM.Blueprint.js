@@ -46,9 +46,15 @@ Spah.classExtend("Spah.DOM.Blueprint", Spah.DOM.Document, {
    * 
    **/
   "compile": function(html, done) {
-    var jsdom = require('jsdom').jsdom();
-    var contextWindow = jsdom.createWindow();
-    var $ = require('jQuery').create(contextWindow);
+    try {
+      var jsdom = require('jsdom').jsdom();
+      var contextWindow = jsdom.createWindow();
+      var $ = require('jQuery').create(contextWindow);
+    }
+    catch(e) {
+      return done(e, null);
+    }
+    
     
     // Prepare the event chain
     var extractedDocType = "";

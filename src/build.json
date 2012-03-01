@@ -24,6 +24,7 @@
 		"Spah.SpahQL.Token.KeyName.js",
 		"Spah.DOM.Modifiers.js",
 		"Spah.DOM.Document.js",
-		"Spah.DOM.Blueprint.js"
+		"Spah.DOM.Blueprint.js",
+		"Spah.State.js"
 	]
 }
