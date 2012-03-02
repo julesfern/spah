@@ -96,6 +96,19 @@ Spah.classCreate("Spah.SpahQL.QueryResult", {
   },
   
   /**
+   * Spah.SpahQL.QueryResult#detach() -> Spah.SpahQL.QueryResult
+   *
+   * Takes this query result and create new root-level QueryResult (with path "/").
+   * The value of this QueryResult is deep-cloned and modifying the detached
+   * result will not cause the original data to be modified, nor will it cause
+   * modification events to be triggered on the original data.
+   **/
+  "detach": function() {
+    var data = Spah.SpahQL.DataHelper.deepClone(this.value);
+    return new Spah.SpahQL.QueryResult("/", data);
+  },
+
+  /**
    * Spah.SpahQL.QueryResult#select(query) -> Spah.SpahQL.QueryResultSet
    *
    * Runs a selection query scoped to this result's path and data, and returns the results.
@@ -116,6 +129,23 @@ Spah.classCreate("Spah.SpahQL.QueryResult", {
    **/
   "assert": function(query) {
     return Spah.SpahQL.assert(query, this.sourceData, this.value, this.path);
+  },
+
+  /**
+   * Spah.SpahQL.QueryResult#contains(queryResult) -> Boolean
+   * queryResult (Spah.SpahQL.QueryResult): A query result instance
+   *
+   * Determines if the given result is a child member of this result, by comparing the two paths.
+   * Will never return true if the given query result has a different source data object to this
+   * result, for example if one of the results is a clone created with #detach, #reduce, #expand
+   * or a similar method.
+   **/
+  "contains": function(queryResult) {
+    return  (this.sourceData == queryResult.sourceData) &&
+            (
+              (this.path == queryResult.path) ||
+              (queryResult.path.indexOf(this.path) == 0)
+            );
   },
   
   /**

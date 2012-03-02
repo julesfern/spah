@@ -36,6 +36,20 @@ exports["Spah.SpahQL.QueryResult"] = {
     test.deepEqual(set.first().parent(), Spah.SpahQL.select("/foo", data).first());
     test.done();
   },
+
+  "Determines whether one result contains another": function(test) {
+    setup();
+
+    var foo = Spah.SpahQL.select("/foo", data).first();
+    var foofoo = foo.select("/foo").first();
+    var foofooclone = foo.detach();
+
+    test.ok(foo && foofoo);
+    test.ok(foo.contains(foofoo));
+    test.ok(!foofoo.contains(foo));
+    test.ok(!foo.contains(foofooclone));
+    test.done();
+  },
   
   "Allows sub-selections": function(test) {
     setup();
@@ -134,6 +148,29 @@ exports["Spah.SpahQL.QueryResult"] = {
     test.deepEqual(callbackCounts, [3,1,0]);
     foo.set("newkey", "newval");
     test.deepEqual(callbackCounts, [4,1,1]);
+    test.done();
+  },
+
+  "Does not modify the original data or trigger events on the original data when detached": function(test) {
+    setup();
+
+    var data = {foo: {bar: {baz: "val"}}};
+    var callbackCounts = [0,0];
+    var callback0 = function() { callbackCounts[0]++; };
+    var callback1 = function() { callbackCounts[1]++; };
+
+    var root = Spah.SpahQL.select("/", data).first();
+        root.modified(callback0);
+
+    var detached = root.detach();
+        detached.modified(callback1);
+
+    root.set("foo", "bar");
+    test.deepEqual(callbackCounts, [1,0]);
+
+    detached.set("foo", "bar");
+    test.deepEqual(callbackCounts, [1,1]);
+
     test.done();
   },
   

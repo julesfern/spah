@@ -483,6 +483,30 @@ Spah.classCreate("Spah.SpahQL.DataHelper", {
       return (k.match(/^\s*$/))? null : k;
     }
     return null;
+  },
+
+  /**
+   * Spah.SpahQL.DataHelper.deepClone(obj) -> Object
+   * obj (Array, Object): The object to be cloned
+   *
+   * Creates a deep clone of an object or array. All nested objects and arrays
+   * are also deep-cloned. Strings, booleans and numbers are returned as-is, because
+   * all in-place modifications to strings and numbers produce new object assignments
+   * anyway.
+   **/
+  "deepClone": function(obj) {
+    var objType = this.objectType(obj);
+    if(objType == "array" || objType == "object") {
+      var clone = (objType == "array")? [] : {};
+      for(var key in obj) {
+        var val = obj[key];
+        clone[key] = this.deepClone(val);
+      }
+      return clone;
+    }
+    else {
+      return obj;
+    }
   }
   
   

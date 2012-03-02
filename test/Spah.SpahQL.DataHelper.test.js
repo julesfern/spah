@@ -41,6 +41,53 @@ exports["Spah.SpahQL.DataHelper"] = {
     test.ok(!Spah.SpahQL.DataHelper.eq({foo: "bar", arr: [0,1,2]}, {foo: "bar", arr: null}), "Fails hashes diff inner content types")
     test.done();
   },
+
+  "Deep-clones an array": function(test) {
+    var arr = [
+      1,
+      "2",
+      [0,1,2],
+      {"foo": "bar"}
+    ];
+    var clone = Spah.SpahQL.DataHelper.deepClone(arr);
+    test.ok(Spah.SpahQL.DataHelper.eq(arr, clone));
+
+    // Try a set of modifications
+    clone.push("added");
+    clone[1] += "changed";
+    clone[2].push("added");
+    clone[3]["bar"] = "added";
+
+    test.ok(!arr[4]);
+    test.equal(arr[1], "2");
+    test.ok(!arr[2][3]);
+    test.ok(!arr[3]["bar"]);
+
+    test.ok(!Spah.SpahQL.DataHelper.eq(arr, clone));
+    test.done();
+  },
+
+  "Deep-clones a hash": function(test) {
+    var obj = {
+      "obj": {"foo": "bar"},
+      "arr": [0,1,{"2": 2}],
+      "str": "foo"
+    };
+    var clone = Spah.SpahQL.DataHelper.deepClone(obj);
+    test.ok(Spah.SpahQL.DataHelper.eq(obj, clone));
+
+    // Try a hash modification and an array modification
+    clone["obj"]["bar"] = "baz";
+    clone["arr"].push(3);
+    clone["arr"][2]["foo"] = "bar";
+
+    test.ok(!obj["obj"]["bar"]);
+    test.ok(!obj["arr"][3]);
+    test.ok(!obj["arr"][2]["foo"]);
+
+    test.ok(!Spah.SpahQL.DataHelper.eq(obj, clone));
+    test.done();
+  },
   
   "Detects modifications successfully": function(test) {
     var d = Spah.SpahQL.DataHelper;
