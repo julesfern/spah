@@ -3,6 +3,7 @@ body {
   font-family: Georgia, serif;
   background: #EFEFEF url('../img/ricepaper2.png');
   background-attachment: fixed;
+  font-size: 17px;
 }
 
 p {
@@ -19,12 +20,12 @@ nav {
   overflow-y: auto;
   top: 0;
   left: 0;
-  width: 250px;
+  width: 260px;
   height: 100%;
   background: rgba(0,0,0,0.1);
   border-right: 2px solid #333;
   color: #333;
-  font-size: 0.9em;
+  font-size: 1em;
 }
 nav#nav-pages {
   display: none;
@@ -133,7 +134,7 @@ nav > ul > li:last-child > a {
 article {
   margin: 10px 30px 50% 300px;
   max-width: 800px;
-  line-height: 1.4em;
+  line-height: 1.6em;
 }
 
 article h1 {
@@ -145,6 +146,14 @@ article h1, article h2, article h3, article h4 {
   padding: 10px 0 20px 0;
   border-bottom: 5px solid #333;
   font-size: 2em;
+}
+
+article h1:first-child {
+  border: none;
+  margin: 40px 0 0 0;
+  padding: 0;
+  color: #0793db;
+  font-size: 2.3em;
 }
 
 article h2 {
@@ -170,6 +179,7 @@ article code {
   color: #FFF;
   background: #333;
   font-size: small;
+  line-height: 1.4em;
 }
 
 article pre {

@@ -11,7 +11,7 @@ Spah.classExtend("Spah.State", Spah.SpahQL.QueryResult, {
 }, {
   
   /**
-   * new Spah.State(data[, reducers, expanders])
+   * new Spah.State(data[, reducers[, expanders]])
    * - data (Object): A hash of data to act as the starting state. Note that modification events are not fired during instantiation.
    * - reducers (Array<Object>): An array of rules to be applied when this state is reduced.
    * - expanders (Array<Object>): An array of rules to be applied when this state is expanded.
@@ -227,7 +227,6 @@ Spah.classExtend("Spah.State", Spah.SpahQL.QueryResult, {
             var mr = this;
             // Is this matcher result contained in the exploded results?
             if(explodedResult.contains(mr)) {
-              Spah.log("EXEMPT "+explodedResult.path+" as it contains "+mr.path);
               exemptPaths.push(explodedResult.path);
             }
           })
@@ -236,12 +235,10 @@ Spah.classExtend("Spah.State", Spah.SpahQL.QueryResult, {
 
       explodedPathResults.each(function() {
         if(exemptPaths.indexOf(this.path) < 0) {
-          Spah.log("DELETE "+this.path+" as not exempted");
           this.delete();
         }
       })
 
- 
     }
   },
 

@@ -3,13 +3,15 @@
  *
  * A collection of built-in modifier scripts to be applied during state deltas.
  **/
+
+
+/**
+ * class Spah.DOM.Modifiers.Show
+ *
+ * Handles showing/hiding elements using jQuery's show() and hide() methods.
+ **/
 Spah.classCreate("Spah.DOM.Modifiers", {
 
-	/**
-	 * class Spah.DOM.Modifiers.Show
-	 *
-	 * Handles showing/hiding elements using jQuery's show() and hide() methods.
-	 **/
 	"Show": {
 		
     /**

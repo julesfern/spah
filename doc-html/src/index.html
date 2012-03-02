@@ -41,7 +41,9 @@
         <ul class="menu-items" id="api_menu"><li><div class="menu-item"><a class="class" href="Spah/index.html" title="Spah (class)">Spah</a></div><ul><li><div class="menu-item"><a class="class" href="Spah/DOM/index.html" title="Spah.DOM (class)">Spah.DOM</a></div><ul><li><div class="menu-item"><a class="class" href="Spah/DOM/Blueprint/index.html" title="Spah.DOM.Blueprint (class)">Spah.DOM.Blueprint</a></div></li>
 <li><div class="menu-item"><a class="class" href="Spah/DOM/Document/index.html" title="Spah.DOM.Document (class)">Spah.DOM.Document</a></div></li>
 <li><div class="menu-item"><a class="class" href="Spah/DOM/Errors/index.html" title="Spah.DOM.Errors (class)">Spah.DOM.Errors</a></div><ul><li><div class="menu-item"><a class="class" href="Spah/DOM/Errors/InvalidModifierError/index.html" title="Spah.DOM.Errors.InvalidModifierError (class)">Spah.DOM.Errors.InvalidModifierError</a></div></li></ul></li>
-<li><div class="menu-item"><a class="class" href="Spah/DOM/Modifiers/index.html" title="Spah.DOM.Modifiers (class)">Spah.DOM.Modifiers</a></div></li></ul></li>
+<li><div class="menu-item"><a class="class" href="Spah/DOM/Modifiers/index.html" title="Spah.DOM.Modifiers (class)">Spah.DOM.Modifiers</a></div><ul><li><div class="menu-item"><a class="class" href="Spah/DOM/Modifiers/ClassName/index.html" title="Spah.DOM.Modifiers.ClassName (class)">Spah.DOM.Modifiers.ClassName</a></div></li>
+<li><div class="menu-item"><a class="class" href="Spah/DOM/Modifiers/ElementId/index.html" title="Spah.DOM.Modifiers.ElementId (class)">Spah.DOM.Modifiers.ElementId</a></div></li>
+<li><div class="menu-item"><a class="class" href="Spah/DOM/Modifiers/Show/index.html" title="Spah.DOM.Modifiers.Show (class)">Spah.DOM.Modifiers.Show</a></div></li></ul></li></ul></li>
 <li><div class="menu-item"><a class="class" href="Spah/SpahQL/index.html" title="Spah.SpahQL (class)">Spah.SpahQL</a></div><ul><li><div class="menu-item"><a class="class" href="Spah/SpahQL/Callbacks/index.html" title="Spah.SpahQL.Callbacks (class)">Spah.SpahQL.Callbacks</a></div></li>
 <li><div class="menu-item"><a class="class" href="Spah/SpahQL/DataHelper/index.html" title="Spah.SpahQL.DataHelper (class)">Spah.SpahQL.DataHelper</a></div></li>
 <li><div class="menu-item"><a class="class" href="Spah/SpahQL/Errors/index.html" title="Spah.SpahQL.Errors (class)">Spah.SpahQL.Errors</a></div><ul><li><div class="menu-item"><a class="class" href="Spah/SpahQL/Errors/SpahQLError/index.html" title="Spah.SpahQL.Errors.SpahQLError (class)">Spah.SpahQL.Errors.SpahQLError</a></div></li>
@@ -76,28 +78,36 @@
         
 
 <div class="page-introduction">
-  <h1 id='spah_stateful_pages_not_single_pages'>Spah: Stateful pages, not single pages.</h1>
-<img src='https://img.skitch.com/20110504-c79qr916mcwtnq4m63uqc3dibq.jpg' />
-<p>Single-page web apps are a big deal - and with good reason. The promise of lush, stateful web UI that hangs off your service&#8217;s developer API is too good to ignore.</p>
+  <h1 id='spah_build_awesome_singlepage_apps_without_breaking_the_web'>Spah: Build awesome single-page apps without breaking the web.</h1>
 
-<p>But why single page? Is it really important that your app sits on a single URL in the browser? No. The important thing that single-page apps give you is <strong>state</strong>. The ability to pull data into a page without destroying the existing in-browser state - and to keep your remote app nice, clean and resource-centric in the process. Single-pagedness is just a side-effect of the way in which we&#8217;re currently achieving this.</p>
+<p>Single-page web apps are awesome. You can use the single-page paradigm to build fancy, stateful web apps that hang right off your service&#8217;s developer API. But it can have terrible side effects.</p>
 
-<p>And in the process of putting entire applications on a single URL, we&#8217;re giving up so much. We&#8217;re making our pages unfriendly to search engines, to consumers of microdata, to open graph clients. We&#8217;re resorting to cheap tricks like hashbang URLs to simulate things that we could easily be providing through more appropriate techniques. Sure, if you&#8217;re building a mail client or a word processor then one page makes sense. But there&#8217;s a whole class of apps that are either using these single-page techniques inappropriately, or using multi-page behaviours where persistent UI state simply produces too much code overhead.</p>
+<p>In the process of putting entire applications on a single URL, we risk breaking the web. We&#8217;re making our pages unfriendly to search engines and impenetrable to microdata clients. We want to get all the advantages and capabilities of rich javascript apps but <em>without</em> the nasty stuff. That means no hashbangs, no code duplication, and no trickery to give search engines and scrapers what they want.</p>
 
-<p>This is why Spah exists.</p>
+<p>So here&#8217;s Spah. Spah takes the best from both the single- and multi-page paradigms and boils it down to a few core concepts:</p>
 
-<p>Spah takes the best from both the single- and multi-page paradigms and lets you:</p>
+<ol>
+<li>A <strong>state</strong> for your UI. That&#8217;s a description of which tabs are active, what the user has typed into a form, lists of model objects, user preferences, that sort of thing.</li>
+
+<li>A <strong>blueprint</strong> for the HTML that makes up your application, much like a template. You define how it will react to changes in the <strong>state</strong>.</li>
+
+<li>A <strong>server</strong> that can make changes to the <strong>state</strong>. The server understands your <strong>blueprint</strong> - so if the user enters a URL directly into their browser, the server can apply the <strong>state</strong> to your <strong>blueprint</strong> and deliver proper HTML down the wire. If the user navigates to that URL from within your app, the server can just ship changes to the UI state as plain JSON.</li>
+
+<li>A <strong>client</strong> that adds all the rich single-page behaviours. It keeps the UI synced to changes in the <strong>state</strong>, it manages navigation history and it enables more advanced client-side behaviours such as lazy-loading.</li>
+</ol>
 
 <ul>
-<li><strong>Be a good web citizen</strong>. With Spah, every URL in your site may be curled, indexed, bookmarked and shared just like a web page should.</li>
+<li><strong>Be a good web citizen</strong>. With Spah, every URL in your site may be indexed, bookmarked, shared and CURLed just like a web page should.</li>
 
-<li><strong>Progressively enhance</strong>. Once a user with a modern browser has loaded a page from your app, the single-page paradigm takes over and all new data may be loaded asynchronously, without destroying the in-browser state of your page. Users with older browsers - even those without Javascript enabled, if you&#8217;ve done it right - get to use your site synchronously.</li>
+<li><strong>Progressively enhance</strong>. Once a user with a modern browser has loaded a page from your app, the single-page paradigm takes over and all new data may be loaded asynchronously, without destroying the in-browser state of your page. Users with older browsers - even those without Javascript enabled - get to use your app like its 1999.</li>
+
+<li><strong>Use proper markup</strong>. Spah is not a UI framework. It doesn&#8217;t generate buttons or list views or anything like that. You build the UI and its controls using proper, semantic HTML and Spah helps you keep them synced with the current UI state.</li>
 
 <li><strong>Keep it stateful.</strong> Spah&#8217;s job is to manage the state of your UI and ensure that the markup seen in the user&#8217;s browser matches that state. The state contains everything in your UI, from lists of model objects through to user preferences and unsaved form content. You decide which bits of the state are hard-rendered as HTML and which bits are used to trigger more advanced client-side behaviours, while Spah syncs and updates the state on each call to the server.</li>
 
 <li><strong>Avoid repetition.</strong> Do all this with <em>zero</em> code duplication between client and server. Spah solves the difficult problems of shared client/server templating and state management, leaving you to work on your app.</li>
 
-<li><strong>Use other libraries.</strong> Spah doesn&#8217;t opinionate about client-side model frameworks or REST paradigms or how you authenticate with your API. Spah only cares about JSON, jQuery and having access to a Spah-compatible server. The Spah server libraries are not full-stack web frameworks, but libraries intended to be woven into your wider Node.js/Rails/Sinatra application stack. To be completely clear: Spah is code that manages the state of a UI in a complex web app, and nothing more. You bring your own app stack preferences to the table.</li>
+<li><strong>Use other libraries.</strong> Spah doesn&#8217;t opinionate about client-side model frameworks or REST paradigms or how you authenticate with your API. Spah only cares about JSON, jQuery and having access to a Spah-compatible server. The Spah server is not a full-stack web framework, but a slim library intended to be woven into your wider application stack. To be completely clear: Spah is code that manages the state of a UI in a complex web app, and nothing more. You bring your own app stack preferences to the table.</li>
 </ul>
 
 <h1 id='contents'>Contents</h1>
@@ -220,11 +230,19 @@
 
 <h1 id='introduction'>Introduction</h1>
 
-<p>Spah is a framework designed to permit the development of a specific class of web application - one in which the majority of URLs absolutely must be fetchable as a generic HTML document for purposes of indexing and scraping, while maintaining highly responsive, stateful behaviour in the browser. It is also assumed that you, the developer, wish for a happy life and therefore do not want to duplicate any code, anywhere.</p>
+<p>Spah is a set of libraries designed to permit the development of a specific class of web application - one in which the majority of URLs absolutely must be fetchable as a generic HTML document for purposes of indexing and scraping, while maintaining highly responsive, stateful behaviour in the browser. It is also assumed that you, the developer, wish for a happy life and therefore do not want to duplicate any code, anywhere.</p>
 
-<p>To be clear, Spah is <em>not</em> a Rails/Django equivalent. Nor is it a Sproutcore or Cappucino equivalent. Spah has no model objects, validation helpers, database connection managers, or request routers. Spah doesn&#8217;t care what you use to do your routing or your persistence. <strong>All Spah cares about is delivering highly stateful pages - it is a view layer for your application, nothing more</strong>.</p>
+<p>To be clear, Spah is <em>not</em> a full-stack web framework like Rails or Django. Nor is it UI framework like Sproutcore or Cappucino. Spah has no model objects, validation helpers, database connection managers, or request routers. Spah doesn&#8217;t care what you use to do your routing or your persistence. <strong>All Spah cares about is delivering highly stateful pages - it is a view layer for your application, nothing more</strong>. Here&#8217;s what makes up Spah:</p>
 
-<p>Spah is written entirely in Javascript, and designed to run in both the browser and via a Node.js server. A ruby version of the Spah server is also planned.</p>
+<ul>
+<li><em>A client</em>. The Spah Client forms the backbone of your browser-based UI. It incorporates all the trickery needed to keep the state of your UI synced up and to help the user navigate your application.</li>
+
+<li><em>A server</em>. The Spah Server is a Node.js library designed to be hooked into any web framework you like. You use the Spah Server to make changes to the state of your UI and to serve those changes back to the user.</li>
+
+<li><em>A query language</em>. SpahQL is a query language for JSON. It allows you to pull data out of JSON objects and to make assertions about their contents. SpahQL is really the backbone of Spah&#8217;s functionality.</li>
+</ul>
+
+<p>Spah is written entirely in Javascript, and designed to run in both the browser and via a Node.js server.</p>
 
 <p>To best explain how Spah works, it&#8217;s probably best to start by looking at some other patterns for building these desktop-class web apps in order to show the decisions that drove Spah&#8217;s creation.</p>
 
@@ -454,7 +472,7 @@
 </li>
 
 <li>
-<p>Less than (or equal to) <code>&lt;``=</code> and <code>&lt;</code></p>
+<p>Less than (or equal to) <code>&lt;=</code> and <code>&lt;</code></p>
 
 <p>Asserts that one or more values from the left-hand set is less than (or equal to) one or more values from the right-hand set.</p>
 </li>
@@ -647,7 +665,7 @@
         <p><a href="http://github.com/danski/spah">Spah</a> v0.0.0 API documentation.</p>
         <p>
           
-            Last updated on October 06, 2011 at 14:19 UTC.
+            Last updated on March 02, 2012 at 17:47 UTC.
           
           Generated by <a href="http://pdoc.org">PDoc</a>.
           Uses <a href="http://famfamfam.com/lab/icons/silk/" title="famfamfam.com: Silk Icons">Silk Icons</a> and portions of <a href="http://github.com/280north/aristo/tree/master" title="280north's aristo at master - GitHub">Aristo</a>.

@@ -1,34 +1,14 @@
-Spah: Stateful pages, not single pages.
-=======================================
-
-<img src="https://img.skitch.com/20110504-c79qr916mcwtnq4m63uqc3dibq.jpg" />
-
-Single-page web apps are a big deal - and with good reason. The promise of lush, stateful web UI that hangs off your service's developer API is too good to ignore.
-
-But why single page? Is it really important that your app sits on a single URL in the browser? No. The important thing that single-page apps give you is **state**. The ability to pull data into a page without destroying the existing in-browser state - and to keep your remote app nice, clean and resource-centric in the process. Single-pagedness is just a side-effect of the way in which we are, at time of writing, achieving this.
-
-And in the process of putting entire applications on a single URL, we're giving up so much. We're making our pages unfriendly to search engines, to consumers of microdata, to open graph clients. We're resorting to cheap tricks like hashbang URLs to simulate things that we could easily be providing through more appropriate techniques. Sure, if you're building a mail client or a word processor then one page makes sense. But there's a whole class of apps that are either using these single-page techniques inappropriately, or using multi-page behaviours where persistent UI state simply produces too much code overhead. 
-
-This is why Spah exists.
-
-Spah takes the best from both the single- and multi-page paradigms and lets you:
-
-- **Be a good web citizen**. With Spah, every URL in your site may be curled, indexed, bookmarked and shared just like a web page should.
-- **Progressively enhance**. Once a user with a modern browser has loaded a page from your app, the single-page paradigm takes over and all new data may be loaded asynchronously, without destroying the in-browser state of your page. Users with older browsers - even those without Javascript enabled, if you've done it right - get to use your site synchronously.
-- **Keep it stateful.** Spah's job is to manage the state of your UI and ensure that the markup seen in the user's browser matches that state. The state contains everything in your UI, from lists of model objects through to user preferences and unsaved form content. You decide which bits of the state are hard-rendered as HTML and which bits are used to trigger more advanced client-side behaviours, while Spah syncs and updates the state on each call to the server.
-- **Avoid repetition.** Do all this with _zero_ code duplication between client and server. Spah solves the difficult problems of shared client/server templating and state management, leaving you to work on your app.
-- **Use other libraries.** Spah doesn't opinionate about client-side model frameworks or REST paradigms or how you authenticate with your API. Spah only cares about JSON, jQuery and having access to a Spah-compatible server. The Spah server libraries are not full-stack web frameworks, but libraries intended to be woven into your wider Node.js/Rails/Sinatra application stack. To be completely clear: Spah is code that manages the state of a UI in a complex web app, and nothing more. You bring your own app stack preferences to the table.	
-
-Contents
-========
+Spah: Build awesome single-page apps without breaking the web.
+==============================================================
 
 [introduction]: #introduction
 [intro_anatomy_of_an_spa]: #anatomy_of_a_singlepage_web_app
 [intro_state]: #the_state
 [intro_anatomy_of_a_spah_app]: #anatomy_of_a_spah_web_app
 
-[server]: #the_server
-[client]: #the_client
+[state]: #the_state
+[server]: #the_spah_server
+[client]: #the_spah_client
 
 [spahql]: #spahql
 [spahql_concepts]: #spahql_core_concepts
@@ -38,7 +18,7 @@ Contents
 [comparison_operators]: #comparison_operators
 [object_equality]: #object_equality
 
-[document_logic]: #document_logic
+[document_logic]: #html_blueprints
 [logic_hide_show]: #hide_or_show_an_element
 [logic_classes]: #add_or_remove_element_classes
 [logic_id]: #set_element_id
@@ -57,63 +37,32 @@ Contents
 [force_synchronous]: #forcing_links_and_forms_to_load_synchronously
 [defaults]: #default_client_behaviour
 
-1. [Introduction][introduction]
-  * [Anatomy of a single-page web app][intro_anatomy_of_an_spa]
-  * [The state][intro_state]
-  * [Anatomy of a spah app][intro_anatomy_of_a_spah_app]
-2. [The server][server]
-  * TODO Document runner
-  * TODO Template handling
-  * TODO Blueprint compiler
-  * TODO State expansion
-  * TODO Default states
-3. [The client][client]
-  * TODO Document runner
-  * TODO Template handling
-  * TODO Event handling
-  * TODO Link, form and navigation handling
-  * TODO History management
-  * TODO State reduction
-4. [Querying the state with SpahQL][spahql] 
-  * [Core concepts][spahql_concepts]
-  * [Selection queries][selection_state_queries]
-  * [Assertion queries][assertion_state_queries]
-  * [Literals and sets][literals_and_sets]
-  * [Comparison operators][comparison_operators]
-  * [Object equality][object_equality]
-5. [Document logic][document_logic]
-  * [Hiding and showing elements][logic_hide_show]
-  * [Adding and removing element classes][logic_classes]
-  * [Setting the ID of an element][logic_id]
-  * [Stash and unstash element content][logic_stashing]
-  * [Using multiple operations on a single element][logic_chaining]
-  * TODO: Applying document logic with css selectors ({"a.loadsTickets": {"stash-if": "query"}})
-  * [Advanced example][logic_example]
-  * TODO: Extending Spah with your own document modifiers
-6. TODO: [Templating with Mustache][templating]
-  * TODO: Extending the template helpers
-7. TODO: [Reacting to state changes with Javascript][responders]
-8. [Forcing links and forms to load synchronously][force_synchronous]
-9. TODO: [Default client behaviours][defaults] (automatically update doc title from /title path, automatically add async behaviour, automatically manage history)
-10. TODO: [Eager client state changes][eager_state_changes] (mark parts of the tree as "expected to get new data" to trigger load notifications. automatically revert to previous state on load failure and dispatch failure event)
-11. TODO: [Examples: Example Node.js application][node_example]
-12. TODO: [Examples: Example Sinatra application][sinatra_example]
-
 Introduction
 ============
 
-Spah is a framework designed to permit the development of a specific class of web application - one in which the majority of URLs absolutely must be fetchable as a generic HTML document for purposes of indexing and scraping, while maintaining highly responsive, stateful behaviour in the browser. It is also assumed that you, the developer, wish for a happy life and therefore do not want to duplicate any code, anywhere.
+Single-page web apps are awesome. You can use the single-page paradigm to build fancy, stateful web apps that hang right off your service's developer API. But it can have terrible side effects. In the process of putting entire applications on a single URL, we risk breaking the web. We're making our pages unfriendly to search engines and impenetrable to microdata clients.
 
-To be clear, Spah is _not_ a Rails/Django equivalent. Nor is it a Sproutcore or Cappucino equivalent. Spah has no model objects, validation helpers, database connection managers, or request routers. Spah doesn't care what you use to do your routing or your persistence. **All Spah cares about is delivering highly stateful pages - it is a view layer for your application, nothing more**.
+We want to get all the advantages and capabilities of rich javascript apps but *without* the nasty stuff. That means no hashbangs, no code duplication, and no trickery to give search engines and scrapers what they want.
 
-Spah is written entirely in Javascript, and designed to run in both the browser and via a Node.js server. A ruby version of the Spah server is also planned.
+So here's Spah. Spah takes the best from both the single- and multi-page paradigms and boils it down to a few core concepts:
 
-To best explain how Spah works, it's probably best to start by looking at some other patterns for building these desktop-class web apps in order to show the decisions that drove Spah's creation.
+1. A **state** for your UI. That's a chunk of JSON that describes which tabs are active, lists of model objects, user preferences, saved form data, that sort of thing.
+2. A **blueprint** for the HTML that makes up your application, much like a template. You define how it will react to changes in the **state** using SpahQL, a powerful query language for JSON.
+3. A **server** that can make changes to the **state**. The server understands your **blueprint** - so if the user enters a URL directly into their browser, the server can apply the **state** to your **blueprint** and deliver proper HTML down the wire. If the user navigates to that URL from within your app, the server can just ship changes to the UI state as plain JSON. The server can update the state selectively, without destroying stuff the user is already doing.
+4. A **client** that adds all the rich single-page behaviours. It keeps the UI synced to changes in the **state**, it manages navigation history and it enables more advanced client-side behaviours such as lazy-loading.
 
-Anatomy of a single-page web app
---------------------------------
+Putting these together lets you:
 
-###Figure 1: The most simple web app
+- **Be a good web citizen**. With Spah, every URL in your site may be indexed, bookmarked, shared, syndicated and CURLed.
+- **Progressively enhance, gracefully degrade**. Users with modern browsers get the full rich javascript experience. Users with old browsers get to surf like its 1999. Everyone gets to use your app.
+- **Keep it stateful.** Give proper multitasking by only updating those parts of the UI that need updating. Get vastly reduced server-side code complexity. Everyone wins.
+- **Do all this with _zero_ code duplication.** Spah solves the difficult problems of shared client/server templating and state management, leaving you to work on your app.
+- **Use the tools you like.** Spah is a view layer for your application and nothing more. It doesn't care what you use to do your routing, your validations or your persistence.
+
+In order to properly explain Spah, lets take a look at a few patterns for building web applications.
+
+Anatomy of a simple web app
+---------------------------
 
 <img src="https://img.skitch.com/20110720-mnf4xun1n6gwf461edtp12jmjf.jpg" />
 
@@ -122,13 +71,14 @@ We all recognise this. The server renders pages as they are requested and serves
 * _Good_: Every page is indexable and scrapable in every possible state.
 * _Good_: Since the state of the page is handled exclusively by the server, state can be maintained as the user navigates between pages.
 * **Bad**: Since the state of the page is handled exclusively by the server, maintaining state requires the developer to wrangle highly complicated query strings.
-* **Bad**: The page is expected to load with all the content it could possibly need. Response times can suffer as a result.
+* **Bad**: Since every user action requires a full page load, a lot of user experience goodness goes out the window.
 
-###Figure 2: Single-page apps (or: how we learned to stop worrying and tolerate hashbangs)
+Anatomy of a single-page web app
+--------------------------------
 
 <img src="https://img.skitch.com/20110504-73a3ftde7d731kbepxg2p7w1.jpg" />
 
-This approach yields the much-desired "desktop" class of application, and it's a tempting approach for any app that also provides a comprehensive JSON API. But, in adopting this approach, we've made some serious concessions:
+This is pretty much where we are today. You get the much-desired "desktop" class of application, and you do it by writing the UI entirely in javascript with little to no markup handled on the server. You pull data in from your app's API in JSON format. But we've made some serious concessions:
 
 * _Good_: The whole UI runs within a single page, so you can have multiple complex stateful UI elements that retain their state as the rest of the page is updated.
 * _Good_: The whole UI runs within the browser, so you've got templating handled in the client. No duplication of template code.
@@ -136,45 +86,132 @@ This approach yields the much-desired "desktop" class of application, and it's a
 * _Bad_: We're not indexable any more. Your app only has one URL, and it serves boilerplate contentless markup. If you decide to make your URLs server-renderable, then the spectre of code duplication returns.
 * _Bad_: Response times suffer, but not because of server inefficiencies such as those seen in Figure 1. Instead, we introduce multiple HTTP turnarounds to start the app - one to load the page, several more to populate it with content.
 
-The State
----------
-
 Anatomy of a Spah web app
 -------------------------
 
+<img src="https://img.skitch.com/20110504-p13hfga9s4d6x7bpjwrw1gbyjj.jpg" title="A cold render" />
 
-The server
-==========
-A Spah server is assumed to be a resource-centric Node.js or Sinatra application. As always, all validation and data
-persistence is handled on the server side by your app's models. All routing will be in your app's router, and all request logic in its controllers. Where a Spah app differs is in the view layer.
+With Spah, we combine the two. Users can visit any URL in your app and get a proper HTML response back. But also...
 
-Instead of hiding away template logic in server-side code, template logic is moved to a place where both the client AND the server have access to it - [the document itself][document_logic].
+<img src="https://img.skitch.com/20110504-tpqb613eyy46j7f758nqr745n2.jpg" title="A warm render" />
 
-A Spah HTML render takes the **state** and a **prototype layout** and gloms to the two together. The HTML layout contains [logic encoded in HTML5 data
-attributes][document_logic], and Spah will pre-process the document **before sending it down the wire**. This way, any view can be cold-rendered by a request
-to the appropriate URL, or warm-rendered by an asynchronous state update from the server. In a sense, Spah allows your server-side app to
-*behave like a browser* and boot your client-side application to the point of usefulness, before letting the user's actual browser carry
-out the rest of the startup process.
+Once the page has loaded, all the rich client behaviours kick in - any further action taken by the user will result in the state of the current page being updated. The Spah Client manages history using the HTML5 History API, allowing the user to move freely around your app and making every link share, bookmark and script-friendly. If the user needs to do something synchronously - say, a file upload, or a secure login - Spah can pass the state to the server where it gets modified, and handed back as another plain HTML document.
 
-*Figure 2: A better approach.*
+The State
+=========
 
-<img src="https://img.skitch.com/20110504-p13hfga9s4d6x7bpjwrw1gbyjj.jpg" />
+Spah's central concept is the State. The State is a JSON object that describes the configuration of your application's user interface. That'd be things like user preferences, active tabs, saved form data, or lists of model objects. Here's a dead simple example for a basic Twitter UI:
 
-For partials, Spah uses [Mustache templates][templating]. All <code>.mustache</code> files in your server-side application are indexed by path on startup
-and made available to the rendering chain on both the client and server. Spah automatically injects the templates into your HTML layout using
-script tags:
+	{
+		"user": {
+			"logged_in": true,
+			"name": "John Doe",
+			"email": "john@doe.com",
+			"handle": "johndoe",
+			"avatar": {
+				"small": "https://myapp.com/avatar-small/goatse.png",
+				"large": "https://myapp.com/avatar-large/goatse.png"
+			}
+		},
+		"active_tab": "timeline",
+		"draft_status": "I'm not sure I should post this",
+		"timeline": [
+			{
+				"type": "status",
+				"status": "FFFFFFFUUUUUUUUUUUU",
+				"user": {
+					"name": "Rage Guy",
+					"handle": "rageguy",
+					"avatar": {
+						"small": "https://myapp.com/avatar-small/f7u12.png",
+						"large": "https://myapp.com/avatar-large/f7u12.png"
+					}
+				}
+			},
+			...
+		],
+		"mentions": null
+		"direct_messages": null
+	}
 
-    <script type="text/mustache" id="views/my/partial">
-      {{name}}
-    </script>
+In this state we've got the user's profile available to us for display, we know that the "timeline" tab is open and populated with some tweets, and we know that the user hasn't loaded any mentions or direct messages just yet. We also know that the user has typed something into the status field but has not yet saved it.
 
-These are semantically neutral in nature and do not alter your document's content. Spah will also add a hidden <code>state</code> input to the end of each form in your document containing the current
-state, and append the state to link URLs within the current domain - this allows for graceful state handover in no-js environments.
+The State's schema is unique to your application - Spah just gives you the tools for manipulating it. You modify the State using [SpahQL][spahql], a query language designed for selecting data from large JSON objects and for making assertions about the contents of those objects. As the name suggests, [SpahQL][spahql] is built right in to Spah and is used for the majority of your work with the State.
 
-In environments that support JS, the state in forms and links is replaced with the current state on submission/activation.
+	var data = the_twitter_example_from_above;
+	var state = new Spah.State(data);
+	
+	state.select("/user/name") // get the user's real name
+	state.select("//user/name") // get the name of all users, everywhere in the state
+	state.select("//[/type=='status']") // get everything with type=status
+	state.select("//mentions/[/type=='status']/user/handle") // get every handle for every tweet in the mentions list
+	
+	state.select("/user").set("name", "Captain Hammer"); // Change the user's name
+	state.select("/user/name").replace("Dr. Horrible"); // Another way to edit values
+	state.select("//user/name").replaceAll("Spartacus"); // Rename everyone
+	state.select("//user/name").deleteAll(); // Anonymise everyone
 
-The client
-==========
+	state.assert("/user/name") // does 'name' exist on '/user'?
+	state.assert("//mentions/.length > 2") // more than 2 mentions loaded?
+	state.assert("//*[/.type=='array']/.length > 0") // any arrays anywhere in the state?
+	
+
+The Spah Server
+===============
+
+The Spah Server is a Node.js library intended to be rolled into whatever HTTP stack you like using - personally, I'm a fan of [Express](http://expressjs.com/). You could also use something like [Socket.io](http://socket.io) to push State updates to users in realtime.
+
+The Spah Server is a view layer for your application. The common theme for any request handled by Spah is for the state to be modified and to then be applied to some HTML. However, both of these steps can take place at either end of the wire. If a request is *cold* - that is, the result of a user visiting a URL within your app from a search engine or by typing the address manually - Spah will apply the [state][the_state] to your [HTML Blueprint][document_logic] at the server end and ship HTML down the wire. If the request is *warm* - that is, an asynchronous request sent by the Spah Client - Spah can simply give the client all the relevant state updates in JSON format and the HTML may be modified on the client side. Additionally, your client-side app may make changes to the state which don't need to involve the server at all.
+
+In a sense, Spah allows your server-side app to *behave like a browser* and boot your client-side application to the point of usefulness, before letting the client browser carry out the rest of the startup process. This is achieved by moving template logic to a place where [both the client and the server can use it][document_logic].
+
+A Spah Server is simple enough to initialise. Start out with some HTML. Put it on your file system, in mongo, wherever you like.
+	
+	// If you use readFileSync during a request cycle,
+	// you will be haunted by a pigeon. During app startup
+	// is fine.
+	var html = require('fs').readFileSync("blueprint.html", "utf-8");
+
+Now you just create a Spah Server and give it an [HTML Blueprint][document_logic] to work with:
+
+	var spah = require('spah');
+	var stateServer = new spah.stateServer();
+	
+	spah.dom.blueprint.compile(html, startServerWithBlueprint);
+	
+	function startServerWithBlueprint(err, blueprint) {
+		if(err) throw err;		
+		
+		// Got a blueprint, got a spah server.
+		// Good to go.
+	
+	}
+
+I'll assume Express is being used for this example, purely for sanity's sake. Let's take a look at building an action:
+
+	function startServerWithBlueprint(err, blueprint) {
+		if(err) throw err;		
+		
+		// Got a blueprint, got a spah server.
+		// Good to go.
+
+		var express = require('express');
+		var app = express.createServer();
+		
+		app.get("/", function() {
+			
+		});
+	
+	}
+
+
+TODO: Example express app
+
+The Spah Client
+===============
+
+TODO: In environments that support JS, the state in forms and links is replaced with the current state on submission/activation.
+
 The Spah client handles things at the browser end. Its primary tasks are:
 
 1. Ensuring that links and forms are submitted asynchronously and that they attach the state when activated (you may also [prevent some links and forms from acting asynchronously][force_synchronous])
@@ -182,10 +219,6 @@ The Spah client handles things at the browser end. Its primary tasks are:
 determine that this is a warm request and should be responded to with an updated state
 3. Re-evaluating and processing any document logic whenever the state is modified
 4. Raising path-specific events whenever the state is modified
-
-*Figure 3: A better approach, with added progressive enhancement*
-
-<img src="https://img.skitch.com/20110504-tpqb613eyy46j7f758nqr745n2.jpg" />
 
 This is achieved by embedding template logic within the markup using HTML5 data attributes, thus making the same template logic available to both client
 and server. When the state is updated by a response from the server, elements with embedded display logic are re-evaluated automatically and the display 
@@ -492,8 +525,8 @@ Properties are like imaginary paths on objects in your state. Each property uses
         // Does a string contain all these characters?
         results = Spah.state.assert("/myStr/.explode }>{ {'a','b','c'}")
 
-Document logic
-==============
+HTML Blueprints
+===============
 
 In a Spah application, document logic (show this, hide that, populate this with that) is moved away from in-place Erb views and into a place where both the client and the server will have access to it - the document itself. In doing this, we want to avoid doing anything silly like adding new tags or attributes that break HTML validity, or dirtying up your markup with billions of extra nested div elements.
 
@@ -617,6 +650,17 @@ Because stash operations run before populate operations, the following chain of 
 
 Templating with Mustache
 ========================
+
+TODO: For partials, Spah uses [Mustache templates][templating]. All <code>.mustache</code> files in your server-side application are indexed by path on startup
+and made available to the rendering chain on both the client and server. Spah automatically injects the templates into your HTML layout using
+script tags:
+
+    <script type="text/mustache" id="views/my/partial">
+      {{name}}
+    </script>
+
+These are semantically neutral in nature and do not alter your document's content. Spah will also add a hidden <code>state</code> input to the end of each form in your document containing the current
+state, and append the state to link URLs within the current domain - this allows for graceful state handover in no-js environments.
 
 Responding to state changes with Javascript
 ===========================================
