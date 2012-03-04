@@ -1,14 +1,22 @@
 body {
   overflow-x: hidden;
   font-family: Georgia, serif;
-  background: #EFEFEF url('../img/ricepaper2.png');
+  background: #EFEFEF url('../img/classy_fabric.png');
   background-attachment: fixed;
   font-size: 17px;
+  color: #F5F5F5;
 }
 
 p {
   margin-bottom: 20px;
   margin-top: 0;
+}
+
+a, h1:first-child {
+  color: #0793db;
+}
+a:visited {
+  color: #97c6dc;
 }
 
 /* Set up nav positions */
@@ -22,10 +30,10 @@ nav {
   left: 0;
   width: 260px;
   height: 100%;
-  background: rgba(0,0,0,0.1);
-  border-right: 2px solid #333;
-  color: #333;
+  background: rgba(0,0,0,0.3);
+  border-right: 1px solid #666;
   font-size: 1em;
+  box-shadow: 0px 0px 100px #000;
 }
 nav#nav-pages {
   display: none;
@@ -36,6 +44,9 @@ nav#nav-overview {
 
 /* All lists */
 
+nav a {
+  
+}
 nav ul {
   list-style-type: none;
   margin: 0;
@@ -44,13 +55,10 @@ nav ul {
 nav > ul > li > a {
   display: block;
   padding: 10px;
-  border-top: 1px solid #CCC;
-}
-nav a {
-  color: #333;
+  border-top: 1px solid #444;
 }
 nav > ul > li:last-child > a {
-  border-bottom: 1px solid #CCC;
+  border-bottom: 1px solid #444;
 }
 
 /* Page list */
@@ -79,7 +87,7 @@ nav > ul > li:last-child > a {
   background: none;
 }
 #nav-overview li.current {
-  background: rgba(25, 25, 25, 0.1);
+  background: rgba(255, 255, 255, 0.1);
 }
 #nav-overview > ul.h1 > li > a {
   font-size: 1.2em;
@@ -111,7 +119,7 @@ nav > ul > li:last-child > a {
 #nav-overview a.nav-toggle {
   display: block;
   float: left;
-  background: #333;
+  background: #0793db;
   padding: 1px 5px;
   text-align: center;
   line-height: 0.8em;
@@ -132,8 +140,8 @@ nav > ul > li:last-child > a {
 /* @group Article body */
 
 article {
-  margin: 10px 30px 50% 300px;
-  max-width: 800px;
+  margin: 10px 30px 50% 400px;
+  max-width: 650px;
   line-height: 1.6em;
 }
 
@@ -144,30 +152,42 @@ article h1 {
 article h1, article h2, article h3, article h4 {
   margin-top: 20px;
   padding: 10px 0 20px 0;
-  border-bottom: 5px solid #333;
+  border-bottom: 5px solid #CCC;
   font-size: 2em;
 }
 
 article h1:first-child {
+  background: #000;
+  width: 100%;
+  position: relative;
+  right: 5%;
   border: none;
-  margin: 40px 0 0 0;
-  padding: 0;
-  color: #0793db;
+  margin: 40px 0 30px 0;
+  padding: 5%;
   font-size: 2.3em;
+  border-radius: 3px;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  box-shadow: 0 0 5px #0793db;
 }
 
 article h2 {
   padding-bottom: 10px;
   border-bottom-width: 2px;
-  border-bottom-color: #999;
   font-size: 1.3em;
 }
 
 article h3 {
   padding-bottom: 5px;
   border-bottom-width: 2px;
-  border-bottom-color: #CCC;
   font-size: 1em;
+}
+
+article em {
+  color: #fcfda0;
+}
+article strong {
+  color: #dda128;
 }
 
 article img {
@@ -175,24 +195,29 @@ article img {
   margin: 20px auto;
 }
 
-article code {
-  color: #FFF;
-  background: #333;
-  font-size: small;
-  line-height: 1.4em;
-}
-
 article pre {
   padding: 10px;
   color: #FFF;
   background: #000;
-  border-left: 5px solid gold;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 3px;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  box-shadow: 0 0 5px #000;
+  overflow-x: scroll;
+}
+article code {
+  display: inline-block;
+  color: #FFF;
+  background: #333;
+  font-size: small;
+  line-height: 1.4em;
+  width: 200%; /* horizontal scroll hack */
 }
 
 article ul, article ol {
   padding: 1em 0 0 0;
-  margin: 0 3em 1em 3em;
-  background: rgba(20, 20, 10, 0.1);
+  margin: 0 3em 2em 3em;
 }
 article ul {
 
@@ -203,16 +228,17 @@ article li ul {
 }
 
 article li {
-  padding: 0;
-  margin: 0;
-  padding: 0 10px 10px 10px;
-  margin-bottom: 10px;
-  border-bottom: 1px solid #ccc;
+  background: #222;
+  padding: 10px 10px 10px 20px;
+  margin: 0 0 10px 0;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 0 5px #1577b8;
+  border-radius: 3px;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
 }
 
 article li:last-child {
-  border: none;
-  margin-bottom: 0;
 }
 
 article li > *:last-child {

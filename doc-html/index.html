@@ -31,6 +31,8 @@
      <article>
       <h1 id='spah_build_awesome_singlepage_apps_without_breaking_the_web'>Spah: Build awesome single-page apps without breaking the web.</h1>
 
+<p><strong>WARNING: EPIC CONSTRUCTION YARD AHEAD. DO NOT BUILD ANYTHING WITH THIS UNTIL THIS MESSAGE DISAPPEARS</strong>.</p>
+
 <h1 id='introduction'>Introduction</h1>
 
 <p>Single-page web apps are awesome. You can use the single-page paradigm to build fancy, stateful web apps that hang right off your service&#8217;s developer API. But it can have terrible side effects. In the process of putting entire applications on a single URL, we risk breaking the web. We&#8217;re making our pages unfriendly to search engines and impenetrable to microdata clients.</p>
@@ -166,6 +168,12 @@ state.assert(&quot;//*[/.type==&#39;array&#39;]/.length &gt; 0&quot;) // any arr
 
 <p>In a sense, Spah allows your server-side app to <em>behave like a browser</em> and boot your client-side application to the point of usefulness, before letting the client browser carry out the rest of the startup process. This is achieved by moving template logic to a place where <a href='#html_blueprints'>both the client and the server can use it</a>.</p>
 
+<h2 id='install_the_server'>Install the server</h2>
+
+<pre><code>npm install spah</code></pre>
+
+<h2 id='boot_the_server'>Boot the server</h2>
+
 <p>A Spah Server is simple enough to initialise. Start out with some HTML. Put it on your file system, in mongo, wherever you like.</p>
 
 <pre><code>// If you use readFileSync during a request cycle,
@@ -176,32 +184,101 @@ var html = require(&#39;fs&#39;).readFileSync(&quot;blueprint.html&quot;, &quot;
 <p>Now you just create a Spah Server and give it an <a href='#html_blueprints'>HTML Blueprint</a> to work with:</p>
 
 <pre><code>var spah = require(&#39;spah&#39;);
-var stateServer = new spah.stateServer();
+// Lets specify a default state
+var stateDefaults = {
+	&quot;active_tab&quot;: &quot;timeline&quot;
+};
+// Create a new StateServer instance
+var stateServer = spah.createServer();</code></pre>
 
-spah.dom.blueprint.compile(html, startServerWithBlueprint);
+<h2 id='configure_the_server'>Configure the server</h2>
 
-function startServerWithBlueprint(err, blueprint) {
-	if(err) throw err;		
-	
-	// Got a blueprint, got a spah server.
-	// Good to go.
+<p>Spah doesn&#8217;t know which HTTP stack you&#8217;re using, so by extension it doesn&#8217;t know how to work with your choice of HTTP Request and HTTP Response objects.</p>
 
-}</code></pre>
+<p>Spah only needs to know a few basic interactions, so we&#8217;ll configure it here:</p>
+
+<pre><code>// Tell the server how to get the current UI state
+// from an inbound request. This will vary depending
+// on your choice of HTTP stack.
+// 
+// If this function returns a string, Spah will parse
+// it as JSON before doing anything with it. If it
+// returns an object, we&#39;ll use it as-is.
+//
+// The Spah Client defaults to attaching the current UI
+// state to the query string, but you can customise that
+// using client.attachStateToRequest. See the API docs
+// for examples.
+var stateServer.identifyStateFromRequest(function(request) {
+	return request.param(&quot;spah_state&quot;, &quot;{}&quot;);
+});
+
+// Tell the server how to tell if a request is warm
+// or not. 
+// 
+// Much like getStateFromRequest (above), the method
+// used to mark a request as &quot;warm&quot; - that is,
+// as coming from an initialised Spah Client and not 
+// requiring a full HTML render - can be customised
+// on the Spah Client. The default is to use a custom
+// Accept header to indicate the client&#39;s preferred format.
+var stateServer.identifyWarmRequest(function(request) {
+	return request.header(&quot;Accept&quot;, &quot;application/state+json&quot;);
+});</code></pre>
+
+<p>The final step is to load an <a href='#html_blueprints'>HTML Blueprint</a> for Spah to work with when rendering HTML:</p>
+
+<pre><code>// Remember, using fs.readFileSync during a request will
+// lead to you being haunted by a pigeon. During app boot
+// is fine.
+var html = require(&#39;fs&#39;).readFileSync(&quot;/path/to/layout.html&quot;, &quot;utf-8&quot;);
+stateServer.compileBlueprint(html, startServerWithBlueprint);</code></pre>
+
+<p>We haven&#8217;t defined <code>startServerWithBlueprint</code> yet, but it&#8217;s going to be used to kick off the app itself in the next example.</p>
+
+<h2 id='responding_to_user_requests'>Responding to user requests</h2>
 
 <p>I&#8217;ll assume Express is being used for this example, purely for sanity&#8217;s sake. Let&#8217;s take a look at building an action:</p>
 
-<pre><code>function startServerWithBlueprint(err, blueprint) {
-	if(err) throw err;		
+<pre><code>// This is the callback for our blueprint example above.
+// it takes an error and the Spah.DOM.Blueprint instance
+// you just created.
+function startServerWithBlueprint(err, blueprint) {
+	if(err) throw err;	
 	
 	// Got a blueprint, got a spah server.
 	// Good to go.
 
 	var express = require(&#39;express&#39;);
+	var params = require(&#39;express-params&#39;);
 	var app = express.createServer();
+	params.extend(app);
 	
-	app.get(&quot;/&quot;, function() {
+	app.get(&quot;/&quot;, function(request, response, next) {
 		
+		// This is the homepage, so it re-applies the
+		// defaults without changing other stuff.
+		var state = stateServer.stateWith(
+			// Pull the state from the params
+			// the state server will parse this as JSON
+			// if you hand it a string
+			request.param(&quot;state&quot;, &quot;{}&quot;),
+			// Apply the defaults to the user state,
+			// restoring the app to the &quot;home&quot; state
+			stateDefaults
+		);
+		
+		var warm = request.param(&quot;state&quot;, null);
+		stateServer.render(warm, state, function(err, contentType, content) {
+			// &quot;content&quot; might be JSON or HTML
+			if(err) throw err;
+			response.header(&#39;Content-Type&#39;, contentType);
+			response.send(content);
+		});
 	});
+	
+	// Open the floodgates
+	app.listen(80);
 
 }</code></pre>
 
@@ -227,11 +304,31 @@ function startServerWithBlueprint(err, blueprint) {
 
 <p>You may also bind more advanced behaviours to changes in the state using <a href='#responding_to_state_changes_with_javascript'>jQuery responders</a> and <a href='#spahql'>state queries</a></p>
 
+<h2 id='install_the_client'>Install the client</h2>
+
+<h2 id='initialise_the_client'>Initialise the client</h2>
+
 <p>For cleanliness, Spah keeps all of its functions, classes and behaviour within the top level <code>Spah</code> object. Initialising Spah is simple:</p>
 
 <pre><code> $(document).ready(function() { 
      Spah.init(); 
  });</code></pre>
+
+<h2 id='configure_the_client'>Configure the client</h2>
+
+<h2 id='responding_to_state_changes_with_javascript'>Responding to state changes with Javascript</h2>
+
+<h2 id='forcing_links_and_forms_to_load_synchronously'>Forcing links and forms to load synchronously</h2>
+
+<p>To prevent Spah from adding asynchronous behaviour, add the <code>data-async="false"</code> attribute to the link or form element:</p>
+
+<pre><code>&lt;a href=&quot;/login&quot; data-async=&quot;false&quot;&gt;Log in&lt;/a&gt;
+
+&lt;form action=&quot;/login&quot; method=&quot;POST&quot; data-async=&quot;false&quot;&gt;
+  ...
+&lt;/form&gt;</code></pre>
+
+<h2 id='eager_client_state_changes'>Eager client state changes</h2>
 
 <h1 id='spahql'>SpahQL</h1>
 
@@ -636,7 +733,18 @@ null // null</code></pre>
 
 <h2 id='populate_element_from_a_template'>Populate element from a template</h2>
 
-<p>Spah can use your shared <a href='#templating_with_mustache'>Mustache templates</a> to render state data into a containing element. On the client side, the Spah client will automatically add a <a href='#responding_to_state_changes_with_javascript'>jQuery responder</a> to the path referenced in the <code>data-populate-with</code> attribute, ensuring that the populated content is updated when the state is modified.</p>
+<p>Spah can use shared Mustache templates to render state data into a containing element. The Populate modifier is added to your Blueprint by default and adds two methods for managing templates:</p>
+
+<pre><code>myBlueprint.addTemplate(&quot;users/listItem&quot;, templateString, &quot;text/mustache&quot;);
+myBlueprint.removeTemplate(&quot;users/listItem&quot;);</code></pre>
+
+<p>Once added, templates appear in the DOM as semantically-neutral script tags:</p>
+
+<pre><code>&lt;script type=&quot;text/mustache&quot; id=&quot;users/listItem&quot;&gt;
+  User&#39;s name: {{name}}
+&lt;/script&gt;</code></pre>
+
+<p>On the client side, the Spah client will automatically add a <a href='#responding_to_state_changes_with_javascript'>jQuery responder</a> to the path referenced in the <code>data-populate-with</code> attribute, ensuring that the populated content is updated when the state is modified.</p>
 
 <pre><code>&lt;ul class=&quot;users&quot; data-populate-if=&quot;/users/.length &gt; 0&quot; 
                   data-populate-with=&quot;/users&quot; 
@@ -715,32 +823,6 @@ null // null</code></pre>
 </ol>
 </li>
 </ol>
-
-<h1 id='templating_with_mustache'>Templating with Mustache</h1>
-
-<p>TODO: For partials, Spah uses <a href='#templating_with_mustache'>Mustache templates</a>. All <code>.mustache</code> files in your server-side application are indexed by path on startup and made available to the rendering chain on both the client and server. Spah automatically injects the templates into your HTML layout using script tags:</p>
-
-<pre><code>&lt;script type=&quot;text/mustache&quot; id=&quot;views/my/partial&quot;&gt;
-  {{name}}
-&lt;/script&gt;</code></pre>
-
-<p>These are semantically neutral in nature and do not alter your document&#8217;s content. Spah will also add a hidden <code>state</code> input to the end of each form in your document containing the current state, and append the state to link URLs within the current domain - this allows for graceful state handover in no-js environments.</p>
-
-<h1 id='responding_to_state_changes_with_javascript'>Responding to state changes with Javascript</h1>
-
-<h1 id='forcing_links_and_forms_to_load_synchronously'>Forcing links and forms to load synchronously</h1>
-
-<p>To prevent Spah from adding asynchronous behaviour, add the <code>data-async="false"</code> attribute to the link or form element:</p>
-
-<pre><code>&lt;a href=&quot;/login&quot; data-async=&quot;false&quot;&gt;Log in&lt;/a&gt;
-
-&lt;form action=&quot;/login&quot; method=&quot;POST&quot; data-async=&quot;false&quot;&gt;
-  ...
-&lt;/form&gt;</code></pre>
-
-<h1 id='default_client_behaviour'>Default client behaviour</h1>
-
-<h1 id='eager_client_state_changes'>Eager client state changes</h1>
 
 <h1 id='example_node_application'>Example Node application</h1>
 
