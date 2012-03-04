@@ -85,6 +85,9 @@ nav > ul > li:last-child > a {
 }
 #nav-overview li {
   background: none;
+  transition: background-color 0.3s ease-out;
+  -webkit-transition: background-color 0.3s ease-out;
+  -moz-transition: background-color 0s ease-out;
 }
 #nav-overview li.current {
   background: rgba(255, 255, 255, 0.1);
