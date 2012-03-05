@@ -1,13 +1,8 @@
 /**
  * class Spah
  * 
- * For cleanliness, the Spah client is wrapped entirely in the <code>window.Spah</code> object.
- * 
- * Initialising Spah in your page is easy:
- *
- *      $(document).ready(function() {
- *        Spah.init();
- *      })
+ * For cleanliness, Spah is wrapped entirely in the <code>window.Spah</code> object
+ * on the client side, and <code>exports.spah</code> on the server side.
  *
  * See [Default client behaviour](../../index.html#default_client_behaviour) to learn what actions Spah performs on initialisation.
  * For more information on Spah, see the main [Readme](../index.html) ([also available on Github](https://github.com/danski/spah#readme))
@@ -27,13 +22,35 @@ Spah["logMessages"] = [];
 Spah["verbose"] = false;
 
 /**
- * Spah.init(options) -> Null
+ * Spah.init([options]) -> Null
  * 
  * Initialises the Spah client. See [Default client behaviour](../../index.html#default_client_behaviour) to learn what actions
  * Spah performs on initialisation.
  **/
 Spah["init"] = function(options) {
   // Instantiate state object
+};
+
+/**
+ * Spah.createServer([options]) -> Spah.StateServer
+ * options (Object): An optional hash used to configure the server
+ *
+ * Create a new Spah.StateServer instance, with options passed to the server
+ * for configuration. See Spah.StateServer's constructor for information on configuring the server.
+ **/
+Spah["createServer"] = function(options) {
+  return new Spah.StateServer(options);
+};
+
+/**
+ * Spah.createClient([options]) -> Spah.StateClient
+ * options (Object): An optional hash used to configure the client
+ *
+ * Creates a new Spah.StateClient instance, with options passed to the client
+ * for configuration. See Spah.StateClient's constructor for information on configuring the client.
+ **/
+Spah["createClient"] = function(options) {
+  return new Spah.StateClient(options);
 };
 
 /**
@@ -177,7 +194,7 @@ Spah["classExtend"] = function(name, superKlass, constructor, klassProps, instan
   klass.prototype = proto;
 
   // Treat superclass class properties
-  for(var s in superKlass) {
+  for(var s in superKlass) { 
     klass[s] = superKlass[s];
   }
   // Treat class properties

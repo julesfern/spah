@@ -98,8 +98,10 @@
 </ul>
 
 <h2 id='anatomy_of_a_spah_web_app'>Anatomy of a Spah web app</h2>
+
+<p>With Spah, we take a little of the basic multi-page paradigm&#8230;</p>
 <img title='A cold render' src='https://img.skitch.com/20110504-p13hfga9s4d6x7bpjwrw1gbyjj.jpg' />
-<p>With Spah, we combine the two. Users can visit any URL in your app and get a proper HTML response back. But also&#8230;</p>
+<p>And we rejig it to allow any page to boot into stateful single-page mode, giving us all the advantages of the new model:</p>
 <img title='A warm render' src='https://img.skitch.com/20110504-tpqb613eyy46j7f758nqr745n2.jpg' />
 <p>Once the page has loaded, all the rich client behaviours kick in - any further action taken by the user will result in the state of the current page being updated. The Spah Client manages history using the HTML5 History API, allowing the user to move freely around your app and making every link share, bookmark and script-friendly. If the user needs to do something synchronously - say, a file upload, or a secure login - Spah can pass the state to the server where it gets modified, and handed back as another plain HTML document.</p>
 

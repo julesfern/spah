@@ -41,9 +41,9 @@ Spah: Build awesome single-page apps without breaking the web.
 Introduction
 ============
 
-Single-page web apps are awesome. You can use the single-page paradigm to build fancy, stateful web apps that hang right off your service's developer API. But it can have terrible side effects. In the process of putting entire applications on a single URL, we risk breaking the web. We're making our pages unfriendly to search engines and impenetrable to microdata clients.
+The single-page app paradigm is awesome for creating fancy, stateful web apps that hang right off your service's developer API. But in the process of putting entire applications on a single URL, we risk breaking the web. We're making our pages unfriendly to search engines and impenetrable to scrapers, microdata clients, and readability engines.
 
-We want to get all the advantages and capabilities of rich javascript apps but *without* the nasty stuff. That means no hashbangs, no code duplication, and no trickery to give search engines and scrapers what they want.
+We want to get all the advantages and capabilities of rich single-page javascript apps but *without* the nasty stuff. That means no hashbangs, no code duplication, and no trickery to give search engines and scrapers what they want.
 
 So here's Spah. Spah takes the best from both the single- and multi-page paradigms and boils it down to a few core concepts:
 
@@ -67,12 +67,12 @@ Anatomy of a simple web app
 
 <img src="https://img.skitch.com/20110720-mnf4xun1n6gwf461edtp12jmjf.jpg" />
 
-We all recognise this. The server renders pages as they are requested and serves them in the body of a request. As far as the client is concerned, it's pulling static HTML. It has these qualities:
+We all recognise this. The server renders pages as they are requested and serves them in the body of a request. As far as the client is concerned, there's no difference between your site and one built with static HTML. It has these qualities:
 
 * _Good_: Every page is indexable and scrapable in every possible state.
 * _Good_: Since the state of the page is handled exclusively by the server, state can be maintained as the user navigates between pages.
-* **Bad**: Since the state of the page is handled exclusively by the server, maintaining state requires the developer to wrangle highly complicated query strings.
-* **Bad**: Since every user action requires a full page load, a lot of user experience goodness goes out the window.
+* _Bad_: Since the state of the page is handled exclusively by the server, maintaining state requires the developer to wrangle highly complicated query strings.
+* _Bad_: Since every user action requires a full page load, a lot of user experience goodness goes out the window and good performance is hard to achieve.
 
 Anatomy of a single-page web app
 --------------------------------
@@ -84,15 +84,17 @@ This is pretty much where we are today. You get the much-desired "desktop" class
 * _Good_: The whole UI runs within a single page, so you can have multiple complex stateful UI elements that retain their state as the rest of the page is updated.
 * _Good_: The whole UI runs within the browser, so you've got templating handled in the client. No duplication of template code.
 * _Bad_: It needs a browser to run. You can't deliver markup for non-browser requests without creating an HTML rendering chain on the server.
-* _Bad_: We're not indexable any more. Your app only has one URL, and it serves boilerplate contentless markup. If you decide to make your URLs server-renderable, then the spectre of code duplication returns.
-* _Bad_: Response times suffer, but not because of server inefficiencies such as those seen in Figure 1. Instead, we introduce multiple HTTP turnarounds to start the app - one to load the page, several more to populate it with content.
+* _Bad_: We're not indexable any more. Your app only has one URL, and it serves content-free boilerplate markup. If you decide to make your URLs server-renderable, then you're going to need multiple rendering chains and a lot of code duplication.
+* _Bad_: Perceptual performance suffers, but not because of server inefficiencies such as those seen in the simple web app model. Instead, we introduce multiple HTTP turnarounds to start the app - one to load the page, several more to populate it with content.
 
 Anatomy of a Spah web app
 -------------------------
 
+With Spah, we take a little of the basic multi-page paradigm...
+
 <img src="https://img.skitch.com/20110504-p13hfga9s4d6x7bpjwrw1gbyjj.jpg" title="A cold render" />
 
-With Spah, we combine the two. Users can visit any URL in your app and get a proper HTML response back. But also...
+And we rejig it to allow any page to boot into stateful single-page mode, giving us all the advantages of the new model:
 
 <img src="https://img.skitch.com/20110504-tpqb613eyy46j7f758nqr745n2.jpg" title="A warm render" />
 
@@ -156,6 +158,63 @@ The State's schema is unique to your application - Spah just gives you the tools
 	state.assert("//mentions/.length > 2") // more than 2 mentions loaded?
 	state.assert("//*[/.type=='array']/.length > 0") // any arrays anywhere in the state?
 	
+The Spah Client
+===============
+
+TODO: In environments that support JS, the state in forms and links is replaced with the current state on submission/activation.
+
+The Spah client handles things at the browser end. Its primary tasks are:
+
+1. Ensuring that links and forms are submitted asynchronously and that they attach the state when activated (you may also [prevent some links and forms from acting asynchronously][force_synchronous])
+2. Ensuring that async requests are submitted with a <code>content-accept</code> header of <code>application/state+json</code>, allowing the server-side application to
+determine that this is a warm request and should be responded to with an updated state
+3. Re-evaluating and processing any document logic whenever the state is modified
+4. Raising path-specific events whenever the state is modified
+
+This is achieved by embedding template logic within the markup using HTML5 data attributes, thus making the same template logic available to both client
+and server. When the state is updated by a response from the server, elements with embedded display logic are re-evaluated automatically and the display 
+updated accordingly.
+
+You may also bind more advanced behaviours to changes in the state using [jQuery responders][responders] and [state queries][spahql]
+
+Install the client
+------------------
+
+Initialise the client
+---------------------
+
+For cleanliness, Spah keeps all of its functions, classes and behaviour within the top level <code>Spah</code> object.
+Initialising Spah is simple:
+
+     $(document).ready(function() { 
+         Spah.init(); 
+     });
+
+Configure the client
+--------------------
+
+The State Reducer
+-----------------
+
+Responding to state changes with Javascript
+-------------------------------------------
+
+Forcing links and forms to load synchronously
+---------------------------------------------
+
+To prevent Spah from adding asynchronous behaviour, add the <code>data-async="false"</code> attribute to the link or form element:
+
+    <a href="/login" data-async="false">Log in</a>
+    
+    <form action="/login" method="POST" data-async="false">
+      ...
+    </form>
+
+Eager client state changes
+--------------------------
+
+
+
 
 The Spah Server
 ===============
@@ -237,6 +296,9 @@ The final step is to load an [HTML Blueprint][document_logic] for Spah to work w
 
 We haven't defined <code>startServerWithBlueprint</code> yet, but it's going to be used to kick off the app itself in the next example.
 
+The State Expander
+------------------
+
 Responding to user requests
 ---------------------------
 
@@ -286,59 +348,6 @@ I'll assume Express is being used for this example, purely for sanity's sake. Le
 
 
 TODO: Example express app
-
-The Spah Client
-===============
-
-TODO: In environments that support JS, the state in forms and links is replaced with the current state on submission/activation.
-
-The Spah client handles things at the browser end. Its primary tasks are:
-
-1. Ensuring that links and forms are submitted asynchronously and that they attach the state when activated (you may also [prevent some links and forms from acting asynchronously][force_synchronous])
-2. Ensuring that async requests are submitted with a <code>content-accept</code> header of <code>application/state+json</code>, allowing the server-side application to
-determine that this is a warm request and should be responded to with an updated state
-3. Re-evaluating and processing any document logic whenever the state is modified
-4. Raising path-specific events whenever the state is modified
-
-This is achieved by embedding template logic within the markup using HTML5 data attributes, thus making the same template logic available to both client
-and server. When the state is updated by a response from the server, elements with embedded display logic are re-evaluated automatically and the display 
-updated accordingly.
-
-You may also bind more advanced behaviours to changes in the state using [jQuery responders][responders] and [state queries][spahql]
-
-Install the client
-------------------
-
-Initialise the client
----------------------
-
-For cleanliness, Spah keeps all of its functions, classes and behaviour within the top level <code>Spah</code> object.
-Initialising Spah is simple:
-
-     $(document).ready(function() { 
-         Spah.init(); 
-     });
-
-Configure the client
---------------------
-
-Responding to state changes with Javascript
--------------------------------------------
-
-Forcing links and forms to load synchronously
----------------------------------------------
-
-To prevent Spah from adding asynchronous behaviour, add the <code>data-async="false"</code> attribute to the link or form element:
-
-    <a href="/login" data-async="false">Log in</a>
-    
-    <form action="/login" method="POST" data-async="false">
-      ...
-    </form>
-
-Eager client state changes
---------------------------
-
 
 SpahQL
 ======

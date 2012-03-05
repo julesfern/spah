@@ -25,6 +25,8 @@
 		"Spah.DOM.Modifiers.js",
 		"Spah.DOM.Document.js",
 		"Spah.DOM.Blueprint.js",
-		"Spah.State.js"
+		"Spah.State.js",
+		"Spah.StateClient.js",
+		"Spah.StateServer.js"
 	]
 }
