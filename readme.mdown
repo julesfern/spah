@@ -8,14 +8,20 @@ Spah: Build awesome single-page apps without breaking the web.
 [intro_state]: #the_state
 [intro_anatomy_of_a_spah_app]: #anatomy_of_a_spah_web_app
 
+[core_concepts]: #core_concepts
 [state]: #the_state
+[cold_requests]: #cold_requests
+[warm_requests]: #warm_requests
+
 [server]: #the_spah_server
+[state_expander]: #the_state_expander
 [client]: #the_spah_client
+[state_reducer]: #the_state_reducer
 
 [spahql]: #spahql
 [spahql_concepts]: #spahql_core_concepts
-[selection_state_queries]: #selection_queries
-[assertion_state_queries]: #assertion_queries
+[selection_queries]: #selection_queries
+[assertion_queries]: #assertion_queries
 [literals_and_sets]: #assertion_queries_literals_and_sets
 [comparison_operators]: #comparison_operators
 [object_equality]: #object_equality
@@ -100,8 +106,11 @@ And we rejig it to allow any page to boot into stateful single-page mode, giving
 
 Once the page has loaded, all the rich client behaviours kick in - any further action taken by the user will result in the state of the current page being updated. The Spah Client manages history using the HTML5 History API, allowing the user to move freely around your app and making every link share, bookmark and script-friendly. If the user needs to do something synchronously - say, a file upload, or a secure login - Spah can pass the state to the server where it gets modified, and handed back as another plain HTML document.
 
+Core Concepts
+=============
+
 The State
-=========
+---------
 
 Spah's central concept is the State. The State is a JSON object that describes the configuration of your application's user interface. That'd be things like user preferences, active tabs, saved form data, or lists of model objects. Here's a dead simple example for a basic Twitter UI:
 
@@ -139,7 +148,12 @@ Spah's central concept is the State. The State is a JSON object that describes t
 
 In this state we've got the user's profile available to us for display, we know that the "timeline" tab is open and populated with some tweets, and we know that the user hasn't loaded any mentions or direct messages just yet. We also know that the user has typed something into the status field but has not yet saved it.
 
-The State's schema is unique to your application - Spah just gives you the tools for manipulating it. You modify the State using [SpahQL][spahql], a query language designed for selecting data from large JSON objects and for making assertions about the contents of those objects. As the name suggests, [SpahQL][spahql] is built right in to Spah and is used for the majority of your work with the State.
+The State's schema is unique to your application - Spah just gives you the tools for manipulating it. 
+
+Spah Query Language
+-------------------
+
+[SpahQL][spahql] is a simple query language for Javascript objects. You can use it to query JSON data:
 
 	var data = the_twitter_example_from_above;
 	var state = new Spah.State(data);
@@ -149,79 +163,51 @@ The State's schema is unique to your application - Spah just gives you the tools
 	state.select("//[/type=='status']") // get everything with type=status
 	state.select("//mentions/[/type=='status']/user/handle") // get every handle for every tweet in the mentions list
 	
+To modify data, using SpahQL's simple editing APIs:
+
 	state.select("/user").set("name", "Captain Hammer"); // Change the user's name
 	state.select("/user/name").replace("Dr. Horrible"); // Another way to edit values
 	state.select("//user/name").replaceAll("Spartacus"); // Rename everyone
 	state.select("//user/name").deleteAll(); // Anonymise everyone
 
+And to make assertions about data:
+
 	state.assert("/user/name") // does 'name' exist on '/user'?
 	state.assert("//mentions/.length > 2") // more than 2 mentions loaded?
-	state.assert("//*[/.type=='array']/.length > 0") // any arrays anywhere in the state?
+	state.assert("//*[/.type=='array']/.length > 0") // any non-empty arrays anywhere in the state?
+
+As the name suggests, [SpahQL][spahql] is built right in to Spah and is used for the majority of your work with the State.
+
+SpahQL is primarily used to describe how any given _state_ is applied to your [HTML Blueprint][document_logic] - for instance:
+
+	<nav class="account" data-show-if="/user_authenticated">
+		<!-- This element only shown if user logged in. -->
+	</nav>
 	
-The Spah Client
-===============
+Cold requests
+-------------
 
-TODO: In environments that support JS, the state in forms and links is replaced with the current state on submission/activation.
+*Cold* requests are synchronous HTTP requests made to your app - maybe the user was sent to yourapp.com/foo/bar by a search engine or social link. Maybe they used a bookmark, or maybe they just made a multipart POST. Regardless, the client is expecting a response containing useful HTML.
 
-The Spah client handles things at the browser end. Its primary tasks are:
+Both the Spah Server and the Spah Client understand how to apply any given *state* to your app's [HTML Blueprint][document_logic] - this means that the Spah Server is able to respond to *cold* requests with a properly-populated HTML document.
 
-1. Ensuring that links and forms are submitted asynchronously and that they attach the state when activated (you may also [prevent some links and forms from acting asynchronously][force_synchronous])
-2. Ensuring that async requests are submitted with a <code>content-accept</code> header of <code>application/state+json</code>, allowing the server-side application to
-determine that this is a warm request and should be responded to with an updated state
-3. Re-evaluating and processing any document logic whenever the state is modified
-4. Raising path-specific events whenever the state is modified
+Once the HTML has been returned to the user agent, in-page Javascript (including the Spah Client) can kick in and *progressively enhance* the pre-existing content with fancy client-side interactivity.
 
-This is achieved by embedding template logic within the markup using HTML5 data attributes, thus making the same template logic available to both client
-and server. When the state is updated by a response from the server, elements with embedded display logic are re-evaluated automatically and the display 
-updated accordingly.
+Warm requests
+-------------
 
-You may also bind more advanced behaviours to changes in the state using [jQuery responders][responders] and [state queries][spahql]
+Typically, *warm* requests follow cold. Once the user agent has made a cold request and received the HTML for your app, the Spah Client is initialised to handle your app's navigation. 
 
-Install the client
-------------------
+Any internal links (or forms that submit to internal URIs) have their default actions intercepted and replaced with an asynchronous request to the Spah Server, which is expected to respond with JSON representing an updated _state_. 
 
-Initialise the client
----------------------
-
-For cleanliness, Spah keeps all of its functions, classes and behaviour within the top level <code>Spah</code> object.
-Initialising Spah is simple:
-
-     $(document).ready(function() { 
-         Spah.init(); 
-     });
-
-Configure the client
---------------------
-
-The State Reducer
------------------
-
-Responding to state changes with Javascript
--------------------------------------------
-
-Forcing links and forms to load synchronously
----------------------------------------------
-
-To prevent Spah from adding asynchronous behaviour, add the <code>data-async="false"</code> attribute to the link or form element:
-
-    <a href="/login" data-async="false">Log in</a>
-    
-    <form action="/login" method="POST" data-async="false">
-      ...
-    </form>
-
-Eager client state changes
---------------------------
-
-
-
+From there, the Spah Client can accept the updated state and make any necessary DOM modifications in-place.
 
 The Spah Server
 ===============
 
-The Spah Server is a Node.js library intended to be rolled into whatever HTTP stack you like using - personally, I'm a fan of [Express](http://expressjs.com/). You could also use something like [Socket.io](http://socket.io) to push State updates to users in realtime.
+The Spah Server is a Node.js library intended to deliver state updates to users over the wire. Spah doesn't include an HTTP server - you're free to pick your application framework.
 
-The Spah Server is a view layer for your application. The common theme for any request handled by Spah is for the state to be modified and to then be applied to some HTML. However, both of these steps can take place at either end of the wire. If a request is *cold* - that is, the result of a user visiting a URL within your app from a search engine or by typing the address manually - Spah will apply the [state][the_state] to your [HTML Blueprint][document_logic] at the server end and ship HTML down the wire. If the request is *warm* - that is, an asynchronous request sent by the Spah Client - Spah can simply give the client all the relevant state updates in JSON format and the HTML may be modified on the client side. Additionally, your client-side app may make changes to the state which don't need to involve the server at all.
+The Spah Server is a view layer for your application. As discussed in [Core Concepts][core_concepts], Spah seperates view handling into two steps - state modification and blueprint rendering. Each of these may be performed on either the client or the server. *Warm* requests require only that the state be modified and sent to the client as JSON, while *cold* requests require that the state be modified and rendered as [HTML][document_logic].
 
 In a sense, Spah allows your server-side app to *behave like a browser* and boot your client-side application to the point of usefulness, before letting the client browser carry out the rest of the startup process. This is achieved by moving template logic to a place where [both the client and the server can use it][document_logic].
 
@@ -240,7 +226,7 @@ A Spah Server is simple enough to initialise. Start out with some HTML. Put it o
 	// is fine.
 	var html = require('fs').readFileSync("blueprint.html", "utf-8");
 
-Now you just create a Spah Server and give it an [HTML Blueprint][document_logic] to work with:
+Now you just create a Spah Server:
 
 	var spah = require('spah');
 	// Lets specify a default state
@@ -283,7 +269,7 @@ Spah only needs to know a few basic interactions, so we'll configure it here:
 	// on the Spah Client. The default is to use a custom
 	// Accept header to indicate the client's preferred format.
 	var stateServer.identifyWarmRequest(function(request) {
-		return request.header("Accept", "application/state+json");
+		return request.header("Accept") == "application/state+json";
 	});
 
 The final step is to load an [HTML Blueprint][document_logic] for Spah to work with when rendering HTML:
@@ -295,9 +281,6 @@ The final step is to load an [HTML Blueprint][document_logic] for Spah to work w
 	stateServer.compileBlueprint(html, startServerWithBlueprint);
 
 We haven't defined <code>startServerWithBlueprint</code> yet, but it's going to be used to kick off the app itself in the next example.
-
-The State Expander
-------------------
 
 Responding to user requests
 ---------------------------
@@ -346,8 +329,106 @@ I'll assume Express is being used for this example, purely for sanity's sake. Le
 	
 	}
 
+The State Expander
+------------------
 
-TODO: Example express app
+We want populating the state to be _clean_ - you shouldn't have to account for everything required by your UI in each response from your server - and most parts of the state simply won't be relevant unless you're responding to a _cold_ request. For instance, rendering a page showing Twitter mentions for the user would require only that the state be populated with tweets for _warm_ requests, but _cold_ requests would require that the page be populated with other information - the user's follower count, for example.
+
+The Spah Server solves the problem of overcomplicated controller code by providing _state expanders_, which are macros used to flesh out the state and populate it with data in the event that a full HTML render is required. The State Expander also allows you to enforce security rules by only populating the state with objects according by your app's security model.
+
+Let's look at an example. We want to populate the state with some information about the user's Twitter profile when rendering HTML responses.
+
+	stateServer.addExpander(
+		{"path": "/followers/count", "if": "/user_authenticated"},
+		function(results, state, request, expander) {
+			twitterUser.fetchFollowerCount(function(count) {
+				console.log("setting "+queryResult.path+" to "+ count);
+				results.replace(count);
+				expander.done();
+			}
+		}
+	);
+
+The example above checks that the [SpahQL assertion][assertion_queries] <code>/user\_authenticated</code> returns <code>true</code>, and if so, selects <code>/followers/count</code> from the state and runs the callback function against the returned result. If no "if" or "unless" condition is specified, the expander will run unconditionally. Note that both _paths_ and _if_/_unless_ are scoped to the root of your state. If you specify multiple paths, you are effectively registering multiple expanders each with the same condition and callback - the expander will execute against one path query at a time.
+
+The callback receives as its arguments _results_, a SpahQL QueryResultSet instance containing all matches for the specified path, _state_, the state object being queried, the _request_ object, and the _expander_ object which itself will contain a function <code>done(value)</code>. In our callback example, we overwrite the value of <code>/followers/count</code> with some abitrary value and then call the <code>done</code> function to signal that the expander has finished fetching data, and that the next expander may be run. Expanders are run in serial fashion for data integrity reasons.
+
+State Expanders are applied in the order in which they were registered via <code>addExpander</code>. Multiple expanders may be run on the same path. You may set expanders for multiple paths by using <code>{paths: [path1, path2, pathN], "if": "/condition"}</code>. If any given path returns more than one <code>QueryResult</code>, the results of the expander will be applied to all matching paths.
+
+The Spah Client
+===============
+
+TODO: In environments that support JS, the state in forms and links is replaced with the current state on submission/activation.
+
+The Spah client handles things at the browser end. Its primary tasks are:
+
+1. Ensuring that links and forms are submitted asynchronously and that they attach the state when activated (you may also [prevent some links and forms from acting asynchronously][force_synchronous])
+2. Ensuring that async requests are submitted with a <code>content-accept</code> header of <code>application/state+json</code>, allowing the server-side application to
+determine that this is a warm request and should be responded to with an updated state
+3. Re-evaluating and processing any document logic whenever the state is modified
+4. Raising path-specific events whenever the state is modified
+
+This is achieved by embedding template logic within the markup using HTML5 data attributes, thus making the same template logic available to both client
+and server. When the state is updated by a response from the server, elements with embedded display logic are re-evaluated automatically and the display 
+updated accordingly.
+
+You may also bind more advanced behaviours to changes in the state using [jQuery responders][responders] and [state queries][spahql]
+
+Install the client
+------------------
+
+Initialise the client
+---------------------
+
+For cleanliness, Spah keeps all of its functions, classes and behaviour within the top level <code>Spah</code> object.
+Initialising Spah is simple:
+
+     $(document).ready(function() { 
+         window.stateClient = Spah.createClient();
+     });
+
+Configure the client
+--------------------
+
+The State Reducer
+-----------------
+
+Whenever the Spah Client intercepts a navigation action, such as submitting a form or following a link, the current _state_ is attached to the request so that the server is able to make decisions. If your state contains model objects, this could get pretty large. Spah provides _state reducers_, macros which once registered are run against the state and remove unnecessary information before the state is sent to the server.
+
+	stateClient.addReducer(
+		{"path": "/mentions", "remove": "/*"}
+	);
+
+Each reducer has a path or array of paths specified with the key <code>path</code> or <code>paths</code>, and a query or array of queries matching items within those paths to keep or remove specified with the <code>keep</code> or <code>remove</code> keys. The _keep_/_remove_ queries are scoped to the paths matched by _path(s)_.
+
+Here's some examples:
+
+	// Remove everything from /mentions and /timeline
+	// except "id" keys, keeping the order and structure intact.
+	{"paths": ["/mentions", "/timeline"], "keep": "//id"}
+	// Remove everything from /mentions without deleting 
+	// /mentions altogether
+	{"path": "/mentions", "remove": "/*"}
+	// Reduce a model, wherever it appears, to include only 
+	// type and id
+	{"path": "//[/type=='myModel']", "keep": ["/id", "/type"]}
+
+Responding to state changes with Javascript
+-------------------------------------------
+
+Forcing links and forms to load synchronously
+---------------------------------------------
+
+To prevent Spah from adding asynchronous behaviour, add the <code>data-async="false"</code> attribute to the link or form element:
+
+    <a href="/login" data-async="false">Log in</a>
+    
+    <form action="/login" method="POST" data-async="false">
+      ...
+    </form>
+
+Eager client state changes
+--------------------------
 
 SpahQL
 ======
@@ -357,7 +438,7 @@ SpahQL Core concepts
 
 SpahQL is an execution-safe query language designed to let you ask complex questions of basic JSON constructs. SpahQL is designed to work against your application's state, but it will work happily against any combination of native hashes, arrays, strings, booleans and numbers.
 
-SpahQL allows two kinds of query: **[Selection queries][selection_state_queries]** are those which retrieve a set of results from your object, while **[Assertion queries][assertion_state_queries]** are those that return a boolean result.
+SpahQL allows two kinds of query: **[Selection queries][selection_queries]** are those which retrieve a set of results from your object, while **[Assertion queries][assertion_queries]** are those that return a boolean result.
 
 SpahQL is biased towards value equality over key equality. It is assumed that the keys in your object are known, curated namespace with arbitrary values. For this reason SpahQL's matching is designed to focus on comparing values, not keys.
 
@@ -459,7 +540,7 @@ If you want to lookup data on the root from inside a filter query, use the <code
     // /myArr on the root.
     results = Spah.state.select("/myHash[/* == $/myArr]")
 
-I'm sure by now that you've noticed the filter queries contain **comparison operators**. Any query containing a comparison operator is automatically executed as an [assertion query][assertion_state_queries]:
+I'm sure by now that you've noticed the filter queries contain **comparison operators**. Any query containing a comparison operator is automatically executed as an [assertion query][assertion_queries]:
 
 * A **selection** query: 
   
@@ -481,7 +562,7 @@ I'm sure by now that you've noticed the filter queries contain **comparison oper
 Assertion queries
 -----------------
 
-We've already seen how assertion queries can be used as filters in [selection queries][selection_state_queries]. Assertion queries are also used heavily in Spah's [document logic][document_logic] features.
+We've already seen how assertion queries can be used as filters in [selection queries][selection_queries]. Assertion queries are also used heavily in Spah's [document logic][document_logic] features.
 
 Assertion queries are run through the <code>assert</code> method on the state:
 
@@ -646,7 +727,7 @@ HTML Blueprints
 
 In a Spah application, document logic (show this, hide that, populate this with that) is moved away from in-place Erb views and into a place where both the client and the server will have access to it - the document itself. In doing this, we want to avoid doing anything silly like adding new tags or attributes that break HTML validity, or dirtying up your markup with billions of extra nested div elements.
 
-Spah handles document logic with HTML5 data attributes. Elements may query the state and declare how they should be altered when the query result is returned. When cold-booting your application from the server, the document logic is evaluated and run in-place before sending the HTML down the wire - this is what allows Spah to respond to HTML requests with valid, useful documents. On the client side, updates to the state cause any embedded document logic to be re-evaluated automatically. All document logic is achieved using [State Queries][spahql]. Conditions such as <code>if</code> statements use truthiness queries, as seen in the [state query documentation][assertion_state_queries].
+Spah handles document logic with HTML5 data attributes. Elements may query the state and declare how they should be altered when the query result is returned. When cold-booting your application from the server, the document logic is evaluated and run in-place before sending the HTML down the wire - this is what allows Spah to respond to HTML requests with valid, useful documents. On the client side, updates to the state cause any embedded document logic to be re-evaluated automatically. All document logic is achieved using [State Queries][spahql]. Conditions such as <code>if</code> statements use truthiness queries, as seen in the [state query documentation][assertion_queries].
 
 Spah provides the following operations on document logic:
 
@@ -774,6 +855,9 @@ Because stash operations run before populate operations, the following chain of 
 4. If the <code>/users</code> array reverts to an empty state:
   1. The "empty" class will be removed from the <code>ul</code>
   2. The "No users found" element will be unstashed into the <code>ul</code>, overwriting the rendered template content.
+
+API
+
 
 Example Node application
 =========================

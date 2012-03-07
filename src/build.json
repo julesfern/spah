@@ -10,6 +10,7 @@
 		"Spah.SpahQL.QueryParser.js",
 		"Spah.SpahQL.QueryRunner.js",
 		"Spah.SpahQL.DataHelper.js",
+		"Spah.SpahQL.Strategiser.js",
 		"Spah.SpahQL.Token.js",
 		"Spah.SpahQL.Token.Base.js",
 		"Spah.SpahQL.Token.Simple.js",

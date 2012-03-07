@@ -8,6 +8,47 @@
 
 Spah.classExtend("Spah.State", Spah.SpahQL.QueryResult, {
 
+  "commoniseReducer": function(reducer) {
+      if(reducer._commonised) return reducer;
+
+      var paths = reducer.paths || reducer.path;
+      if(typeof(paths) == "string") paths = [paths];
+
+      var isKeeper = (reducer.keep)? true : false;
+      if(reducer.keep && reducer.remove) throw new Error("Reducer is ambiguous. Use 'keep' or 'remove', not both.");
+      var matchers = (isKeeper)? reducer.keep : reducer.remove;
+      if(typeof(matchers) == "string") matchers = [matchers];
+
+      var commonisedReducer = {};
+      commonisedReducer._commonised = true;
+      commonisedReducer.paths = paths;
+      commonisedReducer.isKeeper = isKeeper;
+      commonisedReducer.matchers = matchers;
+
+      return commonisedReducer;
+  },
+
+  "commoniseExpander": function(expander, callback) {
+      if(expander._commonised) return expander;
+
+      var paths = expander.paths || expander.path;
+      if(typeof(paths) == "string") paths = [paths];
+
+      var expectation = (expander["if"])? true : false;
+      var condition = (expectation ? expander["if"] : expander["unless"]) || null;
+      var action = expander.action || callback;
+
+      var commonisedExpander = {
+        "paths": paths,
+        "expectation": expectation,
+        "condition": condition,
+        "action": action,
+        "_commonised": true
+      };
+
+      return commonisedExpander;
+  }
+
 }, {
   
   /**
@@ -20,6 +61,13 @@ Spah.classExtend("Spah.State", Spah.SpahQL.QueryResult, {
     this.path = "/"; 
     this.value = data || {};
     this.sourceData = this.value;
+
+    /**
+     * Spah.State#expanderLocked -> Boolean
+     *
+     * Indicates whether an expander process is already running on this State instance.
+     **/
+    this.expanderLocked = false;
 
     /**
      * Spah.State#reducers -> Array<Object>
@@ -53,7 +101,9 @@ Spah.classExtend("Spah.State", Spah.SpahQL.QueryResult, {
   },
 
   /**
-   * Spah.State#reduce() -> Spah.State
+   * Spah.State#reduce([useReducers]) -> Spah.State
+   * useReducers (Array): An optional array of reducer objects to be used instead of those already registered on
+   * this state instance.
    * 
    * Creates a clone of this state instance and applies all reducer strategies specified with #addReducer
    * to the clone. Returns the reduced clone. See #addReducer for details of reducer strategies.
@@ -61,87 +111,24 @@ Spah.classExtend("Spah.State", Spah.SpahQL.QueryResult, {
    * This method will be called by the Spah Client any time the state is about to be sent up the
    * wire to the Spah Server.
    **/
-  "reduce": function() {
+  "reduce": function(useReducers) {
     var target = this.clone();
+    var reducers = useReducers || this.reducers;
 
-    for(var r in this.reducers) {
-      var reducer = this.reducers[r];
+    for(var r in reducers) {
+      var reducer = reducers[r];
       target.applyReducer(reducer);
     }
 
     return target;
   },
 
-  /**
-   * Spah.State#addReducer(reducer) -> Spah.State
-   * reducer (Object): A hash containing the reducer properties. Should contain keys ("path" or "paths") and ("keep" or "remove").
-   *
-   * Adds a new reducer strategy to this state. Reducer strategies are used to shrink the state so that
-   * only the necessary data is sent up the wire to the Spah Server.
-   *
-   * Whenever the Spah Client makes a request to the Spah Server, a reduced version of the state is sent
-   * along with the request, allowing the server to make decisions based on the current UI state. You should
-   * specify how the state is reduced by using this method to add reducer strategies.
-   *
-   * A reducer is a hash made up of one or more paths that you want to reduce, and a set of keys
-   * that you either want removed from those paths or a set of keys that should be kept while all
-   * other keys are removed. All the queries involved are selection queries, not assertions. 
-   * 
-   * Here's some examples:
-   *
-   *    // Remove /tweets from the root
-   *    {"path": "/", "remove": "/tweets"}
-   *
-   *    // Remove anything that contains a key "type" with value "tweet"
-   *    {"path": "/", "remove": "//*[/type=='tweet']"} 
-   *
-   *    // Find everything with type=tweet and reduce it to only the "id" and "type" keys
-   *    {"path": "//*[/type=='tweet']", "keep": ["/id", "/type"]} 
-   *
-   *    // Keep only the first item in the arrays at /mentions and /direct_messages
-   *    {"paths": ["/mentions", "/direct_messages"], "keep": "/0"}
-   *
-   *    // Keep only entries that are tweets any entry containing a tweet at any level
-   *    {"paths": "//*", "keep": "/*[/type=='tweet']"}
-   *
-   * The mechanism uses the basic SpahQL helpers - a set of results to reduce is selected based on the
-   * "path" or "paths" key, and then if the reducer specifies a "keep" key, all entries *except* those matching
-   * one or more of the "keep" queries are destroyed. If the reducer specifies a "remove" key, all entries matching
-   * one or more of the "remove" queries are destroyed.
-   *
-   * Call state.reduce() to run your reducers. Reducers are run in the order in which you added them.
-   * 
-   * The "keep" and "remove" keys are mutually exclusive, and using both in the same reducer
-   * will throw an error. If for some reason you specify both "path" and "paths", "paths" will
-   * take priority and "path" will be ignored.
-   *
-   * This method returns this state instance so that you may chain addReducer calls.
-   **/
-  "addReducer": function(reducer) {
-      var commonisedReducer = (reducer._commonised)? reducer : this.commoniseReducer(reducer);
-      Spah.log("Attaching reducer to Spah.State instance: ", this, commonisedReducer);
-      this.reducers.push(commonisedReducer);
-      return this;
+  "commoniseReducer": function(reducer) {
+    return Spah.State.commoniseReducer(reducer);
   },
 
-  "commoniseReducer": function(reducer) {
-      if(reducer._commonised) return reducer;
-
-      var paths = reducer.paths || reducer.path;
-      if(typeof(paths) == "string") paths = [paths];
-
-      var isKeeper = (reducer.keep)? true : false;
-      if(reducer.keep && reducer.remove) throw new Error("Reducer is ambiguous. Use 'keep' or 'remove', not both.");
-      var matchers = (isKeeper)? reducer.keep : reducer.remove;
-      if(typeof(matchers) == "string") matchers = [matchers];
-
-      var commonisedReducer = {};
-      commonisedReducer._commonised = true;
-      commonisedReducer.paths = paths;
-      commonisedReducer.isKeeper = isKeeper;
-      commonisedReducer.matchers = matchers;
-
-      return commonisedReducer;
+  "commoniseExpander": function(expander, callback) {
+    return Spah.State.commoniseExpander(expander, callback);
   },
 
   /**
@@ -243,17 +230,85 @@ Spah.classExtend("Spah.State", Spah.SpahQL.QueryResult, {
   },
 
   /**
-   * Spah.State#expand(callback) -> Spah.State
+   * Spah.State#expand(callback[, attachments][, useExpanders]) -> Spah.State
+   * callback (Function): The function to call when all expanders have run.
+   * attachments (Object): A hash to be passed to the individual strategies for convenience
+   * useExpanders (Array): An array of expanders to use instead of the expanders registered directly on this State.
    *
-   * Expands only if the found path is in the /_reduced list.
+   * Clones this state instance and executes all expander strategies against the clone.
    **/
-  "expand": function(callback) {
+  "expand": function(callback, attachments, useExpanders) {
+    if(this.expanderLocked) throw new Error("Attempting to expand state while expansion already in progress");
+    this.expanderLocked = true;
+
     var target = this.clone();
+    var expanders = useExpanders || this.expanders;
+    Spah.log("Starting to execute expander strategies on Spah.State instance");
+
+    target.execExpanderStrategyLoop(0, expanders, attachments, callback);
   },
 
-  "addExpander": function(expander) {
-
+  "completedExpanding": function(target, callback) {
+    this.expanderLocked = false;
+    callback(target);
   },
+
+  "execExpanderStrategyLoop": function(expanderIndex, expanders, attachments, exitCallback) {
+    // Check for global exit condition
+    if(expanderIndex >= expanders.length) return this.completedExpanding(this, exitCallback);
+    // Otherwise get expander
+    var expander = this.commoniseExpander(expanders[expanderIndex]);
+
+    // Check validity of expander
+    var paths = expander.paths;
+    var condition = expander.condition;
+    var expectation = expander.expectation;
+
+    // Set up the exit for the 
+    var scope = this;
+    function handControlBackToStrategyLoop() {
+      scope.execExpanderStrategyLoop(expanderIndex+1, expanders, attachments, exitCallback);
+    };
+
+    if(!condition || (this.assert(condition) == expectation)) {
+      Spah.log("State Expander: Executing strategy for ["+paths.join(",")+"]");
+
+      // Enter the loop for queries/paths in this strategy
+      return this.execExpanderQueryLoop(0, expander, attachments, exitCallback, handControlBackToStrategyLoop);
+    }
+    else {
+      Spah.log("State Expander: Skipping strategy for ["+paths.join(",")+"] - condition ("+condition+" == "+expectation+") not met");
+      // Hand off to the next strategy
+      return handControlBackToStrategyLoop();
+    }
+  },
+
+  "execExpanderQueryLoop": function(pathIndex, expander, attachments, exitCallback, handControlBackToStrategyLoop) {
+    // Check for strategy exit condition - exit strategy and move on to next
+    if(pathIndex >= expander.paths.length) {
+      Spah.log("State expander: Strategy for paths ["+expander.paths.join(",")+"] exiting after running out of paths");
+      return handControlBackToStrategyLoop();
+    }
+    
+    var path = expander.paths[pathIndex];
+    var action = expander.action;
+    var results = this.select(path);
+
+    // Create the strategy callback, passing control back to the query loop from an indivudal expander strategy    
+    var scope = this;
+    function handControlBackToQueryLoop() {
+      Spah.log("State Expander: Strategy for path "+path+" completed expanding, resuming expander loop");
+      scope.execExpanderQueryLoop(pathIndex+1, expander, attachments, exitCallback, handControlBackToStrategyLoop);
+    }
+
+    // Exit to next step early if there's no results
+    if(results.length() == 0) return handControlBackToStrategyLoop();
+
+    var strategyCallbacks = {done: handControlBackToQueryLoop};
+    
+    action(results, this, attachments, strategyCallbacks);
+  },
+
 
   /**
    * Spah.State#apply(query, ruleFunc) -> Spah.State

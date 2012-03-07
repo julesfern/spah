@@ -19,15 +19,15 @@
   ],
   "dependencies": {
     "mustache"  :  "*",
-    "jquery"    :  ">=1.6.3",
+    "jQuery"    :  ">=1.6.3",
     "jsdom"     :  ">=0.2.13",
     "underscore":  ">=1.2.2"
   },
   "devDependencies": {
-    "express": ">=2.5.8"
+    "express": ">=2.x < 3.0-"
   },
   "license": "MIT",
   "engine": {
-    "node": "0.5.0"
+    "node": ">= 0.6.0 < 0.7.0-"
   }
 }
