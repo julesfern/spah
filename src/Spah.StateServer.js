@@ -23,7 +23,7 @@ Spah.classCreate("Spah.StateServer", {
 	},
 
    /**
-    * Spah.StateServer#addExpander(strategy, action)
+    * Spah.StateServer#addExpander(strategy, action) -> Object
     * - strategy (Object): A SpahQL Strategiser object. See Spah.SpahQL.Strategiser for details.
     * - action (Function): The Strategiser action for this reducer.
     *
@@ -31,7 +31,7 @@ Spah.classCreate("Spah.StateServer", {
     * the purposes of populating an HTML render.
     **/
    "addExpander": function(strategy, action) {
-      this.strategiser.addStrategy(strategy, "expand", action);
+      return this.strategiser.addStrategy(strategy, "expand", action);
    },
 	
 	

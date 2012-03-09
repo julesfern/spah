@@ -39,7 +39,7 @@ Spah.classCreate("Spah.StateClient", {
 	},
 
 	/**
-	 * Spah.StateClient#addReducer(strategy, action)
+	 * Spah.StateClient#addReducer(strategy, action) -> Object
 	 * - strategy (Object): A SpahQL Strategiser object. See Spah.SpahQL.Strategiser for details.
 	 * - action (Function): The Strategiser action for this reducer.
 	 *
@@ -54,7 +54,7 @@ Spah.classCreate("Spah.StateClient", {
 	 * 	
 	 **/
 	"addReducer": function(strategy, action) {
-      this.strategiser.addStrategy(strategy, "reduce", action);
+      return this.strategiser.addStrategy(strategy, "reduce", action);
    },
 
    /**

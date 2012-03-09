@@ -1,5 +1,5 @@
 /**
- * module Spah.State.Strategies
+ * class Spah.State.Strategies
  *
  * A package of pre-made SpahQL Strategiser actions provided for convience.
  **/
