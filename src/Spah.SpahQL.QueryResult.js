@@ -144,7 +144,7 @@ Spah.classCreate("Spah.SpahQL.QueryResult", {
     return  (this.sourceData == queryResult.sourceData) &&
             (
               (this.path == queryResult.path) ||
-              (queryResult.path.indexOf(this.path) == 0)
+              (queryResult.path.indexOf(this.path+"/") == 0)
             );
   },
   

@@ -27,6 +27,7 @@
 		"Spah.DOM.Document.js",
 		"Spah.DOM.Blueprint.js",
 		"Spah.State.js",
+		"Spah.State.Strategies.js",
 		"Spah.StateClient.js",
 		"Spah.StateServer.js"
 	]

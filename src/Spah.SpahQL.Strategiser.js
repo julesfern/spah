@@ -23,6 +23,10 @@
  			this.categories = {};
  		},
 
+    "count": function(category) {
+      return this.getStrategies(category).length;
+    },
+
  		/**
  		 * Spah.SpahQL#addStrategy(strategy[, category][, action]) -> Object
  		 * - strategy (Object): A hash describing the strategy
@@ -106,7 +110,7 @@
       var expectation = (strategy["if"])? true : false;
       var condition = (expectation ? strategy["if"] : strategy["unless"]) || null;
       var action = strategy.action || callback;
-      var category = strategy.category || category || "*";
+      var category = category || strategy.category || "*";
 
       var commonStrategy = {
         "paths": paths,
