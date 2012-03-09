@@ -53,6 +53,7 @@
 <li><div class="menu-item"><a class="class" href="../Spah/SpahQL/QueryResult/index.html" title="Spah.SpahQL.QueryResult (class)">Spah.SpahQL.QueryResult</a></div></li>
 <li><div class="menu-item"><a class="class" href="../Spah/SpahQL/QueryResultSet/index.html" title="Spah.SpahQL.QueryResultSet (class)">Spah.SpahQL.QueryResultSet</a></div></li>
 <li><div class="menu-item"><a class="class" href="../Spah/SpahQL/QueryRunner/index.html" title="Spah.SpahQL.QueryRunner (class)">Spah.SpahQL.QueryRunner</a></div></li>
+<li><div class="menu-item"><a class="class" href="../Spah/SpahQL/Strategiser/index.html" title="Spah.SpahQL.Strategiser (class)">Spah.SpahQL.Strategiser</a></div></li>
 <li><div class="menu-item"><a class="class" href="../Spah/SpahQL/Token/index.html" title="Spah.SpahQL.Token (class)">Spah.SpahQL.Token</a></div><ul><li><div class="menu-item"><a class="class" href="../Spah/SpahQL/Token/Base/index.html" title="Spah.SpahQL.Token.Base (class)">Spah.SpahQL.Token.Base</a></div></li>
 <li><div class="menu-item"><a class="class" href="../Spah/SpahQL/Token/Boolean/index.html" title="Spah.SpahQL.Token.Boolean (class)">Spah.SpahQL.Token.Boolean</a></div></li>
 <li><div class="menu-item"><a class="class" href="../Spah/SpahQL/Token/ComparisonOperator/index.html" title="Spah.SpahQL.Token.ComparisonOperator (class)">Spah.SpahQL.Token.ComparisonOperator</a></div></li>
@@ -64,9 +65,13 @@
 <li><div class="menu-item"><a class="class" href="../Spah/SpahQL/Token/Set/index.html" title="Spah.SpahQL.Token.Set (class)">Spah.SpahQL.Token.Set</a></div></li>
 <li><div class="menu-item"><a class="class" href="../Spah/SpahQL/Token/Simple/index.html" title="Spah.SpahQL.Token.Simple (class)">Spah.SpahQL.Token.Simple</a></div></li>
 <li><div class="menu-item"><a class="class" href="../Spah/SpahQL/Token/String/index.html" title="Spah.SpahQL.Token.String (class)">Spah.SpahQL.Token.String</a></div></li></ul></li></ul></li>
-<li><div class="menu-item"><a class="class" href="../Spah/State/index.html" title="Spah.State (class)">Spah.State</a></div></li></ul><ul><li><div class="menu-item"><a class="class-method" href="../Spah/classCreate/index.html" title="Spah.classCreate (class method)">classCreate</a></div></li>
+<li><div class="menu-item"><a class="class" href="../Spah/State/index.html" title="Spah.State (class)">Spah.State</a></div><ul><li><div class="menu-item"><a class="class" href="../Spah/State/Strategies/index.html" title="Spah.State.Strategies (class)">Spah.State.Strategies</a></div></li></ul></li>
+<li><div class="menu-item"><a class="class" href="../Spah/StateClient/index.html" title="Spah.StateClient (class)">Spah.StateClient</a></div></li>
+<li><div class="menu-item"><a class="class" href="../Spah/StateServer/index.html" title="Spah.StateServer (class)">Spah.StateServer</a></div></li></ul><ul><li><div class="menu-item"><a class="class-method" href="../Spah/classCreate/index.html" title="Spah.classCreate (class method)">classCreate</a></div></li>
 <li><div class="menu-item"><a class="class-method" href="../Spah/classExtend/index.html" title="Spah.classExtend (class method)">classExtend</a></div></li>
 <li><div class="menu-item"><a class="class-method" href="../Spah/classRegister/index.html" title="Spah.classRegister (class method)">classRegister</a></div></li>
+<li><div class="menu-item"><a class="class-method" href="../Spah/createClient/index.html" title="Spah.createClient (class method)">createClient</a></div></li>
+<li><div class="menu-item"><a class="class-method" href="../Spah/createServer/index.html" title="Spah.createServer (class method)">createServer</a></div></li>
 <li><div class="menu-item"><a class="class-method" href="../Spah/inBrowser/index.html" title="Spah.inBrowser (class method)">inBrowser</a></div></li>
 <li><div class="menu-item"><a class="class-method" href="../Spah/init/index.html" title="Spah.init (class method)">init</a></div></li>
 <li><div class="menu-item"><a class="class-method" href="../Spah/isHeadless/index.html" title="Spah.isHeadless (class method)">isHeadless</a></div></li>
@@ -97,7 +102,7 @@
 </ul>
 
 
-  <p id="src_code_href"><a href="http://github.com/danski/spah/blob/master/src/Spah.js#15">src code</a></p>
+  <p id="src_code_href"><a href="http://github.com/danski/spah/blob/master/src/Spah.js#10">src code</a></p>
 
 
 <h2 class="page-title">
@@ -113,9 +118,7 @@
                 </div> <!-- .section-title -->
                 <div class="section-content">
 
-    <p>For cleanliness, the Spah client is wrapped entirely in the <code>window.Spah</code> object.</p>
-
-<p>Initialising Spah in your page is easy:</p>
+    <p>For cleanliness, Spah is wrapped entirely in the <code>window.Spah</code> object on the client side, and <code>exports.spah</code> on the server side.</p>
 
 <p>See <a href='../../index.html#default_client_behaviour'>Default client behaviour</a> to learn what actions Spah performs on initialisation. For more information on Spah, see the main <a href='../index.html'>Readme</a> (<a href='https://github.com/danski/spah#readme'>also available on Github</a>)</p>
                 </div> <!-- .section-content -->
@@ -151,6 +154,18 @@
     <p><p>Spah.State is the wrapping class for the <code>state</code> defined by your application. It supports querying and assertions against the state and is also responsible for deep-merging state updates from the server and dispatching modification events to your responders.</p></p>
   
 </li>
+<li class="method-description">
+  <h4><a href="../Spah/StateClient/index.html">Spah.StateClient</a></h4>
+
+  
+    <p><p>The StateClient is the main piece of running code at the browser end of a Spah application.</p></p>
+  
+</li>
+<li class="method-description">
+  <h4><a href="../Spah/StateServer/index.html">Spah.StateServer</a></h4>
+
+  
+</li>
     </ul>
                 </div> <!-- .section-content -->
             </div> <!-- .section -->
@@ -184,6 +199,10 @@
 <li><code><a class="class-method" href="../Spah/classExtend/index.html" title="Spah.classExtend (class method)">classExtend</a></code></li>
 
 <li><code><a class="class-method" href="../Spah/classRegister/index.html" title="Spah.classRegister (class method)">classRegister</a></code></li>
+
+<li><code><a class="class-method" href="../Spah/createClient/index.html" title="Spah.createClient (class method)">createClient</a></code></li>
+
+<li><code><a class="class-method" href="../Spah/createServer/index.html" title="Spah.createServer (class method)">createServer</a></code></li>
 
 <li><code><a class="class-method" href="../Spah/inBrowser/index.html" title="Spah.inBrowser (class method)">inBrowser</a></code></li>
 
@@ -237,7 +256,7 @@
         <p><a href="http://github.com/danski/spah">Spah</a> v0.0.0 API documentation.</p>
         <p>
           
-            Last updated on March 02, 2012 at 17:47 UTC.
+            Last updated on March 09, 2012 at 14:27 UTC.
           
           Generated by <a href="http://pdoc.org">PDoc</a>.
           Uses <a href="http://famfamfam.com/lab/icons/silk/" title="famfamfam.com: Silk Icons">Silk Icons</a> and portions of <a href="http://github.com/280north/aristo/tree/master" title="280north's aristo at master - GitHub">Aristo</a>.

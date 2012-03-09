@@ -210,11 +210,22 @@ article pre {
   overflow-x: scroll;
 }
 article code {
-  display: inline-block;
   color: #FFF;
   background: #333;
   font-size: small;
   line-height: 1.4em;
+}
+article p > code, article > code {
+  display: inline-block;
+  background: #000;
+  padding: 0.4em 0.3em;
+  border: 1px solid rgba(255,255,255,0.3);
+    border-radius: 3px;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  box-shadow: 0 0 5px #000;
+}
+article pre code {
   width: 200%; /* horizontal scroll hack */
 }
 
@@ -249,3 +260,23 @@ article li > *:last-child {
 }
 
 /* @end */
+
+/* iPad [portrait + landscape] */
+@media only screen and (max-width: 1024px) {
+	article {
+  		margin-left: 350px;
+  		margin-right: 50px;
+	}
+}
+
+/* iPhone [portrait + landscape] */
+@media only screen and (max-width: 800px) {
+	.nav-wrapper {
+  		display: none;
+	}
+	article {
+  		margin: 0 auto;
+  		padding: 0 10px 10px 10px;
+	}
+}
+
