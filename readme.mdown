@@ -25,6 +25,7 @@ Spah: Build awesome single-page apps without breaking the web.
 [literals_and_sets]: #assertion_queries_literals_and_sets
 [comparison_operators]: #comparison_operators
 [object_equality]: #object_equality
+[strategies]: #spahql_strategies
 
 [document_logic]: #html_blueprints
 [logic_hide_show]: #hide_or_show_an_element
@@ -393,25 +394,39 @@ Configure the client
 The State Reducer
 -----------------
 
-Whenever the Spah Client intercepts a navigation action, such as submitting a form or following a link, the current _state_ is attached to the request so that the server is able to make decisions. If your state contains model objects, this could get pretty large. Spah provides _state reducers_, macros which once registered are run against the state and remove unnecessary information before the state is sent to the server.
+Whenever the Spah Client intercepts a navigation action, such as submitting a form or following a link, the current _state_ is attached to the request so that the server is able to make decisions. If your state contains model objects, this could get pretty large. Spah provides _state reducers_, macros which once registered are run against the state and remove unnecessary information before the state is sent to the server. The State Reducer uses the same basic [SpahQL Strategies][strategies] mechanism as the [State Expander][state_expander] on the server side.
 
+	// Remove the contents of the "mentions" tree if it contains anything
 	stateClient.addReducer(
-		{"path": "/mentions", "remove": "/*"}
+		{"path": "/mentions", "if": "/mentions/.length > 0"}, 
+		function(mentions, root, attachments, strategy) {
+				mentions.deleteAll();
+				strategy.done();
+		};
 	);
 
-Each reducer has a path or array of paths specified with the key <code>path</code> or <code>paths</code>, and a query or array of queries matching items within those paths to keep or remove specified with the <code>keep</code> or <code>remove</code> keys. The _keep_/_remove_ queries are scoped to the paths matched by _path(s)_.
+Spah provides some convience strategies for the most common reducer use cases - removing a list of keys from a set of paths, and removing everything *except* a list of keys from a set of paths.
 
 Here's some examples:
 
 	// Remove everything from /mentions and /timeline
 	// except "id" keys, keeping the order and structure intact.
-	{"paths": ["/mentions", "/timeline"], "keep": "//id"}
+	stateClient.addReducer(
+		{"paths": ["/mentions", "/timeline"]}, 
+		Spah.State.Strategies.keeper("//id")
+	);
 	// Remove everything from /mentions without deleting 
 	// /mentions altogether
-	{"path": "/mentions", "remove": "/*"}
+	stateClient.addReducer(
+		{"path": "/mentions"}, 
+		Spah.State.Strategies.remover("/*")
+	);
 	// Reduce a model, wherever it appears, to include only 
 	// type and id
-	{"path": "//[/type=='myModel']", "keep": ["/id", "/type"]}
+	stateClient.addReducer(
+		{"path": "//[/type=='myModel']"}, 
+		Spah.State.Strategies.keeper("/id", "/type")
+	);
 
 Responding to state changes with Javascript
 -------------------------------------------
@@ -721,6 +736,51 @@ Properties are like imaginary paths on objects in your state. Each property uses
 
         // Does a string contain all these characters?
         results = Spah.state.assert("/myStr/.explode }>{ {'a','b','c'}")
+
+SpahQL Strategies
+-----------------
+
+_Strategies_ are a mechanism provided by SpahQL allowing you to define a queue of asynchronous actions to be run in order against a QueryResult object, provided that the value of the query result matches the criteria you specify. Strategies are managed using the <code>Strategiser</code> class:
+
+		var state = new Spah.State({a: {aa: "a.aa.val", bb: "a.bb.val"}, b: {bb: "b.bb.val", cc: "b.cc.val"}});
+		var strategiser = new Spah.SpahQL.Strategiser();
+
+Strategies are objects which define a set of target paths, a condition which must be met for the strategy to run, and an action to take against the matched paths:
+
+		// Add a strategy to the strategiser...
+		strategiser.addStrategy(
+			// which will take action on /aa and /b/cc, but only if the assertion "/b/bb" returns true
+			{"paths": ["/aa", "/b/cc"], "if": "/b/bb"}, 
+			// with a named category
+			"reduce",
+			// when triggered, the strategy will be called
+			function(results, root, attachments, strategy) {
+					// make changes to the matched results
+					results.deleteAll();
+					// signal that the strategiser can advance to the next strategy in the queue
+					strategy.done();
+			}
+		);
+
+Strategies must specify the key _path_ or _paths_, a path or array of paths for the strategy to modify. Strategies may optionally use the key _if_ or _unless_, containing a SpahQL assertion whose expectation must be met for this strategy to be included. When we execute the strategies against a target QueryResult, _path_, _paths_, _if_ and/or _unless_ will be evaluated relative to the target QueryResult.
+
+Strategies also specify an _action_, a function containing the strategy's behaviour. It receives the arguments _results_, a QueryResultSet containing matches for the _path_, _root_, the original target QueryResult, _attachments_, an arbitrary object you may pass in when you execute the strategies, and _strategy_, an object containing flow control functions allowing you to signal that the strategy has completed.
+
+Specifying multiple paths using the _paths_ key is equivalent to registering multiple strategies each with the same expectation and action - the action function will be called once for each query specified in the _paths_ array and calling <code>strategy.done()</code> will advance the queue to the next path in this strategy, or to the next strategy.
+
+Execution is as follows:
+
+		strategiser.run(target, category, attachments, callback);
+
+When applied to the above example:
+
+		// Clone the State first to run the strategies without modifying the original
+		// Run the strategies in the "reduce" category
+		// Pass {foo: "bar"} as an attachment that will be available to all the strategies
+		// Pass a callback function which will receive the modified QueryResult and the attachments
+		strategiser.run(state.clone(), "reduce", {foo: "bar"}, function(clone, attachments) {
+				console.log(clone.select("/aa").length()); //-> 0, as the above strategy deleted this value
+		});
 
 HTML Blueprints
 ===============
