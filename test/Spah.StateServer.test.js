@@ -8,6 +8,27 @@ exports["Spah.StateServer"] = {
 			});
 			test.equal(server.strategiser.count(), 1);
 			test.done();
+	},
+
+	"Makes methods delegatable": function(test) {
+			var server = Spah.createServer();
+			var errorThrown = "";
+			var errorMessage = "NO FOO";
+
+			test.ok(!server.fooDelegate);
+			server.createDelegatedMethod("fooDelegate", errorMessage);
+
+			try {
+				server.fooDelegate({});
+			}
+			catch(e) {
+				errorThrown = e.message;
+			}
+
+			test.equal(errorThrown.indexOf(errorMessage), 0);
+			server.fooDelegate(function(request) { return request.state; });
+			test.equal(server.fooDelegate({state: "foo"}), "foo");
+			test.done();
 	}
 
 };

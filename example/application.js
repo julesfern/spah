@@ -48,9 +48,10 @@ var spah = require(__dirname+"/../src/_Spah-edge");
 // What we're doing here is creating an instance of StateServer,
 // which the app is going to use to vend new states to clients
 // and to handle merging state updates from clients.
-var stateServer = new spah.stateServer({
+var stateDefaults = {
 	"document": "index.html"
-});
+};
+var stateServer = new spah.stateServer();
 
 // Now, since we're dealing with model objects, and we'll
 // be shunting models down to the client as part of the state,

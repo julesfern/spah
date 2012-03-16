@@ -28,7 +28,6 @@ exports["Spah.StateClient"] = {
 			test.ok(state != reduced);
 			test.done();
 		});
-		
 	}
 
 };
