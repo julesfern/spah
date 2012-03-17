@@ -92,16 +92,16 @@ var stateServer = new spah.stateServer();
 //
 // Expansion is asynchronous. At the end of your expander function, 
 // call the "done" function.
-stateServer.addExpanderRule(
+stateServer.addExpander(
 	// The filter query. Match everything with type='page'
-	"//type == 'page'", 
+	{path: "//type == 'page'"}, 
 	// The expander callback. Comes with a promise, the set of
 	// results returned by the filter query, and the request
 	// and response objects.
-	function(done, resultSet, request, response) {
+	function(results, root, attachments, strategy) {
 		// do work
 		resultSet[0].update(Page.find(1)); // update the state in-place
-		return done();
+		return strategy.done();
 	}
 );
 

@@ -17,12 +17,14 @@
       {
           "name": "Nodeunit (All)",
           "working_dir": "$project_path",
-          "cmd": ["nodeunit", "src/Spah-edge.js", "test"]
+          "cmd": ["nodeunit", "src/Spah-edge.js", "test"],
+          "path": "/usr/local/bin:$PATH"
       },
       {
           "name": "Nodeunit (Current class)",
           "working_dir": "$project_path",
-          "cmd": ["nodeunit", "--reporter", "default", "src/Spah-edge.js", "test/${file_name/(\\.test)*\\.js/\\.test\\.js/}"]
+          "cmd": ["nodeunit", "--reporter", "default", "src/Spah-edge.js", "test/${file_name/(\\.test)*\\.js/\\.test\\.js/}"],
+          "path": "/usr/local/bin:$PATH"
       }
   ]
 }
