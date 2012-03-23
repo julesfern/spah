@@ -238,6 +238,38 @@ Spah.classCreate("Spah.SpahQL.QueryResult", {
   },
 
   /**
+   * Spah.SpahQL.QueryResult#concat(arr) -> Spah.SpahQL.QueryResult
+   * - arr (Array): An array of values to be concatenated to the end of this instance's value
+   *
+   * Concatenates an array to this instance's value, if this instance's value is an array.
+   * Returns self.
+   **/
+  "concat": function(values) {
+    values = (arguments.length > 1)? Array.prototype.slice.call(arguments) : values;
+
+    if(this.type() == "array") {
+      this.replace(this.value.concat(values));
+    }
+    return this;
+  },
+
+  /**
+   * Spah.SpahQL.QueryResult#unshift(arr) -> Spah.SpahQL.QueryResult
+   * - arr (Array): An array of values to be concatenated to the start of this instance's value
+   *
+   * Concatenates this instance's value to the given array, if this instance's value is an array.
+   * Returns self.
+   **/
+  "unshift": function(values) {
+    values = (arguments.length > 1)? Array.prototype.slice.call(arguments) : values;
+
+    if(this.type() == "array") {
+      this.replace(values.concat(this.value));
+    }
+    return this;
+  },
+
+  /**
    * Spah.SpahQL.QueryResult#prepend(value) -> Spah.SpahQL.QueryResult
    * - value (*): A value to be prepended to this result
    *

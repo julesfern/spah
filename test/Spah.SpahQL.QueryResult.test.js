@@ -318,6 +318,38 @@ exports["Spah.SpahQL.QueryResult"] = {
     test.equal(stringModified, 1);
     test.equal(otherModified, 0);
     test.done();
+  },
+
+  "Concats to an array": function(test) {
+    setup();
+    var dataResult = new Spah.SpahQL.QueryResult("/", data);
+    var res = dataResult.select("/arrtest").first();
+
+    var orig = ["a", "b", "c"];
+
+    res.concat("1", "2");
+    test.deepEqual(res.value, ["a","b","c","1","2"]);
+
+    res.concat(["3", "4"]);
+    test.deepEqual(res.value, ["a","b","c","1","2","3","4"]);    
+
+    test.done();
+  },
+
+  "Unshifts to an array": function(test) {
+    setup();
+    var dataResult = new Spah.SpahQL.QueryResult("/", data);
+    var res = dataResult.select("/arrtest").first();
+
+    var orig = ["a", "b", "c"];
+
+    res.unshift("1", "2");
+    test.deepEqual(res.value, ["1","2","a","b","c"]);
+
+    res.unshift(["3", "4"]);
+    test.deepEqual(res.value, ["3","4","1","2","a","b","c"]);    
+
+    test.done();
   }
   
 };
