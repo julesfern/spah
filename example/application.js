@@ -166,5 +166,5 @@ app.get("/", function(request, response) {
 });
 
 app.get("/search", function(request, response) {
-
+	stateServer.instruct("")
 });

@@ -216,6 +216,50 @@ Spah.classCreate("Spah.SpahQL.QueryResult", {
     }
     return false;
   },
+
+  /**
+   * Spah.SpahQL.QueryResult#append(value) -> Spah.SpahQL.QueryResult
+   * - value (*): A value to be appended to this result
+   *
+   * Appends a value to the data for this QueryResult, if this QueryResult is of a type amenable to appending (arrays, strings)
+   * If this instance has an array value, the given value will be appended to the array (not concatenated). If this instance
+   * has a string value, the given value will be appended to the end of the string.
+   *
+   * Returns self.
+   **/
+  "append": function(value) {
+    if(this.type() == "array") {
+      this.set(this.value.length, value);
+    }
+    else if(this.type() == "string") {
+      this.replace(this.value+value);
+    }
+    return this;
+  },
+
+  /**
+   * Spah.SpahQL.QueryResult#prepend(value) -> Spah.SpahQL.QueryResult
+   * - value (*): A value to be prepended to this result
+   *
+   * Adds a value to the beginning of the data for this QueryResult, if this QueryResult is of a type amenable to appending (arrays, strings)
+   * If this instance has an array value, the given value will be appended to the front of the array (not concatenated). If this instance
+   * has a string value, the given value will be appended to the start of the string.
+   *
+   * Returns self.
+   **/
+  "prepend": function(value) {
+    if(this.type() == "array") {
+      this.replace(([value]).concat(this.value));
+    }
+    else if(this.type() == "string") {
+      this.replace(value+this.value);
+    }
+    return this;
+  },
+
+  "insert": function(valueOrArrayOfValues) {
+
+  },
   
   /**
    * Spah.SpahQL.QueryResult#delete(key1, key2, keyN) -> QueryResult

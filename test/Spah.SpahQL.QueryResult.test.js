@@ -1,4 +1,5 @@
 var data;
+var dataResult;
 var setup = function() {
   data = {foo: {foo: "bar"}, booltest: {yes: true, no: false}, arrtest: ["a", "b", "c"], stringtest: "abc"};
 }
@@ -215,6 +216,107 @@ exports["Spah.SpahQL.QueryResult"] = {
     test.deepEqual(bar.value, {a: 1, b: 2, c:3});
     bar.delete();
     test.deepEqual(data, {foo: {a: 1, b: 2, c:3}}); // also asserts that data source was modified
+    test.done();
+  },
+
+  "Appends to an array item and raises events": function(test) {
+    setup();
+    var dataResult = new Spah.SpahQL.QueryResult("/", data);
+
+    var arrayModified = 0;
+    var itemModified = 0;
+    var otherModified = 0;
+
+    var res = dataResult.select("/arrtest").first();
+    var valueLength = res.value.length;
+
+    dataResult.modified("/arrtest", function(path, result) {
+        if(path == "/arrtest") arrayModified++;
+        else otherModified++;
+    });
+    dataResult.modified("/arrtest/"+valueLength, function(path, result) {
+        if(path == "/arrtest/"+valueLength) itemModified++;
+        else otherModified++;
+    });
+
+    res.append("d");
+    test.equal(res.value.length, valueLength+1);
+    test.equal(arrayModified, 1);
+    test.equal(itemModified, 1);
+    test.equal(otherModified, 0);
+    test.done();
+  },
+
+  "Appends to a string item and raises events": function(test) {
+    setup();
+    var dataResult = new Spah.SpahQL.QueryResult("/", data);
+
+    var stringModified = 0;
+    var otherModified = 0;
+
+    var res = dataResult.select("/stringtest").first();
+
+    dataResult.modified("/stringtest", function(path, result) {
+        if(path == "/stringtest") stringModified++;
+        else otherModified++;
+    });
+    
+    var prev = res.value;
+    res.append("d");
+    test.equal(res.value, prev+"d");
+    test.equal(stringModified, 1);
+    test.equal(otherModified, 0);
+    test.done();
+  },
+
+  "Prepends to an array item and raises events": function(test) {
+    setup();
+    var dataResult = new Spah.SpahQL.QueryResult("/", data);
+
+    var arrayModified = 0;
+    var itemModified = 0;
+    var otherModified = 0;
+
+    var res = dataResult.select("/arrtest").first();
+    var valueLength = res.value.length;
+
+    dataResult.modified("/arrtest", function(path, result) {
+        if(path == "/arrtest") arrayModified++;
+        else otherModified++;
+    });
+    dataResult.modified("/arrtest/0", function(path, result) {
+        if(path == "/arrtest/0") itemModified++;
+        else otherModified++;
+    });
+
+    res.prepend("d");
+    test.equal(res.value[0], "d");
+    test.equal(res.value.length, valueLength+1);
+    test.equal(arrayModified, 1);
+    test.equal(itemModified, 1);
+    test.equal(otherModified, 0);
+    test.done();
+  },
+
+  "Prepends to a string item and raises events": function(test) {
+    setup();
+    var dataResult = new Spah.SpahQL.QueryResult("/", data);
+
+    var stringModified = 0;
+    var otherModified = 0;
+
+    var res = dataResult.select("/stringtest").first();
+
+    dataResult.modified("/stringtest", function(path, result) {
+        if(path == "/stringtest") stringModified++;
+        else otherModified++;
+    });
+    
+    var prev = res.value;
+    res.prepend("d");
+    test.equal(res.value, "d"+prev);
+    test.equal(stringModified, 1);
+    test.equal(otherModified, 0);
     test.done();
   }
   
