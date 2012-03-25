@@ -218,7 +218,7 @@ Spah.classExtend("Spah.SpahQL.Token.Set", Spah.SpahQL.Token.Base, {
     
     // Figure out if this is a reversed or symmetrical range. 
     // Another easy comparison: Symmetrical ranges have one entry
-    if(start == end) return [new Spah.SpahQL.QueryResult(null, start)];
+    if(start == end) return [Spah.SpahQL.result(null, start)];
     // Easy comparison: One string is shorter than the other or the range is reversed
     if((start > end)||(start.length!=end.length)) return results; 
     
@@ -252,7 +252,7 @@ Spah.classExtend("Spah.SpahQL.Token.Set", Spah.SpahQL.Token.Base, {
       // When the workingCol hits -1 we know we popped a carry on the highest-order digit and maxed the string
       // If nextString == end then we hit the range target and should break.
       // Push the last-iterated result
-      results.push(new Spah.SpahQL.QueryResult(null, gen));
+      results.push(Spah.SpahQL.result(null, gen));
       if(gen == end) break iterating;
       
       // Iterate until carrying stops, giving us our new stop value for the next increment

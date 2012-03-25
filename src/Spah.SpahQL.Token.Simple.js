@@ -43,7 +43,7 @@ Spah.classExtend("Spah.SpahQL.Token.Simple", Spah.SpahQL.Token.Base, {
    * If the set is a range, it will be flattened into a set of values.
    **/
   evaluate: function(rootData, scopeData, scopePath) {
-    return [new Spah.SpahQL.QueryResult(null, this.value)];
+    return [Spah.SpahQL.item(null, this.value)];
   }
   
 });

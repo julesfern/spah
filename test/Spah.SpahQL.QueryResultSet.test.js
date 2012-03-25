@@ -4,78 +4,7 @@ var setup = function() {
 }
 
 exports["Spah.SpahQL.QueryResultSet"] = {
-  
-  "all() returns all results": function(test) {
-    setup();
-    
-    var set = Spah.SpahQL.select("//foo", data);
-    test.equal(set.all().length, set.results.length);
-    test.done();
-  },
-  
-  "first() returns the first result": function(test) {
-    setup();
-  
-    var set = Spah.SpahQL.select("//foo", data);
-    test.ok(set.first() instanceof Spah.SpahQL.QueryResult);
-    test.done();
-  },
-  
-  "each() returns true on completion, false on a halt": function(test) {
-    setup();
-  
-    var set = Spah.SpahQL.select("//foo", data);
-    test.ok(set.each(function(index, total) {}));
-    test.ok(!set.each(function(index, total) { return false; }));
-    test.done();
-  },
-  
-  "map() returns an ordered array": function(test) {
-    setup();
-  
-    var set = Spah.SpahQL.select("//foo", data);
-    test.deepEqual(set.map(function(i,t) { return [i,t]; }), [[0,2],[1,2]]);
-    test.done();
-  },
-  
-  "parentPath() acts on the first result": function(test) {
-    setup();
-  
-    var set = Spah.SpahQL.select("/foo/foo", data);
-    test.equal(set.parentPath(), "/foo");
-    test.done();
-  },
-  
-  "parent() acts on the first result": function(test) {
-    setup();
-  
-    var set = Spah.SpahQL.select("/foo/foo", data);
-    test.deepEqual(set.parent(), Spah.SpahQL.select("/foo", data).first());
-    test.done();
-  },
-  
-  "select() executes against every item in the set": function(test) {
-    setup();
-  
-    var data = {bar: {bar: {baz: "foo", boop: "foop"}}};
-    var set = Spah.SpahQL.select("//bar", data);
-    
-    test.deepEqual(set.select("//baz"), Spah.SpahQL.select("//baz", data));
-    test.deepEqual(set.select("/baz"), Spah.SpahQL.select("/bar/bar/baz", data));
-    test.done();
-  },
-  
-  "assert() executes against every item in the set": function(test) {
-    setup();
-  
-    var data = {foo: {yes: true, no: false}};
-    
-    test.ok(Spah.SpahQL.select("/foo", data).assert("/yes"));
-    test.ok(!Spah.SpahQL.select("/foo", data).assert("/no"));
-    test.ok(Spah.SpahQL.select("/foo", data).assert("/*"));
-    test.done();
-  },
-  
+ 
   "set() works on the first result in the set": function(test) {
     setup();
   

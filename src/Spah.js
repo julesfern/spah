@@ -172,7 +172,11 @@ Spah["classExtend"] = function(name, superKlass, constructor, klassProps, instan
   // Treat instance properties - create proto
   var proto = Object.create(superKlass.prototype);
   for(var i in iP) {
-    proto[i] = iP[i];
+    Object.defineProperty(proto, i, {
+      value: iP[i],
+      enumerable: false
+    });
+    //proto[i] = iP[i];
   }
 
   // Find constructor

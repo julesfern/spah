@@ -288,10 +288,6 @@ Spah.classCreate("Spah.SpahQL.QueryResult", {
     }
     return this;
   },
-
-  "insert": function(valueOrArrayOfValues) {
-
-  },
   
   /**
    * Spah.SpahQL.QueryResult#delete(key1, key2, keyN) -> QueryResult
