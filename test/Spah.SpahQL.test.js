@@ -380,6 +380,20 @@ exports["Spah.SpahQL"] = {
 		test.equal(db.select("/str").type(), "string");
 		test.equal(db.select("/num").type(), "number");
 		test.done();
+	},
+
+	"filter() reduces the set to those for which the scoped assertion is true": function(test) {
+		var data = {c: "root", a: {c: {inner: "accval"}}, b: {c: {inner: "bccval"}}}
+		var db = Spah.SpahQL.db(data);
+		var res = db.select("//c");
+
+		test.equal(res.length, 3);
+		var filtered = res.filter("/inner");
+
+		test.equal(filtered.length, 2);
+		test.deepEqual(filtered.paths(), ["/a/c", "/b/c"]);
+		test.deepEqual(filtered.values(), [{inner: "accval"}, {inner: "bccval"}]);
+		test.done();
 	}
 
 

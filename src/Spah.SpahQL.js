@@ -17,9 +17,7 @@ Spah.SpahQL = Spah.classExtend("Spah.SpahQL", Array, {
    * Create a new root-level SpahQL database with the given data.
    **/
   "db": function(data) {
-    return new this(
-      {path: "/", value: data, sourceData: data}
-    );
+    return this.item("/", data, data);
   },
 
   /**
@@ -93,7 +91,7 @@ Spah.SpahQL = Spah.classExtend("Spah.SpahQL", Array, {
     }
     else {
       results = (arguments.length > 1)? Array.prototype.slice.call(arguments) : results;
-      results = (results.value)? [results] : results;
+      results = (results.value && typeof(results.value)!="function")? [results] : results;
       for(var i in results) this.push(results[i]);
     }
   },
@@ -301,8 +299,8 @@ Spah.SpahQL = Spah.classExtend("Spah.SpahQL", Array, {
    *      select("/foo").keyName() //-> "foo"
    *      select("/foo/bar/.size").keyName() // -> ".size"
    **/
-  "keyName": function(path) {
-    var p = path || this.path();
+  "keyName": function(p) {
+    p = p || this.path();
     return (!p || p == "/")? null : p.substring(p.lastIndexOf("/")+1);
   },
 
@@ -319,33 +317,56 @@ Spah.SpahQL = Spah.classExtend("Spah.SpahQL", Array, {
     })
   },
 
+  /**
+   * Spah.SpahQL#type() -> String
+   *
+   * Returns the type of data for the first item in this set as a string, e.g. "array", "object", "number" etc.
+   **/
   "type": function(value) {
     var v = value || this.value();
     return this.dh.objectType(v);
   },
 
+  /**
+   * Spah.SpahQL#types() -> Array
+   *
+   * Returns a map of data types for all items in this set, e.g. ["array", "object", "number"]
+   **/
   "types": function() {
     var scope = this;
     return this.map(function() {
       return scope.type(this.value());
     });
-  }
+  },
 
-  // detach()
-  // clone() 
-  // set(keyOrDict)
-  // setAll(keyOrDict)
-  // replace()
-  // replaceAll()
-  // replaceEach()
-  // delete()
-  // deleteAll()
-  // deleteEach()
-  // append()
-  // concat()
-  // unshift()
-  // prepend()
-  // triggerModificationCallbacks
-  // modified()
+  /**
+   * Spah.SpahQL#filter(query) -> Spah.SpahQL
+   * - query (String): A SpahQL assertion query.
+   *
+   * Runs the given assertion against each item in this set and returns a new SpahQL set containing
+   * only those items meeting the given assertion.
+   **/
+  "filter": function(query) {
+    var matches = [];
+    this.each(function() {
+      if(this.assert(query)) matches.push(this[0]);
+    });
+    return new Spah.SpahQL(matches);
+  },
+
+  /**
+   * Spah.SpahQL#concat(otherSpahQL) -> Spah.SpahQL
+   * - otherSpahQL (Spah.SpahQL): Any other Spah.SpahQL instance.
+   *
+   * Creates and returns a new SpahQL set containing all results from this instance followed
+   * by all results from the given instance.
+   **/
+  "concat": function(otherSpahQL) {
+    var conc = [];
+    for(var i=0; i<this.length; i++) conc.push(this[i]);
+    for(var j=0; j<otherSpahQL.length; j++) conc.push(otherSpahQL[j]);
+    return new Spah.SpahQL(conc);
+  },
+  
 
 });
