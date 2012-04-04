@@ -25,6 +25,7 @@ Spah.classExtend("Spah.SpahQL.Token.Simple", Spah.SpahQL.Token.Base, {
     this.value = value;
   },
 
+
   /**
    * Spah.SpahQL.Token#toSet() -> Spah.SpahQL.Token.Set
    * 
@@ -35,7 +36,7 @@ Spah.classExtend("Spah.SpahQL.Token.Simple", Spah.SpahQL.Token.Base, {
   },
 
   /**
-   * Spah.SpahQL.Token.Simple#evaluate(queryToken, rootData[, scopeData]) -> Spah.SpahQL
+   * Spah.SpahQL.Token.Simple#evaluate(queryToken, rootData[, scopeData]) -> Array of result objects
    * - rootData (Object): A root data context for any selection queries that appear in the literal
    * - scopeData (Object): A scoped data context for the scope at which selection queries in the set will be evaluated.
    *
@@ -43,7 +44,7 @@ Spah.classExtend("Spah.SpahQL.Token.Simple", Spah.SpahQL.Token.Base, {
    * If the set is a range, it will be flattened into a set of values.
    **/
   evaluate: function(rootData, scopeData, scopePath) {
-    return Spah.SpahQL.item(null, this.value);
+    return [Spah.SpahQL.result(null, this.value)];
   }
   
 });

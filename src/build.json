@@ -5,8 +5,6 @@
 		"Spah.SpahQL.Callbacks.js",
 		"Spah.SpahQL.Errors.js",
 		"Spah.SpahQL.Query.js",
-		"Spah.SpahQL.QueryResult.js",
-		"Spah.SpahQL.QueryResultSet.js",
 		"Spah.SpahQL.QueryParser.js",
 		"Spah.SpahQL.QueryRunner.js",
 		"Spah.SpahQL.DataHelper.js",

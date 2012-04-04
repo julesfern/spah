@@ -145,7 +145,7 @@ Spah.classExtend("Spah.SpahQL.Token.PathComponent", Spah.SpahQL.Token.Base, {
 
       if(this.key == null && this.property == null) {
         // Root query, 
-        results = [new Spah.SpahQL.QueryResult(path, scopeData, rootData)]; // Uses original path arg
+        results = [Spah.SpahQL.result(path, scopeData, rootData)]; // Uses original path arg
       }
       else if(this.key != null) {
         // Key query - key might be wildcard.
@@ -161,21 +161,25 @@ Spah.classExtend("Spah.SpahQL.Token.PathComponent", Spah.SpahQL.Token.Base, {
       // Now filter results if there are filter queries
       if(results.length > 0 && this.filterQueries.length > 0) {
         var fI, rI;
-        var filteredResults = [];
+
+        // Loop filter queries
         for(fI=0; fI<this.filterQueries.length; fI++) {
           var filterQueryToken = this.filterQueries[fI];
+          var filteredResults = [];
 
           // Loop results and assert filters against the result's data
           for(rI = 0; rI < results.length; rI++) {
             var r = results[rI];
-            if(filteredResults.indexOf(r) < 0 && filterQueryToken.evaluate(rootData, r.value)) {
+            var filterResult = filterQueryToken.evaluate(rootData, r.value);
+
+            if(filterResult && filteredResults.indexOf(r) < 0) {
               filteredResults.push(r);
             }
-          }
+          } // result loop
           // Set results to those allowed by this filter query
           results = filteredResults;
-        }
-      }
+        } // filter query loop
+      } // condition
 
       // Return remainder
       return results;
@@ -203,7 +207,7 @@ Spah.classExtend("Spah.SpahQL.Token.PathComponent", Spah.SpahQL.Token.Base, {
           var oPath = path+"/"+oKey;
           // Match at this level
           if(key == Spah.SpahQL.QueryParser.ATOM_PATH_WILDCARD || key.toString() == oKey.toString()) {
-            results.push(new Spah.SpahQL.QueryResult(oPath, oVal, rootData));
+            results.push(Spah.SpahQL.result(oPath, oVal, rootData));
           }
           // Recurse! That is, if we should. Or not. It's cool.
           if(recursive && (oValType == "array" || oValType == "object")) {
@@ -234,20 +238,20 @@ Spah.classExtend("Spah.SpahQL.Token.PathComponent", Spah.SpahQL.Token.Base, {
         case this.PROPERTY_SIZE:
           switch(oType) {
             case "array": case "string":
-              results.push(new Spah.SpahQL.QueryResult(pPath, scopeData.length, rootData));
+              results.push(Spah.SpahQL.result(pPath, scopeData.length, rootData));
               break;
             case "object":
-              results.push(new Spah.SpahQL.QueryResult(pPath, Spah.SpahQL.DataHelper.hashKeys(scopeData).length, rootData));
+              results.push(Spah.SpahQL.result(pPath, Spah.SpahQL.DataHelper.hashKeys(scopeData).length, rootData));
               break;
           }
           break;
         case this.PROPERTY_TYPE:
-          results.push(new Spah.SpahQL.QueryResult(pPath, oType, rootData));
+          results.push(Spah.SpahQL.result(pPath, oType, rootData));
           break;
         case this.PROPERTY_EXPLODE:
           if(oType =="string") {
             for(var c=0; c<scopeData.length; c++) {
-              results.push(new Spah.SpahQL.QueryResult(path+"/"+c, scopeData.charAt(c), rootData));
+              results.push(Spah.SpahQL.result(path+"/"+c, scopeData.charAt(c), rootData));
             }
           }
           break;

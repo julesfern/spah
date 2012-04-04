@@ -170,10 +170,14 @@ Spah.classExtend("Spah.SpahQL.Token.Set", Spah.SpahQL.Token.Base, {
   evalNumericRange: function(start, end) {
     var results = [];
     // Return empty set for reverse ranges
-    if(end < start) return results;
-    for(var i=start; i<=end; i++) {
-      results.push(new Spah.SpahQL.QueryResult(null, i));
+    if(end < start) {
+      
+      for(var r=start; r>=end; r--) results.push(Spah.SpahQL.result(null, r));
     }
+    else {
+      for(var i=start; i<=end; i++) results.push(Spah.SpahQL.result(null, i));
+    }
+    
     return results;
   },
 

@@ -6,7 +6,7 @@
  * state updates from the server and dispatching modification events to your responders.
  **/
 
-Spah.classExtend("Spah.State", Spah.SpahQL.QueryResult, {
+Spah.classExtend("Spah.State", Spah.SpahQL, {
 
 }, {
   
