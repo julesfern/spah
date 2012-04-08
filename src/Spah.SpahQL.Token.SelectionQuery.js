@@ -91,7 +91,7 @@ Spah.classExtend("Spah.SpahQL.Token.SelectionQuery", Spah.SpahQL.Token.Base, {
     "evaluate": function(rootData, scopeData, scopePath) {
       // Start off with a simulated result using the data required by the query
       var results = [
-        new Spah.SpahQL.QueryResult(
+        Spah.SpahQL.result(
           ((this.useRoot)? null : scopePath) || "/", 
           ((this.useRoot)? rootData : scopeData)
         )

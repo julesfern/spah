@@ -394,6 +394,20 @@ exports["Spah.SpahQL"] = {
 		test.deepEqual(filtered.paths(), ["/a/c", "/b/c"]);
 		test.deepEqual(filtered.values(), [{inner: "accval"}, {inner: "bccval"}]);
 		test.done();
+	},
+
+	"Detaches as a root-level object": function(test) {
+		var myDb = Spah.SpahQL.db({foo: {bar: "baz"}});
+   	
+   	var foo = myDb.select("/foo");   	
+   	var fooClone = foo.detach();
+   	
+   	test.equal(fooClone.length, 1);
+   	test.equal(fooClone.path(), "/")
+   	test.deepEqual(fooClone.value(), foo.value());
+   	test.ok(fooClone.value() != foo.value());
+
+   	test.done();
 	}
 
 

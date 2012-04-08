@@ -101,7 +101,7 @@ exports["Spah.DOM.Document"] = {
       	  });
 
       // Create an example SpahQL state
-      var state = new Spah.SpahQL.QueryResult("/", {"test": true});
+      var state = Spah.SpahQL.db({"test": true});
 
       // Assert starting state
       test.equals(tDoc.jQ("#test-if").html(), "")
