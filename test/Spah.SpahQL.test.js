@@ -601,6 +601,71 @@ exports["Spah.SpahQL"] = {
 		test.done();
 	},
 
+	"delete() deletes from the parent": function(test) {
+		var inner = {aa: "aa"};
+		var outer = {a: inner, b: inner};
+
+		var db = Spah.SpahQL.db(outer);
+
+		db.select("/a").delete();
+
+		test.deepEqual(db.value(), {b: inner});
+		test.done();
+	},
+
+	"delete() ignored on root object": function(test) {
+		var inner = {aa: "aa"};
+		var outer = {a: inner, b: inner};
+
+		var db = Spah.SpahQL.db(outer);
+
+		db.delete();
+
+		test.deepEqual(db.value(), {a: inner, b: inner});
+		test.done();
+	},
+
+	"delete() deletes a key from an array": function(test) {
+		var inner = [0,1,2,3,4];
+		var outer = {a: inner, b: inner};
+
+		var db = Spah.SpahQL.db(outer);
+
+		db.select("/a").delete(3);
+
+		test.deepEqual(db.value(), {a: inner, b: inner});
+		test.deepEqual(inner, [0,1,2,4]);
+		test.done();
+	},
+
+	"delete() deletes a key from an object": function(test) {
+		var inner = {aa: "aa", bb: "bb"};
+		var outer = {a: inner, b: inner};
+
+		var db = Spah.SpahQL.db(outer);
+
+		db.select("/a").delete("bb");
+
+		test.deepEqual(db.value(), {a: inner, b: inner});
+		test.deepEqual(inner, {aa: "aa"});
+		test.done();
+	},
+
+	"deleteAll() works against every item in the set": function(test) {
+		var inner1 = {aa: "aa", bb: "bb"};
+		var inner2 = {aa: "aa", bb: "bb"};
+		var outer = {a: inner1, b: inner2};
+
+		var db = Spah.SpahQL.db(outer);
+
+		db.select("/*").deleteAll("bb");
+
+		test.deepEqual(db.value(), {a: inner1, b: inner2});
+		test.deepEqual(inner1, {aa: "aa"});
+		test.deepEqual(inner2, {aa: "aa"});
+		test.done();
+	},
+
 
 }
 

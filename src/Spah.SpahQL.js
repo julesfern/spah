@@ -504,6 +504,71 @@ Spah.SpahQL = Spah.classExtend("Spah.SpahQL", Array, {
   },
 
   /**
+   * Spah.SpahQL#delete([key]) -> Spah.SpahQL
+   *
+   * Deletes data from the first result in this set. If a key is supplied, the key will be deleted from value.
+   * If no arguments are given, the entire result will be deleted from its parent.
+   *
+   * Deletion takes different effects depending on the data type of this query result.
+   * Arrays are spliced, removing the specified index from the array without leaving an empty space. 
+   * Objects/Hashes will have the specified key removed, if the key exists.
+   *
+   * The root data construct may not be deleted. This method always returns self.
+   **/
+  "delete": function() {
+    var target = (typeof(arguments[0])=="object")? arguments[0] : null;
+    var ai = (target)? 1 : 0;
+    target = target || this[0];
+
+    if(!target) return this;
+
+    if((ai > 0 && arguments.length > 1) || (ai==0 && arguments.length > 0)) {
+      // Key deletion
+      var key = arguments[ai];
+      var modified = false;
+      var oldVal, newVal;
+      var type = this.type(target.value);
+      
+      // Shallow-clone original value...
+      // Original value is cloned so that new value can remain pointed to source data.
+      var cKey = Spah.SpahQL.DataHelper.coerceKeyForObject(key, target.value);
+      if(type == "array") {
+        // Doing array splice
+        oldVal = target.value.slice(0); // shallow array clone
+        target.value.splice(cKey, 1);
+      }
+      else if(type == "object") {
+        // Doing hash delete
+        oldVal = {};
+        // Shallow hash clone
+        for(var v in target.value) oldVal[v] = target.value[v];
+        delete target.value[cKey];
+      }
+      this.resultModified(target, oldVal);
+    }
+    else {
+      // Self-deletion
+      var k = this.keyName(target.path);
+      var p = this.parent(target);
+      if(p && k) {
+        p.delete(k);
+      }
+    }
+    
+    return this;
+  },
+
+  /**
+   * Spah.SpahQL#deleteAll([key]) -> Spah.SpahQL
+   *
+   * Just like #delete, but called against every item in this set. Returns self.
+   **/
+  "deleteAll": function(key) {
+    for(var i=0; i<this.length; i++) this.delete(this[i], key);
+    return this;
+  },
+
+  /**
    * Spah.SpahQL#listen(path, callback) -> Spah.SpahQL
    * - path (String): A path relative to the items in this set, if you only want to listen for changes on a particular subkey.
    * - callback (Function): A function to be called when the data in this SpahQL set is modified.
@@ -657,74 +722,5 @@ Spah.SpahQL = Spah.classExtend("Spah.SpahQL", Array, {
 //    return this;
 //  },
 //  
-//  /**
-//   * Spah.SpahQL.QueryResult#delete(key1, key2, keyN) -> QueryResult
-//   *
-//   * Deletes data from this result. If one or more keys is given as an argument, 
-//   * those keys will be deleted from this value in reverse alphanumeric order. If no arguments are
-//   * given, the entire result will be deleted from its parent.
-//   *
-//   * Deletion takes different effects depending on the data type of this query result.
-//   * Arrays are spliced, removing the specified index from the array without leaving an empty space
-//   * (hence the reverse ordering, to avoid array corruption). Objects/Hashes will have the specified
-//   * keys removed, if those keys exist.
-//   *
-//   * The root data construct may not be deleted. This method always returns <code>this</code>.
-//   **/
-//  "delete": function() {
-//    if(arguments.length > 0) {
-//      // Key deletion
-//      var keys = []; for(var i=0; i<arguments.length; i++) { keys.push(arguments[i]); };
-//          keys.sort(function(a, b) { return (a.toString()>b.toString())? -1 : 1; });
-//      var modified = false;
-//      var oldVal, newVal;
-//      var type = this.type();
-//      
-//      // Shallow-clone original value...
-//      // Original value is cloned so that new value can remain pointed to source data.
-//      if(type == "array") {
-//        // Doing array splice
-//        oldVal = this.value.slice(0); // shallow array clone
-//      }
-//      else if(type == "object") {
-//        // Doing hash delete
-//        oldVal = {};
-//        for(var v in this.value) { 
-//          // Shallow hash clone
-//          oldVal[v] = this.value[v]; 
-//        }
-//      }
-//       
-//      // Loop keys and remove
-//      for(var k=0; k<keys.length; k++) {
-//        var cKey = Spah.SpahQL.DataHelper.coerceKeyForObject(keys[k], this.value);
-//        if(cKey) {
-//          if(type == "array") {
-//            // Doing array splice
-//            this.value.splice(cKey, 1);
-//          }
-//          else if(type == "object") {
-//            // Doing hash delete
-//            delete this.value[cKey];
-//          }
-//          newVal = this.value;
-//        }
-//      }
-//      
-//      if(newVal) {
-//        this.triggerModificationCallbacks(oldVal, newVal);
-//      }
-//    }
-//    else {
-//      // Self-deletion
-//      var k = this.keyName();
-//      var p = this.parent();
-//      if(p && k) {
-//        p.delete(k);
-//      }
-//    }
-//    
-//    
-//    return this;
-//  },
+
 //
