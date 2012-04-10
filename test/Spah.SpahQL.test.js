@@ -512,24 +512,6 @@ exports["Spah.SpahQL"] = {
 			});
 	},
 
-	"listen() supplies the observed result, listened path and the modified subpath": function(test) {
-		var hsh = {a: {aa: "aaval"}, b: {aa: "bbval"}};
-		var db = Spah.SpahQL.db({"hsh": hsh});
-
-		db.listen("/hsh", function(result, path, subpaths) {
-			test.equal(result.length, 1);
-			test.equal(result.path(), path);
-			test.equal(path, "/hsh");
-
-			test.equal(result.value(), hsh);
-
-			test.deepEqual(subpaths, ["/a/cc", "/a/bb", "/a"]);
-			test.done();
-		});
-
-		db.select("/hsh/a").set({"bb": "bbval", "cc": "ccval"});
-	},
-
 	"unlisten() removes a listener": function(test) {
 		var hsh = {a: {aa: "aaval"}, b: {aa: "bbval"}};
 		var db = Spah.SpahQL.db({"hsh": hsh});

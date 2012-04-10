@@ -10,6 +10,24 @@ exports["Spah.SpahQL.Callbacks"] = {
     test.done();
   },
   
+  "listen() supplies the observed result, listened path and the modified subpath": function(test) {
+    var hsh = {a: {aa: "aaval"}, b: {aa: "bbval"}};
+    var db = Spah.SpahQL.db({"hsh": hsh});
+
+    db.listen("/hsh", function(result, path, subpaths) {
+      test.equal(result.length, 1);
+      test.equal(result.path(), path);
+      test.equal(path, "/hsh");
+
+      test.equal(result.value(), hsh);
+
+      test.deepEqual(subpaths, ["/a/cc", "/a/bb", "/a"]);
+      test.done();
+    });
+
+    db.select("/hsh/a").set({"bb": "bbval", "cc": "ccval"});
+  },
+
   "Removes the callbacks": function(test) {
     Spah.SpahQL.Callbacks.reset();
     
@@ -41,10 +59,10 @@ exports["Spah.SpahQL.Callbacks"] = {
     var bar = foo.select("/bar").first();
     var baz = bar.select("/baz").first();
 
-    root.modified(callback0);
-    foo.modified(callback1);
-    bar.modified(callback2);
-    baz.modified(callback3);
+    root.listen(callback0);
+    foo.listen(callback1);
+    bar.listen(callback2);
+    baz.listen(callback3);
     
     // Try modifying each key descending
     root.set("newkey", "newvalue");
@@ -62,14 +80,14 @@ exports["Spah.SpahQL.Callbacks"] = {
     Spah.SpahQL.Callbacks.reset();
     
     var data = {foo: {bar: {baz: "val"}}};
-    var root = Spah.SpahQL.select("/", data).first();
-    var foo = root.select("/foo").first();
+    var root = Spah.SpahQL.db(data);
+    var foo = root.select("/foo");
     
     test.expect(3);
-    foo.modified(function(path, result) {
-      test.equal(path, foo.path);
-      test.equal(result.path, foo.path);
-      test.deepEqual(result.value, {bar: {baz: "val"}, newkey: "newvalue"});
+    foo.listen(function(result, path, subpaths) {
+      test.equal(path, foo.path());
+      test.equal(result.path(), foo.path());
+      test.deepEqual(result.value(), {bar: {baz: "val"}, newkey: "newvalue"});
     });
     foo.set("newkey", "newvalue");
     test.done();
@@ -78,13 +96,13 @@ exports["Spah.SpahQL.Callbacks"] = {
   "Triggers modification callbacks on non-existent paths when setting complex values": function(test) {
     Spah.SpahQL.Callbacks.reset();
     var data = {foo: {bar: {baz: "val"}}};
-    var root = Spah.SpahQL.select("/", data).first();
+    var root = Spah.SpahQL.db(data);
 
     test.expect(3);
-    root.modified("/foo/newarr", function(path, result) {
+    root.listen("/foo/newarr", function(result, path) {
       test.equal(path, "/foo/newarr");
-      test.equal(result.path, path);
-      test.deepEqual(result.value, ["a","b","c"]);
+      test.equal(result.path(), path);
+      test.deepEqual(result.value(), ["a","b","c"]);
     });
     root.select("/foo").set("newarr", ["a","b","c"]);
     test.done();
