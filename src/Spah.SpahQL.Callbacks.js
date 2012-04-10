@@ -78,7 +78,10 @@ Spah.classCreate("Spah.SpahQL.Callbacks", {
       return (a.split("/").length > b.split("/").length)? -1: 1;
     })
     Spah.log("Path modified on data store, formulated the following dispatch strategy: ["+dispatchQueue.join(" -> ")+"]. Data store: ", data);
+    
     // Now run the dispatch queue
+    // For each path with modifications in the dispatch queue, locate all modified
+    // subpaths in the modification list.
     
     for(var i=0; i<dispatchQueue.length; i++) {
       var dispatchPath = dispatchQueue[i];
@@ -89,9 +92,17 @@ Spah.classCreate("Spah.SpahQL.Callbacks", {
       if(pathCallbacks) {
         for(var j=0; j<pathCallbacks.length; j++) {
           if(pathCallbacks[j][0] == data) {
+            // Find subpaths
+            var modifiedSubPaths = [];
+            for(var k=0; k<dispatchQueue.length; k++) {
+              if(dispatchQueue[k] != dispatchPath && (dispatchQueue[k]).indexOf(dispatchPath) == 0) {
+                modifiedSubPaths.push(
+                  dispatchQueue[k].substring(dispatchPath.length)
+                );
+              }
+            }
             // Trigger callback
-            
-            (pathCallbacks[j][1])(dispatchPath, Spah.SpahQL.select(dispatchPath, data).first());
+            (pathCallbacks[j][1])(Spah.SpahQL.select(dispatchPath, data), dispatchPath, modifiedSubPaths);
           }
         }
       }

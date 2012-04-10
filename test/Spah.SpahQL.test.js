@@ -408,7 +408,198 @@ exports["Spah.SpahQL"] = {
    	test.ok(fooClone.value() != foo.value());
 
    	test.done();
-	}
+	},
+
+	"set() Sets a subkey on an array": function(test) {
+		var arr = [0,1,2];
+		var db = Spah.SpahQL.db({"arr": arr});
+
+		db.select("/arr").set(0, "0-modified");
+		test.deepEqual(arr, ["0-modified", 1, 2]);
+
+		db.select("/arr").set("1", "1-modified");
+		test.deepEqual(arr, ["0-modified", "1-modified", 2]);
+
+		db.select("/arr").set(3, "3-created");
+		test.deepEqual(arr, ["0-modified", "1-modified", 2, "3-created"]);
+
+		test.done();
+	},
+
+	"set() Sets a subkey on a hash": function(test) {
+		var hsh = {a: "a", b: "b", c: "c"};
+		var db = Spah.SpahQL.db({"hsh": hsh});
+
+		db.select("/hsh").set("a", "a-modified");
+		test.deepEqual(hsh, {a: "a-modified", b: "b", c: "c"});
+
+		db.select("/hsh").set(1, "1-created");
+		test.deepEqual(hsh, {a: "a-modified", b: "b", c: "c", "1": "1-created"});
+
+		test.done();
+	},
+
+	"set() is a NOOP on simple types": function(test) {
+		var str = "abcd";
+		var db = Spah.SpahQL.db({"str": str});
+
+		db.select("/str").set(0, "changed");
+		test.deepEqual(db.select("/str").value(), "abcd");
+		test.equal(str, "abcd");
+
+		test.done();
+	},
+
+	"set() triggers modification callbacks on the affected path": function(test) {
+			var hsh1 = {a: "a", b: "b", c: "c"};
+			var hsh2 = {a: "aa", b: "bb", c: "cc"};
+			var db = Spah.SpahQL.db({"hsh1": hsh1, "hsh2": hsh2});
+
+			var set = db.select("/hsh1");
+
+			set.listen(function(result, path) {
+				test.equal(result.length, 1);
+				test.equal(result.path(), path);
+				test.equal(path, "/hsh1");
+				test.equal(result.value(), hsh1);
+				test.done();
+			});
+
+			set.set("a", "a-modified");
+	},
+
+	"setAll() sets on all members in the set": function(test) {
+			var hsh1 = {a: "a", b: "b", c: "c"};
+			var hsh2 = {a: "aa", b: "bb", c: "cc"};
+			var db = Spah.SpahQL.db({"hsh1": hsh1, "hsh2": hsh2});
+
+			db.select("/*").setAll("newkey", "newval");
+
+			test.equal(hsh1.newkey, "newval");
+			test.equal(hsh2.newkey, "newval");
+
+			test.done();
+	},
+
+	"setAll() ignores non-settable types": function(test) {
+		var hsh1 = {a: "a", b: "b", c: "c"};
+		var data = {"hsh1": hsh1, "hsh2": "hsh2"};
+		var db = Spah.SpahQL.db(data);
+
+		db.select("/*").setAll("newkey", "newval");
+
+		test.equal(hsh1.newkey, "newval");
+		test.equal(data.hsh2, "hsh2");
+
+		test.done();
+	},	
+
+	"listen() waits for modifications on the entire set": function(test) {
+			var hsh = {a: {aa: "aaval"}, b: {aa: "bbval"}};
+			var db = Spah.SpahQL.db({"hsh": hsh});
+
+			var set = db.select("/hsh/*");
+			test.equal(set.length, 2);
+
+			var listenersTriggered = 0;
+			set.listen(function() {
+				listenersTriggered++;
+				if(listenersTriggered == set.length) test.done();
+			});
+
+			set.each(function() {
+				this.set("foo", "bar");
+			});
+	},
+
+	"listen() supplies the observed result, listened path and the modified subpath": function(test) {
+		var hsh = {a: {aa: "aaval"}, b: {aa: "bbval"}};
+		var db = Spah.SpahQL.db({"hsh": hsh});
+
+		db.listen("/hsh", function(result, path, subpaths) {
+			test.equal(result.length, 1);
+			test.equal(result.path(), path);
+			test.equal(path, "/hsh");
+
+			test.equal(result.value(), hsh);
+
+			test.deepEqual(subpaths, ["/a/cc", "/a/bb", "/a"]);
+			test.done();
+		});
+
+		db.select("/hsh/a").set({"bb": "bbval", "cc": "ccval"});
+	},
+
+	"unlisten() removes a listener": function(test) {
+		var hsh = {a: {aa: "aaval"}, b: {aa: "bbval"}};
+		var db = Spah.SpahQL.db({"hsh": hsh});
+
+		var observer = function(result, path, subpaths) {
+			throw new Error("OH SCIENCE WHY DID I FIRE")
+		};
+
+		db.listen("/hsh", observer);
+		db.unlisten("/hsh", observer);
+
+		db.select("/hsh/a").set({"bb": "bbval", "cc": "ccval"});
+		test.done();
+	},
+
+	"replace() on a child key replaces the value in-place and updates the data store": function(test) {
+		var hsh = {a: {aa: "aaval"}, b: {aa: "bbval"}};
+		var hshReplacement = {x: {xx: "xxval"}};
+		var data = {"hsh": hsh};
+		var db = Spah.SpahQL.db(data);
+
+		var res = db.select("/hsh");
+		res.replace(hshReplacement);
+
+		test.equal(res.value(), hshReplacement);
+		test.equal(db.select("/hsh").value(), hshReplacement);
+		test.equal(data.hsh, hshReplacement);
+		test.done();
+	},
+
+	"replace() on the root object is ignored": function(test) {
+		var hsh = {a: {aa: "aaval"}, b: {aa: "bbval"}};
+		var hshReplacement = {x: {xx: "xxval"}};
+		var db = Spah.SpahQL.db(hsh);
+
+		db.replace(hshReplacement);
+
+		test.equal(db.value(), hsh);
+		test.equal(db.select("/x").value(), null);
+		test.done();
+	},
+
+	"replace() triggers listeners": function(test) {
+		var hsh = {a: {aa: "aaval"}, b: {aa: "bbval"}};
+		var hshReplacement = {x: {xx: "xxval"}};
+		var db = Spah.SpahQL.db({"hsh": hsh});
+
+		var res = db.select("/hsh");
+
+		res.listen(function(result, path, subpaths) {
+			test.equal(result.value(), hshReplacement);
+			test.equal(path, "/hsh");
+
+			test.done();
+		})
+
+		res.replace(hshReplacement);
+	},
+
+	"replaceAll() works against every item in the set": function(test) {
+		var db = Spah.SpahQL.db({arr: ["a",1,2,"3","4"]});
+
+		db.select("//*[/.type=='number']").replaceAll("NO NUMBERS ALLOWED");
+
+		test.deepEqual(
+			db.select("/arr").value(),
+			["a","NO NUMBERS ALLOWED","NO NUMBERS ALLOWED","3","4"]
+		);
+		test.done();
+	},
 
 
 }
