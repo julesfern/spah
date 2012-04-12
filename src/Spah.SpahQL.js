@@ -343,6 +343,78 @@ Spah.SpahQL = Spah.classExtend("Spah.SpahQL", Array, {
   },
 
   /**
+   * Spah.SpahQL#containing(spahql) -> Spah.SpahQL
+   * - spahql (Spah.SpahQL): A SpahQL object containing any number of results
+   * Spah.SpahQL#containing(path) -> Spah.SpahQL
+   * - path (String): An absolute path
+   * Spah.SpahQL#containing(pathList) -> Spah.SpahQL
+   * - pathList (Array<String>): An array of absolute paths
+   *
+   * Reduces this set of results to only those items containing one or more of the given absolute paths,
+   * returning the reduced set as a new SpahQL instance.
+   *
+   * Note that the existence of the given paths is not checked for - this method only matches on the paths
+   * themselves. If you need to assert the existence of a subpath, consider using #assert or #select.
+   *
+   * For instance:
+   *
+   *    var db = Spah.SpahQL.db(someData);
+   *    var foo = db.select("//foo");
+   *    foo.length //-> 2
+   *    foo.paths() //-> ["/a/foo", "/b/foo"]
+   *    foo.containing("/a/foo").paths() //-> ["/a/foo"], because the path was matched exactly
+   *    foo.containing("/b/foo/bar/baz").paths() //-> ["/b/foo"], because '/b/foo' is a superpath for the given path
+   *    
+   **/
+  "containing": function(obj, strict) {
+    var paths, matchesRequired;
+
+    // Do sugar
+    if(typeof obj == "string") paths = [obj];
+    else if((typeof obj.paths == "function")) paths = obj.paths();
+    else paths = obj;
+
+    matchesRequired = (strict)? paths.length : 1;
+
+    // Filter
+    var matches = [];
+    results: for(var i=0; i<this.length; i++) {
+      var res = this[i];
+
+      if(res.path) {
+        // Match subpaths
+        var pathMatches = 0;
+
+        subpaths: for(var j=0; j<paths.length; j++) {
+          if(paths[j].indexOf(res.path) == 0 && (paths[j].charAt(res.path.length) == "" || paths[j].charAt(res.path.length) == "/")) {
+            pathMatches++;
+            if(pathMatches >= matchesRequired) {
+              matches.push(res);
+              continue results;
+            }
+          }
+        }
+      }
+
+    }
+    return new Spah.SpahQL(matches);
+  },
+
+  /**
+   * Spah.SpahQL#containingAll(spahql) -> Spah.SpahQL
+   * - spahql (Spah.SpahQL): A SpahQL object containing any number of results
+   * Spah.SpahQL#containingAll(path) -> Spah.SpahQL
+   * - path (String): An absolute path
+   * Spah.SpahQL#containingAll(pathList) -> Spah.SpahQL
+   * - pathList (Array<String>): An array of absolute paths
+   *
+   * Works just like #containing, but reduces this set to only those items which contain ALL of the argument paths.
+   **/
+  "containingAll": function(obj) {
+    return this.containing(obj, true);
+  },
+
+  /**
    * Spah.SpahQL#filter(query) -> Spah.SpahQL
    * - query (String): A SpahQL assertion query.
    *
@@ -394,6 +466,59 @@ Spah.SpahQL = Spah.classExtend("Spah.SpahQL", Array, {
   "detach": function() {
     var data = this.dh.deepClone((this[0])? this[0].value : null);
     return Spah.SpahQL.db(data);
+  },
+
+
+  /**
+   * Spah.SpahQL#clone() -> Spah.SpahQL
+   *
+   * Produces a completely detached clone of this result set. This method does
+   * the equivalent of deep-cloning the original data used to create the SpahQL database
+   * (using SpahQL.db(data), for instance) and re-querying that clone for every result
+   * path found in this set.
+   *
+   * The result is a complete clone which may have its own change listeners and which
+   * may be freely modified without disrupting the original.
+   *
+   * If this set contains any literals (from a query such as "{1,2,3}") these results
+   * are cloned as well.
+   **/
+  "clone": function() {
+    var results = [],
+        sourceDatas = [],
+        sourceDataCloneDBs = [];
+
+    for(var i=0; i<this.length; i++) {
+      var sd = this[i].sourceData,
+          path = this[i].path;
+
+      if(path) {
+        // Query result
+        var sdi = sourceDatas.indexOf(sd);
+        var sdc;
+        
+        // For each sourceData found, clone it
+        if(sdi < 0) {
+          sdc = Spah.SpahQL.db(this.dh.deepClone(sd));
+
+          sourceDatas.push(sd);
+          sourceDataCloneDBs.push(sdc);
+          sdi = sourceDatas.length-1;
+        }
+        else {
+          sdc = sourceDataCloneDBs[sdi];
+        }
+        
+        // Now sourcedata is cloned, we can requery for the result
+        var cloneResult = sdc.select(path);
+        if(cloneResult[0]) results.push(cloneResult[0]);
+      }
+      else {
+        // Primitive result, clone it right away
+        results.push(this.dh.deepClone(this[i]));
+      }
+    }
+    return new Spah.SpahQL(results);
   },
 
   /**
@@ -515,16 +640,14 @@ Spah.SpahQL = Spah.classExtend("Spah.SpahQL", Array, {
    *
    * The root data construct may not be deleted. This method always returns self.
    **/
-  "delete": function() {
-    var target = (typeof(arguments[0])=="object")? arguments[0] : null;
-    var ai = (target)? 1 : 0;
-    target = target || this[0];
+  "delete": function(target, key) {
+    if(!target || typeof(target)!="object") {
+      key = target;
+      target = this[0];
+    }
 
-    if(!target) return this;
-
-    if((ai > 0 && arguments.length > 1) || (ai==0 && arguments.length > 0)) {
+    if(target && key) {
       // Key deletion
-      var key = arguments[ai];
       var modified = false;
       var oldVal, newVal;
       var type = this.type(target.value);
@@ -546,7 +669,7 @@ Spah.SpahQL = Spah.classExtend("Spah.SpahQL", Array, {
       }
       this.resultModified(target, oldVal);
     }
-    else {
+    else if(target) {
       // Self-deletion
       var k = this.keyName(target.path);
       var p = this.parent(target);

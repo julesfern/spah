@@ -4,7 +4,7 @@
 
 var fs = require('fs');
 var html = fs.readFileSync(__dirname+"/fixtures/layout.html", "utf-8");	
-var state = new Spah.SpahQL.QueryResult("/", {
+var state = Spah.SpahQL.db({
 	"show-if": false,
 	"class-if": false,
 	"id-if": false,

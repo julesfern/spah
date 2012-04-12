@@ -52,7 +52,7 @@
  		 *			}
  		 * 		}, "myEvent");
  		 *
- 		 * The _action_ receives the arguments _results_ (the ResultSet matched by the _path_), _target_ (the QueryResult
+ 		 * The _action_ receives the arguments _results_ (the SpahQL result set matching by the _path_), _target_ (the SpahQL set
  		 * to which the strategy is being applied), _attachments_ (An arbitrary object fed in by the caller executing the 
  		 * strategy) and _strategy_, an object containing flow control functions used to signal a strategy's completion.
  		 *
@@ -194,7 +194,7 @@
  				var query = strategy.paths[queryIndex];
  				var results = target.select(query);
  				var action = strategy.action;
- 				if(results.length() > 0) {
+ 				if(results.length > 0) {
  					// Execute action for this query
  					return action(results, target, attachments, flowController);
  				}

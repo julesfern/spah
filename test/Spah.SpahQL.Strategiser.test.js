@@ -108,7 +108,7 @@ exports["Spah.SpahQL.Strategiser"] = {
 
 	"Executes strategies by category": function(test) {
 		var data = {a: {aa: "a.aa.val", bb: "a.bb.val"}, b: {aa: "b.aa.val", bb: "b.bb.val"}};
-		var state = new Spah.State(data);
+		var state = Spah.SpahQL.db(data);
 		var strategiser = new Spah.SpahQL.Strategiser();
 		var stratFoo, stratBar, stratStar;
 
@@ -148,7 +148,7 @@ exports["Spah.SpahQL.Strategiser"] = {
 
 	"Runs strategies with IF conditions only when the expectation is met": function(test) {
 		var data = {a: {aa: "a.aa.val", bb: "a.bb.val"}, b: {aa: "b.aa.val", bb: "b.bb.val"}};
-		var state = new Spah.State(data);
+		var state = Spah.SpahQL.db(data);
 		var strategiser = new Spah.SpahQL.Strategiser();
 		var yesStrat, noStrat, yesRan, noRan;
 		var yesRan = 0, noRan = 0;
@@ -166,7 +166,7 @@ exports["Spah.SpahQL.Strategiser"] = {
 
 	"Runs strategies with UNLESS conditions when the expectation is met": function(test) {
 		var data = {a: {aa: "a.aa.val", bb: "a.bb.val"}, b: {aa: "b.aa.val", bb: "b.bb.val"}};
-		var state = new Spah.State(data);
+		var state = Spah.SpahQL.db(data);
 		var strategiser = new Spah.SpahQL.Strategiser();
 		var yesStrat, noStrat, yesRan, noRan;
 		var yesRan = 0, noRan = 0;

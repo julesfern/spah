@@ -61,15 +61,15 @@ Spah.classCreate("Spah.State.Strategies", {
           	// Inspect the matching results and determine if it should be kept
             var mr = this;
             // Is this matcher result contained in the exploded results?
-            if(explodedResult.contains(mr)) {
-              exemptPaths.push(explodedResult.path);
+            if(explodedResult.containing(mr).length > 0) {
+              exemptPaths.push(explodedResult.path());
             }
           })
         }
       });
 
       explodedTargets.each(function() {
-        if(exemptPaths.indexOf(this.path) < 0) {
+        if(exemptPaths.indexOf(this.path()) < 0) {
           this.delete();
         }
       });
