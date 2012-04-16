@@ -34,7 +34,7 @@
  		 * - action (Function): An optional function to be used as the strategy's action if you don't like specifying functions in hashes.
  		 *
  		 * Adds a strategy to this strategiser instance. Strategies are macros which may be categorised, and specific categories
- 		 * of strategy run in sequence against any given _target_. The target is always a SpahQL QueryResult, although it need not 
+ 		 * of strategy run in sequence against any given _target_. The target is always a SpahQL instance, although it need not 
  		 * be the root query result.
  		 *
  		 * Strategies are hashes containing the following keys:
@@ -148,7 +148,7 @@
 
  		/**
  		 * Spah.SpahQL.Strategiser#run(target, categoryList, attachments, callback) -> void
- 		 * - target (Spah.SpahQL.QueryResult): The SpahQL object upon which you want to execute a strategy set.
+ 		 * - target (Spah.SpahQL): The SpahQL object upon which you want to execute a strategy set.
  		 * - categoryList (String, Array): One or more categories used to filter the strategies you wish to execute
  		 * - attachments (*): An object made available to strategy actions at runtime
  		 * - callback (Function): A function to call when the strategy loop has completed. Takes arguments (target, attachments).

@@ -1,12 +1,7 @@
 /**
  * class Spah.SpahQL
  *
- * The SpahQL module wraps all operations relating to querying JSON objects, and manipulating data
- * based on their responses. SpahQL wraps a query parser with a matching set of query token types, a query runner
- * and the wrapping objects for query responses (QueryResultSet and QueryResult).
- *
- * The main SpahQL module also provides the frontend querying methods for all SpahQL operations. Use #select and #assert on this
- * class for all your querying needs.
+ * TODO
  **/
 
 Spah.SpahQL = Spah.classExtend("Spah.SpahQL", Array, {
@@ -23,8 +18,8 @@ Spah.SpahQL = Spah.classExtend("Spah.SpahQL", Array, {
   /**
    * Spah.SpahQL.result(path, value, sourceData) -> Object
    * - path (String, null): The path for this result primitive
-   * - value (*): The value at the given path
-   * - sourceData (*): The source database on which events are dispatched
+   * - value: The value at the given path
+   * - sourceData: The source database on which events are dispatched
    *
    * Create and return a new result primitive to be wrapped in a Spah.SpahQL instance.
    **/
@@ -42,7 +37,7 @@ Spah.SpahQL = Spah.classExtend("Spah.SpahQL", Array, {
    },
 
   /** 
-   * Spah.SpahQL.select(query, rootData[,scopeData][,path]) -> QueryResultSet
+   * Spah.SpahQL.select(query, rootData[,scopeData][,path]) -> Spah.SpahQL
    * - query (String): A valid SpahQL query. This may not be an assertion query.
    * - rootData (Object, Array): The root data context being queried.
    * - scopeData (Object, Array): The actual data context being queried, which should be a sub-context of the rootData.
@@ -323,7 +318,7 @@ Spah.SpahQL = Spah.classExtend("Spah.SpahQL", Array, {
   /**
    * Spah.SpahQL#type() -> String
    *
-   * Returns the type of data for the first item in this set as a string, e.g. "array", "object", "number" etc.
+   * Returns the type of data for the first item in this set as a string, e.g. array, object, number etc.
    **/
   "type": function(value) {
     var v = value || this.value();
@@ -348,7 +343,7 @@ Spah.SpahQL = Spah.classExtend("Spah.SpahQL", Array, {
    * Spah.SpahQL#containing(path) -> Spah.SpahQL
    * - path (String): An absolute path
    * Spah.SpahQL#containing(pathList) -> Spah.SpahQL
-   * - pathList (Array<String>): An array of absolute paths
+   * - pathList (Array): An array of absolute path strings
    *
    * Reduces this set of results to only those items containing one or more of the given absolute paths,
    * returning the reduced set as a new SpahQL instance.
@@ -524,7 +519,7 @@ Spah.SpahQL = Spah.classExtend("Spah.SpahQL", Array, {
   /**
    * Spah.SpahQL#set(key, value) -> Spah.SpahQL
    * - key (String, Number): The key to set on this result
-   * - value (*): The value to set for the given key
+   * - value: The value to set for the given key
    * Spah.SpahQL#set(dictionary) -> Spah.SpahQL
    * - dictionary (Object): A key/value hash containing multiple keys to be set.
    *
@@ -572,7 +567,7 @@ Spah.SpahQL = Spah.classExtend("Spah.SpahQL", Array, {
   /**
    * Spah.SpahQL#setAll(key, value) -> Spah.SpahQL
    * - key (String, Number): The key to set on this result
-   * - value (*): The value to set for the given key
+   * - value: The value to set for the given key
    * Spah.SpahQL#setAll(dictionary) -> Spah.SpahQL
    * - dictionary (Object): A key/value hash containing multiple keys to be set.
    *
@@ -744,7 +739,7 @@ Spah.SpahQL = Spah.classExtend("Spah.SpahQL", Array, {
    * Removes a listener previously created with #listen, accepting the same objects as arguments in order to identify the listener being destroyed.
    *
    * Returns self.
-   */
+   **/
   "unlisten": function(pathOrCallback, callback) {
     this.listen(pathOrCallback, callback, true);
   },
@@ -752,7 +747,7 @@ Spah.SpahQL = Spah.classExtend("Spah.SpahQL", Array, {
   /**
    * Spah.SpahQL#resultModified(result, oldValue) -> void
    * - result (Object): A primitive result object that was modified as a result of a modification made to this set
-   * - oldValue (*): The prior value of the modified result
+   * - oldValue: The prior value of the modified result
    *
    * Raises modification events for anything subscribing to changes to the modified path chain on the specified result object.
    **/
@@ -766,84 +761,3 @@ Spah.SpahQL = Spah.classExtend("Spah.SpahQL", Array, {
   },
 
 });
-
-
-///**
-// * class Spah.SpahQL.QueryResult
-// *
-// * A simple model wrapping an individual result returned from a SpahQL query.
-// **/
-// 
-//
-//Spah.classCreate("Spah.SpahQL.QueryResult", {
-//  // Singletons
-//  // --------------------
-//},{
-//  
-//  // Instance
-//  // -------------------
-//  
-//  /**
-//
-//  /**
-//   * Spah.SpahQL.QueryResult#contains(queryResult) -> Boolean
-//   * queryResult (Spah.SpahQL.QueryResult): A query result instance
-//   *
-//   * Determines if the given result is a child member of this result, by comparing the two paths.
-//   * Will never return true if the given query result has a different source data object to this
-//   * result, for example if one of the results is a clone created with #detach, #reduce, #expand
-//   * or a similar method.
-//   **/
-//  "contains": function(queryResult) {
-//    return  (this.sourceData == queryResult.sourceData) &&
-//            (
-//              (this.path == queryResult.path) ||
-//              (queryResult.path.indexOf(this.path+"/") == 0)
-//            );
-//  },
-//  
-//  
-
-//
-//  /**
-//   * Spah.SpahQL.QueryResult#append(value) -> Spah.SpahQL.QueryResult
-//   * - value (*): A value to be appended to this result
-//   *
-//   * Appends a value to the data for this QueryResult, if this QueryResult is of a type amenable to appending (arrays, strings)
-//   * If this instance has an array value, the given value will be appended to the array (not concatenated). If this instance
-//   * has a string value, the given value will be appended to the end of the string.
-//   *
-//   * Returns self.
-//   **/
-//  "append": function(value) {
-//    if(this.type() == "array") {
-//      this.set(this.value.length, value);
-//    }
-//    else if(this.type() == "string") {
-//      this.replace(this.value+value);
-//    }
-//    return this;
-//  },
-//
-//  /**
-//   * Spah.SpahQL.QueryResult#prepend(value) -> Spah.SpahQL.QueryResult
-//   * - value (*): A value to be prepended to this result
-//   *
-//   * Adds a value to the beginning of the data for this QueryResult, if this QueryResult is of a type amenable to appending (arrays, strings)
-//   * If this instance has an array value, the given value will be appended to the front of the array (not concatenated). If this instance
-//   * has a string value, the given value will be appended to the start of the string.
-//   *
-//   * Returns self.
-//   **/
-//  "prepend": function(value) {
-//    if(this.type() == "array") {
-//      this.replace(([value]).concat(this.value));
-//    }
-//    else if(this.type() == "string") {
-//      this.replace(value+this.value);
-//    }
-//    return this;
-//  },
-//  
-
-//

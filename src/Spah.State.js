@@ -1,5 +1,5 @@
 /**
- * class Spah.State < Spah.SpahQL.QueryResult
+ * class Spah.State < Spah.SpahQL
  *
  * Spah.State is the wrapping class for the <code>state</code> defined by your application. 
  * It supports querying and assertions against the state and is also responsible for deep-merging
@@ -13,8 +13,8 @@ Spah.classExtend("Spah.State", Spah.SpahQL, {
   /**
    * new Spah.State(data[, reducers[, expanders]])
    * - data (Object): A hash of data to act as the starting state. Note that modification events are not fired during instantiation.
-   * - reducers (Array<Object>): An array of rules to be applied when this state is reduced.
-   * - expanders (Array<Object>): An array of rules to be applied when this state is expanded.
+   * - reducers (Array): An array of rules to be applied when this state is reduced.
+   * - expanders (Array): An array of rules to be applied when this state is expanded.
    **/
   "init": function(data, reducers, expanders) {
     this.path = "/"; 

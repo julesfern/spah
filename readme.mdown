@@ -1,17 +1,9 @@
-Spah: Build awesome single-page apps without breaking the web.
-==============================================================
+#Spah (on [Danski's Github][github])
 
-**WARNING: EPIC CONSTRUCTION YARD AHEAD. DO NOT BUILD ANYTHING WITH THIS UNTIL THIS MESSAGE DISAPPEARS**.
-
+[github]: http://github.com/danski/spah
 [introduction]: #introduction
-[intro_anatomy_of_an_spa]: #anatomy_of_a_singlepage_web_app
-[intro_state]: #the_state
-[intro_anatomy_of_a_spah_app]: #anatomy_of_a_spah_web_app
 
 [core_concepts]: #core_concepts
-[state]: #the_state
-[cold_requests]: #cold_requests
-[warm_requests]: #warm_requests
 
 [server]: #the_spah_server
 [state_expander]: #the_state_expander
@@ -19,11 +11,13 @@ Spah: Build awesome single-page apps without breaking the web.
 [state_reducer]: #the_state_reducer
 
 [spahql]: #spahql
-[spahql_concepts]: #spahql_core_concepts
-[selection_queries]: #selection_queries
-[assertion_queries]: #assertion_queries
-[literals_and_sets]: #assertion_queries_literals_and_sets
-[comparison_operators]: #comparison_operators
+[spahql_getting_started]: #spahql_getting_started
+[selection_queries]: #selecting_data
+[modifying_data]: #modifying_data
+[spahql_listeners]: #listening_for_changes
+[assertion_queries]: #making_assertions
+[literals_and_sets]: #literals
+[comparison_operators]: #comparisons
 [object_equality]: #object_equality
 [strategies]: #spahql_strategies
 
@@ -48,86 +42,66 @@ Spah: Build awesome single-page apps without breaking the web.
 Introduction
 ============
 
-The single-page app paradigm is awesome for creating fancy, stateful web apps that hang right off your service's developer API. But in the process of putting entire applications on a single URL, we risk breaking the web. We're making our pages unfriendly to search engines and impenetrable to scrapers, microdata clients, and readability engines.
+**WARNING: EPIC CONSTRUCTION YARD AHEAD. DO NOT BUILD ANYTHING WITH THIS UNTIL THIS MESSAGE DISAPPEARS**.
 
-We want to get all the advantages and capabilities of rich single-page javascript apps but *without* the nasty stuff. That means no hashbangs, no code duplication, and no trickery to give search engines and scrapers what they want.
-
-So here's Spah. Spah takes the best from both the single- and multi-page paradigms and boils it down to a few core concepts:
-
-1. A **state** for your UI. That's a chunk of JSON that describes which tabs are active, lists of model objects, user preferences, saved form data, that sort of thing.
-2. A **blueprint** for the HTML that makes up your application, much like a template. You define how it will react to changes in the **state** using SpahQL, a powerful query language for JSON.
-3. A **server** that can make changes to the **state**. The server understands your **blueprint** - so if the user enters a URL directly into their browser, the server can apply the **state** to your **blueprint** and deliver proper HTML down the wire. If the user navigates to that URL from within your app, the server can just ship changes to the UI state as plain JSON. The server can update the state selectively, without destroying stuff the user is already doing.
-4. A **client** that adds all the rich single-page behaviours. It keeps the UI synced to changes in the **state**, it manages navigation history and it enables more advanced client-side behaviours such as lazy-loading.
-
-Putting these together lets you:
+Spah is a toolkit for building dynamic, single-page web apps *without* breaking the features supported by regular HTML pages - such as deep-linking, bookmarking, scraping and indexing.
 
 - **Be a good web citizen**. With Spah, every URL in your site may be indexed, bookmarked, shared, syndicated and CURLed.
 - **Progressively enhance, gracefully degrade**. Users with modern browsers get the full rich javascript experience. Users with old browsers get to surf like its 1999. Everyone gets to use your app.
-- **Keep it stateful.** Give proper multitasking by only updating those parts of the UI that need updating. Get vastly reduced server-side code complexity. Everyone wins.
-- **Do all this with _zero_ code duplication.** Spah solves the difficult problems of shared client/server templating and state management, leaving you to work on your app.
-- **Use the tools you like.** Spah is a view layer for your application and nothing more. It doesn't care what you use to do your routing, your validations or your persistence.
-
-In order to properly explain Spah, lets take a look at a few patterns for building web applications.
-
-Anatomy of a simple web app
----------------------------
-
-<img src="https://img.skitch.com/20110720-mnf4xun1n6gwf461edtp12jmjf.jpg" />
-
-We all recognise this. The server renders pages as they are requested and serves them in the body of a request. As far as the client is concerned, there's no difference between your site and one built with static HTML. It has these qualities:
-
-* _Good_: Every page is indexable and scrapable in every possible state.
-* _Good_: Since the state of the page is handled exclusively by the server, state can be maintained as the user navigates between pages.
-* _Bad_: Since the state of the page is handled exclusively by the server, maintaining state requires the developer to wrangle highly complicated query strings.
-* _Bad_: Since every user action requires a full page load, a lot of user experience goodness goes out the window and good performance is hard to achieve.
-
-Anatomy of a single-page web app
---------------------------------
-
-<img src="https://img.skitch.com/20110504-73a3ftde7d731kbepxg2p7w1.jpg" />
-
-This is pretty much where we are today. You get the much-desired "desktop" class of application, and you do it by writing the UI entirely in javascript with little to no markup handled on the server. You pull data in from your app's API in JSON format. But we've made some serious concessions:
-
-* _Good_: The whole UI runs within a single page, so you can have multiple complex stateful UI elements that retain their state as the rest of the page is updated.
-* _Good_: The whole UI runs within the browser, so you've got templating handled in the client. No duplication of template code.
-* _Bad_: It needs a browser to run. You can't deliver markup for non-browser requests without creating an HTML rendering chain on the server.
-* _Bad_: We're not indexable any more. Your app only has one URL, and it serves content-free boilerplate markup. If you decide to make your URLs server-renderable, then you're going to need multiple rendering chains and a lot of code duplication.
-* _Bad_: Perceptual performance suffers, but not because of server inefficiencies such as those seen in the simple web app model. Instead, we introduce multiple HTTP turnarounds to start the app - one to load the page, several more to populate it with content.
-
-Anatomy of a Spah web app
--------------------------
-
-With Spah, we take a little of the basic multi-page paradigm...
-
-<img src="https://img.skitch.com/20110504-p13hfga9s4d6x7bpjwrw1gbyjj.jpg" title="A cold render" />
-
-And we rejig it to allow any page to boot into stateful single-page mode, giving us all the advantages of the new model:
-
-<img src="https://img.skitch.com/20110504-tpqb613eyy46j7f758nqr745n2.jpg" title="A warm render" />
-
-Once the page has loaded, all the rich client behaviours kick in - any further action taken by the user will result in the state of the current page being updated. The Spah Client manages history using the HTML5 History API, allowing the user to move freely around your app and making every link share, bookmark and script-friendly. If the user needs to do something synchronously - say, a file upload, or a secure login - Spah can pass the state to the server where it gets modified, and handed back as another plain HTML document.
+- **Do away with code duplication.** Spah solves the difficult problems of shared client/server templating and state management, leaving you to work on your app.
+- **Use the tools you like.** Spah is *not* a Rails-alike MVC/ORM framework - its a view layer for your application and nothing more. It doesn't care what you use to do your routing, your validations or your persistence. Nor does it stop you creating whatever futuristic client-side stuff you have in mind.
 
 Core Concepts
 =============
 
-The State
----------
+The most important concept in Spah is the **state**. The state is a Javascript Object that describes your UI at a given point in time - which tabs are active, lists of model objects, user preferences, saved form data, that sort of thing.
 
-Spah's central concept is the State. The State is a JSON object that describes the configuration of your application's user interface. That'd be things like user preferences, active tabs, saved form data, or lists of model objects. Here's a dead simple example for a basic Twitter UI:
+To make the state object useful, we need some way of making the UI correctly reflect the desired state. To this end, we have  what Spah refers to as the **blueprint**.
 
-	{
-		"user": {
-			"logged_in": true,
-			"name": "John Doe",
-			"email": "john@doe.com",
-			"handle": "johndoe",
-			"avatar": {
-				"small": "https://myapp.com/avatar-small/goatse.png",
-				"large": "https://myapp.com/avatar-large/goatse.png"
+The **blueprint** is two things. One, it contains the raw HTML for your application. Two, it contains instructions for how that HTML should be modified to reflect changes in the **state**. These instructions are each made up of an **action** and a condition - such as showing an element only if the user is logged in, or populating an element from a template if the state contains the data required to do so.
+
+Sticking those concepts together; responding to requests with Spah involves creating or modifying a **state object**, and _applying_ it to a **blueprint**. All of the conditions in your **blueprint** are checked, and the appropriate **actions** are run to produce a fully-populated HTML document that properly reflects your state. 
+
+The trick is that this rendering process can be performed by _either the client or the server_. When a user first loads a URL within your app, this action can (and should) be performed on the server side to deliver some proper HTML. This initial request is called a **cold request**. Once the user has your app loaded, the rendering process can take place over the wire as state updates are returned in JSON format to the client, which then does the work of updating your markup - a **warm request**.
+
+No code duplication. Shared templates. Rich, stateful UI. And your pages still have all the features of a good-old linkable, bookmarkable, scraper-friendly HTML document.
+
+What makes Spah
+===============
+
+Spah is really a small set of utilities that taste great together. Here's what you get:
+
+- A **query system** named _SpahQL_ for working with states. Think of it like jQuery, but for dealing with object data instead of DOM elements.
+- A **runner** for your **blueprints**. It can apply any given **state** to a blueprint to produce markup reflecting that state.
+- Some basic **actions** to get you started making blueprints.
+- Server-side **app helpers** to help you keep your controller/responder code nice and brief.
+- A client-side **navigation manager** that turns navigational actions such as link clicks and form submissions into async requests to the server, which can then modify the state.
+- A client-side **history manager** that allows the user to move forward and back between pages in your app without refreshing the entire page. You can also define which parts of the state should be persisted across the entire history.
+
+SpahQL
+======
+
+<h2 id="spahql_getting_started">Getting started</h2>
+
+Think of SpahQL like jQuery, but instead of handling DOM elements, it handles JSON data. Instead of CSS selectors, you use SpahQL queries. It's a querying system for JSON data, aware of hashes, arrays, strings and booleans.
+
+Using SpahQL starts out with you putting your data into a *SpahQL Database*. The [State][core_concepts] is itself a SpahQL database, and you can manipulate it accordingly.
+
+Let's start out with an example - the state for a basic Twitter app UI. In this state we've got the user's profile available to us for display, we know that the "timeline" tab is open and populated with some tweets, and we know that the user hasn't loaded any mentions or direct messages just yet. We also know that the user has typed something into the status field but has not yet saved it. We'll be using this example data below to explore SpahQL's capabilities.
+
+	var data = {
+	  "user": {
+	  "logged_in": true,
+	    "name": "John Doe",
+	    "handle": "johndoe",
+			    "avatar": {
+						"small": "https://myapp.com/avatar-small/johndoe.png",
+						"large": "https://myapp.com/avatar-large/johndoe.png"
+					}
 			}
 		},
+		"draft_status": "The meaning of life is",
 		"active_tab": "timeline",
-		"draft_status": "I'm not sure I should post this",
 		"timeline": [
 			{
 				"type": "status",
@@ -147,61 +121,296 @@ Spah's central concept is the State. The State is a JSON object that describes t
 		"direct_messages": null
 	}
 
-In this state we've got the user's profile available to us for display, we know that the "timeline" tab is open and populated with some tweets, and we know that the user hasn't loaded any mentions or direct messages just yet. We also know that the user has typed something into the status field but has not yet saved it.
+To start using this data with SpahQL, we need to put it in a _SpahQL database_:
 
-The State's schema is unique to your application - Spah just gives you the tools for manipulating it. 
+	var db = Spah.SpahQL.db(data);
 
-Spah Query Language
--------------------
+Selecting data
+--------------
 
-[SpahQL][spahql] is a simple query language for Javascript objects. You can use it to query JSON data:
+Now that we've got a _SpahQL Database_ assigned to the <code>db</code> variable, we can start to pull data from it using SpahQL _selection queries_. We call the <code>db</code> object the _root_.
 
-	var data = the_twitter_example_from_above;
-	var state = new Spah.State(data);
-	
-	state.select("/user/name") // get the user's real name
-	state.select("//user/name") // get the name of all users, everywhere in the state
-	state.select("//[/type=='status']") // get everything with type=status
-	state.select("//mentions/[/type=='status']/user/handle") // get every handle for every tweet in the mentions list
-	
-To modify data, using SpahQL's simple editing APIs:
+The query syntax is a little like XPath. Every item in your database can be considered to have a unique *path*, and you can query for that path specifically, or perform more advanced actions such as recursion and filtering.
 
-	state.select("/user").set("name", "Captain Hammer"); // Change the user's name
-	state.select("/user/name").replace("Dr. Horrible"); // Another way to edit values
-	state.select("//user/name").replaceAll("Spartacus"); // Rename everyone
-	state.select("//user/name").deleteAll(); // Anonymise everyone
+To select items from the database, use the <code>select</code> method. This will return a new SpahQL object containing your results.
 
-And to make assertions about data:
+    var user = db.select("/user");
+    user.length; //-> 1
+    user.value(); //-> {"logged_in": true, "name": "John Doe", "handle": "johndoe" ... }
 
-	state.assert("/user/name") // does 'name' exist on '/user'?
-	state.assert("//mentions/.length > 2") // more than 2 mentions loaded?
-	state.assert("//*[/.type=='array']/.length > 0") // any non-empty arrays anywhere in the state?
+In the above example, we queried for the path <code>/user</code> which pulled the key "user" from the data. We can also chain keys together:
 
-As the name suggests, [SpahQL][spahql] is built right in to Spah and is used for the majority of your work with the State.
+	var avatar_large = db.select("/user/avatar/large");
+	avatar_large.value(); //-> "https://myapp.com/avatar-large/johndoe.png"
 
-SpahQL is primarily used to describe how any given _state_ is applied to your [HTML Blueprint][document_logic] - for instance:
+The <code>select</code> method returns a SpahQL object, so we can scope queries to results we already have:
 
-	<nav class="account" data-show-if="/user_authenticated">
-		<!-- This element only shown if user logged in. -->
-	</nav>
-	
-Cold requests
--------------
+	var avatars = db.select("/user/avatar");
+	var avatar_large = avatars.select("/large")
+	avatar_large.value(); //-> "https://myapp.com/avatar-large/johndoe.png"
 
-*Cold* requests are synchronous HTTP requests made to your app - maybe the user was sent to yourapp.com/foo/bar by a search engine or social link. Maybe they used a bookmark, or maybe they just made a multipart POST. Regardless, the client is expecting a response containing useful HTML.
+Much like XPath, SpahQL supports recursion with a double-slash anywhere in the path. To find all avatars, no matter where they appear in the state, we'd do this:
 
-Both the Spah Server and the Spah Client understand how to apply any given *state* to your app's [HTML Blueprint][document_logic] - this means that the Spah Server is able to respond to *cold* requests with a properly-populated HTML document.
+	var all_avatars = db.select("//avatar");
 
-Once the HTML has been returned to the user agent, in-page Javascript (including the Spah Client) can kick in and *progressively enhance* the pre-existing content with fancy client-side interactivity.
+This will return a set containing multiple results from several places in the original <code>db</code> object:
 
-Warm requests
--------------
+	all_avatars.length; //-> 2
+	all_avatars.paths(); //-> ["/user/avatar", "/timeline/0/user/avatar"]
+	all_avatars.values(); //-> ["https://myapp.com/avatar-large/johndoe.png", "https://myapp.com/avatar-large/f7u12.png"]
 
-Typically, *warm* requests follow cold. Once the user agent has made a cold request and received the HTML for your app, the Spah Client is initialised to handle your app's navigation. 
+Notice that the second path returned by <code>all_avatars.paths()</code> starts with <code>/timeline/0</code>. The key <code>0</code> refers to the first item an array, and this is how SpahQL handles arrays in general.
 
-Any internal links (or forms that submit to internal URIs) have their default actions intercepted and replaced with an asynchronous request to the Spah Server, which is expected to respond with JSON representing an updated _state_. 
+	var second_tweet_in_timeline = db.select("/timeline/1");
 
-From there, the Spah Client can accept the updated state and make any necessary DOM modifications in-place.
+The <code>*</code> (asterisk) character works as a wildcard in paths, allowing you to pull every value from an object without recursion. To grab all tweets from the timeline:
+
+	var timeline_tweets = db.select("/timeline/*")
+	timeline_tweets.paths(); //-> ["/timeline/0", "/timeline/1", "/timeline/2", ...]
+
+We can also _filter_ the results at any point in the query. Here's an example where we filter the timeline for all tweets from a given user, and take the actual text of each tweet as the value:
+
+	var tweets_from_bob = db.select("/timeline/*[/user/handle == 'bob']/status");
+
+In the above, we took all objects from the timeline (<code>/timeline/*</code>) and filtered the list with an assertion (<code>[/user/handle == 'bob']</code>) - then we picked the tweet text from the remaining items (<code>/status</code>).
+
+Note that the contents of the filter were scoped to the object being filtered. This is fine for basic cases, but what if you need to compare the handle of each user to something else stored in the database?
+
+Let's add a field to the root object, for handling searches:
+
+	db.set("show_only_from_handle", "coolguy99");
+	db.select("/show_only_from_handle").value(); //-> "coolguy99"
+
+Now to filter the tweets based on this new bit of data, we can use the <code>$</code> (dollar sign) to scope any part of a filter to the root data:
+
+	var tweets_filtered = db.select("/timeline/*[/user/handle == $/show_only_from_handle]/status");
+
+And voila, we've filtered one part of the state based on the contents of another, and selected some data from within.
+
+Filters may be chained together to produce logical <code>AND</code> gates. Here we'll pull all users who have both a large and a small avatar available:
+
+	var users_with_both_avatars = db.select("//user[/avatar/small][/avatar/large]");
+
+Modifying data
+--------------
+
+SpahQL objects provide a set of methods for modifying their data values. SpahQL always maintains _strict pointer equality_ to the original database data, so be aware that calling these methods will result in alterations being made directly to the object you originally passed to <code>Spah.SpahQL.db(your_data)</code>.
+
+Most destructive methods apply only to the first item in a SpahQL result set, and have a partner method which applies to the entire set. For instance:
+
+	db.select("//user").replace("This string will replace the first user in the set");
+	db.select("//user").replaceAll("NO USERS FOR YOU");
+
+Listening for changes
+---------------------
+
+SpahQL objects are able to dispatch events when certain paths are changed, using an event-bubbling model similar to the HTML DOM:
+
+	db.listen(function(db, path, subpaths) {
+		console.log("Something in the DB was modified. Modified paths: "+subpaths.join(","));
+	})
+
+The above code listens for changes to the database as a whole. You may scope listeners to certain paths using either of the following methods:
+
+	db.listen("/user", function(user, path, subpaths) {
+		console.log("User was modified: ", user.value());
+	})
+	db.select("/user").listen(function(user, path, subpaths) {
+		console.log("User was modified: ", user.value());
+	});
+
+The callback function always receives three arguments; <code>result</code>, a SpahQL object containing the data found at the path on which you registered the listener, <code>path</code>, the path on which you registered the listener (allowing you to assign a single listener function cabable of responding to multiple changes), and <code>subpaths</code>, an array of paths within the <code>path</code> that were detected as having been modified:
+
+	db.listen("/user", function(user, path, subpaths) {
+		console.log("Subpaths modified on user ("+path+"): ", subpaths.join(","));
+	});
+	db.select("/user").set({handle: "modified-handle", newobject: {foo: "bar"}});
+	// -> prints the following to console:
+	// Subpaths modified on user (/user): /handle,/newobject,/newobject/foo
+
+Properties
+----------
+
+Properties are like imaginary paths on objects in your database. They allow you to make more interesting assertions about your data. Each property uses the <code>.propertyName</code> syntax and may be used in any path query:
+
+Use <code>.type</code> When you need to know what type of data is at any given path. Returns the object type as 'object', 'array', 'string', 'number', 'boolean' or 'null':
+
+	results = db.select("/timeline/.type");
+	results.value() //-> 'Array'
+
+The type property lets you query for all paths matching more precise criteria:
+
+	// Find all arrays everywhere. 
+	var all_arrays = db.select("//[/.type == 'array']")
+        
+Use <code>.size</code> when you need to know about the amount of data in an object. Returns the object's size if it is a String (number of characters), Array (number of items) or Object (number of keys):
+        
+	var timeline_is_empty = db.assert("/timeline/.size < 1"); //-> false, timeline contains items
+        
+Use <code>.explode</code> when you need to break an object down into components. Returns the object broken into a set that may be compared to other sets. Strings are exploded into a set of characters. Arrays and objects do not support this property - use the wildcard <code>*</code> character instead.
+
+	// Does the user's handle contain a, b and c?
+	results = db.assert("/user/handle/.explode }>{ {'a','b','c'}")
+
+Making assertions
+-----------------
+
+We've already seen how assertion queries can be used as filters in [selection queries][selection_queries]. Assertion queries are also used heavily in Spah's [HTML handling][document_logic].
+
+Since the entity on either side of the comparison operator could contain one or more results (or no results at all), all comparisons in SpahQL are _set_ comparisons.
+
+Assertions are run through the <code>assert</code> method on the state:
+
+	result = db.assert(myQuery) //-> true or false.
+
+Assertions don't have to use comparisons:
+
+	db.assert("/user"); //-> true, since /user exists and has a truthy value
+	db.assert("/flibbertygibbet"); //-> false, since /flibbertygibbet doesn't exist, or is false or null
+
+Much like selections, assertions can be scoped to a set of results you already have available:
+
+	db.select("/user").assert("/handle"); //-> true, since /user/handle exists
+
+Comparisons
+-----------
+
+SpahQL's set arithmetic uses the following operators for comparing values. To learn how values are compared, see [Object equality][object_equality].
+
+* Set equality <code>==</code>
+
+  Asserts that both the left-hand and right-hand sets have a 1:1 relationship between their values. The values do not have to be in the same order. 
+
+* Set inequality <code>!=</code>
+
+  Asserts that the sets are not identical under the rules of the <code>==</code> operator.
+  
+* Subset of <code>}&lt;{</code>
+  
+  Asserts that the left-hand set is a subset of the right-hand set. All values present in the left-hand set must have a matching counterpart in the right-hand set.
+  
+* Superset of <code>}&gt;{</code>
+
+  Asserts that the left-hand set is a superset of the right-hand set. All values present in the right-hand set must have a matching counterpart in the left-hand set.
+
+* Joint set <code>}~{</code>
+
+  Asserts that the left-hand set contains one or more values that are also present in the right-hand set.
+
+* Disjoint set <code>}!{</code>
+
+  Asserts that the left-hand set contains no values that are also present in the right-hand set.
+
+* Rough equality <code>=~</code>
+
+  Asserts that one or more values from the left-hand set are *roughly equal* to one or more values from the right-hand set. See [Object equality][object_equality].
+
+* Greater than (or equal to) <code>&gt;=</code> and <code>&gt;</code>
+
+  Asserts that one or more values from the left-hand set is greater than (or equal to) one or more values from the right-hand set.
+
+* Less than (or equal to) <code>&lt;=</code> and <code>&lt;</code> 
+
+  Asserts that one or more values from the left-hand set is less than (or equal to) one or more values from the right-hand set.
+
+
+Literals
+--------
+
+SpahQL does support literals - strings, integers, floats, <code>true</code>, <code>false</code> and <code>null</code> may all be used directly in SpahQL queries. Strings may use single or double quotes as you prefer.
+
+Because all SpahQL comparisons compare sets to one another, all literals count as sets containing just one value. As such, the following basic comparisons work just as you'd expect:
+
+	db.assert("/user/handle == 'johndoe'") //-> true
+	db.assert("//user/handle == 'johndoe'") //-> false. The left-hand set contains more than one item.
+
+You may use set literals in SpahQL assertions. A set literal is wrapped in <code>{}</code> mustaches:
+
+	db.assert("//user/handle }~{ {'johndoe', 'anotherguy'}") //-> true. The left set is a joint set with the right.
+
+Set literals may combine numbers, strings, booleans and even selection queries:
+
+	{"arbitrary_handle", //user/handle} //-> a set containing all the handles, plus one arbitrary one.
+
+Sets may not be nested - in the above example, SpahQL flattens the set literal to contain all the results of querying for <code>//user/handle</code> and one other value, <code>"arbitrary_handle"</code>.
+  
+Ranges are also supported in set literals:
+
+    {"a".."c"} // a set containing "a", "b" and "c"
+    {"A".."Z"} // a set containing all uppercase letters
+    {"Aa".."Ac"} // a set containing "Aa", "Ab", "Ac"
+    {0..3} // a set containing 0, 1, 2 and 3.
+    {"a"..9} // COMPILER ERROR - ranges must be composed of objects of the same type.
+    {"a"../foo/bar} // COMPILE ERROR - ranges do not support path lookup.
+
+Object equality
+---------------
+
+The equality of objects is calculated based on their type. Firstly, for two objects to be equal under strict equality (<code>==</code>) they must have the same base type.
+
+* **Object equality**: The objects being compared must contain the same set of keys, and the value of each key must be the same in each object. If the value is an object or an array, it will be evaluated recursively.
+* **Array equality**: The arrays must each contain the same values in the same order. If any value is an array or object, it will be evaluated recursively.
+* **Number, String, Bool, null**: The objects must be of equal type and value.
+
+Under rough equality (<code>=~</code>) the rules are altered:
+
+* **Strings** are evaluated to determine if the left-hand value matches the right-hand value, evaluating the right-hand value as a regular expression e.g. <code>"bar" =~ "^b"</code> returns <code>true</code> but <code>"bar" =~ "^a"</code> returns <code>false</code>
+* **Numbers** are evaluated with integer accuracy only (using Math.floor, numeric.floor or an equivalent operation)
+* **Arrays** behave as if compared with the joint set operator.
+* **Objects** are roughly equal if both hashes contain one or more keys with the same corresponding values. Values are compared using strict equality.
+* **Booleans and null** are evaluated based on truthiness rather than exact equality. <code>false =~ null</code> is <code>true</code> but <code>true =~ false</code> is <code>false</code>.
+
+When using inequality operators <code>&lt;</code>, <code>=&lt;</code>, <code>&gt;</code>, <code>&gt;=</code>:
+
+* **Strings** are evaluated based on alphanumeric sorting. <code>"a" &lt;= "b"</code> returns <code>true</code> but <code>"z" &gt;= "a"</code> returns <code>false</code>.
+* **Numbers** are evaluated, as you'd expect, based on their native values.
+* **Arrays, Objects, Booleans, null** are not compatible with these operators and will automatically result in <code>false</code> being returned.
+
+SpahQL Strategies
+-----------------
+
+_Strategies_ are a mechanism provided by SpahQL allowing you to define a queue of asynchronous actions to be run in order against a SpahQL object, provided that the value of the query result matches the criteria you specify. Pattern-wise, they're somewhere between a macro and a stored procedure. Strategies are managed using the <code>Strategiser</code> class:
+
+		var state = Spah.SpahQL.db({a: {aa: "a.aa.val", bb: "a.bb.val"}, b: {bb: "b.bb.val", cc: "b.cc.val"}});
+		var strategiser = new Spah.SpahQL.Strategiser();
+
+Strategies are objects which define a set of target paths, a condition which must be met for the strategy to run, and an action to take against the matched paths:
+
+		// Add a strategy to the strategiser...
+		strategiser.addStrategy(
+			// which will take action on /aa and /b/cc, but only if the assertion "/b/bb" returns true
+			{"paths": ["/aa", "/b/cc"], "if": "/b/bb"}, 
+			// with a named category
+			"reduce",
+			// when triggered, the strategy will be called
+			function(results, root, attachments, strategy) {
+					// make changes to the matched results
+					results.deleteAll();
+					// signal that the strategiser can advance to the next strategy in the queue
+					strategy.done();
+			}
+		);
+
+Strategies must specify the key _path_ or _paths_, a path or array of paths for the strategy to modify. Strategies may optionally use the key _if_ or _unless_, containing a SpahQL assertion whose expectation must be met for this strategy to be included. When we execute the strategies against a target SpahQL object, _path_, _paths_, _if_ and/or _unless_ will be evaluated relative to the target.
+
+Strategies also specify an _action_, a function containing the strategy's behaviour. It receives the arguments _results_, a SpahQL instance containing matches for the _path_, _root_, the original target SpahQL instance, _attachments_, an arbitrary object you may pass in when you execute the strategies, and _strategy_, an object containing flow control functions allowing you to signal that the strategy has completed.
+
+Specifying multiple paths using the _paths_ key is equivalent to registering multiple strategies each with the same expectation and action - the action function will be called once for each query specified in the _paths_ array and calling <code>strategy.done()</code> will advance the queue to the next path in this strategy, or to the next strategy.
+
+Execution is as follows:
+
+		strategiser.run(target, category, attachments, callback);
+
+When applied to the above example:
+
+		// Clone the State first to run the strategies without modifying the original
+		// Run the strategies in the "reduce" category
+		// Pass {foo: "bar"} as an attachment that will be available to all the strategies
+		// Pass a callback function which will receive the modified SpahQL and the attachments
+		strategiser.run(state.clone(), "reduce", {foo: "bar"}, function(clone, attachments) {
+				console.log(clone.select("/aa").length()); //-> 0, as the above strategy deleted this value
+		});
+
 
 The Spah Server
 ===============
@@ -343,8 +552,8 @@ Let's look at an example. We want to populate the state with some information ab
 		{"path": "/followers/count", "if": "/user_authenticated"},
 		function(results, state, request, expander) {
 			twitterUser.fetchFollowerCount(function(count) {
-				console.log("setting "+queryResult.path+" to "+ count);
-				results.replace(count);
+				console.log("setting "+results.paths().join(",")+" to "+ count);
+				results.replaceAll(count);
 				expander.done();
 			}
 		}
@@ -352,9 +561,9 @@ Let's look at an example. We want to populate the state with some information ab
 
 The example above checks that the [SpahQL assertion][assertion_queries] <code>/user\_authenticated</code> returns <code>true</code>, and if so, selects <code>/followers/count</code> from the state and runs the callback function against the returned result. If no "if" or "unless" condition is specified, the expander will run unconditionally. Note that both _paths_ and _if_/_unless_ are scoped to the root of your state. If you specify multiple paths, you are effectively registering multiple expanders each with the same condition and callback - the expander will execute against one path query at a time.
 
-The callback receives as its arguments _results_, a SpahQL QueryResultSet instance containing all matches for the specified path, _state_, the state object being queried, the _request_ object, and the _expander_ object which itself will contain a function <code>done(value)</code>. In our callback example, we overwrite the value of <code>/followers/count</code> with some abitrary value and then call the <code>done</code> function to signal that the expander has finished fetching data, and that the next expander may be run. Expanders are run in serial fashion for data integrity reasons.
+The callback receives as its arguments _results_, a SpahQL instance containing all matches for the specified path, _state_, the state object being queried, the _request_ object, and the _expander_ object which itself will contain a function <code>done(value)</code>. In our callback example, we overwrite the value of <code>/followers/count</code> with some abitrary value and then call the <code>done</code> function to signal that the expander has finished fetching data, and that the next expander may be run. Expanders are run in serial fashion for data integrity reasons.
 
-State Expanders are applied in the order in which they were registered via <code>addExpander</code>. Multiple expanders may be run on the same path. You may set expanders for multiple paths by using <code>{paths: [path1, path2, pathN], "if": "/condition"}</code>. If any given path returns more than one <code>QueryResult</code>, the results of the expander will be applied to all matching paths.
+State Expanders are applied in the order in which they were registered via <code>addExpander</code>. Multiple expanders may be run on the same path. You may set expanders for multiple paths by using <code>{paths: [path1, path2, pathN], "if": "/condition"}</code>. If any given path returns more than one result (because it uses recursion, set literals or what have you), the results of the expander will be applied to all the selected results.
 
 The Spah Client
 ===============
@@ -445,342 +654,6 @@ To prevent Spah from adding asynchronous behaviour, add the <code>data-async="fa
 Eager client state changes
 --------------------------
 
-SpahQL
-======
-
-SpahQL Core concepts
---------------------
-
-SpahQL is an execution-safe query language designed to let you ask complex questions of basic JSON constructs. SpahQL is designed to work against your application's state, but it will work happily against any combination of native hashes, arrays, strings, booleans and numbers.
-
-SpahQL allows two kinds of query: **[Selection queries][selection_queries]** are those which retrieve a set of results from your object, while **[Assertion queries][assertion_queries]** are those that return a boolean result.
-
-SpahQL is biased towards value equality over key equality. It is assumed that the keys in your object are known, curated namespace with arbitrary values. For this reason SpahQL's matching is designed to focus on comparing values, not keys.
-
-All SpahQL queries are read-only; there is no semantic for updating the state.
-
-Furthermore, SpahQL uses set arithmetic for comparisons. Rather than providing an imperative syntax with complex logic, SpahQL provides set operations that allow you to build the equivalent of the <code>AND</code> and <code>OR</code> operations from other query languages using a safe, declarative syntax.
-
-Selection queries
------------------
-
-To select items from the state, use the basic syntax:
-
-    var results = Spah.state.select(myQuery);
-
-The basic constituent of a selection query is a *path selector*. With an example object:
-
-    {
-        myHash: {foo: "bar", bar: "baz", mySubHash: {foo: "bar", bar: "I'M IN A HASH"}},
-        myArr: [0,1,2],
-        myPrimitives: [true, false, null, "foo", 3]
-    }
-
-It's easy to make selections based on a known path. To pull up the contents of the key "myHash" in the root, use the following syntax and remember that **paths always begin with a slash**.
-
-    results = Spah.state.select("/myHash");
-
-Or to pull up the contents of the subhash:
-
-    results = Spah.state.select("/myHash/mySubHash");
-
-Recursion is supported with a double-slash anywhere in the path:
-
-    // Find all entries with the key "foo"
-    results = Spah.state.select("//foo");
-    
-    // Find all entries inside myHash with the key "foo"
-    results = Spah.state.select("/myHash//foo");
-    
-The results are always returned as a set of <code>Spah.SpahQL.QueryResult</code> objects, which each have properties <code>path</code> and <code>value</code>:
-
-    results = Spah.state.select("/myHash//foo"); //-> [QueryResult, QueryResult]
-    results[0].path //-> "/myHash/foo"
-    results[0].value //-> "bar"
-    results[1].path //-> "/myHash/mySubHash/foo"
-    results[1].value //-> "bar"
-
-Keys in arrays are treated just like keys in hashes:
-
-    // Grab the first item in /myArr
-    results = Spah.state.select("/myArr/0")
-
-You may also use <code>*</code> as a wildcard in paths:
-
-    // Grab ALL items in /myArr
-    results = Spah.state.select("/myArr/*")
-    results[0].path //-> "/myArr/0"
-    results[0].value //-> 0
-
-Path queries are **reductive**. When executed, the first part of the query is run against the top level of the object being queried, and the remaining results are handed to the next part of the path to be reduced further. This loop continues until we're either out of results or out of path segments.
-
-Using these reductive characteristics, we can perform advanced queries with **filter queries**. Filter queries are contained in square brackets, and can be used to further reduce the results before the query runner moves on to the next path segment.
-
-    // Grab /myHash, but only if it contains a key "foo" with any 
-    // non-false value:
-    results = Spah.state.select("/myHash[/foo]")
-    
-    // Grab all items that contain a key "foo" with value "bar"
-    // This is an identical query to "//*[/foo == 'bar']"
-    results = Spah.state.select("//[/foo == 'bar']")
-    
-    // Grab all root-level items that have the key "foo" with value "bar"
-    // either on themselves or on any of their descendants.
-    // This is an identical query to "/*[//foo == 'bar']"
-    results = Spah.state.select("/[//foo == 'bar']")
-    
-    // Grab all items anywhere that have key "foo" with value "bar"
-    // either on themselves or on any of their descendants.
-    // This is an identical query to "//*[//foo == 'bar']"
-    results = Spah.state.select("//[//foo == 'bar']")
-    
-    // Grab all items containing the value "bar" on themselves:
-    // This is an identical query to "//*[/* == 'bar']"
-    results = Spah.state.select("//[/* == 'bar']")
-    
-    // Grab all items containing the value "bar" on themselves
-    // or any of their descendants.
-    // This is an identical query to "//*[//* == 'bar']"
-    results = Spah.state.select("//[//* == 'bar']")
-
-There are a few things to note about the query inside the <code>[]</code> brackets. Firstly, it has access to the full query syntax. Secondly, it runs within the scope of the current path segment. Take this query for example:
-
-    // Returns no results - myArr is on the root, and the filter query 
-    // runs in the context of /myHash, which has no key "myArr".
-    results = Spah.state.select("/myHash[/myArr]")
-
-If you want to lookup data on the root from inside a filter query, use the <code>$</code> symbol to force a path to execute on the root context:
-
-    // Returns /myHash only if it contains a value with the same contents as 
-    // /myArr on the root.
-    results = Spah.state.select("/myHash[/* == $/myArr]")
-
-I'm sure by now that you've noticed the filter queries contain **comparison operators**. Any query containing a comparison operator is automatically executed as an [assertion query][assertion_queries]:
-
-* A **selection** query: 
-  
-        /myHash
-  
-* An **assertion** query: 
-  
-        /myHash == /someOtherHash
-  
-* A **selection** query containing an assertion query as a filter: 
-  
-        /myHash[/foo == 'baz']
-  
-* An **assertion** query containing two selection queries, one of which contains an assertion query as a filter: 
-  
-        /myHash[/foo == 'baz'] == /myArr
-  
-
-Assertion queries
------------------
-
-We've already seen how assertion queries can be used as filters in [selection queries][selection_queries]. Assertion queries are also used heavily in Spah's [document logic][document_logic] features.
-
-Assertion queries are run through the <code>assert</code> method on the state:
-
-    result = Spah.state.assert(myQuery) //-> true or false.
-
-The <code>assert</code> method accepts both selection and assertion queries - if the given query is a selection query, the result will be <code>true</code> if the query returns one or more results with non-false (i.e. not false or null) values.
-
-As discussed in [core concepts][spahql_concepts], all comparisons in SpahQL use set arithmetic instead of traditional imperative logic and equality. SpahQL comparisons allow you to determine if:
-
-* One set is exactly equal to another set
-* One set contains the same values as another set
-* One set is a subset of another set
-* One set is a superset of another set
-
-Assertion queries: Literals and sets
-------------------------------------
-
-SpahQL does support literals - strings, integers, floats, <code>true</code>, <code>false</code> and <code>null</code> may all be used directly in SpahQL queries:
-
-    3 // the number 3
-    "foo" // the string "foo"
-    'foo' // the string "foo"
-    true // boolean true
-    false // boolean false
-    null // null
-
-All comparisons in SpahQL are **set comparisons**. A query like <code>/foo</code> returns a set of results. A literal like <code>3</code> or <code>"somestring"</code> is considered to be a set containing a single entity. Literals may be wrapped in <code>{}</code> mustaches and seperated with commas to create in-place sets:
-
-    // a set containing the string "3" and the number 3.
-    {"3",3}
-
-Sets may also be built from a combination of literals and queries:
-
-    // a set containing the string "3", all the results from the 
-    // query "/bar" and the string "foo".
-    {"3",/bar,"foo"}
-    // note that the set is flattened - the results from "/bar"
-    // are appended to the set in-place. If /bar returned values "a" and "b",
-    // this set would look like: {"3","a","b","foo"}
-
-You may also create ranges:
-
-    {"a".."c"} // a set containing "a", "b" and "c"
-    {0..3} // a set containing 0, 1, 2 and 3.
-    {"a"..9} // COMPILER ERROR - sets must be composed of objects of the same type.
-    {"a"../foo/bar} // COMPILE ERROR - ranges do not support path lookup.
-
-Comparison operators
---------------------
-
-SpahQL's set arithmetic uses simple operators:
-
-* Set equality <code>==</code>
-
-  Asserts that both the left-hand and right-hand sets have a 1:1 relationship between their values. The values may come from different paths in the state, or be literals. The values do not have to be in the same order. Each value has its equality checked based on its type. See [Object equality][object_equality].
-
-        // Always true:
-        Spah.state.assert("1 == 1"); // integers
-        Spah.state.assert("'foo' == 'foo'"); // strings
-        Spah.state.assert("true"); // boolean
-        Spah.state.assert("/myHash == /myHash"); // queries
-        Spah.state.assert("{1,2,3} == {1..3}"); // set literals
-        
-        // Always false:
-        Spah.state.assert("1 == '1'"); // mixed types
-        Spah.state.assert("true == false"); // boolean comparison
-        Spah.state.assert("false"); // boolean
-        Spah.state.assert("/myHash == /myArr"); // queries
-        Spah.state.assert("{1,2,3} == {'a'..'z'}"); // set literals
-
-* Set inequality <code>!=</code>
-
-  Asserts that the sets are not identical under the rules of the <code>==</code> operator.
-  
-* Subset of <code>}&lt;{</code>
-  
-  Asserts that the left-hand set is a subset of the right-hand set. All values present in the left-hand set must have a matching counterpart in the right-hand set.
-  
-* Superset of <code>}&gt;{</code>
-
-  Asserts that the left-hand set is a superset of the right-hand set. All values present in the right-hand set must have a matching counterpart in the left-hand set.
-
-* Joint set <code>}~{</code>
-
-  Asserts that the left-hand set contains one or more values that are also present in the right-hand set.
-
-* Disjoint set <code>}!{</code>
-
-  Asserts that the left-hand set contains no values that are also present in the right-hand set.
-
-* Rough equality <code>=~</code>
-
-  Asserts that one or more values from the left-hand set are roughly equal to one or more values from the right-hand set. See [Object equality][object_equality].
-
-* Greater than (or equal to) <code>&gt;=</code> and <code>&gt;</code>
-
-  Asserts that one or more values from the left-hand set is greater than (or equal to) one or more values from the right-hand set.
-
-* Less than (or equal to) <code>&lt;=</code> and <code>&lt;</code> 
-
-  Asserts that one or more values from the left-hand set is less than (or equal to) one or more values from the right-hand set.
-
-Object equality
----------------
-
-The equality of objects is calculated based on their type. Firstly, for two objects to be equal under strict equality (<code>==</code>) they must have the same base type.
-
-* **Object equality**: The objects being compared must contain the same set of keys, and the value of each key must be the same in each object. If the value is an object or an array, it will be evaluated recursively.
-* **Array equality**: The arrays must each contain the same values in the same order. If any value is an array or object, it will be evaluated recursively.
-* **Number, String, Bool, null**: The objects must be of equal type and value.
-
-Under rough equality (<code>=~</code>) the rules are altered:
-
-* **Strings** are evaluated to determine if the left-hand value matches the right-hand value, evaluating the right-hand value as a regular expression e.g. <code>"bar" =~ "^b"</code> returns <code>true</code> but <code>"bar" =~ "^a"</code> returns <code>false</code>
-* **Numbers** are evaluated with integer accuracy only (using Math.floor, numeric.floor or an equivalent operation)
-* **Arrays** behave as if compared with the joint set operator.
-* **Objects** are roughly equal if both hashes contain one or more keys with the same corresponding values. Values are compared using strict equality.
-* **Booleans and null** are evaluated based on truthiness rather than exact equality. <code>false =~ null</code> is <code>true</code> but <code>true =~ false</code> is <code>false</code>.
-
-N.B: Objects that are of different types are never roughly equal.
-
-When using inequality operators <code>&lt;</code>, <code>=&lt;</code>, <code>&gt;</code>, <code>&gt;=</code>:
-
-* **Strings** are evaluated based on alphanumeric sorting. <code>"a" &lt;= "b"</code> returns <code>true</code> but <code>"z" &gt;= "a"</code> returns <code>false</code>.
-* **Numbers** are evaluated, as you'd expect, based on their native values.
-* **Arrays, Objects, Booleans, null** are not compatible with these operators and will automatically result in <code>false</code> being returned.
-
-Properties
-----------
-
-Properties are like imaginary paths on objects in your state. Each property uses the <code>.propertyName</code> syntax and may be used in any path query:
-
-* **.type** Returns the object type as 'Object', 'Array', 'String', 'Number', 'Boolean' or 'null'
-
-        results = Spah.state.select("/myArr/.type"); //-> [QueryResult]
-        results[0].path //-> "/myArr/.type"
-        results[0].value //-> 'Array'
-        
-        // Find all arrays everywhere. 
-        results = Spah.state.select("//[/.type == 'Array']")
-        results[0].path //-> "/myArr"
-        results[1].path //-> "/myPrimitives"
-
-* **.size** Returns the object's size if it is a String (number of characters), Array (number of items) or Object (number of keys)
-        
-        // Number of keys in the root
-        results = Spah.state.select("/.size");
-        results[0].path //-> "/.size"
-        results[0].value //-> 3
-        
-        // Find all strings longer than 3 characters
-        results = Spah.state.select("//[/.type == 'String'][/.size > 3]")
-        results[0].path //-> "/myHash/mySubHash/bar"
-
-* **.explode** Returns the object broken into a set that may be compared to other sets. Strings are exploded into a set of characters. Arrays and objects do not support this property - use the wildcard (\*) character instead.
-
-        // Does a string contain all these characters?
-        results = Spah.state.assert("/myStr/.explode }>{ {'a','b','c'}")
-
-SpahQL Strategies
------------------
-
-_Strategies_ are a mechanism provided by SpahQL allowing you to define a queue of asynchronous actions to be run in order against a QueryResult object, provided that the value of the query result matches the criteria you specify. Strategies are managed using the <code>Strategiser</code> class:
-
-		var state = new Spah.State({a: {aa: "a.aa.val", bb: "a.bb.val"}, b: {bb: "b.bb.val", cc: "b.cc.val"}});
-		var strategiser = new Spah.SpahQL.Strategiser();
-
-Strategies are objects which define a set of target paths, a condition which must be met for the strategy to run, and an action to take against the matched paths:
-
-		// Add a strategy to the strategiser...
-		strategiser.addStrategy(
-			// which will take action on /aa and /b/cc, but only if the assertion "/b/bb" returns true
-			{"paths": ["/aa", "/b/cc"], "if": "/b/bb"}, 
-			// with a named category
-			"reduce",
-			// when triggered, the strategy will be called
-			function(results, root, attachments, strategy) {
-					// make changes to the matched results
-					results.deleteAll();
-					// signal that the strategiser can advance to the next strategy in the queue
-					strategy.done();
-			}
-		);
-
-Strategies must specify the key _path_ or _paths_, a path or array of paths for the strategy to modify. Strategies may optionally use the key _if_ or _unless_, containing a SpahQL assertion whose expectation must be met for this strategy to be included. When we execute the strategies against a target QueryResult, _path_, _paths_, _if_ and/or _unless_ will be evaluated relative to the target QueryResult.
-
-Strategies also specify an _action_, a function containing the strategy's behaviour. It receives the arguments _results_, a QueryResultSet containing matches for the _path_, _root_, the original target QueryResult, _attachments_, an arbitrary object you may pass in when you execute the strategies, and _strategy_, an object containing flow control functions allowing you to signal that the strategy has completed.
-
-Specifying multiple paths using the _paths_ key is equivalent to registering multiple strategies each with the same expectation and action - the action function will be called once for each query specified in the _paths_ array and calling <code>strategy.done()</code> will advance the queue to the next path in this strategy, or to the next strategy.
-
-Execution is as follows:
-
-		strategiser.run(target, category, attachments, callback);
-
-When applied to the above example:
-
-		// Clone the State first to run the strategies without modifying the original
-		// Run the strategies in the "reduce" category
-		// Pass {foo: "bar"} as an attachment that will be available to all the strategies
-		// Pass a callback function which will receive the modified QueryResult and the attachments
-		strategiser.run(state.clone(), "reduce", {foo: "bar"}, function(clone, attachments) {
-				console.log(clone.select("/aa").length()); //-> 0, as the above strategy deleted this value
-		});
 
 HTML Blueprints
 ===============
@@ -921,6 +794,3 @@ API
 
 Example Node application
 =========================
-
-Example Sinatra application
-===========================

@@ -53,7 +53,7 @@ Spah.classCreate("Spah.DOM.Document", {
 
    /**
     * Spah.DOM.Document#addModifiers(modifierOrArrayOfModifiers, modifer1, modifierN) -> void
-    * - modifierOrArrayOfModifiers (Object, Array<Object>): The modifier object to be registered. Expected to implement the modifier interface.
+    * - modifierOrArrayOfModifiers (Object, Array): The modifier object to be registered. Expected to implement the modifier interface.
     * - modifier1 (Object): If modifierOrArrayOfModifiers is not an array, then all arguments passed to this method will be added as modifiers.
     *
     * The interface requires your module to contain the methods:
@@ -65,7 +65,7 @@ Spah.classCreate("Spah.DOM.Document", {
     * In each case the arguments are as follows:
     * - "element" is a jQuery containing the element in question
     * - "flags" are any arguments given by the attribute name (see below)
-    * - "state" is the Spah state (a Spah.SpahQL.QueryResult object)
+    * - "state" is the Spah state (a Spah.SpahQL object)
     * - "$" is the main jQuery object itself
     * - "window" is the context DOMWindow for the document runner. Call window.document for the document itself.
     *
@@ -108,7 +108,7 @@ Spah.classCreate("Spah.DOM.Document", {
 
   /**
     * Spah.DOM.Document#removeModifiers(modifierOrArrayOfModifiers, modifer1, modifierN) -> void
-    * - modifierOrArrayOfModifiers (Object, Array<Object>): The modifier object to be deregistered. 
+    * - modifierOrArrayOfModifiers (Object, Array): The modifier object to be deregistered. 
     * - modifier1 (Object): If modifierOrArrayOfModifiers is not an array, then all arguments passed to this method will be added as modifiers.
     *
     * Deregisters one or more modifiers from this document instance.
@@ -140,52 +140,52 @@ Spah.classCreate("Spah.DOM.Document", {
   },
   
   /**
-   * Spah.DOM.Document#run(stateQueryResult, done) -> void
-   * - stateQueryResult (Spah.SpahQL.QueryResult): The root-level state object with path "/"
+   * Spah.DOM.Document#run(state, done) -> void
+   * - state (Spah.SpahQL): The root-level state object with path "/"
    * - done (Function): (Server-side only) A callback function to be executed when the run has completed. The callback will receive the document as an argument.
    * 
    * Runs all conditional logic in the document and modifies the document accordingly. Runs synchronously
    * in the browser and asynchronously in the Node.js environment.
    **/
-  "run": function(stateQueryResult, done) {
+  "run": function(state, done) {
     var d = this;
     
     if(Spah.inBrowser()) {
       // Synchronous Browser implementation
-      d.runSync(stateQueryResult);
+      d.runSync(state);
     }
     else {
       // Async server implementation
       process.nextTick(function() {
-        d.runSync(stateQueryResult);
+        d.runSync(state);
         done(null, d);
       });
     }
   },
   
   /**
-   * Spah.DOM.Document#runSync(stateQueryResult) -> void
-   * - stateQueryResult (Spah.SpahQL.QueryResult): The root-level state object with path "/"
+   * Spah.DOM.Document#runSync(state) -> void
+   * - state (Spah.SpahQL): The root-level state object with path "/"
    *
    * Synchronous version of #run.
    **/
-  "runSync": function(stateQueryResult) {
+  "runSync": function(state) {
     // Start at document level
-    this.runElementSync(this.jQ("head"), stateQueryResult);
-    this.runElementSync(this.jQ("body"), stateQueryResult);
+    this.runElementSync(this.jQ("head"), state);
+    this.runElementSync(this.jQ("body"), state);
     // Reset result comparisons
     this.queryResultsLastRun = this.queryResultsThisRun;
     this.queryResultsThisRun = {};
   },
   
   /**
-   * Spah.DOM.Document#runElementSync(elem, stateQueryResult) -> void
+   * Spah.DOM.Document#runElementSync(elem, state) -> void
    * - elem (DOMElement): The element to be examined and run through the modifier chain
-   * - stateQueryResult (Spah.SpahQL.QueryResult): The query result object that will be the scope for this element's assertion queries.
+   * - state (Spah.SpahQL): The query result object that will be the scope for this element's assertion queries.
    *
    * Runs a DOM element through the modifier chain, running any modifiers that apply to the element.
    **/
-  "runElementSync": function(elem, stateQueryResult) {
+  "runElementSync": function(elem, state) {
     var modChain = this.modifiers;
     var attrs = elem[0].attributes;
     
@@ -221,15 +221,15 @@ Spah.classCreate("Spah.DOM.Document", {
       
       if(assertion) {
         // Now run the assertion
-        var result = stateQueryResult.assert(assertion);
+        var result = state.assert(assertion);
         // Is the result different to the result last run?
         var resultLastRun = this.queryResultsLastRun[assertion];
         if(result != resultLastRun) {
           // If so, call the appropriate up/down method on the modifier
           // Up: result matches expectation
           // Down: result opposeses expectation
-          if(result == expectation) modifier.up(elem, modifierArgs, stateQueryResult, this.jQ, this.window);
-          else modifier.down(elem, modifierArgs, stateQueryResult, this.jQ, this.window);
+          if(result == expectation) modifier.up(elem, modifierArgs, state, this.jQ, this.window);
+          else modifier.down(elem, modifierArgs, state, this.jQ, this.window);
         }
         // Also stash the results from this run
         this.queryResultsThisRun[assertion] = result;
@@ -243,7 +243,7 @@ Spah.classCreate("Spah.DOM.Document", {
     // Run each child through the modifiers, recursively
     var d = this;
     elem.children().each(function() {
-      d.runElementSync(d.jQ(this), stateQueryResult);
+      d.runElementSync(d.jQ(this), state);
     });
   }
   

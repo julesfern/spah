@@ -81,12 +81,12 @@ Spah.classExtend("Spah.SpahQL.Token.SelectionQuery", Spah.SpahQL.Token.Base, {
     },
     
     /**
-     * Spah.SpahQL.Token.SelectionQuery#evaluate(rootData, scopeData, scopePath) -> Array of Spah.SpahQL.QueryResult instances
+     * Spah.SpahQL.Token.SelectionQuery#evaluate(rootData, scopeData, scopePath) -> Array
      * - rootData (Object): The entire root-level data structure being queried
      * - scopeData (Object): The data for the scope at which this query is being executed.
      * - scopePath (String): The string path for the root of the scopeData argument.
      *
-     * Evaluates all the path components in the given query in turn, creating an array of QueryResult instances.
+     * Evaluates all the path components in the given query in turn.
      **/
     "evaluate": function(rootData, scopeData, scopePath) {
       // Start off with a simulated result using the data required by the query

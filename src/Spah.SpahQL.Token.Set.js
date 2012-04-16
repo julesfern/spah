@@ -111,7 +111,7 @@ Spah.classExtend("Spah.SpahQL.Token.Set", Spah.SpahQL.Token.Base, {
   },
   
   /**
-   * Spah.SpahQL.Token.Set#evaluate(rootData[, scopeData][, scopePath]) -> Array of QueryResults
+   * Spah.SpahQL.Token.Set#evaluate(rootData[, scopeData][, scopePath]) -> Array
    * - rootData (Object): A root data context for any selection queries that appear in the literal
    * - scopeData (Object): A scoped data context for the scope at which selection queries in the set will be evaluated.
    * - scopePath (String): The string path at which the scopeData is located in the overall rootData construct.
@@ -158,14 +158,14 @@ Spah.classExtend("Spah.SpahQL.Token.Set", Spah.SpahQL.Token.Base, {
   },
 
   /**
-   * Spah.SpahQL.Token.Set#evalNumericRange(start, end) -> Array of QueryResults
+   * Spah.SpahQL.Token.Set#evalNumericRange(start, end) -> Array
    * - start (Number): The number at the start of the range (10 is the start value for {10..8})
    * - end (Number): The number at the start of the range (8 is the end value for {10..8})
    *
    * Works with a ruby-style evaluation. Reverse ranges evaluate as empty. Symmetrical ranges e.g. 10..10 evaluate with 
    * one result.
    *
-   * Evaluates a numeric range literal, generating an array of QueryResults containing all values in the range.
+   * Evaluates a numeric range literal, generating an array containing all values in the range.
    **/
   evalNumericRange: function(start, end) {
     var results = [];

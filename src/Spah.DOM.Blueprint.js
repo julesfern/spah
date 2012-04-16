@@ -81,7 +81,7 @@ Spah.classExtend("Spah.DOM.Blueprint", Spah.DOM.Document, {
   
   /**
    * Spah.DOM.Blueprint#render(state, callback) -> void
-   * -> state (Spah.SpahQL.QueryResult): The state object that will be used to render the document's markup
+   * -> state (Spah.SpahQL): The state object that will be used to render the document's markup
    * -> done (Function): A callback function that will receive (err, markup) as arguments, where 'markup' is the full generated markup to be rendered on the client.
    *
    * Renders markup for the given state

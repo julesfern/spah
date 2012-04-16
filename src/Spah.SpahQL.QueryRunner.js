@@ -2,7 +2,7 @@
  * class Spah.SpahQL.QueryRunner
  *
  * Class responsible for executing parsed <code>Spah.SpahQL.Query</code> queries and returning sets
- * of <code>Spah.SpahQL.QueryResult</code> instances.
+ * of <code>Spah.SpahQL</code> instances.
  *
  * Unless you're spelunking or fixing bugs, the only methods you care about are _select_ and _assert_.
  **/
@@ -12,8 +12,7 @@ Spah.classCreate("Spah.SpahQL.QueryRunner", {
   // ------------------------
   
   /**
-   * Spah.SpahQL.QueryRunner.select(query, rootData[,scopeData][, scopePath]) -> Array of Spah.SpahQL.QueryResult instances
-   * - query (Spah.SpahQL.Query): A parsed query instance
+   * Spah.SpahQL.QueryRunner.select(query, rootData[,scopeData][, scopePath]) -> Array
    * - rootData (Object): The root data context against which to run the query
    * - scopeData (Object): An optional additional data context which will be the local scope for this query. If not set, will be set internally to <code>rootData</code>.
    * - scopePath (String): An optional path indicating the scope to which this query has been restricted.
