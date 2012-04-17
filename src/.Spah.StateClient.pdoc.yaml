@@ -1,0 +1,78 @@
+---
+id: "Spah.StateClient"
+parent_id: "Spah"
+type: class
+line_number: 15
+description: |
+  The StateClient is the main piece of running code at the browser end of a Spah application.
+  
+  While the <code>Spah.StateServer</code> is used to vend new State objects as responses to user
+  requests, <code>Spah.StateClient</code> manages the state (actually, a history of states) for
+  a single user session and is responsible for requesting new states from the Spah Server.
+  
+  The client's responsibilities start when the page is loaded, by configuring the client
+  with the document's starting state.
+  
+  Also during initialisation, the client hooks into the document
+
+file: /home/danski/projects/spah/src/Spah.StateClient.js
+
+---
+id: "Spah.StateClient#reduceState"
+parent_id: "Spah.StateClient"
+type: instance method
+line_number: 68
+description: |
+  Clones any given Spah.State instance and applies all registered "reduce" strategies to it.
+
+signatures:
+ -
+  signature: "Spah.StateClient#reduceState(target, attachments, callback)"
+  return_value: "void"
+arguments:
+ -
+  name: target
+  types: [Spah.State]
+  description: >
+    A Spah.State instance to clone and reduce
+
+ -
+  name: attachments
+  types: [Objects]
+  description: >
+    An attachment object supplied to the reducer strategies
+
+ -
+  name: callback
+  types: [Function]
+  description: >
+    The callback for completion. Receives (target, attachments)
+
+file: /home/danski/projects/spah/src/Spah.StateClient.js
+
+---
+id: "Spah.StateClient#reduceCurrentState"
+parent_id: "Spah.StateClient"
+type: instance method
+line_number: 79
+description: |
+  Clones the current client state and applies all registered "reduce" strategies to it.
+
+signatures:
+ -
+  signature: "Spah.StateClient#reduceCurrentState(attachments, callback)"
+  return_value: "void"
+arguments:
+ -
+  name: attachments
+  types: [Objects]
+  description: >
+    An attachment object supplied to the reducer strategies
+
+ -
+  name: callback
+  types: [Function]
+  description: >
+    The callback for completion. Receives (target, attachments)
+
+file: /home/danski/projects/spah/src/Spah.StateClient.js

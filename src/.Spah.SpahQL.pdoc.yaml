@@ -1,0 +1,816 @@
+---
+id: "Spah.SpahQL"
+parent_id: "Spah"
+type: class
+line_number: 6
+description: |
+  TODO
+
+file: /home/danski/projects/spah/src/Spah.SpahQL.js
+
+---
+id: "Spah.SpahQL.db"
+parent_id: "Spah.SpahQL"
+type: class method
+line_number: 14
+description: |
+  Create a new root-level SpahQL database with the given data.
+
+signatures:
+ -
+  signature: "Spah.SpahQL.db(data)"
+  return_value: "Spah.SpahQL"
+file: /home/danski/projects/spah/src/Spah.SpahQL.js
+
+---
+id: "Spah.SpahQL.result"
+parent_id: "Spah.SpahQL"
+type: class method
+line_number: 26
+description: |
+  - path (String, null): The path for this result primitive
+  - value: The value at the given path
+  - sourceData: The source database on which events are dispatched
+  
+  Create and return a new result primitive to be wrapped in a Spah.SpahQL instance.
+
+signatures:
+ -
+  signature: "Spah.SpahQL.result(path, value, sourceData)"
+  return_value: "Object"
+file: /home/danski/projects/spah/src/Spah.SpahQL.js
+
+---
+id: "Spah.SpahQL.select"
+parent_id: "Spah.SpahQL"
+type: class method
+line_number: 49
+description: |
+  - query (String): A valid SpahQL query. This may not be an assertion query.
+  - rootData (Object, Array): The root data context being queried.
+  - scopeData (Object, Array): The actual data context being queried, which should be a sub-context of the rootData.
+  - scopePath (String): Optional: If the data being queried is a member item of a larger queryable data construct, providing the path
+     for the queryable object will ensure that results are generated with an accurate path attribute.
+  
+  Executes a query against the given data construct and retrieves all objects that match the supplied query.
+
+signatures:
+ -
+  signature: "Spah.SpahQL.select(query, rootData[,scopeData][,path])"
+  return_value: "Spah.SpahQL"
+file: /home/danski/projects/spah/src/Spah.SpahQL.js
+
+---
+id: "Spah.SpahQL.assert"
+parent_id: "Spah.SpahQL"
+type: class method
+line_number: 65
+description: |
+  - query (String): A valid SpahQL query. This may not be an assertion query.
+  - rootData (Object, Array): The root data context being queried.
+  - scopeData (Object, Array): The actual data context being queried, which should be a sub-context of the rootData.
+  - scopePath (String): Optional: If the data being queried is a member item of a larger queryable data construct, providing the path
+     for the queryable object will ensure that results are generated with an accurate path attribute.
+  
+  Executes an assertion query and returns the appropriate boolean result.
+
+signatures:
+ -
+  signature: "Spah.SpahQL.assert(query, data)"
+  return_value: "Boolean"
+file: /home/danski/projects/spah/src/Spah.SpahQL.js
+
+---
+id: "new Spah.SpahQL"
+parent_id: "Spah.SpahQL"
+type: constructor
+line_number: 85
+description: |
+  Instantiate a new SpahQL monad with the given set of results. Each result is an object with keys
+  "path" (indicating the absolute path of the item), "value" (indicating the value at this path) and
+  "sourceData" (indicating the original data structure from which this data was culled).
+  
+  It's recommended that you leave this method to be used by Spah's internals, and instead use
+  SpahQL.db(data) to create new SpahQL resources.
+
+signatures:
+ -
+  signature: "new Spah.SpahQL(results[, result1][, result2])"
+file: /home/danski/projects/spah/src/Spah.SpahQL.js
+
+---
+id: "Spah.SpahQL#item"
+parent_id: "Spah.SpahQL"
+type: instance method
+line_number: 103
+description: |
+  Retrieves a particular item from this set of results and returns a new SpahQL instance containing that item.
+
+signatures:
+ -
+  signature: "Spah.SpahQL#item(index)"
+  return_value: "Spah.SpahQL"
+arguments:
+ -
+  name: index
+  types: [Number]
+  description: >
+    The index of the item you're after
+
+file: /home/danski/projects/spah/src/Spah.SpahQL.js
+
+---
+id: "Spah.SpahQL#first"
+parent_id: "Spah.SpahQL"
+type: instance method
+line_number: 112
+description: |
+  Retrieves the first item from this set as a new SpahQL instance - which will be empty if this set is also empty.
+
+signatures:
+ -
+  signature: "Spah.SpahQL#first()"
+  return_value: "Spah.SpahQL"
+file: /home/danski/projects/spah/src/Spah.SpahQL.js
+
+---
+id: "Spah.SpahQL#last"
+parent_id: "Spah.SpahQL"
+type: instance method
+line_number: 121
+description: |
+  Retrieves the last item from this set as a new SpahQL instance - which will be empty if this set is also empty.
+
+signatures:
+ -
+  signature: "Spah.SpahQL#last()"
+  return_value: "Spah.SpahQL"
+file: /home/danski/projects/spah/src/Spah.SpahQL.js
+
+---
+id: "Spah.SpahQL#path"
+parent_id: "Spah.SpahQL"
+type: instance method
+line_number: 130
+description: |
+  Returns the absolute path for the first item in this set.
+
+signatures:
+ -
+  signature: "Spah.SpahQL#path()"
+  return_value: "String, null"
+file: /home/danski/projects/spah/src/Spah.SpahQL.js
+
+---
+id: "Spah.SpahQL#paths"
+parent_id: "Spah.SpahQL"
+type: instance method
+line_number: 139
+description: |
+  Returns an array containing the absolute path for every item in this set.
+
+signatures:
+ -
+  signature: "Spah.SpahQL#paths()"
+  return_value: "Array"
+file: /home/danski/projects/spah/src/Spah.SpahQL.js
+
+---
+id: "Spah.SpahQL#value"
+parent_id: "Spah.SpahQL"
+type: instance method
+line_number: 148
+description: |
+  Returns the data value for the first item in this set.
+
+signatures:
+ -
+  signature: "Spah.SpahQL#value()"
+  return_value: "String, null"
+file: /home/danski/projects/spah/src/Spah.SpahQL.js
+
+---
+id: "Spah.SpahQL#values"
+parent_id: "Spah.SpahQL"
+type: instance method
+line_number: 157
+description: |
+  Returns an array containing the data values for every item in this set.
+
+signatures:
+ -
+  signature: "Spah.SpahQL#values()"
+  return_value: "Array"
+file: /home/danski/projects/spah/src/Spah.SpahQL.js
+
+---
+id: "Spah.SpahQL#sourceData"
+parent_id: "Spah.SpahQL"
+type: instance method
+line_number: 166
+description: |
+  The original, root-level object from which this SpahQL instance draws data.
+
+signatures:
+ -
+  signature: "Spah.SpahQL#sourceData()"
+  return_value: "Object"
+file: /home/danski/projects/spah/src/Spah.SpahQL.js
+
+---
+id: "Spah.SpahQL#each"
+parent_id: "Spah.SpahQL"
+type: instance method
+line_number: 181
+description: |
+  Executes the callback function with each item in this resultset. The
+  loop is halted if the callback at any time returns false. This method will
+  return true if the loop completes, and false if it is halted midway. If the callback
+  function does not return anything, the loop will continue to completion.
+
+signatures:
+ -
+  signature: "Spah.SpahQL#each(callback)"
+  return_value: "Spah.SpahQL"
+arguments:
+ -
+  name: callback
+  types: [Function]
+  description: >
+    A callback to execute against each result in the set. The callback will receive the arguments (index, total). within the function, the <code>this</code> keyword will refer to the QueryResult for this iteration.
+
+file: /home/danski/projects/spah/src/Spah.SpahQL.js
+
+---
+id: "Spah.SpahQL#map"
+parent_id: "Spah.SpahQL"
+type: instance method
+line_number: 195
+description: |
+  Executes the callback function with each item in this set. The return value from
+  each iteration of the callback is appended to an array, which is returned at the end of the loop.
+
+signatures:
+ -
+  signature: "Spah.SpahQL#map(callback)"
+  return_value: "Array"
+arguments:
+ -
+  name: callback
+  types: [Function]
+  description: >
+    A callback to execute against each result in the set. The callback is exactly as used with #each, but should return a value.
+
+file: /home/danski/projects/spah/src/Spah.SpahQL.js
+
+---
+id: "Spah.SpahQL#select"
+parent_id: "Spah.SpahQL"
+type: instance method
+line_number: 211
+description: |
+  Runs a selection query relative to all items in this set, and returns the results.
+  For instance:
+  
+       select("/foo/foo").select("/foo") // identical to select("/foo/foo/foo")
+
+signatures:
+ -
+  signature: "Spah.SpahQL#select(query)"
+  return_value: "Spah.SpahQL"
+file: /home/danski/projects/spah/src/Spah.SpahQL.js
+
+---
+id: "Spah.SpahQL#assert"
+parent_id: "Spah.SpahQL"
+type: instance method
+line_number: 228
+description: |
+  Runs an assertion query against every item in this set. Returns <code>false</code> if any one item fails to meet the assertion.
+  
+       select("/foo/foo").first().assert("/foo") // Is exactly the same as just asserting /foo/foo/foo.
+
+signatures:
+ -
+  signature: "Spah.SpahQL#assert(query)"
+  return_value: "Boolean"
+file: /home/danski/projects/spah/src/Spah.SpahQL.js
+
+---
+id: "Spah.SpahQL#parentPath"
+parent_id: "Spah.SpahQL"
+type: instance method
+line_number: 245
+description: |
+  Returns the parent path for the first item in this set, or null if this item is the root.
+  For instance, a result with path "/foo/bar/baz" has parent path "/foo/bar"
+
+signatures:
+ -
+  signature: "Spah.SpahQL#parentPath()"
+  return_value: "String or null"
+file: /home/danski/projects/spah/src/Spah.SpahQL.js
+
+---
+id: "Spah.SpahQL#parentPaths"
+parent_id: "Spah.SpahQL"
+type: instance method
+line_number: 256
+description: |
+  Returns an array of containing the parent path of each item in this set.
+
+signatures:
+ -
+  signature: "Spah.SpahQL#parentPaths()"
+  return_value: "Array"
+file: /home/danski/projects/spah/src/Spah.SpahQL.js
+
+---
+id: "Spah.SpahQL#parent"
+parent_id: "Spah.SpahQL"
+type: instance method
+line_number: 270
+description: |
+  Retrieves the parent object from the data construct that originally generated this
+  query result. Remember to always assume that the data may have been modified in the
+  meantime.
+
+signatures:
+ -
+  signature: "Spah.SpahQL#parent()"
+  return_value: "null, Spah.SpahQL"
+file: /home/danski/projects/spah/src/Spah.SpahQL.js
+
+---
+id: "Spah.SpahQL#parents"
+parent_id: "Spah.SpahQL"
+type: instance method
+line_number: 281
+description: |
+  Retrieves the parent object for the first item in this resultset.
+
+signatures:
+ -
+  signature: "Spah.SpahQL#parents()"
+  return_value: "Spah.SpahQL"
+file: /home/danski/projects/spah/src/Spah.SpahQL.js
+
+---
+id: "Spah.SpahQL#keyName"
+parent_id: "Spah.SpahQL"
+type: instance method
+line_number: 300
+description: |
+  Returns the name for the first item in this set, based on its path. If the item is the root
+  or if the result was not created from a path query then the method will return null.
+  
+       select("/foo").keyName() //-> "foo"
+       select("/foo/bar/.size").keyName() // -> ".size"
+
+signatures:
+ -
+  signature: "Spah.SpahQL#keyName()"
+  return_value: "String or null"
+file: /home/danski/projects/spah/src/Spah.SpahQL.js
+
+---
+id: "Spah.SpahQL#keyNames"
+parent_id: "Spah.SpahQL"
+type: instance method
+line_number: 311
+description: |
+  Returns an array of key names for all items in this set, based on the path of each item in the set.
+  Items which are not the result of path queries, such as set literals, will appear as null entries in the array.
+
+signatures:
+ -
+  signature: "Spah.SpahQL#keyNames()"
+  return_value: "Array"
+file: /home/danski/projects/spah/src/Spah.SpahQL.js
+
+---
+id: "Spah.SpahQL#type"
+parent_id: "Spah.SpahQL"
+type: instance method
+line_number: 323
+description: |
+  Returns the type of data for the first item in this set as a string, e.g. array, object, number etc.
+
+signatures:
+ -
+  signature: "Spah.SpahQL#type()"
+  return_value: "String"
+file: /home/danski/projects/spah/src/Spah.SpahQL.js
+
+---
+id: "Spah.SpahQL#types"
+parent_id: "Spah.SpahQL"
+type: instance method
+line_number: 333
+description: |
+  Returns a map of data types for all items in this set, e.g. ["array", "object", "number"]
+
+signatures:
+ -
+  signature: "Spah.SpahQL#types()"
+  return_value: "Array"
+file: /home/danski/projects/spah/src/Spah.SpahQL.js
+
+---
+id: "Spah.SpahQL#containing"
+parent_id: "Spah.SpahQL"
+type: instance method
+line_number: 364
+description: |
+  Reduces this set of results to only those items containing one or more of the given absolute paths,
+  returning the reduced set as a new SpahQL instance.
+  
+  Note that the existence of the given paths is not checked for - this method only matches on the paths
+  themselves. If you need to assert the existence of a subpath, consider using #assert or #select.
+  
+  For instance:
+  
+     var db = Spah.SpahQL.db(someData);
+     var foo = db.select("//foo");
+     foo.length //-> 2
+     foo.paths() //-> ["/a/foo", "/b/foo"]
+     foo.containing("/a/foo").paths() //-> ["/a/foo"], because the path was matched exactly
+     foo.containing("/b/foo/bar/baz").paths() //-> ["/b/foo"], because '/b/foo' is a superpath for the given path
+
+signatures:
+ -
+  signature: "Spah.SpahQL#containing(spahql)"
+  return_value: "Spah.SpahQL"
+arguments:
+ -
+  name: spahql
+  types: [Spah.SpahQL]
+  description: >
+    A SpahQL object containing any number of results Spah.SpahQL#containing(path) -> Spah.SpahQL
+
+ -
+  name: path
+  types: [String]
+  description: >
+    An absolute path Spah.SpahQL#containing(pathList) -> Spah.SpahQL
+
+ -
+  name: pathList
+  types: [Array]
+  description: >
+    An array of absolute path strings
+
+file: /home/danski/projects/spah/src/Spah.SpahQL.js
+
+---
+id: "Spah.SpahQL#containingAll"
+parent_id: "Spah.SpahQL"
+type: instance method
+line_number: 408
+description: |
+  - spahql (Spah.SpahQL): A SpahQL object containing any number of results
+  Spah.SpahQL#containingAll(path) -> Spah.SpahQL
+  - path (String): An absolute path
+  Spah.SpahQL#containingAll(pathList) -> Spah.SpahQL
+  - pathList (Array<String>): An array of absolute paths
+  
+  Works just like #containing, but reduces this set to only those items which contain ALL of the argument paths.
+
+signatures:
+ -
+  signature: "Spah.SpahQL#containingAll(spahql)"
+  return_value: "Spah.SpahQL"
+file: /home/danski/projects/spah/src/Spah.SpahQL.js
+
+---
+id: "Spah.SpahQL#filter"
+parent_id: "Spah.SpahQL"
+type: instance method
+line_number: 419
+description: |
+  Runs the given assertion against each item in this set and returns a new SpahQL set containing
+  only those items meeting the given assertion.
+
+signatures:
+ -
+  signature: "Spah.SpahQL#filter(query)"
+  return_value: "Spah.SpahQL"
+arguments:
+ -
+  name: query
+  types: [String]
+  description: >
+    A SpahQL assertion query.
+
+file: /home/danski/projects/spah/src/Spah.SpahQL.js
+
+---
+id: "Spah.SpahQL#concat"
+parent_id: "Spah.SpahQL"
+type: instance method
+line_number: 434
+description: |
+  Creates and returns a new SpahQL set containing all results from this instance followed
+  by all results from the given instance.
+
+signatures:
+ -
+  signature: "Spah.SpahQL#concat(otherSpahQL)"
+  return_value: "Spah.SpahQL"
+arguments:
+ -
+  name: otherSpahQL
+  types: [Spah.SpahQL]
+  description: >
+    Any other Spah.SpahQL instance.
+
+file: /home/danski/projects/spah/src/Spah.SpahQL.js
+
+---
+id: "Spah.SpahQL#detach"
+parent_id: "Spah.SpahQL"
+type: instance method
+line_number: 461
+description: |
+  Creates and returns the first item from this set as a new SpahQL database, using
+  a deep clone of the item's value.
+  
+  For instance:
+  
+   var myDb = Spah.SpahQL.db({foo: {bar: "baz"}});
+   var foo = myDb.select("/foo");
+   foo.path() // -> "/foo"
+   foo.value() //-> {bar: "baz"};
+   var fooClone = foo.detach();
+   fooClone.path() //-> "/"
+   fooClone.value() //-> {bar: "baz"}
+   fooClone.value() == foo.value() //-> false
+   fooClone.set("bar", "baz-changed")
+   fooClone.select("/bar").value() //-> "baz-changed"
+   foo.select("/bar").value() //-> "baz"
+
+signatures:
+ -
+  signature: "Spah.SpahQL#detach()"
+  return_value: "Spah.SpahQL"
+file: /home/danski/projects/spah/src/Spah.SpahQL.js
+
+---
+id: "Spah.SpahQL#clone"
+parent_id: "Spah.SpahQL"
+type: instance method
+line_number: 481
+description: |
+  Produces a completely detached clone of this result set. This method does
+  the equivalent of deep-cloning the original data used to create the SpahQL database
+  (using SpahQL.db(data), for instance) and re-querying that clone for every result
+  path found in this set.
+  
+  The result is a complete clone which may have its own change listeners and which
+  may be freely modified without disrupting the original.
+  
+  If this set contains any literals (from a query such as "{1,2,3}") these results
+  are cloned as well.
+
+signatures:
+ -
+  signature: "Spah.SpahQL#clone()"
+  return_value: "Spah.SpahQL"
+file: /home/danski/projects/spah/src/Spah.SpahQL.js
+
+---
+id: "Spah.SpahQL#set"
+parent_id: "Spah.SpahQL"
+type: instance method
+line_number: 536
+description: |
+  - key (String, Number): The key to set on this result
+  - value: The value to set for the given key
+  Spah.SpahQL#set(dictionary) -> Spah.SpahQL
+  - dictionary (Object): A key/value hash containing multiple keys to be set.
+  
+  Take the data for the first result item in this set, and set a key on it.
+  Has no effect if the data being modified is a basic type such as a string
+  or number.
+  
+     var db = Spah.SpahQL.db({foo: {a: "b"}});
+     var foo = db.select("/foo");
+     foo.set("new-key", "moose"); //-> data is now {foo: {a: "b", "new-key": "moose"}}
+  
+  Returns self.
+
+signatures:
+ -
+  signature: "Spah.SpahQL#set(key, value)"
+  return_value: "Spah.SpahQL"
+file: /home/danski/projects/spah/src/Spah.SpahQL.js
+
+---
+id: "Spah.SpahQL#setAll"
+parent_id: "Spah.SpahQL"
+type: instance method
+line_number: 580
+description: |
+  - key (String, Number): The key to set on this result
+  - value: The value to set for the given key
+  Spah.SpahQL#setAll(dictionary) -> Spah.SpahQL
+  - dictionary (Object): A key/value hash containing multiple keys to be set.
+  
+  Just like #set, only it attempts to set the given key(s) on all items in this set:
+  
+     db.select("//foo").set("a", "a-value") // Attempt to set "a" on all "foo" objects
+  
+  Just like #set, returns self.
+
+signatures:
+ -
+  signature: "Spah.SpahQL#setAll(key, value)"
+  return_value: "Spah.SpahQL"
+file: /home/danski/projects/spah/src/Spah.SpahQL.js
+
+---
+id: "Spah.SpahQL#replace"
+parent_id: "Spah.SpahQL"
+type: instance method
+line_number: 594
+description: |
+  Replaces the value of the first item in this set, modifying the queried data
+  in the process. If the first item in this set is the root, no action will be taken.
+  
+  Returns self.
+
+signatures:
+ -
+  signature: "Spah.SpahQL#replace(value)"
+  return_value: "Spah.SpahQL"
+arguments:
+ -
+  name: value
+  types: [Object]
+  description: >
+    The value to replace this query result's value.
+
+file: /home/danski/projects/spah/src/Spah.SpahQL.js
+
+---
+id: "Spah.SpahQL#replaceAll"
+parent_id: "Spah.SpahQL"
+type: instance method
+line_number: 621
+description: |
+  Works just like #replace, but takes action against every result in this set:
+  
+     // Replace all hashes with a polite notice.
+     db.select("//[/.type=='object']").replace("NO HASHES FOR YOU. ONE YEAR.")
+
+signatures:
+ -
+  signature: "Spah.SpahQL#replaceAll(value)"
+  return_value: "Spah.SpahQL"
+file: /home/danski/projects/spah/src/Spah.SpahQL.js
+
+---
+id: "Spah.SpahQL#delete"
+parent_id: "Spah.SpahQL"
+type: instance method
+line_number: 638
+description: |
+  Deletes data from the first result in this set. If a key is supplied, the key will be deleted from value.
+  If no arguments are given, the entire result will be deleted from its parent.
+  
+  Deletion takes different effects depending on the data type of this query result.
+  Arrays are spliced, removing the specified index from the array without leaving an empty space.
+  Objects/Hashes will have the specified key removed, if the key exists.
+  
+  The root data construct may not be deleted. This method always returns self.
+
+signatures:
+ -
+  signature: "Spah.SpahQL#delete([key])"
+  return_value: "Spah.SpahQL"
+file: /home/danski/projects/spah/src/Spah.SpahQL.js
+
+---
+id: "Spah.SpahQL#deleteAll"
+parent_id: "Spah.SpahQL"
+type: instance method
+line_number: 684
+description: |
+  Just like #delete, but called against every item in this set. Returns self.
+
+signatures:
+ -
+  signature: "Spah.SpahQL#deleteAll([key])"
+  return_value: "Spah.SpahQL"
+file: /home/danski/projects/spah/src/Spah.SpahQL.js
+
+---
+id: "Spah.SpahQL#listen"
+parent_id: "Spah.SpahQL"
+type: instance method
+line_number: 715
+description: |
+  Registers a callback to be triggered when data within this set of results is modified.
+  Note that this method listens for changes on all items in this set:
+  
+     var db = Spah.SpahQL.db(some_data);
+  
+     // Callback triggered whenever the first item in any array anywhere is modified
+     db.select("//0").modified(function() {...})
+  
+     // Callback triggered only when a specific array is modified
+     db.select("//0").item(0).modified(function() {....})
+  
+  
+  Upon modification, the callback will be triggered with arguments:
+  - <code>result</code>: A SpahQL instance containing one result item, the item modified. This may be <code>undefined</code> if the data at that path was removed during the modification.
+  - <code>path</code>: The path being observed
+  - <code>subpaths</code>: An array of paths modified, relative to the path being observed. Empty if the observed path was itself replaced.
+  
+  Returns self.
+
+signatures:
+ -
+  signature: "Spah.SpahQL#listen(path, callback)"
+  return_value: "Spah.SpahQL"
+arguments:
+ -
+  name: path
+  types: [String]
+  description: >
+    A path relative to the items in this set, if you only want to listen for changes on a particular subkey.
+
+ -
+  name: callback
+  types: [Function]
+  description: >
+    A function to be called when the data in this SpahQL set is modified. Spah.SpahQL#listen(callback) -> Spah.SpahQL
+
+ -
+  name: callback
+  types: [Function]
+  description: >
+    A function to be called when the data in this SpahQL set is modified.
+
+file: /home/danski/projects/spah/src/Spah.SpahQL.js
+
+---
+id: "Spah.SpahQL#unlisten"
+parent_id: "Spah.SpahQL"
+type: instance method
+line_number: 743
+description: |
+  Removes a listener previously created with #listen, accepting the same objects as arguments in order to identify the listener being destroyed.
+  
+  Returns self.
+
+signatures:
+ -
+  signature: "Spah.SpahQL#unlisten(path, callback)"
+  return_value: "Spah.SpahQL"
+arguments:
+ -
+  name: path
+  types: [String]
+  description: >
+    The subpath previously subscribed using #listen
+
+ -
+  name: callback
+  types: [Function]
+  description: >
+    The function registered as a callback using #listen Spah.SpahQL#unlisten(callback) -> Spah.SpahQL
+
+ -
+  name: callback
+  types: [Function]
+  description: >
+    The function registered as a callback using #listen
+
+file: /home/danski/projects/spah/src/Spah.SpahQL.js
+
+---
+id: "Spah.SpahQL#resultModified"
+parent_id: "Spah.SpahQL"
+type: instance method
+line_number: 754
+description: |
+  Raises modification events for anything subscribing to changes to the modified path chain on the specified result object.
+
+signatures:
+ -
+  signature: "Spah.SpahQL#resultModified(result, oldValue)"
+  return_value: "void"
+arguments:
+ -
+  name: result
+  types: [Object]
+  description: >
+    A primitive result object that was modified as a result of a modification made to this set
+
+ -
+  name: oldValue
+  description: >
+    The prior value of the modified result
+
+file: /home/danski/projects/spah/src/Spah.SpahQL.js

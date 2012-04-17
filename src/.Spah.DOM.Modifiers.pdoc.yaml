@@ -1,0 +1,209 @@
+---
+id: "Spah.DOM.Modifiers"
+parent_id: "Spah.DOM"
+type: class
+line_number: 6
+description: |
+  A collection of built-in modifier scripts to be applied during state deltas.
+
+file: /home/danski/projects/spah/src/Spah.DOM.Modifiers.js
+
+---
+id: "Spah.DOM.Modifiers.Show"
+parent_id: "Spah.DOM.Modifiers"
+type: class
+line_number: 13
+description: |
+  Handles showing/hiding elements using jQuery's show() and hide() methods.
+
+file: /home/danski/projects/spah/src/Spah.DOM.Modifiers.js
+
+---
+id: "Spah.DOM.Modifiers.Show.actionName"
+parent_id: "Spah.DOM.Modifiers.Show"
+type: class method
+line_number: 22
+description: |
+  The action name for this modifier is always "show"
+
+signatures:
+ -
+  signature: "Spah.DOM.Modifiers.Show.actionName(element)"
+  return_value: "String"
+file: /home/danski/projects/spah/src/Spah.DOM.Modifiers.js
+
+---
+id: "Spah.DOM.Modifiers.Show.up"
+parent_id: "Spah.DOM.Modifiers.Show"
+type: class method
+line_number: 30
+description: |
+  Shows the element using jQuery(element).show();
+
+signatures:
+ -
+  signature: "Spah.DOM.Modifiers.Show.up(element)"
+  return_value: "void"
+file: /home/danski/projects/spah/src/Spah.DOM.Modifiers.js
+
+---
+id: "Spah.DOM.Modifiers.Show.down"
+parent_id: "Spah.DOM.Modifiers.Show"
+type: class method
+line_number: 38
+description: |
+  Hides the element using jQuery(element).hide();
+
+signatures:
+ -
+  signature: "Spah.DOM.Modifiers.Show.down(element)"
+  return_value: "void"
+file: /home/danski/projects/spah/src/Spah.DOM.Modifiers.js
+
+---
+id: "Spah.DOM.Modifiers.ClassName"
+parent_id: "Spah.DOM.Modifiers"
+type: class
+line_number: 49
+description: |
+  Handles adding/removing class names from elements.
+
+file: /home/danski/projects/spah/src/Spah.DOM.Modifiers.js
+
+---
+id: "Spah.DOM.Modifiers.ClassName.actionName"
+parent_id: "Spah.DOM.Modifiers.ClassName"
+type: class method
+line_number: 56
+description: |
+  The action name for this modifier is always "class"
+
+signatures:
+ -
+  signature: "Spah.DOM.Modifiers.ClassName.actionName(element)"
+  return_value: "String"
+file: /home/danski/projects/spah/src/Spah.DOM.Modifiers.js
+
+---
+id: "Spah.DOM.Modifiers.ClassName.up"
+parent_id: "Spah.DOM.Modifiers.ClassName"
+type: class method
+line_number: 64
+description: |
+  Adds the flags as a single class using jQuery(element).addClass(flags)
+
+signatures:
+ -
+  signature: "Spah.DOM.Modifiers.ClassName.up(element, flags)"
+  return_value: "void"
+file: /home/danski/projects/spah/src/Spah.DOM.Modifiers.js
+
+---
+id: "Spah.DOM.Modifiers.ClassName.down"
+parent_id: "Spah.DOM.Modifiers.ClassName"
+type: class method
+line_number: 72
+description: |
+  Removes the flags as a single class using jQuery(element).removeClass(flags)
+
+signatures:
+ -
+  signature: "Spah.DOM.Modifiers.ClassName.down(element, flags)"
+  return_value: "void"
+file: /home/danski/projects/spah/src/Spah.DOM.Modifiers.js
+
+---
+id: "Spah.DOM.Modifiers.ElementId"
+parent_id: "Spah.DOM.Modifiers"
+type: class
+line_number: 83
+description: |
+  Handles applying and removing element IDs.
+
+file: /home/danski/projects/spah/src/Spah.DOM.Modifiers.js
+
+---
+id: "Spah.DOM.Modifiers.ElementId.actionName"
+parent_id: "Spah.DOM.Modifiers.ElementId"
+type: class method
+line_number: 90
+description: |
+  The action name is always "id" for this modifier.
+
+signatures:
+ -
+  signature: "Spah.DOM.Modifiers.ElementId.actionName(element)"
+  return_value: "String"
+file: /home/danski/projects/spah/src/Spah.DOM.Modifiers.js
+
+---
+id: "Spah.DOM.Modifiers.ElementId.up"
+parent_id: "Spah.DOM.Modifiers.ElementId"
+type: class method
+line_number: 100
+description: |
+  Removes the id specified by the flags from any existing elements that have it,
+  applies the id specified by the flags to this element, and stashes the element's
+  old id in the data-id-old attribute so that the modification may be reversed later.
+
+signatures:
+ -
+  signature: "Spah.DOM.Modifiers.ElementId.up(element, flags)"
+  return_value: "void"
+file: /home/danski/projects/spah/src/Spah.DOM.Modifiers.js
+
+---
+id: "Spah.DOM.Modifiers.ElementId.down"
+parent_id: "Spah.DOM.Modifiers.ElementId"
+type: class method
+line_number: 111
+description: |
+  Re-applies the previously stashed ID to this element, if it had one.
+  Otherwise the id is removed.
+
+signatures:
+ -
+  signature: "Spah.DOM.Modifiers.ElementId.down(element, flags)"
+  return_value: "void"
+file: /home/danski/projects/spah/src/Spah.DOM.Modifiers.js
+
+---
+id: "Spah.DOM.Document#addTemplate"
+parent_id: "Spah.DOM.Document"
+type: instance method
+line_number: 167
+description: |
+  name (String): A unique name for this template
+  body (String): The template itself
+  type (String): The rendering engine that should be used to render this template. Underscore, Mustache and Handlebars templates are all supported. The default type is "Mustache" - pass "Handlebars" if you want to use Handlebars for rendering this template.
+  
+  This method is only present if the "Populate" modifier is registered on the document
+  (this is enabled by default.)
+  
+  Adds a template to the document, ready to be used by the Populate modifier when rendering
+  templated content.
+
+signatures:
+ -
+  signature: "Spah.DOM.Document#addTemplate(name, body, type)"
+  return_value: "void"
+file: /home/danski/projects/spah/src/Spah.DOM.Modifiers.js
+
+---
+id: "Spah.DOM.Document#removeTemplate"
+parent_id: "Spah.DOM.Document"
+type: instance method
+line_number: 182
+description: |
+  name (String): The unique name of the template to be removed
+  
+  This method is only present if the "Populate" modifier is registered on the document
+  (this is enabled by default.)
+  
+  Removes a template previously added with #addTemplate.
+
+signatures:
+ -
+  signature: "Spah.DOM.Document#removeTemplate(name)"
+  return_value: "void"
+file: /home/danski/projects/spah/src/Spah.DOM.Modifiers.js

@@ -1,0 +1,45 @@
+---
+id: "Spah.State"
+parent_id: "Spah"
+type: class
+superclass_id: "Spah.SpahQL"
+line_number: 8
+description: |
+  Spah.State is the wrapping class for the <code>state</code> defined by your application.
+  It supports querying and assertions against the state and is also responsible for deep-merging
+  state updates from the server and dispatching modification events to your responders.
+
+file: /home/danski/projects/spah/src/Spah.State.js
+
+---
+id: "new Spah.State"
+parent_id: "Spah.State"
+type: constructor
+line_number: 19
+description: |
+  - data (Object): A hash of data to act as the starting state. Note that modification events are not fired during instantiation.
+  - reducers (Array): An array of rules to be applied when this state is reduced.
+  - expanders (Array): An array of rules to be applied when this state is expanded.
+
+signatures:
+ -
+  signature: "new Spah.State(data[, reducers[, expanders]])"
+file: /home/danski/projects/spah/src/Spah.State.js
+
+---
+id: "Spah.State#clone"
+parent_id: "Spah.State"
+type: instance method
+line_number: 34
+description: |
+  Creates a new, deep clone of this State, the value of which may be freely modified
+  without embuggering the original.
+  
+  However, this new state will share a set of reducer and expander rules
+  with the original.
+
+signatures:
+ -
+  signature: "Spah.State#clone()"
+  return_value: "Spah.State"
+file: /home/danski/projects/spah/src/Spah.State.js

@@ -1,0 +1,38 @@
+---
+id: "Spah.SpahQL.Token"
+parent_id: "Spah.SpahQL"
+type: class
+line_number: 7
+description: |
+  A containing module for all token types - queries, filters, comparison operators, sets, literals etc.
+  that are encountered during the parsing process.
+
+file: /home/danski/projects/spah/src/Spah.SpahQL.Token.js
+
+---
+id: "Spah.SpahQL.Token.parseAt"
+parent_id: "Spah.SpahQL.Token"
+type: class method
+line_number: 16
+description: |
+  Attempts to locate a token of any valid top-level type at the given index in the given string query.
+
+signatures:
+ -
+  signature: "Spah.SpahQL.Token.parseAt(i, query)"
+  return_value: "Array result"
+file: /home/danski/projects/spah/src/Spah.SpahQL.Token.js
+
+---
+id: "Spah.SpahQL.Token.throwParseErrorAt"
+parent_id: "Spah.SpahQL.Token"
+type: class method
+line_number: 31
+description: |
+  Throws an exception at the given index in the given query string with the given error message.
+
+signatures:
+ -
+  signature: "Spah.SpahQL.Token.throwParseErrorAt(i, query, message)"
+  return_value: "void"
+file: /home/danski/projects/spah/src/Spah.SpahQL.Token.js

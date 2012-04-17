@@ -19,6 +19,10 @@ a:visited {
   color: #97c6dc;
 }
 
+.clearfix {
+  clear: both !important;
+}
+
 /* Set up nav positions */
 
 /* @group Nav styles */
@@ -143,16 +147,24 @@ nav > ul > li:last-child > a {
 /* @group Article body */
 
 article {
-  margin: 10px 30px 50% 400px;
-  max-width: 650px;
+  margin: 10px 30px 50% 290px;
+  max-width: 900px;
   line-height: 1.6em;
+}
+
+article > * {
+  max-width: 600px;
+  margin: 0 auto 1.5em auto;
 }
 
 article h1 {
   line-height: 1.3em;
 }
 
-article h1, article h2, article h3, article h4 {
+article h1, 
+article h2, 
+article h3, 
+article h4 {
   margin-top: 20px;
   padding: 10px 0 20px 0;
   border-bottom: 5px solid #CCC;
@@ -163,9 +175,9 @@ article h1:first-child {
   background: #000;
   width: 100%;
   position: relative;
-  right: 5%;
   border: none;
-  margin: 40px 0 30px 0;
+  margin-top: 40px;
+  margin-bottom: 40px;
   padding: 5%;
   font-size: 2.3em;
   border-radius: 3px;
@@ -207,7 +219,7 @@ article pre {
   -webkit-border-radius: 3px;
   -moz-border-radius: 3px;
   box-shadow: 0 0 5px #000;
-  overflow-x: scroll;
+  overflow-x: auto;
 }
 article code {
   color: #FFF;
@@ -229,9 +241,52 @@ article pre code {
   width: 200%; /* horizontal scroll hack */
 }
 
+article > .code-pair {
+  clear: both;
+  max-width: 100%;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 10px;
+  margin-bottom: 1.5em;
+}
+article > div.code-pair > .text-container {
+  float: left;
+  width: 46%;
+  background: gold;
+  box-shadow: 0px 0px 10px black;
+   -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+  position: relative;
+  z-index: 2000;
+  color: #333;
+}
+article > div.code-pair p {
+  width: auto;
+  padding: 10px;
+  margin: 0;
+}
+article > div.code-pair p a,
+article > div.code-pair p em,
+article > div.code-pair p strong {
+  color: black;
+}
+article > div.code-pair p code {
+  box-shadow: none;
+  background: none;
+  border: none;
+  padding: 2px;
+  color: #666;
+}
+
+article > .code-pair > pre,
+article > .code-pair > code {
+  float: right;
+  margin: 0;
+  width: 50%;
+}
+
 article ul, article ol {
   padding: 1em 0 0 0;
-  margin: 0 3em 2em 3em;
 }
 article ul {
 
@@ -261,15 +316,77 @@ article li > *:last-child {
 
 /* @end */
 
-/* iPad [portrait + landscape] */
-@media only screen and (max-width: 1024px) {
-	article {
-  		margin-left: 350px;
-  		margin-right: 50px;
-	}
+
+@media only screen and (min-width: 1200px) {
+  article {
+    margin-left: 350px;
+  }
 }
 
-/* iPhone [portrait + landscape] */
+@media only screen and (min-width: 1050px) {
+  article > div.code-pair > .text-container:before {
+    content: " ";
+    border-style: dashed;
+    border-color: transparent;
+    border-width: 0.53em;
+    display: -moz-inline-box;
+    display: inline-block;
+    /* Use font-size to control the size of the arrow. */
+    font-size: 1.2em;
+    height: 0;
+    line-height: 0;
+    position: absolute;
+    vertical-align: middle;
+    width: 0;
+    border-left-width: 1em;
+    border-left-style: solid;
+    border-left-color: gold;
+    top: 0.5em;
+    right: -1.2em;
+  }
+}
+
+@media only screen and (max-width: 1049px) {
+	article {
+      max-width: 650px;
+  		margin-left: 320px;
+  		margin-right: 50px;
+	}
+  article > * {
+    max-width: 550px;
+  }
+  article > div.code-pair > .text-container {
+    margin-bottom: 0.5em;
+  }
+  article > div.code-pair > .text-container,
+  article > div.code-pair > pre,
+  article > div.code-pair > code {
+    float: none;
+    width: auto;
+  }
+  article > div.code-pair > .text-container:before {
+    content: " ";
+    border-style: dashed;
+    border-color: transparent;
+    border-width: 0.53em;
+    display: -moz-inline-box;
+    display: inline-block;
+    /* Use font-size to control the size of the arrow. */
+    font-size: 1.2em;
+    height: 0;
+    line-height: 0;
+    position: absolute;
+    vertical-align: middle;
+    width: 0;
+    border-top-width: 1em;
+    border-top-style: solid;
+    border-top-color: gold;
+    bottom: -1.2em;
+    left: 0.5em;
+    z-index: 1000;
+  }
+}
+
 @media only screen and (max-width: 800px) {
 	.nav-wrapper {
   		display: none;
@@ -280,3 +397,11 @@ article li > *:last-child {
 	}
 }
 
+@media only screen and (max-width: 650px) {
+  article > div.code-pair > p,
+  article > div.code-pair > pre,
+  article > div.code-pair > code {
+    float: none;
+    width: auto;
+  }
+}

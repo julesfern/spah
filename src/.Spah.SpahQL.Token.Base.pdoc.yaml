@@ -1,0 +1,24 @@
+---
+id: "Spah.SpahQL.Token.Base"
+parent_id: "Spah.SpahQL.Token"
+type: class
+line_number: 7
+description: |
+  A simple superclass for all tokens - queries, filters, comparison operators, sets, literals etc.
+  that are encountered during the parsing process
+
+file: /home/danski/projects/spah/src/Spah.SpahQL.Token.Base.js
+
+---
+id: "Spah.SpahQL.Token.Base.parseAt"
+parent_id: "Spah.SpahQL.Token.Base"
+type: class method
+line_number: 17
+description: |
+  Should be overridden by the child class.
+
+signatures:
+ -
+  signature: "Spah.SpahQL.Token.Base.parseAt(index, queryString)"
+  return_value: "Array\\[resumeIndex, foundToken\\] or null"
+file: /home/danski/projects/spah/src/Spah.SpahQL.Token.Base.js

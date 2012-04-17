@@ -1,0 +1,79 @@
+---
+id: "Spah.StateServer"
+parent_id: "Spah"
+type: class
+line_number: 6
+description: |
+
+
+file: /home/danski/projects/spah/src/Spah.StateServer.js
+
+---
+id: "Spah.StateServer#identifyStateFromRequest"
+parent_id: "Spah.StateServer"
+type: instance method
+line_number: 31
+description: |
+  - delegateOrObject (Function<String, Object>, Object): Either a function to use as a delegate, or the object being checked using the delegate.
+  
+  Tells Spah how to retrieve the State from an inbound client request, or identifies the State from an inbound
+  client request. Retrieving a String or Object from the request is fine - if the delegate function returns
+  a String it will be interpreted as JSON automatically.
+  
+  When called with a function as the argument, sets the delegate function used by Spah to make this determination.
+  When called with an object argument, passes the argument to the delegate function and returns the result.
+
+signatures:
+ -
+  signature: "Spah.StateServer#identifyStateFromRequest(delegateOrObject)"
+  return_value: "String, Object"
+file: /home/danski/projects/spah/src/Spah.StateServer.js
+
+---
+id: "Spah.StateServer#identifyWarmRequest"
+parent_id: "Spah.StateServer"
+type: instance method
+line_number: 44
+description: |
+  - delegateOrObject (Function<Boolean>, Object): Either a function to use as a delegate, or the object being checked using the delegate.
+  
+  Tells Spah how to determine the warmth of a request, or determines the warmth of a given request. Warm requests are
+  those made via AJAX or other asynchronous means. The given delegate function should return <code>true</code> if the
+  given request is warm and <code>false</code> if the request is cold.
+  
+  When called with a function as the argument, sets the delegate function used by Spah to make this determination.
+  When called with an object argument, passes the argument to the delegate function and returns the result.
+
+signatures:
+ -
+  signature: "Spah.StateServer#identifyWarmRequest(delegateOrObject)"
+  return_value: "String, Object"
+file: /home/danski/projects/spah/src/Spah.StateServer.js
+
+---
+id: "Spah.StateServer#addExpander"
+parent_id: "Spah.StateServer"
+type: instance method
+line_number: 73
+description: |
+  Adds a new SpahQL Strategy to this server to be applied when expanding the state for
+  the purposes of populating an HTML render.
+
+signatures:
+ -
+  signature: "Spah.StateServer#addExpander(strategy, action)"
+  return_value: "Object"
+arguments:
+ -
+  name: strategy
+  types: [Object]
+  description: >
+    A SpahQL Strategiser object. See Spah.SpahQL.Strategiser for details.
+
+ -
+  name: action
+  types: [Function]
+  description: >
+    The Strategiser action for this reducer.
+
+file: /home/danski/projects/spah/src/Spah.StateServer.js

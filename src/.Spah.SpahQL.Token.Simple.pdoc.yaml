@@ -1,0 +1,65 @@
+---
+id: "Spah.SpahQL.Token.Simple"
+parent_id: "Spah.SpahQL.Token"
+type: class
+superclass_id: "Spah.SpahQL.Token.Base"
+line_number: 6
+description: |
+  A simple superclass for all simple tokens that carry a single value or subtoken.
+
+file: /home/danski/projects/spah/src/Spah.SpahQL.Token.Simple.js
+
+---
+id: "new Spah.SpahQL.Token.Simple"
+parent_id: "Spah.SpahQL.Token.Simple"
+type: constructor
+line_number: 24
+description: |
+  Instantiate a new simple token with the given primitive value.
+
+signatures:
+ -
+  signature: "new Spah.SpahQL.Token.Simple(value)"
+file: /home/danski/projects/spah/src/Spah.SpahQL.Token.Simple.js
+
+---
+id: "Spah.SpahQL.Token#toSet"
+parent_id: "Spah.SpahQL.Token"
+type: instance method
+line_number: 34
+description: |
+  Wraps this token up in a set, allowing it to be used as a top-level evaluatable token.
+
+signatures:
+ -
+  signature: "Spah.SpahQL.Token#toSet()"
+  return_value: "Spah.SpahQL.Token.Set"
+file: /home/danski/projects/spah/src/Spah.SpahQL.Token.Simple.js
+
+---
+id: "Spah.SpahQL.Token.Simple#evaluate"
+parent_id: "Spah.SpahQL.Token.Simple"
+type: instance method
+line_number: 46
+description: |
+  Evaluates a set literal, for use when a set is used in a selection query and must be returned as a set of results.
+  If the set is a range, it will be flattened into a set of values.
+
+signatures:
+ -
+  signature: "Spah.SpahQL.Token.Simple#evaluate(queryToken, rootData[, scopeData])"
+  return_value: "Array of result objects"
+arguments:
+ -
+  name: rootData
+  types: [Object]
+  description: >
+    A root data context for any selection queries that appear in the literal
+
+ -
+  name: scopeData
+  types: [Object]
+  description: >
+    A scoped data context for the scope at which selection queries in the set will be evaluated.
+
+file: /home/danski/projects/spah/src/Spah.SpahQL.Token.Simple.js

@@ -1,0 +1,25 @@
+---
+id: "Spah.State.Strategies"
+parent_id: "Spah.State"
+type: class
+line_number: 6
+description: |
+  A package of pre-made SpahQL Strategiser actions provided for convience.
+
+file: /home/danski/projects/spah/src/Spah.State.Strategies.js
+
+---
+id: "Spah.State.Strategies.keeper"
+parent_id: "Spah.State.Strategies"
+type: class method
+line_number: 32
+description: |
+  Generates a SpahQL Strategy action which will completely clear all paths handled
+  by the strategy, excluding any sub-paths (or their containing paths) matched by the paths
+  handed to this method.
+
+signatures:
+ -
+  signature: "Spah.State.Strategies.keeper(pathOrArrayOfPaths[,path2][,pathN])"
+  return_value: "Function"
+file: /home/danski/projects/spah/src/Spah.State.Strategies.js

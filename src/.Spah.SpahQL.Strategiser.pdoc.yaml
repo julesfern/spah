@@ -1,0 +1,14 @@
+---
+id: "Spah.SpahQL.Strategiser"
+parent_id: "Spah.SpahQL"
+type: class
+line_number: 11
+description: |
+  A generic handler class for managing SpahQL Strategies and applying them to SpahQL objects.
+  
+  The Strategiser allows the creation and registration of SpahQL Strategies, which are macros
+  which may be applied to SpahQL objects such as the Spah State.
+  
+  Strategies are categorised, allowing specific sets of strategies to be executed at any time.
+
+file: /home/danski/projects/spah/src/Spah.SpahQL.Strategiser.js

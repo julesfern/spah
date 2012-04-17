@@ -1,0 +1,19 @@
+---
+id: "Spah.DOM.Errors"
+parent_id: "Spah.DOM"
+type: class
+line_number: 6
+description: |
+  A containing namespace for all exceptions generated within the Spah.DOM library.
+
+file: /home/danski/projects/spah/src/Spah.DOM.Errors.js
+
+---
+id: "Spah.DOM.Errors.InvalidModifierError"
+parent_id: "Spah.DOM.Errors"
+type: class
+line_number: 13
+description: |
+  Generally raised when registering a document modifier that does not conform to the correct interface.
+
+file: /home/danski/projects/spah/src/Spah.DOM.Errors.js

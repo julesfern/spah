@@ -5,11 +5,41 @@ Nav.init = function(pageListSelector, headingListSelector) {
   var pNav = $(pageListSelector);
   var hNav = $(headingListSelector);
 
+  this.addHelperMarkup();
+  this.formatCode();
   this.buildOverview(hNav);
   this.addToggleBehaviours();
   this.addLinkBehaviours();
   this.addScrollListener();
 }
+
+Nav.addHelperMarkup = function() {
+  $("article > pre").each(function() {
+    var $pre = $(this);
+    var $prev = $pre.prev();
+    if($prev[0] && $prev[0].nodeName.toLowerCase() == "p" && $prev.html().indexOf(":") == $prev.html().length-1) {
+      var wrapper = $("<div class=\"code-pair\"></div>");
+      $prev.before(wrapper);
+
+      var pWrapper = $("<div class=\"text-container\"></div>");
+      wrapper.append(pWrapper);
+      pWrapper.append($prev);
+      
+      wrapper.append($pre); 
+      wrapper.append("<div class=\"clearfix\"></div>")
+
+    }
+  });
+};
+
+Nav.formatCode = function() {
+  $("code").each(function() {
+    var $e = $(this);
+    var code = $e.html();
+
+    $e.html(code.replace(/\t/g, "  "));
+  });
+};
 
 Nav.buildOverview = function(target) {
 
