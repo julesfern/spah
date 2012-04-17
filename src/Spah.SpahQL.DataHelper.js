@@ -84,11 +84,9 @@ Spah.classCreate("Spah.SpahQL.DataHelper", {
    * Extends the core typeof(obj) function by adding types "array" and "null".
    **/
   "objectType": function(obj) {
-    var _ = (typeof(_)=="undefined")? require('underscore') : _;
-
     if(obj == null || obj == undefined) return "null";
     if(typeof(obj) == "object") {
-      if(_.isArray(obj)) return "array";
+      if(Object.prototype.toString.call(obj) == "[object Array]") return "array";
       else return "object";
     } else {
       return typeof(obj);
@@ -104,12 +102,31 @@ Spah.classCreate("Spah.SpahQL.DataHelper", {
    **/
   "eq": function() {
     var aP, aI, aT;
-    var _ = (typeof(_)=="undefined")? require('underscore') : _;
     
     aP = arguments[0];
     for(aI=1; aI<arguments.length; aI++) {
       var a=arguments[aI];
-      if(!_.isEqual(a, aP)) return false;
+
+      // Determine a and aP equal
+      var t = this.objectType(aP);
+      if(t != this.objectType(a)) return false;
+
+      if(t == "array") {
+        if(a.length != aP.length) return false;
+        for(var i=0; i<a.length; i++) {
+          if(!this.eq(a[i], aP[i])) return false;
+        }
+      }
+      else if(t == "object") {
+        if(Object.keys(a).length != Object.keys(aP).length) return false;
+        for(var k in a) {
+          if(!this.eq(a[k], aP[k])) return false;
+        }
+      }
+      else if(a != aP) {
+        return false;
+      }
+      
       aP = a;
     }
     return true;
@@ -123,8 +140,7 @@ Spah.classCreate("Spah.SpahQL.DataHelper", {
    * without the corresponding values.
    **/
   "hashKeys": function(hash) {
-    var _ = (typeof(_)=="undefined")? require('underscore') : _;
-    var keys = _.keys(hash)
+    var keys = Object.keys(hash)
     return keys.sort();
   },
   
@@ -136,8 +152,9 @@ Spah.classCreate("Spah.SpahQL.DataHelper", {
    * without keys. Uniqueness is not enforced.
    **/
   "hashValues": function(hash) {
-    var _ = (typeof(_)=="undefined")? require('underscore') : _;
-    return _.values(hash);
+    var a = [];
+    for(var k in hash) a.push(hash[k]);
+    return a;
   },
   
   /**
@@ -472,11 +489,10 @@ Spah.classCreate("Spah.SpahQL.DataHelper", {
    * Returns null if the key can't be coerced for the given object.
    **/
   "coerceKeyForObject": function(key, obj) {
-    var _ = (typeof(_)=="undefined")? require('underscore') : _;
     var t = this.objectType(obj);
     if(t == "array") {
       var k = parseInt(key);
-      return _.isNaN(k)? null : k;
+      return isNaN(k)? null : k;
     }
     else if(t == "object") {
       var k = key.toString();

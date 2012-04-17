@@ -7,7 +7,10 @@ exports["Spah.DOM.Blueprint"] = {
     test.expect(5);
     
     Spah.DOM.Blueprint.compile(html, function(err, doc) {
+      
+      if(err) console.log(err);
       test.ok(!err);
+
       test.ok(doc instanceof Spah.DOM.Blueprint);
       test.ok(doc.jQ);
       test.ok(doc.window);

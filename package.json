@@ -20,8 +20,7 @@
   "dependencies": {
     "mustache"  :  "*",
     "jQuery"    :  ">=1.6.3",
-    "jsdom"     :  ">=0.2.13",
-    "underscore":  ">=1.2.2"
+    "jsdom"     :  ">=0.2.13"
   },
   "devDependencies": {
     "express": ">=2.x < 3.0-"
