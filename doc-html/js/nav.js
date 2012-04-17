@@ -5,7 +5,7 @@ Nav.init = function(pageListSelector, headingListSelector) {
   var pNav = $(pageListSelector);
   var hNav = $(headingListSelector);
 
-  this.addHelperClasses();
+  this.addHelperMarkup();
   this.formatCode();
   this.buildOverview(hNav);
   this.addToggleBehaviours();
@@ -13,15 +13,18 @@ Nav.init = function(pageListSelector, headingListSelector) {
   this.addScrollListener();
 }
 
-Nav.addHelperClasses = function() {
+Nav.addHelperMarkup = function() {
   $("article > pre").each(function() {
     var $pre = $(this);
     var $prev = $pre.prev();
-    if($prev[0] && $prev[0].nodeName.toLowerCase() == "p") {
+    if($prev[0] && $prev[0].nodeName.toLowerCase() == "p" && $prev.html().indexOf(":") == $prev.html().length-1) {
       var wrapper = $("<div class=\"code-pair\"></div>");
       $prev.before(wrapper);
 
-      wrapper.append($prev);
+      var pWrapper = $("<div class=\"text-container\"></div>");
+      wrapper.append(pWrapper);
+      pWrapper.append($prev);
+      
       wrapper.append($pre); 
       wrapper.append("<div class=\"clearfix\"></div>")
 

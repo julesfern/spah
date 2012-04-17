@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title> - Spah (on Danski’s Github)</title>
+    <title>Spah: Build single-page apps without breaking the web.</title>
     
     <link rel="stylesheet" href="css/normalize.css" type="text/css" media="screen" />
     <link rel="stylesheet" href="css/master.css" type="text/css" media="screen" />
@@ -22,14 +22,14 @@
     
     <div class="nav-wrapper">
       <nav id="nav-pages">
-        <ul><li><a class="current" href="#">Spah (on Danski’s Github)</a></li><li><a href="spah-grammar.html">Appendix: SpahQL Grammar and execution spec</a></li><li><a href="src/index.html">API</a></li></ul>
+        <ul><li><a class="current" href="#">Spah: Build single-page apps without breaking the web.</a></li><li><a href="spah-grammar.html">Appendix: SpahQL Grammar and execution spec</a></li><li><a href="src/index.html">API</a></li></ul>
       </nav>
       <nav id="nav-overview">
       </nav>
     </div>
      
      <article>
-      <h1 id='spah_on_danskis_github'>Spah (on <a href='http://github.com/danski/spah'>Danski&#8217;s Github</a>)</h1>
+      <h1 id='spah_build_singlepage_apps_without_breaking_the_web'>Spah: Build single-page apps without breaking the web.</h1>
 
 <h1 id='introduction'>Introduction</h1>
 
@@ -85,7 +85,7 @@
 
 <p>Using SpahQL starts out with you putting your data into a <em>SpahQL Database</em>. The <a href='#core_concepts'>State</a> is itself a SpahQL database, and you can manipulate it accordingly.</p>
 
-<p>Let&#8217;s start out with an example - the state for a basic Twitter app UI. In this state we&#8217;ve got the user&#8217;s profile available to us for display, we know that the &#8220;timeline&#8221; tab is open and populated with some tweets, and we know that the user hasn&#8217;t loaded any mentions or direct messages just yet. We also know that the user has typed something into the status field but has not yet saved it. We&#8217;ll be using this example data below to explore SpahQL&#8217;s capabilities.</p>
+<p>Let&#8217;s start out with an example - the state for a basic Twitter app UI.</p>
 
 <pre><code>var data = {
   &quot;user&quot;: {
@@ -118,6 +118,8 @@
 	&quot;mentions&quot;: null
 	&quot;direct_messages&quot;: null
 }</code></pre>
+
+<p>In this state we&#8217;ve got the user&#8217;s profile available to us for display, we know that the &#8220;timeline&#8221; tab is open and populated with some tweets, and we know that the user hasn&#8217;t loaded any mentions or direct messages just yet. We also know that the user has typed something into the status field but has not yet saved it. We&#8217;ll be using this example data below to explore SpahQL&#8217;s capabilities.</p>
 
 <p>To start using this data with SpahQL, we need to put it in a <em>SpahQL database</em>:</p>
 
@@ -192,14 +194,16 @@ db.select(&quot;/show_only_from_handle&quot;).value(); //-&gt; &quot;coolguy99&q
 
 <p>SpahQL objects provide a set of methods for modifying their data values. SpahQL always maintains <em>strict pointer equality</em> to the original database data, so be aware that calling these methods will result in alterations being made directly to the object you originally passed to <code>Spah.SpahQL.db(your_data)</code>.</p>
 
-<p>Most destructive methods apply only to the first item in a SpahQL result set, and have a partner method which applies to the entire set. For instance:</p>
+<p>Most destructive methods apply only to the first item in a SpahQL result set, and have a partner method which applies to the entire set.</p>
+
+<p>For instance, here are the <code>replace</code> and <code>replaceAll</code> methods - just two of the many methods SpahQL offers for easy data editing:</p>
 
 <pre><code>db.select(&quot;//user&quot;).replace(&quot;This string will replace the first user in the set&quot;);
 db.select(&quot;//user&quot;).replaceAll(&quot;NO USERS FOR YOU&quot;);</code></pre>
 
 <h2 id='listening_for_changes'>Listening for changes</h2>
 
-<p>SpahQL objects are able to dispatch events when certain paths are changed, using an event-bubbling model similar to the HTML DOM:</p>
+<p>SpahQL objects are able to dispatch events when certain paths are changed, using an event-bubbling model similar to the HTML DOM.</p>
 
 <pre><code>db.listen(function(db, path, subpaths) {
 	console.log(&quot;Something in the DB was modified. Modified paths: &quot;+subpaths.join(&quot;,&quot;));
@@ -214,7 +218,7 @@ db.select(&quot;/user&quot;).listen(function(user, path, subpaths) {
 	console.log(&quot;User was modified: &quot;, user.value());
 });</code></pre>
 
-<p>The callback function always receives three arguments; <code>result</code>, a SpahQL object containing the data found at the path on which you registered the listener, <code>path</code>, the path on which you registered the listener (allowing you to assign a single listener function cabable of responding to multiple changes), and <code>subpaths</code>, an array of paths within the <code>path</code> that were detected as having been modified:</p>
+<p>The callback function always receives three arguments; <code>result</code>, a SpahQL object containing the data found at the path on which you registered the listener, <code>path</code>, the path on which you registered the listener (allowing you to assign a single listener function cabable of responding to multiple changes), and <code>subpaths</code>, an array of paths within the <code>path</code> that were detected as having been modified.</p>
 
 <pre><code>db.listen(&quot;/user&quot;, function(user, path, subpaths) {
 	console.log(&quot;Subpaths modified on user (&quot;+path+&quot;): &quot;, subpaths.join(&quot;,&quot;));
@@ -329,18 +333,23 @@ db.assert(&quot;/flibbertygibbet&quot;); //-&gt; false, since /flibbertygibbet d
 
 <p>SpahQL does support literals - strings, integers, floats, <code>true</code>, <code>false</code> and <code>null</code> may all be used directly in SpahQL queries. Strings may use single or double quotes as you prefer.</p>
 
-<p>Because all SpahQL comparisons compare sets to one another, all literals count as sets containing just one value. As such, the following basic comparisons work just as you&#8217;d expect:</p>
+<p>Because all SpahQL comparisons compare sets to one another, all literals count as sets containing just one value.</p>
+
+<p>As such, the following basic comparisons work just as you&#8217;d expect:</p>
 
 <pre><code>db.assert(&quot;/user/handle == &#39;johndoe&#39;&quot;) //-&gt; true
 db.assert(&quot;//user/handle == &#39;johndoe&#39;&quot;) //-&gt; false. The left-hand set contains more than one item.</code></pre>
 
-<p>You may use set literals in SpahQL assertions. A set literal is wrapped in <code>{}</code> mustaches:</p>
+<p>You may use set literals in SpahQL assertions.</p>
+
+<p>A set literal is wrapped in <code>{}</code> mustaches:</p>
 
 <pre><code>db.assert(&quot;//user/handle }~{ {&#39;johndoe&#39;, &#39;anotherguy&#39;}&quot;) //-&gt; true. The left set is a joint set with the right.</code></pre>
 
 <p>Set literals may combine numbers, strings, booleans and even selection queries:</p>
 
-<pre><code>{&quot;arbitrary_handle&quot;, //user/handle} //-&gt; a set containing all the handles, plus one arbitrary one.</code></pre>
+<pre><code>// a set containing all the handles, plus one arbitrary one.
+{&quot;arbitrary_handle&quot;, //user/handle} </code></pre>
 
 <p>Sets may not be nested - in the above example, SpahQL flattens the set literal to contain all the results of querying for <code>//user/handle</code> and one other value, <code>"arbitrary_handle"</code>.</p>
 
@@ -391,12 +400,12 @@ db.assert(&quot;//user/handle == &#39;johndoe&#39;&quot;) //-&gt; false. The lef
 
 <h2 id='spahql_strategies'>SpahQL Strategies</h2>
 
-<p><em>Strategies</em> are a mechanism provided by SpahQL allowing you to define a queue of asynchronous actions to be run in order against a SpahQL object, provided that the value of the query result matches the criteria you specify. Pattern-wise, they&#8217;re somewhere between a macro and a stored procedure. Strategies are managed using the <code>Strategiser</code> class:</p>
+<p><em>Strategies</em> are a mechanism provided by SpahQL allowing you to define a queue of asynchronous actions to be run in order against a SpahQL object, provided that the value of the query result matches the criteria you specify. Pattern-wise, they&#8217;re somewhere between a macro and a stored procedure. Strategies are managed using the <code>Strategiser</code> class.</p>
 
 <pre><code>	var state = Spah.SpahQL.db({a: {aa: &quot;a.aa.val&quot;, bb: &quot;a.bb.val&quot;}, b: {bb: &quot;b.bb.val&quot;, cc: &quot;b.cc.val&quot;}});
 	var strategiser = new Spah.SpahQL.Strategiser();</code></pre>
 
-<p>Strategies are objects which define a set of target paths, a condition which must be met for the strategy to run, and an action to take against the matched paths:</p>
+<p>Strategies are objects which define a set of target paths, a condition which must be met for the strategy to run, and an action to take against the matched paths.</p>
 
 <pre><code>	// Add a strategy to the strategiser...
 	strategiser.addStrategy(
@@ -421,7 +430,7 @@ db.assert(&quot;//user/handle == &#39;johndoe&#39;&quot;) //-&gt; false. The lef
 
 <p>Execution is as follows:</p>
 
-<pre><code>	strategiser.run(target, category, attachments, callback);</code></pre>
+<pre><code>strategiser.run(target, category, attachments, callback);</code></pre>
 
 <p>When applied to the above example:</p>
 
