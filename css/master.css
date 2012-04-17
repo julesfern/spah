@@ -210,17 +210,32 @@ article img {
   margin: 20px auto;
 }
 
-article pre {
-  padding: 10px;
-  color: #FFF;
+article .pre-wrapper,
+article p > code, 
+article > code {
   background: #000;
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: #FFF;
+  border: 1px solid rgba(255,255,255,0.3);
   border-radius: 3px;
   -webkit-border-radius: 3px;
   -moz-border-radius: 3px;
   box-shadow: 0 0 5px #000;
+}
+
+article .pre-wrapper {
+  display: block;
+  padding: 10px;
+}
+article .pre-wrapper pre {
+  width: auto;
+  margin: 0;
+  white-space: pre;
   overflow-x: auto;
 }
+article .pre-wrapper pre code {
+  display: inline-block;
+}
+
 article code {
   color: #FFF;
   background: #333;
@@ -229,17 +244,10 @@ article code {
 }
 article p > code, article > code {
   display: inline-block;
-  background: #000;
   padding: 0.4em 0.3em;
-  border: 1px solid rgba(255,255,255,0.3);
-    border-radius: 3px;
-  -webkit-border-radius: 3px;
-  -moz-border-radius: 3px;
-  box-shadow: 0 0 5px #000;
+  
 }
-article pre code {
-  width: 200%; /* horizontal scroll hack */
-}
+
 
 article > .code-pair {
   clear: both;
@@ -250,7 +258,7 @@ article > .code-pair {
 }
 article > div.code-pair > .text-container {
   float: left;
-  width: 46%;
+  width: 36.5%;
   background: gold;
   box-shadow: 0px 0px 10px black;
    -webkit-border-radius: 5px;
@@ -278,11 +286,11 @@ article > div.code-pair p code {
   color: #666;
 }
 
-article > .code-pair > pre,
+article > .code-pair > .pre-wrapper,
 article > .code-pair > code {
   float: right;
   margin: 0;
-  width: 50%;
+  width: 60%;
 }
 
 article ul, article ol {
@@ -359,7 +367,7 @@ article li > *:last-child {
     margin-bottom: 0.5em;
   }
   article > div.code-pair > .text-container,
-  article > div.code-pair > pre,
+  article > div.code-pair > .pre-wrapper,
   article > div.code-pair > code {
     float: none;
     width: auto;
@@ -399,7 +407,7 @@ article li > *:last-child {
 
 @media only screen and (max-width: 650px) {
   article > div.code-pair > p,
-  article > div.code-pair > pre,
+  article > div.code-pair > .pre-wrapper,
   article > div.code-pair > code {
     float: none;
     width: auto;
