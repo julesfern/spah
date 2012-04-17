@@ -17,6 +17,10 @@ Nav.addHelperMarkup = function() {
   $("article > pre").each(function() {
     var $pre = $(this);
     var $prev = $pre.prev();
+
+    $pre.wrap('<div class="pre-wrapper"></div>');
+    $pre = $pre.closest(".pre-wrapper");
+
     if($prev[0] && $prev[0].nodeName.toLowerCase() == "p" && $prev.html().indexOf(":") == $prev.html().length-1) {
       var wrapper = $("<div class=\"code-pair\"></div>");
       $prev.before(wrapper);
