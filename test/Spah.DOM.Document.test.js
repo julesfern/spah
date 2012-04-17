@@ -41,7 +41,7 @@ exports["Spah.DOM.Document"] = {
       var tDoc = new Spah.DOM.Document(doc.jQ, doc.window);
       var count = tDoc.modifiers.length;
       test.ok(count > 0);
-      tDoc.addModifiers(Spah.DOM.Modifiers.Show);
+      tDoc.addModifiers(Spah.DOM.Actions.Show);
       test.equal(tDoc.modifiers.length, count);
       
       test.done();

@@ -14,11 +14,11 @@ Spah.classCreate("Spah.DOM.Document", {
    * The list of modifiers to be registered by default on new Document instances where a list of modifiers is not specified in the constructor.
    **/
   "defaultModifiers": [
-    Spah.DOM.Modifiers.Show,
-    Spah.DOM.Modifiers.ClassName,
-    Spah.DOM.Modifiers.ElementId,
-    Spah.DOM.Modifiers.Stash,
-    Spah.DOM.Modifiers.Populate
+    Spah.DOM.Actions.Show,
+    Spah.DOM.Actions.ClassName,
+    Spah.DOM.Actions.ElementId,
+    Spah.DOM.Actions.Stash,
+    Spah.DOM.Actions.Populate
   ]
 
 }, {

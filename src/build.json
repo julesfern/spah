@@ -21,7 +21,7 @@
 		"Spah.SpahQL.Token.PathComponent.js",
 		"Spah.SpahQL.Token.SelectionQuery.js",
 		"Spah.SpahQL.Token.KeyName.js",
-		"Spah.DOM.Modifiers.js",
+		"Spah.DOM.Actions.js",
 		"Spah.DOM.Document.js",
 		"Spah.DOM.Blueprint.js",
 		"Spah.State.js",

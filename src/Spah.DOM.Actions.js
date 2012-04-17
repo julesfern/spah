@@ -138,11 +138,16 @@ Spah.classCreate("Spah.DOM.Actions", {
 			return "populate";
 		},
 		"up": function(element, flags, state, $) {
-			var doPopulate = function(e,f,s,j) {
+
+      var e = element,
+          f = flags,
+          s = state,
+          j = $;
+			var doPopulate = function() {
         
       }
       // Register change listener on client
-      if(Spah.inBrowser()) {
+      if(Spah.inBrowser() || flags=="live") {
         
       }
 		},
@@ -167,7 +172,10 @@ Spah.classCreate("Spah.DOM.Actions", {
       document.addTemplate = function(name, tmp, type) {
         // Add the template node to the end of the document body
         this.jQ("body").append(
-          this.jQ("<script></script>").attr({"type": popMod.TemplateEngines[type]["mimeType"], "id": "template-"+name}).html(tmp)
+          this.jQ("<script></script>").attr({
+            "type": popMod.TemplateEngines[type]["mimeType"], 
+            "id": "template-"+name
+          }).html(tmp)
         );
       };
       /**
@@ -189,13 +197,10 @@ Spah.classCreate("Spah.DOM.Actions", {
     },
 
     "TemplateEngines": {
-      "Mustache": {
+      "mustache": {
         "mimeType": "text/mustache"
       },
-      "Handlebars": {
-        "mimeType": "text/handlebars"
-      },
-      "Underscore": {
+      "underscore": {
         "mimeType": "text/underscore"
       }  
     }
