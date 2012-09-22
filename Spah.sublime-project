@@ -29,15 +29,10 @@
 	"folders":
 	[
 		{
-			"file_exclude_patterns":
-			[
-				".DS_Store",
-				"*.pdoc.yaml"
-			],
-			"path": ""
+			"path": "/home/danski/projects/spah"
 		},
 		{
-			"path": "/home/danski/projects/spah"
+			"path": "/home/danski/projects/nav.js"
 		}
 	],
 	"settings":

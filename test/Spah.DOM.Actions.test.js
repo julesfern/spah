@@ -152,6 +152,17 @@ exports["Spah.DOM.Actions.Populate"] = {
 		});
 	},
 
+	"Removes #addTemplate and #removeTemplate when disabled": function(test) {
+		Spah.DOM.Blueprint.compile(html, function(err, doc) {
+			doc.addModifiers(Spah.DOM.Actions.Populate);
+			doc.removeModifiers(Spah.DOM.Actions.Populate);
+
+			test.equal(typeof(doc.addTemplate), "undefined");
+			test.equal(typeof(doc.removeTemplate), "undefined");
+			test.done();
+		});
+	},
+
 	"addTemplate() adds the template, removeTemplate() removes it": function(test) {
 		Spah.DOM.Blueprint.compile(html, function(err, doc) {
 			doc.addModifiers(Spah.DOM.Actions.Populate);
@@ -172,7 +183,7 @@ exports["Spah.DOM.Actions.Populate"] = {
 	},
 
 	"Runs up and down": function(test) {
-		
+
 	},
 
 	"Renders a Mustache template": function(test) {

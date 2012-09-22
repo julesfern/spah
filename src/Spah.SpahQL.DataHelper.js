@@ -86,8 +86,7 @@ Spah.classCreate("Spah.SpahQL.DataHelper", {
   "objectType": function(obj) {
     if(obj == null || obj == undefined) return "null";
     if(typeof(obj) == "object") {
-      if(Object.prototype.toString.call(obj) == "[object Array]") return "array";
-      else return "object";
+      return (Object.prototype.toString.call(obj) == "[object Array]") ? "array" : "object";
     } else {
       return typeof(obj);
     }

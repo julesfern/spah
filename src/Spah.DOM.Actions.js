@@ -138,11 +138,15 @@ Spah.classCreate("Spah.DOM.Actions", {
 			return "populate";
 		},
 		"up": function(element, flags, state, $) {
-
-      var e = element,
+      // Get parameters
+      var templateName = element.attr("data-populate-template"),
+          query = element.attr("data-populate-with"),
+          e = element,
           f = flags,
           s = state,
-          j = $;
+          j = $,
+          scope = this;
+          
 			var doPopulate = function() {
         
       }
@@ -152,8 +156,8 @@ Spah.classCreate("Spah.DOM.Actions", {
       }
 		},
 		"down": function(element, flags, state, $) {
-			
 		},
+
     "added": function(document) {
       var popMod = this;
 
@@ -198,11 +202,27 @@ Spah.classCreate("Spah.DOM.Actions", {
 
     "TemplateEngines": {
       "mustache": {
-        "mimeType": "text/mustache"
+        "mimeType": "text/mustache",
+        "render": function(template, data) {
+
+        }
       },
       "underscore": {
-        "mimeType": "text/underscore"
-      }  
+        "mimeType": "text/underscore",
+        "render": function(template, data) {
+
+        }
+      }
+      "html": {
+        "mimeType": "text/html",
+        "render": function(template, data) {
+
+        }
+      }
+    },
+
+    "TemplateCache": {
+
     }
     
 	}
